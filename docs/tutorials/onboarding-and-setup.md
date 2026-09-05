@@ -1,10 +1,12 @@
 ---
+okf_version: "0.2"
 title: BDA Lakehouse Onboarding and Developer Setup
 description: Step-by-step tutorial for onboarding engineers and developers to the BDA lakehouse baseline documentation.
 type: tutorial
-version: 0.2.0
 status: verified
-tags:
+timestamp: "2026-09-05T23:45:00Z"
+stale_after: "2027-09-05T23:45:00Z"
+topics:
   - bda
   - onboarding
   - setup

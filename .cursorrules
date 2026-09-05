@@ -1,0 +1,9 @@
+# Cursor AI Rules — Deep State of Mind Protocol
+
+Read and strictly adhere to `.agents/AGENTS.md` (Sovereign Constitution) and `.agents/brain/` (Spatial Memory).
+
+1. Search local documentation in `.agents/brain/` and `docs/` using OKF frontmatter BEFORE executing terminal commands.
+2. Maintain OKF v0.2 YAML frontmatter on all modified `.md` files.
+3. Use `uv run` for Python execution.
+4. Execute granular, atomic git commits.
+5. Follow DTS 0.1 concise output standard: no conversational filler, answer first.

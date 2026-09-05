@@ -1,10 +1,12 @@
 ---
+okf_version: "0.2"
 title: Governance, Security, and Compliance Framework
 description: Overview of enterprise catalog selection (OpenMetadata), IAM (Keycloak), API management (APISIX), and compliance with standardized geospatial profiles and data sovereignty guidelines.
 type: explanation
-version: 0.2.0
 status: verified
-tags:
+timestamp: "2026-09-05T23:45:00Z"
+stale_after: "2027-09-05T23:45:00Z"
+topics:
   - bda
   - governance
   - openmetadata

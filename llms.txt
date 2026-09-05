@@ -1,0 +1,27 @@
+# BDA Lakehouse & Deep State of Mind (DSOM) Sitemap
+
+> Plain-text AI crawler sitemap following llms.txt protocol.
+
+## Core Navigation & Gateways
+- [AGENTS.md](AGENTS.md): Lightweight AI Discovery Gateway
+- [.agents/AGENTS.md](.agents/AGENTS.md): Sovereign AI Constitution (31 Laws)
+- [START-HERE.md](START-HERE.md): Entry Points Map & Onboarding Topology
+- [README.md](README.md): Master BDA Lakehouse Platform Index
+- [SUMMARY.md](SUMMARY.md): GitBook & Navigation Table of Contents
+
+## Spatial Memory
+- [.agents/brain/task.md](.agents/brain/task.md): Active task checklist
+- [.agents/brain/walkthrough.md](.agents/brain/walkthrough.md): Session walkthroughs & anchors
+- [.agents/brain/palace_registry.md](.agents/brain/palace_registry.md): Spatial memory index
+
+## Sovereign Documentation Suite
+- [docs/tutorials/onboarding-and-setup.md](docs/tutorials/onboarding-and-setup.md): Onboarding Tutorial
+- [docs/how-to-guides/ingestion-pipeline-modernization.md](docs/how-to-guides/ingestion-pipeline-modernization.md): Ingestion Pipeline Modernization
+- [docs/how-to-guides/phased-migration-strategy.md](docs/how-to-guides/phased-migration-strategy.md): Phased Migration Strategy
+- [docs/reference/legacy-architecture.md](docs/reference/legacy-architecture.md): Legacy Architecture Deconstruction
+- [docs/reference/lakehouse-architecture.md](docs/reference/lakehouse-architecture.md): Target Open-Source Lakehouse Specs
+- [docs/reference/business-applications.md](docs/reference/business-applications.md): Business Domain Specs
+- [docs/reference/governance-matrix.md](docs/reference/governance-matrix.md): Governance Subsystems Matrix
+- [docs/explanation/human-ai-quarantine-model.md](docs/explanation/human-ai-quarantine-model.md): Human-to-AI Quarantine Model
+- [docs/explanation/mcp-and-ai-sandboxing.md](docs/explanation/mcp-and-ai-sandboxing.md): MCP Sandboxing Rationale
+- [docs/explanation/governance-and-compliance.md](docs/explanation/governance-and-compliance.md): Security & Compliance Framework

@@ -1,10 +1,12 @@
 ---
+okf_version: "0.2"
 title: Data Governance, Subsystems, and Standards Matrix
 description: Complete reference matrix mapping governance subsystems, OpenLineage provenance, ODCS contract standards, geospatial metadata profiles, and enterprise compliance.
 type: reference
-version: 0.2.0
 status: verified
-tags:
+timestamp: "2026-09-05T23:45:00Z"
+stale_after: "2027-09-05T23:45:00Z"
+topics:
   - bda
   - governance
   - openmetadata

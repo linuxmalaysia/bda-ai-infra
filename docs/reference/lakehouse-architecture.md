@@ -1,10 +1,12 @@
 ---
+okf_version: "0.2"
 title: Target 100% Open-Source Lakehouse Architecture
 description: Decoupled storage and compute specifications replacing legacy Hadoop/GlusterFS with Ceph/MinIO, Apache Iceberg, Apache Polaris, Trino, and Apache Spark/Sedona.
 type: reference
-version: 0.2.0
 status: verified
-tags:
+timestamp: "2026-09-05T23:45:00Z"
+stale_after: "2027-09-05T23:45:00Z"
+topics:
   - bda
   - lakehouse
   - open-source

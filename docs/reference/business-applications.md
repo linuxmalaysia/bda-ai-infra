@@ -1,10 +1,12 @@
 ---
+okf_version: "0.2"
 title: Big Data Domain Specifications and Analytical Workflows
 description: Overview of core domain analytical modules supported by the BDA platform (Incident Management, Hydrogeology, Active Fire Tracking, Climate Adaptation, Landslide Hazard Risk).
 type: reference
-version: 0.2.0
 status: verified
-tags:
+timestamp: "2026-09-05T23:45:00Z"
+stale_after: "2027-09-05T23:45:00Z"
+topics:
   - bda
   - business-applications
   - spatial-analytics

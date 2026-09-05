@@ -17,9 +17,9 @@ topics:
 # 🧠 DSOM Task List & Spatial Memory
 
 - [x] Initialise `.agents/brain/` spatial memory structure.
-- [ ] Establish root `AGENTS.md` and `.agents/AGENTS.md` constitution.
-- [ ] Provision Universal Gateway files (`.cursorrules`, `CLAUDE.md`, `.github/copilot-instructions.md`).
-- [ ] Scaffold root `README.md`, `START-HERE.md`, `SUMMARY.md`, and `llms.txt`.
-- [ ] Scaffold Triple-Ledger files (`CHANGELOG.md`, `HISTORY.md`).
-- [ ] Upgrade existing documentation in `docs/` to OKF v0.2 frontmatter standard.
+- [x] Establish root `AGENTS.md` and `.agents/AGENTS.md` constitution.
+- [x] Provision Universal Gateway files (`.cursorrules`, `CLAUDE.md`, `.github/copilot-instructions.md`).
+- [x] Scaffold root `README.md`, `START-HERE.md`, `SUMMARY.md`, and `llms.txt`.
+- [x] Scaffold Triple-Ledger files (`CHANGELOG.md`, `HISTORY.md`).
+- [x] Upgrade existing documentation in `docs/` to OKF v0.2 frontmatter standard.
 - [ ] Complete pre-commit verification and submitting changes.

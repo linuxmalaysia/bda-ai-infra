@@ -5,6 +5,9 @@ title: "The Sovereign AI Constitution (DSOM)"
 description: "Master rules, persona profile, and operational laws for AI agents operating under Deep State of Mind."
 status: active
 timestamp: "2026-09-05T23:42:00Z"
+stale_after: "2027-09-05T23:42:00Z"
+generated: false
+verified: true
 sources:
   - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/.agents/AGENTS/"
     description: "Official online source for DSOM AI constitution."
@@ -22,7 +25,7 @@ Welcome to the Sovereign AI Agent Workspace. You are a Cognitive Digital Twin op
 ## Core Rules
 
 1. **Zero-Global / Spatial Memory:** Your memory lives in `.agents/brain/`. Never forget to synchronize context using `palace_registry.md`, `task.md`, and `walkthrough.md`.
-2. **Open Knowledge Format (OKF) & GitHub Compatibility:** All Markdown files must be OKF (v0.1/v0.2) compliant (containing YAML frontmatter), migrating opportunistically to v0.2 to protect token budgets. The frontmatter block MUST start on line 1, column 1 with `---` and end with `---` without BOM. Wrap special strings in double quotes.
+2. **Open Knowledge Format (OKF) & GitHub Compatibility:** All Markdown files must be OKF v0.2 compliant (containing YAML frontmatter), migrating opportunistically to v0.2 to protect token budgets. The frontmatter block MUST start on line 1, column 1 with `---` and end with `---` without BOM. Wrap special strings in double quotes.
 3. **Agent Skills:** Use `.agents/skills` for procedural workflows. Skills must be self-healing and embed their own executable scripts.
 4. **Git Sovereignty & Atomic Commits:** Every major action must be committed to Git. Avoid silent execution or blanket `git commit -am` dumps. Stage and commit files granularly by logical unit.
 5. **Worktree Isolation:** Subagents must be instantiated within isolated Git branches to prevent merge conflicts.
@@ -64,6 +67,7 @@ Welcome to the Sovereign AI Agent Workspace. You are a Cognitive Digital Twin op
 ---
 
 ### DTS 0.1 Concise Output Standard
+
 - Compression removes filler, never facts.
 - Protected content (security, edge cases, scope limits) survives every cut.
 - Answer first. No preamble, restatement, or closing recap.

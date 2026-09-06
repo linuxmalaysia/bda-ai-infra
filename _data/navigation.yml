@@ -46,6 +46,13 @@
     url: /docs/reference/governance-matrix.html
   - title: Legacy Big Data Analytics Environment Architectural Deconstruction
     url: /docs/reference/legacy-architecture.html
+  - title: 'Solution 1 Reference Spec: AWS Native & Cloud Managed Infrastructure'
+    url: /docs/reference/solution-1-aws-native.html
+  - title: 'Solution 2 Reference Spec: Hybrid Cloud Lakehouse & On-Premises GPU Infrastructure'
+    url: /docs/reference/solution-2-hybrid-ai.html
+  - title: 'Solution 3 Reference Spec: 100% On-Premises Sovereign Architecture (Proxmox
+      VE + RKE2 + Ceph SDS)'
+    url: /docs/reference/solution-3-onprem-proxmox-rke2.html
   - title: Target 100% Open-Source Lakehouse Architecture
     url: /docs/reference/lakehouse-architecture.html
 - title: Tutorials

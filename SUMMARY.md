@@ -52,6 +52,9 @@ topics:
 * [Big Data Domain Specifications and Analytical Workflows](docs/reference/business-applications.md)
 * [Data Governance, Subsystems, and Standards Matrix](docs/reference/governance-matrix.md)
 * [Legacy Big Data Analytics Environment Architectural Deconstruction](docs/reference/legacy-architecture.md)
+* [Solution 1 Reference Spec: AWS Native & Cloud Managed Infrastructure](docs/reference/solution-1-aws-native.md)
+* [Solution 2 Reference Spec: Hybrid Cloud Lakehouse & On-Premises GPU Infrastructure](docs/reference/solution-2-hybrid-ai.md)
+* [Solution 3 Reference Spec: 100% On-Premises Sovereign Architecture (Proxmox VE + RKE2 + Ceph SDS)](docs/reference/solution-3-onprem-proxmox-rke2.md)
 * [Target 100% Open-Source Lakehouse Architecture](docs/reference/lakehouse-architecture.md)
 
 ## Tutorials

@@ -55,13 +55,16 @@ This reference document outlines the modern governance subsystems, metadata engi
 ## 3. Data Governance & Interoperability Standards
 
 ### Standard Geospatial Metadata Profile
+
 - **Standard:** MS ISO 19115:2003 / OGC (Geographic Information - Metadata).
 - **Mandatory Attributes:** Standardized Coordinate Reference Systems (`EPSG:3168`, `EPSG:3169`, `EPSG:4326`), spatial resolutions, bounding coordinate extents, and lineage source histories.
 - **Integration:** Mapped directly as custom metadata facets within OpenMetadata for automated compatibility with spatial clearinghouses.
 
 ### Open-Source Architecture & Sovereignty Directives
+
 - **Directives:** Prioritize adoption of robust open-source software, enforce strict data sovereignty protections (on-premises storage), eliminate vendor lock-in, and establish secure, audited inter-agency data sharing.
 
 ### Linux Foundation Bitol Open Data Contract Standard (ODCS v3.1.0)
+
 - **Scope:** Machine-readable data contract specifications defining schema models, physical data types, nullability rules, geospatial bounding boxes, and mandatory provenance metadata.
 - **Enforcement:** Automated Data Contract CLI gates embedded in NiFi and Airflow ingestion tasks. Rejected non-compliant payloads are diverted to isolated dead-letter queues.

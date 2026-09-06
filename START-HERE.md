@@ -1,44 +1,53 @@
 ---
 okf_version: "0.2"
-type: onboarding_map
-title: "START HERE: DSOM Project Entry Points & Navigation Map"
-description: "Master entry map and topology guide for human engineers and AI agents adopting the DSOM protocol."
+type: master_index
+title: "START HERE — Sovereign AI & BDA Lakehouse Onboarding Gateway"
+description: "Primary onboarding entry point and navigation gateway for human operators and AI agents."
 status: active
-timestamp: "2026-09-05T23:45:00Z"
-sources:
-  - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/START-HERE/"
-    description: "Official DSOM START-HERE master entry points guide."
-topics:
-  - dsom
-  - onboarding
-  - entry-points
-stale_after: "2027-09-05T23:45:00Z"
+timestamp: "2026-09-06T00:00:00Z"
+stale_after: "2027-09-06T00:00:00Z"
 generated: false
 verified: true
+sources:
+  - url: "README.md"
+    description: "Root repository documentation index."
+topics:
+  - dsom
+  - start-here
+  - onboarding
+  - bda
 ---
 
-# START HERE: DSOM Entry Points & Onboarding Map
+# 🚀 START HERE — BDA Lakehouse & DSOM Protocol Onboarding
 
-Welcome to the **Deep State of Mind (DSOM)** protocol environment.
+Welcome to the Big Data Analytics (BDA) Lakehouse SSoT modernization project operating under the Deep State of Mind (DSOM) Protocol.
 
-## 🌟 Sovereign Entry Points Map
+## 🧭 Navigation Gateway
 
-1. **The Cognitive Entry Point (AI Persona & Rules):**
-   - Read [AGENTS.md](AGENTS.md) (Gateway) and [.agents/AGENTS.md](.agents/AGENTS.md) (Full Constitution containing 31 AI Laws).
-2. **The Spatial Memory Entry Point (Zero Context Amnesia):**
-   - Access [.agents/brain/](.agents/brain/) to inspect `task.md`, `walkthrough.md`, and `palace_registry.md`.
-3. **The Engineering Entry Point (Scaffolding & Onboarding):**
-   - Read [docs/tutorials/onboarding-and-setup.md](docs/tutorials/onboarding-and-setup.md).
-4. **The External System Entry Point (AI Crawlers):**
-   - Read [llms.txt](llms.txt) and [SUMMARY.md](SUMMARY.md).
+### 🤖 AI Agent Entry Points
 
----
+1. **Root Gateway:** [AGENTS.md](AGENTS.md)
+2. **Sovereign Constitution:** [.agents/AGENTS.md](.agents/AGENTS.md)
+3. **Spatial Memory Engine:** [.agents/brain/](.agents/brain/)
+4. **AI Cognitive Twin Protocol:** [docs/AI-COGNITIVE-TWIN-PROTOCOL.md](docs/AI-COGNITIVE-TWIN-PROTOCOL.md)
 
-## 🧭 The Diátaxis Documentation Compass
+### 📚 Documentation Quadrants (Diátaxis)
 
-| Quadrant | Intent | Core Documents |
-| :--- | :--- | :--- |
-| **🎓 Tutorials** | Guided Onboarding | `docs/tutorials/onboarding-and-setup.md` |
-| **🛠️ How-To Guides** | Problem Solving | `docs/how-to-guides/ingestion-pipeline-modernization.md`<br>`docs/how-to-guides/phased-migration-strategy.md` |
-| **📚 Reference** | Technical Specs | `docs/reference/legacy-architecture.md`<br>`docs/reference/lakehouse-architecture.md`<br>`docs/reference/business-applications.md`<br>`docs/reference/governance-matrix.md` |
-| **💡 Explanation** | Rationale & Concepts | `docs/explanation/human-ai-quarantine-model.md`<br>`docs/explanation/mcp-and-ai-sandboxing.md`<br>`docs/explanation/governance-and-compliance.md` |
+- **Tutorials:** [docs/tutorials/onboarding-and-setup.md](docs/tutorials/onboarding-and-setup.md)
+- **How-To Guides:** [docs/how-to-guides/phased-migration-strategy.md](docs/how-to-guides/phased-migration-strategy.md)
+- **Reference Material:** [docs/reference/lakehouse-architecture.md](docs/reference/lakehouse-architecture.md)
+- **Explanation:** [docs/explanation/governance-and-compliance.md](docs/explanation/governance-and-compliance.md)
+
+### 🛠️ Workflows & Test Suites
+
+- **CI/CD OKF & Link Audit:** `.github/workflows/dsom-audit.yml`
+- **Python Linter & Unit Tests:** `uv run ruff check .` and `uv run pytest`
+- **Ansible & Quadlet Tests:** `.ansible-lint` and `molecule/default/`
+- **Playwright E2E Search Tests:** `tests/e2e/docs_search.spec.ts`
+
+### 📜 Sovereign Ledgers
+
+- **Summary Index:** [SUMMARY.md](SUMMARY.md)
+- **LLM AI Sitemap:** [llms.txt](llms.txt)
+- **Changelog Ledger:** [CHANGELOG.md](CHANGELOG.md)
+- **Execution History Ledger:** [HISTORY.md](HISTORY.md)

@@ -29,6 +29,7 @@ This tutorial guides new engineers, data stewards, and system administrators thr
 ## Learning Objectives
 
 By completing this onboarding guide, you will:
+
 1. Understand the core architectural principles of the modernized 100% open-source BDA lakehouse.
 2. Know where to find technical reference materials, conceptual explanations, and operational how-to guides using the **Diátaxis documentation compass**.
 3. Learn how data contracts (ODCS v3.1.0) and OpenLineage metadata tracking safeguard Tier 0 Golden Human Truth.
@@ -63,12 +64,16 @@ Read through the primary reference and explanation documents to familiarize your
 If you are inspecting or contributing to the codebase repository:
 
 1. Clone the repository and navigate into the root directory:
+
    ```bash
    git clone <repo-url>
    cd <repo-folder>
    ```
+
 2. Verify the documentation files under `docs/`:
+
    ```bash
    ls -la docs/reference/ docs/explanation/ docs/how-to-guides/ docs/tutorials/
    ```
+
 3. Read `docs/README.md` for full cross-referencing and index navigation.

@@ -5,13 +5,17 @@ import yaml
 import pytest
 
 REPO_ROOT = Path(__file__).parent.parent
+EXCLUDED_DIRS = {"node_modules", "dist", "build", ".venv", ".git", ".pytest_cache"}
 
 
 def get_all_markdown_files():
-    """Retrieve all markdown files in the repository excluding hidden directories."""
+    """Retrieve all markdown files in the repository excluding hidden/build directories."""
     md_files = []
     for root, dirs, files in os.walk(REPO_ROOT):
-        dirs[:] = [d for d in dirs if not d.startswith(".") or d == ".agents"]
+        dirs[:] = [
+            d for d in dirs
+            if (not d.startswith(".") or d == ".agents") and d not in EXCLUDED_DIRS
+        ]
         for file in files:
             if file.endswith(".md"):
                 md_files.append(Path(root) / file)
@@ -51,16 +55,33 @@ def test_okf_v02_frontmatter(md_path):
 
 
 def _get_markdown_headings(target_path):
-    """Extract slugified heading anchors from a markdown file."""
+    """Extract GitHub-compatible slugified heading anchors with duplicate suffixing."""
     content = target_path.read_text(encoding="utf-8")
-    slugs = set()
+    slugs = []
+    in_code_block = False
+    slug_counts = {}
+
     for line in content.splitlines():
-        if line.startswith("#"):
+        trimmed = line.strip()
+        if trimmed.startswith("```") or trimmed.startswith("~~~"):
+            in_code_block = not in_code_block
+            continue
+
+        if not in_code_block and line.startswith("#"):
             heading_text = line.lstrip("#").strip()
-            slug = heading_text.lower()
-            slug = re.sub(r"[^\w\s-]", "", slug)
-            slug = re.sub(r"[\s_]+", "-", slug)
-            slugs.add(slug)
+            # Basic GitHub slugification: lowercase, remove non-alphanumeric/spaces/hyphens
+            base_slug = heading_text.lower()
+            base_slug = re.sub(r"[^\w\s-]", "", base_slug)
+            base_slug = re.sub(r"[\s_]+", "-", base_slug)
+
+            count = slug_counts.get(base_slug, 0)
+            slug_counts[base_slug] = count + 1
+
+            if count == 0:
+                slugs.append(base_slug)
+            else:
+                slugs.append(f"{base_slug}-{count}")
+
     return slugs
 
 

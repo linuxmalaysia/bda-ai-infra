@@ -7,7 +7,7 @@
         dest: /etc/containers/systemd/bda-lakehouse.container
         content: |
           [Container]
-          Image=quay.io/centos/centos:stream9
+          Image=quay.io/centos/centos:stream9@sha256:d559868f760813952f447781b4d081f9b31d0528ef3c24ae6cf95fa66aa107b3
           Exec=sleep infinity
           [Install]
           WantedBy=multi-user.target

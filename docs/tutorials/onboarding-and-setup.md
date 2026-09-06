@@ -11,6 +11,11 @@ topics:
   - onboarding
   - setup
   - tutorial
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # BDA Lakehouse Onboarding and Developer Setup

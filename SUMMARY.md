@@ -12,6 +12,9 @@ topics:
   - dsom
   - navigation
   - summary
+stale_after: "2027-09-05T23:45:00Z"
+generated: false
+verified: true
 ---
 
 # Summary Navigation Index

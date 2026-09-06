@@ -13,6 +13,11 @@ topics:
   - ai-sandboxing
   - governance
   - keycloak
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # Model Context Protocol (MCP) and AI Sandboxing Architecture

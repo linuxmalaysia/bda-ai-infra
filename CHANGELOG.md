@@ -5,6 +5,9 @@ title: "Project Changelog"
 description: "Changelog recording notable changes to the DSOM AI protocol and BDA Lakehouse baseline."
 status: active
 timestamp: "2026-09-05T23:45:00Z"
+stale_after: "2027-09-05T23:45:00Z"
+generated: false
+verified: true
 sources:
   - url: "README.md"
     description: "Master architecture baseline."

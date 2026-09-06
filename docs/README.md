@@ -11,6 +11,11 @@ topics:
   - diataxis
   - index
   - dsom
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # Modernizing Big Data Analytics Architecture: Master Documentation Suite

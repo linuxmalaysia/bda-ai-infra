@@ -11,6 +11,11 @@ topics:
   - business-applications
   - spatial-analytics
   - environmental-data
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # Big Data Domain Specifications and Analytical Workflows

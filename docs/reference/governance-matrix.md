@@ -14,6 +14,11 @@ topics:
   - apisix
   - openlineage
   - odcs
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # Data Governance, Subsystems, and Standards Matrix

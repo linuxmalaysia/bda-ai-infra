@@ -12,6 +12,9 @@ topics:
   - dsom
   - onboarding
   - entry-points
+stale_after: "2027-09-05T23:45:00Z"
+generated: false
+verified: true
 ---
 
 # START HERE: DSOM Entry Points & Onboarding Map

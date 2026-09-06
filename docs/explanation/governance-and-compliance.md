@@ -12,6 +12,11 @@ topics:
   - openmetadata
   - keycloak
   - apisix
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # Governance, Security, and Compliance Framework

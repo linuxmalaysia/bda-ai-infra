@@ -17,6 +17,11 @@ topics:
   - Trino
   - Spark
   - Sedona
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # Target 100% Open-Source Lakehouse Architecture: Storage & Compute Decoupling

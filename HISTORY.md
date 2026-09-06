@@ -5,6 +5,9 @@ title: "Universal Execution History Ledger"
 description: "Universal history ledger recording major agent actions, executions, and artifact creations."
 status: active
 timestamp: "2026-09-05T23:45:00Z"
+stale_after: "2027-09-05T23:45:00Z"
+generated: false
+verified: true
 sources:
   - url: "README.md"
     description: "Master architecture baseline."

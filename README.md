@@ -13,6 +13,9 @@ topics:
   - lakehouse
   - diataxis
   - dsom
+stale_after: "2027-09-05T23:45:00Z"
+generated: false
+verified: true
 ---
 
 # Modernizing Big Data Analytics Architecture: BDA Lakehouse Baseline

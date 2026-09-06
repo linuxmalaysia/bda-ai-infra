@@ -15,6 +15,11 @@ topics:
   - tier-2
   - openlineage
   - provenance
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # The Human-to-AI Quarantine Model and Data Classification Topology

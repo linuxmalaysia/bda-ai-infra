@@ -12,6 +12,11 @@ topics:
   - roadmap
   - dual-run
   - risk-mitigation
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # Phased Migration Strategy and Implementation Roadmap

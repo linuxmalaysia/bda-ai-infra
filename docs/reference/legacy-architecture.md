@@ -12,6 +12,11 @@ topics:
   - Hadoop
   - MariaDB
   - PostgreSQL
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # Legacy Big Data Analytics Environment Architectural Deconstruction

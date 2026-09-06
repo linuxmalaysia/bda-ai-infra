@@ -14,6 +14,11 @@ topics:
   - nextjs
   - apisix
   - odcs
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # Ingestion Pipeline, Application Portal, and Superset Modernization

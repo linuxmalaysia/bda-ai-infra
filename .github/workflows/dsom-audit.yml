@@ -33,6 +33,11 @@ jobs:
       - name: Install Dependencies
         run: |
           uv sync --locked
+          npm install -g markdownlint-cli
+
+      - name: Run Markdownlint
+        run: |
+          markdownlint --config .markdownlint.json "**/*.md"
           npm ci
 
       - name: Run Markdownlint

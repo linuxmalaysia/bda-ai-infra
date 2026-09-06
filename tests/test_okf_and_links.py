@@ -54,6 +54,33 @@ def test_okf_v02_frontmatter(md_path):
     assert "description" in data, f"Missing description in {md_path}"
 
 
+def _get_markdown_headings(target_path):
+    """Extract GitHub-compatible slugified heading anchors with duplicate suffixing."""
+    content = target_path.read_text(encoding="utf-8")
+    slugs = []
+    in_code_block = False
+    slug_counts = {}
+
+    for line in content.splitlines():
+        trimmed = line.strip()
+        if trimmed.startswith("```") or trimmed.startswith("~~~"):
+            in_code_block = not in_code_block
+            continue
+
+        if not in_code_block and line.startswith("#"):
+            heading_text = line.lstrip("#").strip()
+            # Basic GitHub slugification: lowercase, remove non-alphanumeric/spaces/hyphens
+            base_slug = heading_text.lower()
+            base_slug = re.sub(r"[^\w\s-]", "", base_slug)
+            base_slug = re.sub(r"[\s_]+", "-", base_slug)
+
+            count = slug_counts.get(base_slug, 0)
+            slug_counts[base_slug] = count + 1
+
+            if count == 0:
+                slugs.append(base_slug)
+            else:
+                slugs.append(f"{base_slug}-{count}")
 def _get_markdown_headings(target_path_or_content):
     """Extract GitHub ATX-compliant slugified heading anchors with duplicate suffixing."""
     if isinstance(target_path_or_content, Path):

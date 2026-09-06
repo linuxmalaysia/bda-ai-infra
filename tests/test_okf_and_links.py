@@ -8,12 +8,7 @@ REPO_ROOT = Path(__file__).parent.parent
 
 
 def get_all_markdown_files():
-    """
-    Collect all Markdown files under the repository root, including files within `.agents` directories.
-    
-    Returns:
-        list[Path]: Paths to the discovered Markdown files.
-    """
+    """Retrieve all markdown files in the repository excluding hidden directories."""
     md_files = []
     for root, dirs, files in os.walk(REPO_ROOT):
         dirs[:] = [d for d in dirs if not d.startswith(".") or d == ".agents"]
@@ -56,21 +51,12 @@ def test_okf_v02_frontmatter(md_path):
 
 
 def _get_markdown_headings(target_path):
-    """
-    Extract unique anchors generated from Markdown headings.
-    
-    Parameters:
-        target_path: Path to the Markdown file.
-    
-    Returns:
-        A set of lowercase heading anchors.
-    """
+    """Extract slugified heading anchors from a markdown file."""
     content = target_path.read_text(encoding="utf-8")
     slugs = set()
     for line in content.splitlines():
         if line.startswith("#"):
             heading_text = line.lstrip("#").strip()
-            # Basic GitHub slugification: lowercase, replace spaces/special chars with hyphens
             slug = heading_text.lower()
             slug = re.sub(r"[^\w\s-]", "", slug)
             slug = re.sub(r"[\s_]+", "-", slug)

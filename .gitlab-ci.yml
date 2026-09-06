@@ -3,9 +3,10 @@ image: ruby:3.2
 
 pages:
   stage: deploy
+  pages: true
   script:
     - gem install jekyll bundler
-    - jekyll build -d public
+    - jekyll build -b "/${CI_PROJECT_NAME}" -d public
   artifacts:
     paths:
       - public

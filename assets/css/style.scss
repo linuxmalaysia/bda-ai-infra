@@ -145,6 +145,18 @@ body {
   overflow-y: auto;
 }
 
+@media (max-width: 768px) {
+  .site-container {
+    flex-direction: column;
+  }
+
+  .sidebar-nav {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+}
+
 .sidebar-header h2 {
   font-size: 1.1rem;
   text-transform: uppercase;

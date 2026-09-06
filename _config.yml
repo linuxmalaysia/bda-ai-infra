@@ -14,7 +14,7 @@ kramdown:
 
 sass:
   style: compressed
-  sass_dir: assets/css
+  sass_dir: _sass
 
 defaults:
   - scope:

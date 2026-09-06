@@ -1,0 +1,7 @@
+site_name: "BDA AI Infra Documentation"
+site_description: "Enterprise Big Data Analytics & AI Lakehouse Architecture Blueprint & Documentation"
+docs_dir: "."
+
+nav:
+  - Home: README.md
+  - Summary: SUMMARY.md

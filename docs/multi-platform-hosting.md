@@ -36,7 +36,7 @@ This project supports seamless multi-platform hosting across GitHub Pages, GitLa
 - Native GitBook integration reading `README.md` as home and `SUMMARY.md` as table of contents structure.
 
 ### 3. ReadTheDocs.org (`.readthedocs.yaml`)
-- ReadTheDocs v2 configuration using Python 3.12 and MkDocs/Sphinx dependencies listed in `docs/requirements.txt`.
+- ReadTheDocs v2 configuration using Python 3.12 and MkDocs dependencies listed in `docs/requirements.txt`.
 
 ### 4. Dynamic Markdown Navigation
 - All documentation files under `docs/` and root files (`README.md`, `CHANGELOG.md`, `SUMMARY.md`, `HISTORY.md`) are automatically indexed by `tools/generate_summary.py`.

@@ -14,17 +14,7 @@ EXCLUDED_DIRS = {"node_modules", "dist", "build", ".venv", ".git", ".pytest_cach
 
 
 def parse_frontmatter(file_path):
-    """
-    Extract a document title and description from YAML frontmatter.
-    
-    Parameters:
-        file_path (Path): Path to the Markdown file.
-    
-    Returns:
-        tuple: The frontmatter title and description, or a title derived from the
-            filename and an empty description when frontmatter is unavailable or
-            invalid.
-    """
+    """Extract title and description from OKF frontmatter if present."""
     try:
         content = file_path.read_text(encoding="utf-8")
         if content.startswith("---\n"):
@@ -45,12 +35,7 @@ def parse_frontmatter(file_path):
 
 
 def discover_markdown_files():
-    """
-    Discover prioritized root Markdown files and documentation files under the docs directory.
-    
-    Returns:
-        tuple: A pair containing root file metadata and documentation file metadata.
-    """
+    """Discover all .md files in root and docs/."""
     root_files = []
     docs_files = []
 
@@ -64,11 +49,23 @@ def discover_markdown_files():
         "AGENTS.md",
         "llms.txt",
     ]
+    seen_root_paths = set()
     for pr in priority_roots:
         p = REPO_ROOT / pr
         if p.exists():
+            seen_root_paths.add(pr)
             title, _ = parse_frontmatter(p)
             root_files.append({"title": title, "path": pr, "url": f"/{pr.replace('.md', '.html')}"})
+
+    # Append all other root *.md files in sorted order
+    for item in sorted(REPO_ROOT.glob("*.md")):
+        if item.name not in seen_root_paths:
+            title, _ = parse_frontmatter(item)
+            root_files.append({
+                "title": title,
+                "path": item.name,
+                "url": f"/{item.name.replace('.md', '.html')}",
+            })
 
     # Docs directory traversal
     if DOCS_DIR.exists():
@@ -99,11 +96,6 @@ def discover_markdown_files():
 
 
 def main():
-    """
-    Generate navigation data and a documentation index from discovered Markdown files.
-    
-    Creates the navigation YAML file and updates `SUMMARY.md` with grouped links for root and documentation files.
-    """
     """Generate SUMMARY.md and _data/navigation.yml documentation indexes."""
     root_files, docs_files = discover_markdown_files()
 

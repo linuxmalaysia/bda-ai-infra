@@ -13,20 +13,17 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        # actions/checkout@v4
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
 
       - name: Set up Python
-        # actions/setup-python@v5
-        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdef900eaed61
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
       - name: Install uv
-        # astral-sh/setup-uv@v3
-        uses: astral-sh/setup-uv@1edb43242cc9d8e5749d021735aaf2327d5da730
+        uses: astral-sh/setup-uv@v5
 
       - name: Install Dependencies
         run: |

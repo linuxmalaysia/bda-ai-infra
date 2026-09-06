@@ -4,8 +4,8 @@ title: BDA Lakehouse Baseline Documentation Index
 description: Main index and navigation hub for the Modernizing Big Data Analytics Architecture baseline documentation, structured following Diátaxis and DSOM standards.
 type: reference
 status: verified
-timestamp: "2026-09-05T23:45:00Z"
-stale_after: "2027-09-05T23:45:00Z"
+timestamp: "2026-09-06T00:00:00Z"
+stale_after: "2027-09-06T00:00:00Z"
 topics:
   - bda
   - diataxis
@@ -48,8 +48,10 @@ Following the **Diátaxis Documentation Framework**, this suite is organized int
      • Ingestion Pipeline         │     • Legacy BDA Deconstruction
        Modernization              │     • Target Lakehouse Architecture
      • Phased 12-Month            │     • Business Domains (x5)
-       Migration Strategy         │     • Governance & Subsystem Matrix
-                                  │
+       Migration Strategy         │     • Data Governance Matrix
+                                  │     • Solution 1: AWS Native
+                                  │     • Solution 2: Hybrid AI
+                                  │     • Solution 3: On-Prem Sovereign
                                   │
                       APPLICATION OF SKILL (Work)
 ```
@@ -73,6 +75,9 @@ Following the **Diátaxis Documentation Framework**, this suite is organized int
 - **[Target Lakehouse Architecture Specifications](reference/lakehouse-architecture.md):** Specs for decoupled storage and compute (Ceph/MinIO, Apache Iceberg, Apache Polaris, Trino, Apache Spark + Sedona).
 - **[Business Domain Specifications](reference/business-applications.md):** Detailed specifications for 5 core analytical domains: Incident Management, Groundwater Potential, Active Fire Tracking, Climate Adaptation, and Geological Hazard Risk.
 - **[Data Governance & Subsystems Matrix](reference/governance-matrix.md):** Mapping governance subsystems, OpenLineage provenance, ODCS contract standards, and geospatial standards.
+- **[Solution 1 Reference Spec: AWS Native Infrastructure](reference/solution-1-aws-native.md):** Detailed reference specifications for All in Cloud deployment using AWS managed services (S3 Object Lock, Glue Catalog, EMR Serverless, Athena, Bedrock).
+- **[Solution 2 Reference Spec: Hybrid Cloud Lakehouse & On-Prem GPU](reference/solution-2-hybrid-ai.md):** Detailed reference specifications for Hybrid deployment retaining cloud lakehouse core while executing AI inference, local vector search, and MCP tools on-premises over AWS Direct Connect MACsec/IPsec.
+- **[Solution 3 Reference Spec: 100% On-Premises Sovereign Architecture](reference/solution-3-onprem-proxmox-rke2.md):** Detailed reference specifications for 100% sovereign deployment using Proxmox VE hypervisor, dual RKE2/K3s Kubernetes clusters, and Ceph SDS object/block storage.
 
 ### 💡 4. Explanation (Theoretical Rationale and Architecture Principles)
 

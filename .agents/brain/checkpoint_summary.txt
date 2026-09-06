@@ -1,26 +1,7 @@
----
-okf_version: "0.2"
-type: spatial_memory
-title: "DSOM Checkpoint Summary"
-description: "EOD Palace Sync mental anchor checkpoint summary for DSOM cognitive twin reanimation."
-status: active
-timestamp: "2026-09-06T00:00:00Z"
-stale_after: "2027-09-06T00:00:00Z"
-generated: false
-verified: true
-sources:
-  - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/.agents/skills/eod-palace-sync/SKILL/"
-    description: "EOD Palace Sync Skill specification."
-topics:
-  - dsom
-  - checkpoint
-  - mental-anchor
----
-
 [MENTAL ANCHOR]
-Timestamp: 2026-09-06T06:30:00+00:00
+Timestamp: 2026-09-06T15:00:00+00:00
 Project: bda-ai-infra
-State: In Sync / Green / Pushed
-Test Suite: 52/52 passed (100%)
-Active Remotes: origin @ feat/dsom-post-merge-automation
-Mental Anchor: Completed post-merge DSOM protocol baseline adoption, CI/CD OKF and zero link decay audit workflow, Ruff and markdownlint configuration, Ansible Molecule Quadlet tests, and Playwright E2E search test scaffolding. All 52 unit tests and markdownlint checks pass with 0 errors.
+State: In Sync / Green / EOD Palace Sync Complete
+Test Suite: 57 pytest / 2 Playwright passed (100%)
+Active Remotes: origin @ feat/github-pages-jekyll-template-multiplatform
+Mental Anchor: Completed GitHub Pages Jekyll site generation with cmsfornerd2 Laboratory layout, multi-platform hosting configs (GitLab Pages, GitBook, ReadTheDocs with MkDocs), automated summary and dynamic navigation generator, responsive SCSS breakpoints, and git pre-commit hook backup guardrails. All 57 pytest tests, 2 Playwright E2E tests, Ruff linting, and markdownlint checks passed with 0 errors.

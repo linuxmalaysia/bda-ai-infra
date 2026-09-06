@@ -4,8 +4,8 @@ type: spatial_memory
 title: "Active Context Manifest"
 description: "Live tracking manifest of files currently in active engineering scope under the DSOM protocol."
 status: active
-timestamp: "2026-09-06T00:00:00Z"
-stale_after: "2027-09-06T00:00:00Z"
+timestamp: "2026-09-06T15:00:00Z"
+stale_after: "2027-09-06T15:00:00Z"
 generated: false
 verified: true
 sources:
@@ -36,6 +36,25 @@ The following assets are currently in active development or audit scope:
 - `.agents/brain/walkthrough.md`
 - `.agents/brain/palace_registry.md`
 - `.agents/brain/active_context_manifest.md`
+- `.agents/brain/checkpoint_summary.txt`
+
+## 🌐 GitHub Pages & Multi-Platform Hosting
+
+- `.github/workflows/jekyll-gh-pages.yml`
+- `_config.yml`
+- `_layouts/default.html`
+- `_includes/header.html`
+- `_includes/sidebar.html`
+- `_includes/footer.html`
+- `assets/css/style.scss`
+- `assets/js/theme-toggle.js`
+- `.gitlab-ci.yml`
+- `.gitbook.yaml`
+- `.readthedocs.yaml`
+- `mkdocs.yml`
+- `docs/requirements.txt`
+- `docs/github-pages-setup.md`
+- `docs/multi-platform-hosting.md`
 
 ## 🧪 CI/CD, Linters, Infrastructure & Test Suites
 
@@ -50,12 +69,15 @@ The following assets are currently in active development or audit scope:
 - `package.json`
 - `playwright.config.ts`
 - `tests/e2e/docs_search.spec.ts`
+- `tools/generate_summary.py`
+- `tools/install_git_guardrails.py`
 
 ## 📚 Navigation & Sovereign Ledgers
 
 - `README.md`
 - `START-HERE.md`
 - `SUMMARY.md`
+- `_data/navigation.yml`
 - `llms.txt`
 - `CHANGELOG.md`
 - `HISTORY.md`

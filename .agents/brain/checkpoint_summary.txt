@@ -1,7 +1,7 @@
 [MENTAL ANCHOR]
-Timestamp: 2026-09-06T15:30:00+00:00
+Timestamp: 2026-09-06T22:35:00+00:00
 Project: bda-ai-infra
 State: In Sync / Green / LLM-WIKI EOD Palace Sync Complete
-Test Suite: 59 pytest / 2 Playwright passed (100%)
-Active Remotes: origin @ feat/github-pages-jekyll-template-multiplatform
-Mental Anchor: Completed LLM-WIKI governance adoption and EOD Palace Sync. Verified Jekyll build exclusions, OKF index.md entrypoint, MkDocs configuration, dynamic summary generator determinism, SASS media query breakpoints, and pre-commit hook backup counter logic. All 59 pytest unit tests, 2 Playwright E2E tests, Ruff linting, and markdownlint checks passed clean with 0 errors.
+Test Suite: 65 pytest passed / markdownlint 0 errors (100%)
+Active Remotes: origin @ feat/diataxis-three-deployment-solutions
+Mental Anchor: Completed Three (3) Infrastructure Deployment Solutions Diátaxis separation into solution-1-aws-native.md, solution-2-hybrid-ai.md, and solution-3-onprem-proxmox-rke2.md. Resolved PR review comments, fixed markdownlint MD004 list formatting errors, updated navigation indexes, and performed EOD Palace Sync. All 65 pytest unit tests and markdownlint checks passed clean with 0 errors.

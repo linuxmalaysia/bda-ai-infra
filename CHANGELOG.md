@@ -27,6 +27,7 @@ and this project adheres to Semantic Versioning.
 ## [Unreleased]
 
 ### Added
+
 - Created `docs/AI-COGNITIVE-TWIN-PROTOCOL.md` defining the 4-tier infrastructure topology map (T1 Command Centre, T2 Dev Bridge, T3 Staging, T4 Production Node Fabric).
 - Added `.github/workflows/dsom-audit.yml` and `tests/test_okf_and_links.py` for CI/CD OKF v0.2 frontmatter verification and zero link decay detection.
 - Configured Python code health linter `ruff` and `.markdownlint.json` formatting rules alongside `.pre-commit-config.yaml`.
@@ -35,5 +36,12 @@ and this project adheres to Semantic Versioning.
 - Created `.agents/brain/active_context_manifest.md` to track live engineering scope under DSOM.
 
 ### Changed
+
 - Updated root `README.md`, `START-HERE.md`, `SUMMARY.md`, `llms.txt`, `CHANGELOG.md`, and `HISTORY.md` to reference newly established protocols, CI/CD workflows, linters, and test suites.
 - Synchronized spatial memory engine in `.agents/brain/` (`task.md`, `walkthrough.md`, `palace_registry.md`).
+
+## [1.0.0] - 2026-09-05
+
+### Added
+
+- Initial Big Data Analytics Lakehouse SSoT Documentation Platform baseline under DSOM protocol.

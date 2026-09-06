@@ -24,7 +24,7 @@ This protocol governs the operational behavior, execution boundaries, and infras
 
 ## 🏗️ 4-Tier Infrastructure Topology Map
 
-```
+```text
 +-----------------------------------------------------------------------+
 | T1: Command Centre (Local Workstation / Windows 11 DeX)              |
 | - Local AI agent interface, IDE gateways (.cursorrules, CLAUDE.md)   |

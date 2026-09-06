@@ -22,6 +22,7 @@ topics:
 The following assets are currently in active development or audit scope:
 
 ## 📜 Core Gateway & Governance Rules
+
 - `AGENTS.md`
 - `.agents/AGENTS.md`
 - `.cursorrules`
@@ -30,12 +31,14 @@ The following assets are currently in active development or audit scope:
 - `docs/AI-COGNITIVE-TWIN-PROTOCOL.md`
 
 ## 🧠 Spatial Memory State (`.agents/brain/`)
+
 - `.agents/brain/task.md`
 - `.agents/brain/walkthrough.md`
 - `.agents/brain/palace_registry.md`
 - `.agents/brain/active_context_manifest.md`
 
 ## 🧪 CI/CD, Linters, Infrastructure & Test Suites
+
 - `.github/workflows/dsom-audit.yml`
 - `pyproject.toml`
 - `tests/test_okf_and_links.py`
@@ -49,6 +52,7 @@ The following assets are currently in active development or audit scope:
 - `tests/e2e/docs_search.spec.ts`
 
 ## 📚 Navigation & Sovereign Ledgers
+
 - `README.md`
 - `START-HERE.md`
 - `SUMMARY.md`

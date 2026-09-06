@@ -23,6 +23,10 @@ This document maintains a chronological record of execution milestones, governan
 
 ## Milestone History
 
+### 2026-09-05 — Initial DSOM Documentation Baseline
+- **Author:** Cognitive Twin / System Architect
+- **Scope:** Initial layout setup for Big Data Analytics Lakehouse documentation platform.
+
 ### 2026-09-06 — DSOM Master Setup & Post-Merge Workflows Implementation
 - **Author:** Cognitive Twin (Jules / LinuxMalaysia)
 - **Scope:** Post-Merge Recommendations & DSOM Master Protocol Baseline Adoption

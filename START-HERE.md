@@ -25,24 +25,28 @@ Welcome to the Big Data Analytics (BDA) Lakehouse SSoT modernization project ope
 ## 🧭 Navigation Gateway
 
 ### 🤖 AI Agent Entry Points
+
 1. **Root Gateway:** [AGENTS.md](AGENTS.md)
 2. **Sovereign Constitution:** [.agents/AGENTS.md](.agents/AGENTS.md)
 3. **Spatial Memory Engine:** [.agents/brain/](.agents/brain/)
 4. **AI Cognitive Twin Protocol:** [docs/AI-COGNITIVE-TWIN-PROTOCOL.md](docs/AI-COGNITIVE-TWIN-PROTOCOL.md)
 
 ### 📚 Documentation Quadrants (Diátaxis)
+
 - **Tutorials:** [docs/tutorials/onboarding-and-setup.md](docs/tutorials/onboarding-and-setup.md)
 - **How-To Guides:** [docs/how-to-guides/phased-migration-strategy.md](docs/how-to-guides/phased-migration-strategy.md)
 - **Reference Material:** [docs/reference/lakehouse-architecture.md](docs/reference/lakehouse-architecture.md)
 - **Explanation:** [docs/explanation/governance-and-compliance.md](docs/explanation/governance-and-compliance.md)
 
 ### 🛠️ Workflows & Test Suites
+
 - **CI/CD OKF & Link Audit:** `.github/workflows/dsom-audit.yml`
 - **Python Linter & Unit Tests:** `uv run ruff check .` and `uv run pytest`
 - **Ansible & Quadlet Tests:** `.ansible-lint` and `molecule/default/`
 - **Playwright E2E Search Tests:** `tests/e2e/docs_search.spec.ts`
 
 ### 📜 Sovereign Ledgers
+
 - **Summary Index:** [SUMMARY.md](SUMMARY.md)
 - **LLM AI Sitemap:** [llms.txt](llms.txt)
 - **Changelog Ledger:** [CHANGELOG.md](CHANGELOG.md)

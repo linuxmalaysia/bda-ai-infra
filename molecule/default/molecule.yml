@@ -5,7 +5,7 @@ driver:
   name: podman
 platforms:
   - name: instance
-    image: quay.io/centos/centos:stream9
+    image: quay.io/centos/centos:stream9@sha256:d559868f760813952f447781b4d081f9b31d0528ef3c24ae6cf95fa66aa107b3
     pre_build_image: true
 provisioner:
   name: ansible

@@ -13,24 +13,29 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        # actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        with:
+          persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        # actions/setup-python@v5
+        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdef900eaed61
         with:
           python-version: '3.12'
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v3
+        # astral-sh/setup-uv@v3
+        uses: astral-sh/setup-uv@1edb43242cc9d8e5749d021735aaf2327d5da730
 
       - name: Install Dependencies
         run: |
-          uv pip install --system pytest pyyaml ruff
+          uv sync --locked
 
       - name: Run Ruff Linter
         run: |
-          ruff check .
+          uv run --locked ruff check .
 
       - name: Run OKF Frontmatter & Zero Link Decay Tests
         run: |
-          pytest tests/test_okf_and_links.py -v
+          uv run --locked pytest tests/test_okf_and_links.py -v

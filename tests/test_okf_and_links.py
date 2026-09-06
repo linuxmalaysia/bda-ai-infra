@@ -45,9 +45,24 @@ def test_okf_v02_frontmatter(md_path):
     assert isinstance(data, dict), f"Frontmatter in {md_path} is not a valid YAML dictionary"
 
     assert "okf_version" in data, f"Missing okf_version in {md_path}"
-    assert str(data["okf_version"]) in ["0.1", "0.2"], f"Invalid okf_version in {md_path}"
+    assert str(data["okf_version"]) == "0.2", f"Invalid okf_version in {md_path}"
     assert "type" in data or "title" in data, f"Missing title/type header in {md_path}"
     assert "description" in data, f"Missing description in {md_path}"
+
+
+def _get_markdown_headings(target_path):
+    """Extract slugified heading anchors from a markdown file."""
+    content = target_path.read_text(encoding="utf-8")
+    slugs = set()
+    for line in content.splitlines():
+        if line.startswith("#"):
+            heading_text = line.lstrip("#").strip()
+            # Basic GitHub slugification: lowercase, replace spaces/special chars with hyphens
+            slug = heading_text.lower()
+            slug = re.sub(r"[^\w\s-]", "", slug)
+            slug = re.sub(r"[\s_]+", "-", slug)
+            slugs.add(slug)
+    return slugs
 
 
 @pytest.mark.parametrize(
@@ -56,23 +71,37 @@ def test_okf_v02_frontmatter(md_path):
     ids=lambda p: str(p.relative_to(REPO_ROOT)),
 )
 def test_zero_link_decay(md_path):
-    """Verify all relative markdown links point to existing files."""
+    """Verify all relative markdown links point to existing files and fragment anchors."""
     content = md_path.read_text(encoding="utf-8")
 
     link_pattern = re.compile(r"\[.*?\]\(([^)]+)\)")
     matches = link_pattern.findall(content)
 
     for link in matches:
-        if link.startswith(("http://", "https://", "mailto:", "#")):
+        if link.startswith(("http://", "https://", "mailto:")):
             continue
 
-        target_link = link.split("#")[0]
-        if not target_link:
-            continue
+        if link.startswith("#"):
+            target_path = md_path
+            fragment = link[1:]
+        else:
+            link_parts = link.split("#", 1)
+            target_link = link_parts[0]
+            fragment = link_parts[1] if len(link_parts) > 1 else None
 
-        target_path = (md_path.parent / target_link).resolve()
+            if not target_link:
+                continue
+
+            target_path = (md_path.parent / target_link).resolve()
 
         rel_file = md_path.relative_to(REPO_ROOT)
         assert target_path.exists(), (
             f"Link decay detected in {rel_file}: '{link}' -> '{target_path}' does not exist"
         )
+
+        if fragment and target_path.is_file() and target_path.suffix == ".md":
+            headings = _get_markdown_headings(target_path)
+            rel_target = target_path.relative_to(REPO_ROOT)
+            assert (
+                fragment in headings or fragment.lower() in headings
+            ), f"Heading anchor '{fragment}' missing in {rel_target} from {rel_file}"

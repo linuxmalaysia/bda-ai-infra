@@ -27,34 +27,34 @@ topics:
 
 ## Spatial Memory Engine
 
-  - [Task Checklist](.agents/brain/task.md)
-  - [Session Walkthrough](.agents/brain/walkthrough.md)
-  - [Palace Registry](.agents/brain/palace_registry.md)
-  - [Active Context Manifest](.agents/brain/active_context_manifest.md)
+- [Task Checklist](.agents/brain/task.md)
+- [Session Walkthrough](.agents/brain/walkthrough.md)
+- [Palace Registry](.agents/brain/palace_registry.md)
+- [Active Context Manifest](.agents/brain/active_context_manifest.md)
 
 ## Diátaxis Quadrants
 
 ### 🎓 Tutorials
 
-  - [Onboarding and Developer Setup Guide](docs/tutorials/onboarding-and-setup.md)
+- [Onboarding and Developer Setup Guide](docs/tutorials/onboarding-and-setup.md)
 
 ### 🛠️ How-To Guides
 
-  - [Ingestion Pipeline Modernization](docs/how-to-guides/ingestion-pipeline-modernization.md)
-  - [Phased Migration Strategy](docs/how-to-guides/phased-migration-strategy.md)
+- [Ingestion Pipeline Modernization](docs/how-to-guides/ingestion-pipeline-modernization.md)
+- [Phased Migration Strategy](docs/how-to-guides/phased-migration-strategy.md)
 
 ### 📚 Reference Material
 
-  - [Legacy Architecture Deconstruction](docs/reference/legacy-architecture.md)
-  - [Target Lakehouse Architecture](docs/reference/lakehouse-architecture.md)
-  - [Analytical Modules Specifications](docs/reference/business-applications.md)
-  - [Data Governance Subsystems Matrix](docs/reference/governance-matrix.md)
+- [Legacy Architecture Deconstruction](docs/reference/legacy-architecture.md)
+- [Target Lakehouse Architecture](docs/reference/lakehouse-architecture.md)
+- [Analytical Modules Specifications](docs/reference/business-applications.md)
+- [Data Governance Subsystems Matrix](docs/reference/governance-matrix.md)
 
 ### 💡 Explanation
 
-  - [Human-to-AI Quarantine Model](docs/explanation/human-ai-quarantine-model.md)
-  - [MCP and AI Sandboxing Architecture](docs/explanation/mcp-and-ai-sandboxing.md)
-  - [Governance, Security, and Compliance](docs/explanation/governance-and-compliance.md)
+- [Human-to-AI Quarantine Model](docs/explanation/human-ai-quarantine-model.md)
+- [MCP and AI Sandboxing Architecture](docs/explanation/mcp-and-ai-sandboxing.md)
+- [Governance, Security, and Compliance](docs/explanation/governance-and-compliance.md)
 
 ## Ledgers
 

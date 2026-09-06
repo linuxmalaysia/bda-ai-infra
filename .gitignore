@@ -6,3 +6,6 @@ __pycache__/
 node_modules/
 test-results/
 playwright-report/
+_site/
+.jekyll-cache/
+.jekyll-metadata

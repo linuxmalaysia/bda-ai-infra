@@ -1,0 +1,315 @@
+---
+# Frontmatter for Sass compilation
+---
+
+:root {
+  --bg-color: #f8fafc;
+  --panel-bg: #ffffff;
+  --text-primary: #0f172a;
+  --text-muted: #475569;
+  --border-color: #e2e8f0;
+  --accent-color: #2563eb;
+  --accent-hover: #1d4ed8;
+  --card-bg: #f1f5f9;
+  --sidebar-bg: #1e293b;
+  --sidebar-text: #f8fafc;
+  --sidebar-muted: #94a3b8;
+  --code-bg: #0f172a;
+  --code-text: #f1f5f9;
+}
+
+[data-theme="dark"] {
+  --bg-color: #0b0f19;
+  --panel-bg: #111827;
+  --text-primary: #f9fafb;
+  --text-muted: #9ca3af;
+  --border-color: #1f2937;
+  --accent-color: #3b82f6;
+  --accent-hover: #60a5fa;
+  --card-bg: #1f2937;
+  --sidebar-bg: #030712;
+  --sidebar-text: #f9fafb;
+  --sidebar-muted: #6b7280;
+  --code-bg: #111827;
+  --code-text: #f3f4f6;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] {
+    --bg-color: #0b0f19;
+    --panel-bg: #111827;
+    --text-primary: #f9fafb;
+    --text-muted: #9ca3af;
+    --border-color: #1f2937;
+    --accent-color: #3b82f6;
+    --accent-hover: #60a5fa;
+    --card-bg: #1f2937;
+    --sidebar-bg: #030712;
+    --sidebar-text: #f9fafb;
+    --sidebar-muted: #6b7280;
+    --code-bg: #111827;
+    --code-text: #f3f4f6;
+  }
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Header */
+.top-header {
+  background-color: #0f172a;
+  color: #ffffff;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--accent-color);
+}
+
+.top-header-brand .brand-title {
+  color: #ffffff;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-sub {
+  font-size: 0.75rem;
+  color: #38bdf8;
+  letter-spacing: 0.05em;
+}
+
+.brand-main {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.theme-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.theme-label {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-right: 0.25rem;
+}
+
+.theme-btn {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #e2e8f0;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-btn:hover, .theme-btn.active {
+  background: var(--accent-color);
+  border-color: var(--accent-hover);
+  color: #ffffff;
+}
+
+/* Layout Container */
+.site-container {
+  display: flex;
+  min-height: calc(100vh - 120px);
+}
+
+/* Sidebar Navigation */
+.sidebar-nav {
+  width: 280px;
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  padding: 1.5rem 1rem;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-color);
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .site-container {
+    flex-direction: column;
+  }
+
+  .sidebar-nav {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+}
+
+.sidebar-header h2 {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--sidebar-muted);
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 0.5rem;
+}
+
+.nav-section {
+  margin-bottom: 1.25rem;
+}
+
+.nav-section-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: #38bdf8;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.03em;
+}
+
+.nav-list {
+  list-style: none;
+}
+
+.nav-item {
+  margin-bottom: 0.25rem;
+}
+
+.nav-link {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.88rem;
+  display: block;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+  background: #334155;
+  color: #ffffff;
+}
+
+/* Main Content */
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.hero-callout {
+  background: var(--card-bg);
+  border-left: 4px solid var(--accent-color);
+  padding: 1.5rem;
+  border-radius: 6px;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 1.8rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.page-description {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pill-badge {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 12px;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}
+
+.pill-primary { background: #dbeafe; color: #1e40af; }
+.pill-info { background: #e0f2fe; color: #0369a1; }
+.pill-success { background: #dcfce7; color: #15803d; }
+.pill-action {
+  background: var(--accent-color);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+
+/* Markdown typography */
+.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+.markdown-body p, .markdown-body ul, .markdown-body ol {
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.markdown-body pre {
+  background-color: var(--code-bg);
+  color: var(--code-text);
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-body code {
+  background-color: var(--card-bg);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.88rem;
+}
+
+/* Footer */
+.site-footer {
+  background: #0f172a;
+  color: #94a3b8;
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+  border-top: 1px solid #1e293b;
+}
+
+.site-footer a {
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+@media print {
+  .top-header, .sidebar-nav, .theme-switcher, .print-btn {
+    display: none !important;
+  }
+  .site-container {
+    display: block;
+  }
+  .main-content {
+    max-width: 100%;
+    padding: 0;
+  }
+}

@@ -8,12 +8,12 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:8000',
+    baseURL: 'http://localhost:8000/bda-ai-infra',
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'python3 -m http.server 8000 --directory docs',
-    url: 'http://localhost:8000',
+    command: 'sh -c "jekyll build -d _site && (ln -s . _site/bda-ai-infra 2>/dev/null || true) && python3 -m http.server 8000 --directory _site"',
+    url: 'http://localhost:8000/bda-ai-infra/README.html',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },

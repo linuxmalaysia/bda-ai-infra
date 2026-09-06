@@ -1,0 +1,35 @@
+<aside class="sidebar-nav" id="sidebar-nav">
+  <div class="sidebar-header">
+    <h2>Documentation</h2>
+  </div>
+  <nav class="sidebar-menu">
+    {% if site.data.navigation %}
+      {% for section in site.data.navigation %}
+        <div class="nav-section">
+          {% if section.title %}
+            <h3 class="nav-section-title">{{ section.title }}</h3>
+          {% endif %}
+          <ul class="nav-list">
+            {% for item in section.items %}
+              <li class="nav-item">
+                <a href="{{ site.baseurl }}{{ item.url }}" class="nav-link {% if page.url == item.url %}active{% endif %}">
+                  {{ item.title }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="nav-section">
+        <h3 class="nav-section-title">Core Navigation</h3>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="{{ site.baseurl }}/" class="nav-link">Overview & Readme</a></li>
+          <li class="nav-item"><a href="{{ site.baseurl }}/SUMMARY.html" class="nav-link">Summary & Index</a></li>
+          <li class="nav-item"><a href="{{ site.baseurl }}/CHANGELOG.html" class="nav-link">Changelog</a></li>
+          <li class="nav-item"><a href="{{ site.baseurl }}/HISTORY.html" class="nav-link">History</a></li>
+        </ul>
+      </div>
+    {% endif %}
+  </nav>
+</aside>

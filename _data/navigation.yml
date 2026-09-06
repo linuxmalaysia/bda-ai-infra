@@ -1,0 +1,54 @@
+- title: Root Overview
+  items:
+  - title: "Modernizing Big Data Analytics Architecture \u2014 BDA Lakehouse SSoT"
+    url: /README.html
+  - title: Changelog Ledger
+    url: /CHANGELOG.html
+  - title: Sovereign Execution History Ledger
+    url: /HISTORY.html
+  - title: "START HERE \u2014 Sovereign AI & BDA Lakehouse Onboarding Gateway"
+    url: /START-HERE.html
+  - title: AI Gateway & Sovereign Redirect
+    url: /AGENTS.html
+  - title: Llms
+    url: /llms.txt
+  - title: Anthropic Claude AI Rules
+    url: /CLAUDE.html
+- title: Explanation
+  items:
+  - title: Governance, Security, and Compliance Framework
+    url: /docs/explanation/governance-and-compliance.html
+  - title: Model Context Protocol (MCP) and AI Sandboxing Architecture
+    url: /docs/explanation/mcp-and-ai-sandboxing.html
+  - title: The Human-to-AI Quarantine Model and Data Classification
+    url: /docs/explanation/human-ai-quarantine-model.html
+- title: General Documentation
+  items:
+  - title: AI Cognitive Twin Protocol & Infrastructure Topology
+    url: /docs/AI-COGNITIVE-TWIN-PROTOCOL.html
+  - title: BDA Lakehouse Baseline Documentation Index
+    url: /docs/README.html
+  - title: GitHub Pages Setup & Deployment Guide
+    url: /docs/github-pages-setup.html
+  - title: Multi-Platform Hosting Guide (GitLab, GitBook, ReadTheDocs)
+    url: /docs/multi-platform-hosting.html
+- title: How To Guides
+  items:
+  - title: Ingestion Pipeline, Application Portal, and Superset Modernization
+    url: /docs/how-to-guides/ingestion-pipeline-modernization.html
+  - title: Phased Migration Strategy and Implementation Roadmap
+    url: /docs/how-to-guides/phased-migration-strategy.html
+- title: Reference
+  items:
+  - title: Big Data Domain Specifications and Analytical Workflows
+    url: /docs/reference/business-applications.html
+  - title: Data Governance, Subsystems, and Standards Matrix
+    url: /docs/reference/governance-matrix.html
+  - title: Legacy Big Data Analytics Environment Architectural Deconstruction
+    url: /docs/reference/legacy-architecture.html
+  - title: Target 100% Open-Source Lakehouse Architecture
+    url: /docs/reference/lakehouse-architecture.html
+- title: Tutorials
+  items:
+  - title: BDA Lakehouse Onboarding and Developer Setup
+    url: /docs/tutorials/onboarding-and-setup.html

@@ -1,12 +1,6 @@
 #!/usr/bin/env python3
-"""
-tools/install_git_guardrails.py
-Installs pre-commit hook guardrails to auto-generate SUMMARY.md and verify OKF metadata.
-"""
+"""Installs pre-commit hook guardrails to auto-generate SUMMARY.md and verify OKF metadata."""
 
-import os
-import subprocess
-import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).parent.parent

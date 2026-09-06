@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
-"""
-tools/generate_summary.py
-Generates SUMMARY.md and _data/navigation.yml by scanning root and docs/ for .md files.
-"""
+"""Generates SUMMARY.md and _data/navigation.yml by scanning root and docs/ for .md files."""
 
 import os
-import re
 from pathlib import Path
 import yaml
 
@@ -44,7 +40,15 @@ def discover_markdown_files():
     docs_files = []
 
     # Priority root files
-    priority_roots = ["README.md", "SUMMARY.md", "CHANGELOG.md", "HISTORY.md", "START-HERE.md", "AGENTS.md", "llms.txt"]
+    priority_roots = [
+        "README.md",
+        "SUMMARY.md",
+        "CHANGELOG.md",
+        "HISTORY.md",
+        "START-HERE.md",
+        "AGENTS.md",
+        "llms.txt",
+    ]
     for pr in priority_roots:
         p = REPO_ROOT / pr
         if p.exists():
@@ -64,19 +68,23 @@ def discover_markdown_files():
 
                     # Section determined by subdirectory under docs
                     parts = rel_path.parts
-                    section = parts[1].replace("-", " ").title() if len(parts) > 2 else "General Documentation"
+                    if len(parts) > 2:
+                        section = parts[1].replace("-", " ").title()
+                    else:
+                        section = "General Documentation"
 
                     docs_files.append({
                         "title": title,
                         "path": str(rel_path),
                         "url": rel_url,
-                        "section": section
+                        "section": section,
                     })
 
     return root_files, docs_files
 
 
 def main():
+    """Generate SUMMARY.md and _data/navigation.yml documentation indexes."""
     root_files, docs_files = discover_markdown_files()
 
     # Build navigation yaml
@@ -125,7 +133,7 @@ def main():
         "# Table of Contents",
         "",
         "## Root Overview",
-        ""
+        "",
     ]
 
     for rf in root_files:
@@ -137,9 +145,9 @@ def main():
         summary_lines.append(f"## {sec_name}")
         summary_lines.append("")
         for item in items:
-            path_str = item['url'].lstrip('/').replace('.html', '.md')
-            if path_str == 'index.md':
-                path_str = 'README.md'
+            path_str = item["url"].lstrip("/").replace(".html", ".md")
+            if path_str == "index.md":
+                path_str = "README.md"
             summary_lines.append(f"* [{item['title']}]({path_str})")
         summary_lines.append("")
 

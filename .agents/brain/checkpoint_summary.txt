@@ -1,9 +1,26 @@
-[DSOM EPISODIC RECORD]
-Timestamp: 2026-09-05T23:55:00Z
-Project: BDA Lakehouse & Deep State of Mind Protocol Setup
-State: In Sync / Green / Ready for Merge
-Test Suite: 18/18 Markdown files verified OKF v0.2 compliant (100%)
-Active Branch: feat/dsom-protocol-setup
+---
+okf_version: "0.2"
+type: spatial_memory
+title: "DSOM Checkpoint Summary"
+description: "EOD Palace Sync mental anchor checkpoint summary for DSOM cognitive twin reanimation."
+status: active
+timestamp: "2026-09-06T00:00:00Z"
+stale_after: "2027-09-06T00:00:00Z"
+generated: false
+verified: true
+sources:
+  - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/.agents/skills/eod-palace-sync/SKILL/"
+    description: "EOD Palace Sync Skill specification."
+topics:
+  - dsom
+  - checkpoint
+  - mental-anchor
+---
 
 [MENTAL ANCHOR]
-Initialised spatial memory in .agents/brain/ (task.md, walkthrough.md, palace_registry.md, checkpoint_summary.txt). Established Sovereign Constitution in .agents/AGENTS.md, root AI discovery gateway AGENTS.md, and Universal Gateway Matrix (.cursorrules, CLAUDE.md, .github/copilot-instructions.md). Upgraded all repository documentation to OKF v0.2 frontmatter standard with full trust signals.
+Timestamp: 2026-09-06T06:30:00+00:00
+Project: bda-ai-infra
+State: In Sync / Green / Pushed
+Test Suite: 52/52 passed (100%)
+Active Remotes: origin @ feat/dsom-post-merge-automation
+Mental Anchor: Completed post-merge DSOM protocol baseline adoption, CI/CD OKF and zero link decay audit workflow, Ruff and markdownlint configuration, Ansible Molecule Quadlet tests, and Playwright E2E search test scaffolding. All 52 unit tests and markdownlint checks pass with 0 errors.

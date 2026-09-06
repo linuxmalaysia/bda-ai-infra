@@ -81,8 +81,103 @@ def _get_markdown_headings(target_path):
                 slugs.append(base_slug)
             else:
                 slugs.append(f"{base_slug}-{count}")
+def _get_markdown_headings(target_path_or_content):
+    """Extract GitHub ATX-compliant slugified heading anchors with duplicate suffixing."""
+    if isinstance(target_path_or_content, Path):
+        content = target_path_or_content.read_text(encoding="utf-8")
+    else:
+        content = target_path_or_content
+
+    slugs = []
+    fence_char = None
+    fence_len = 0
+    slug_counts = {}
+
+    for line in content.splitlines():
+        # Check fenced code block transitions
+        # Up to 3 leading spaces allowed before fence
+        indent_len = len(line) - len(line.lstrip(" "))
+        if indent_len <= 3:
+            stripped_line = line.strip()
+            fence_match = re.match(r"^(`{3,}|~{3,})", stripped_line)
+            if fence_match:
+                match_str = fence_match.group(1)
+                m_char = match_str[0]
+                m_len = len(match_str)
+
+                if fence_char is None:
+                    # Open code fence
+                    fence_char = m_char
+                    fence_len = m_len
+                    continue
+                elif m_char == fence_char and m_len >= fence_len:
+                    # Close code fence
+                    fence_char = None
+                    fence_len = 0
+                    continue
+
+        if fence_char is not None:
+            continue
+
+        # Check ATX heading: 0-3 leading spaces, 1-6 '#' chars, space/tab or EOL after '#'
+        if indent_len <= 3:
+            stripped_indent = line.lstrip(" ")
+            heading_match = re.match(r"^(#{1,6})(?:[ \t]+(.*)|$)", stripped_indent)
+            if heading_match:
+                raw_title = heading_match.group(2) or ""
+                # Remove trailing closing '#' hashes (e.g. '### Heading ###')
+                raw_title = re.sub(r"[ \t]+#+[ \t]*$", "", raw_title).strip()
+
+                # GitHub slugification: lowercase, remove non-alphanumeric/spaces/hyphens
+                base_slug = raw_title.lower()
+                base_slug = re.sub(r"[^\w\s-]", "", base_slug)
+                base_slug = re.sub(r"[\s_]+", "-", base_slug)
+
+                count = slug_counts.get(base_slug, 0)
+                slug_counts[base_slug] = count + 1
+
+                if count == 0:
+                    slugs.append(base_slug)
+                else:
+                    slugs.append(f"{base_slug}-{count}")
 
     return slugs
+
+
+def test_markdown_heading_extraction_atx_rules():
+    """Unit tests for GitHub ATX heading extraction rules."""
+    sample = """
+# Valid Heading
+
+   ## Indented Heading
+
+#### Heading With Trailing Hashes ####
+
+#not-a-heading
+
+```python
+# Code comment inside block
+````
+# Outside Code Fence
+
+````python
+```
+# Still Inside Mismatched Fence
+````
+
+# Duplicate Heading
+# Duplicate Heading
+"""
+    headings = _get_markdown_headings(sample)
+    assert "valid-heading" in headings
+    assert "indented-heading" in headings
+    assert "heading-with-trailing-hashes" in headings
+    assert "not-a-heading" not in headings
+    assert "code-comment-inside-block" not in headings
+    assert "outside-code-fence" in headings
+    assert "still-inside-mismatched-fence" not in headings
+    assert "duplicate-heading" in headings
+    assert "duplicate-heading-1" in headings
 
 
 @pytest.mark.parametrize(

@@ -38,6 +38,11 @@ jobs:
       - name: Run Markdownlint
         run: |
           markdownlint --config .markdownlint.json "**/*.md"
+          npm ci
+
+      - name: Run Markdownlint
+        run: |
+          npx markdownlint --config .markdownlint.json --ignore node_modules --ignore dist --ignore build "**/*.md"
 
       - name: Run Ruff Linter
         run: |

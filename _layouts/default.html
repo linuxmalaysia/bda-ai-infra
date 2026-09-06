@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/css/style.css">
+  <script src="{{ site.baseurl }}/assets/js/theme-toggle.js" defer></script>
+</head>
+<body class="site-body">
+  {% include header.html %}
+
+  <div class="site-container">
+    {% include sidebar.html %}
+
+    <main class="main-content" id="main-content">
+      <div class="content-wrapper">
+        <header class="page-header">
+          <div class="hero-callout">
+            <h1 class="page-title">{{ page.title | default: "Big Data & AI Infra" }}</h1>
+            {% if page.description %}
+            <p class="page-description">{{ page.description }}</p>
+            {% endif %}
+            <div class="badge-row">
+              <span class="pill-badge pill-primary">OpenTofu &gt;= 1.6.0</span>
+              <span class="pill-badge pill-info">AWS / On-Prem</span>
+              <span class="pill-badge pill-success">DSOM v0.2</span>
+              <button class="pill-badge pill-action print-btn" onclick="window.print()">🖨️ PRINT / PDF</button>
+            </div>
+          </div>
+        </header>
+
+        <article class="markdown-body">
+          {{ content }}
+        </article>
+      </div>
+    </main>
+  </div>
+
+  {% include footer.html %}
+</body>
+</html>

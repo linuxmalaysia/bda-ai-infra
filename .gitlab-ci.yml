@@ -1,0 +1,13 @@
+# GitLab Pages CI/CD Pipeline
+image: ruby:3.2
+
+pages:
+  stage: deploy
+  script:
+    - gem install jekyll bundler
+    - jekyll build -d public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main

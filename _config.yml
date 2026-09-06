@@ -1,0 +1,39 @@
+title: "BDA AI Infra :: Enterprise Big Data & AI Architecture"
+description: "Enterprise Big Data Analytics & AI Lakehouse Architecture Blueprint & Documentation"
+baseurl: "/bda-ai-infra"
+url: "https://linuxmalaysia.github.io"
+
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+
+sass:
+  style: compressed
+  sass_dir: assets/css
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+exclude:
+  - node_modules
+  - vendor
+  - .venv
+  - .agents
+  - molecule
+  - tests
+  - package.json
+  - package-lock.json
+  - pyproject.toml
+  - uv.lock
+  - playwright.config.ts
+  - .pre-commit-config.yaml
+  - .ansible-lint
+  - .markdownlint.json

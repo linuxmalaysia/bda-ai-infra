@@ -1,63 +1,60 @@
 ---
 okf_version: "0.2"
-type: summary_index
-title: "Summary Index & Navigation Map"
-description: "Master summary index and navigation gateway across all DSOM documentation quadrants."
+type: reference
+title: "Table of Contents & Documentation Index"
+description: "Auto-generated index of all documentation files in the repository."
 status: active
 timestamp: "2026-09-06T00:00:00Z"
 stale_after: "2027-09-06T00:00:00Z"
-generated: false
+generated: true
 verified: true
 sources:
-  - url: "README.md"
-    description: "Root project documentation index."
+  - url: "https://linuxmalaysia.github.io/bda-ai-infra/SUMMARY.html"
+    description: "Documentation summary index."
 topics:
-  - dsom
-  - summary-index
+  - index
+  - summary
   - navigation
 ---
 
-# Summary Index
+# Table of Contents
 
-- [Start Here](START-HERE.md)
-- [Root Readme](README.md)
-- [AI Root Gateway](AGENTS.md)
-- [Sovereign AI Constitution](.agents/AGENTS.md)
-- [AI Cognitive Twin Protocol](docs/AI-COGNITIVE-TWIN-PROTOCOL.md)
+## Root Overview
 
-## Spatial Memory Engine
+* [Modernizing Big Data Analytics Architecture — BDA Lakehouse SSoT](README.md)
+* [Summary Index & Navigation Map](SUMMARY.md)
+* [Changelog Ledger](CHANGELOG.md)
+* [Sovereign Execution History Ledger](HISTORY.md)
+* [START HERE — Sovereign AI & BDA Lakehouse Onboarding Gateway](START-HERE.md)
+* [AI Gateway & Sovereign Redirect](AGENTS.md)
+* [Llms](llms.txt)
 
-- [Task Checklist](.agents/brain/task.md)
-- [Session Walkthrough](.agents/brain/walkthrough.md)
-- [Palace Registry](.agents/brain/palace_registry.md)
-- [Active Context Manifest](.agents/brain/active_context_manifest.md)
+## General Documentation
 
-## Diátaxis Quadrants
+* [AI Cognitive Twin Protocol & Infrastructure Topology](docs/AI-COGNITIVE-TWIN-PROTOCOL.md)
+* [BDA Lakehouse Baseline Documentation Index](docs/README.md)
+* [GitHub Pages Setup & Deployment Guide](docs/github-pages-setup.md)
+* [Multi-Platform Hosting Guide (GitLab, GitBook, ReadTheDocs)](docs/multi-platform-hosting.md)
 
-### 🎓 Tutorials
+## Reference
 
-- [Onboarding and Developer Setup Guide](docs/tutorials/onboarding-and-setup.md)
+* [Big Data Domain Specifications and Analytical Workflows](docs/reference/business-applications.md)
+* [Data Governance, Subsystems, and Standards Matrix](docs/reference/governance-matrix.md)
+* [Target 100% Open-Source Lakehouse Architecture](docs/reference/lakehouse-architecture.md)
+* [Legacy Big Data Analytics Environment Architectural Deconstruction](docs/reference/legacy-architecture.md)
 
-### 🛠️ How-To Guides
+## Tutorials
 
-- [Ingestion Pipeline Modernization](docs/how-to-guides/ingestion-pipeline-modernization.md)
-- [Phased Migration Strategy](docs/how-to-guides/phased-migration-strategy.md)
+* [BDA Lakehouse Onboarding and Developer Setup](docs/tutorials/onboarding-and-setup.md)
 
-### 📚 Reference Material
+## Explanation
 
-- [Legacy Architecture Deconstruction](docs/reference/legacy-architecture.md)
-- [Target Lakehouse Architecture](docs/reference/lakehouse-architecture.md)
-- [Analytical Modules Specifications](docs/reference/business-applications.md)
-- [Data Governance Subsystems Matrix](docs/reference/governance-matrix.md)
+* [Governance, Security, and Compliance Framework](docs/explanation/governance-and-compliance.md)
+* [The Human-to-AI Quarantine Model and Data Classification](docs/explanation/human-ai-quarantine-model.md)
+* [Model Context Protocol (MCP) and AI Sandboxing Architecture](docs/explanation/mcp-and-ai-sandboxing.md)
 
-### 💡 Explanation
+## How To Guides
 
-- [Human-to-AI Quarantine Model](docs/explanation/human-ai-quarantine-model.md)
-- [MCP and AI Sandboxing Architecture](docs/explanation/mcp-and-ai-sandboxing.md)
-- [Governance, Security, and Compliance](docs/explanation/governance-and-compliance.md)
+* [Ingestion Pipeline, Application Portal, and Superset Modernization](docs/how-to-guides/ingestion-pipeline-modernization.md)
+* [Phased Migration Strategy and Implementation Roadmap](docs/how-to-guides/phased-migration-strategy.md)
 
-## Ledgers
-
-- [Changelog Ledger](CHANGELOG.md)
-- [Execution History Ledger](HISTORY.md)
-- [LLMs Crawl Map](llms.txt)

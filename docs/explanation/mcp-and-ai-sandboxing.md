@@ -1,16 +1,23 @@
 ---
+okf_version: "0.2"
 title: Model Context Protocol (MCP) and AI Sandboxing Architecture
 description: Explanation of how Model Context Protocol (MCP) is utilized to confine AI models to operational tooling while barring direct writes to ground-truth data.
 type: explanation
-version: 0.2.0
 status: verified
-tags:
+timestamp: "2026-09-05T23:45:00Z"
+stale_after: "2027-09-05T23:45:00Z"
+topics:
   - bda
   - mcp
   - model-context-protocol
   - ai-sandboxing
   - governance
   - keycloak
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # Model Context Protocol (MCP) and AI Sandboxing Architecture

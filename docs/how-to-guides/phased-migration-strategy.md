@@ -1,15 +1,22 @@
 ---
+okf_version: "0.2"
 title: Phased Migration Strategy and Implementation Roadmap
 description: Practical 4-phase implementation roadmap over 12 months for transitioning BDA to a 100% open-source lakehouse with zero downtime.
 type: how-to-guide
-version: 0.2.0
 status: verified
-tags:
+timestamp: "2026-09-05T23:45:00Z"
+stale_after: "2027-09-05T23:45:00Z"
+topics:
   - bda
   - migration
   - roadmap
   - dual-run
   - risk-mitigation
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # Phased Migration Strategy and Implementation Roadmap

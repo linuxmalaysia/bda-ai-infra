@@ -1,10 +1,12 @@
 ---
+okf_version: "0.2"
 title: Ingestion Pipeline, Application Portal, and Superset Modernization
 description: Practical how-to guide for modernizing data ingestion using Apache NiFi and Airflow, web applications with Next.js/APISIX, and visual analytics with Apache Superset.
 type: how-to-guide
-version: 0.2.0
 status: verified
-tags:
+timestamp: "2026-09-05T23:45:00Z"
+stale_after: "2027-09-05T23:45:00Z"
+topics:
   - bda
   - nifi
   - airflow
@@ -12,6 +14,11 @@ tags:
   - nextjs
   - apisix
   - odcs
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # Ingestion Pipeline, Application Portal, and Superset Modernization

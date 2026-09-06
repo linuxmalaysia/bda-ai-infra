@@ -1,14 +1,21 @@
 ---
+okf_version: "0.2"
 title: BDA Lakehouse Baseline Documentation Index
 description: Main index and navigation hub for the Modernizing Big Data Analytics Architecture baseline documentation, structured following Diátaxis and DSOM standards.
 type: reference
-version: 0.2.0
 status: verified
-tags:
+timestamp: "2026-09-05T23:45:00Z"
+stale_after: "2027-09-05T23:45:00Z"
+topics:
   - bda
   - diataxis
   - index
   - dsom
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # Modernizing Big Data Analytics Architecture: Master Documentation Suite

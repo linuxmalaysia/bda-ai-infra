@@ -1,10 +1,12 @@
 ---
+okf_version: "0.2"
 title: The Human-to-AI Quarantine Model and Data Classification
 description: Detailed conceptual explanation of the 3-tier data classification topology (Tier 0 Golden Truth, Tier 1 Telemetry, Tier 2 AI Sandbox) preserving human ground truth.
 type: explanation
-version: 0.2.0
 status: verified
-tags:
+timestamp: "2026-09-05T23:45:00Z"
+stale_after: "2027-09-05T23:45:00Z"
+topics:
   - bda
   - data-governance
   - data-classification
@@ -13,6 +15,11 @@ tags:
   - tier-2
   - openlineage
   - provenance
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 ---
 
 # The Human-to-AI Quarantine Model and Data Classification Topology

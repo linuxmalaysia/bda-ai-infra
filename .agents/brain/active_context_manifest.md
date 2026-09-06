@@ -2,24 +2,27 @@
 okf_version: "0.2"
 type: spatial_memory
 title: "Active Context Manifest"
-description: "Live tracking manifest of files currently in active engineering scope under the DSOM protocol."
+description: "Live tracking manifest of files currently in active engineering scope under the DSOM protocol and LLM-WIKI framework."
 status: active
-timestamp: "2026-09-06T15:00:00Z"
-stale_after: "2027-09-06T15:00:00Z"
+timestamp: "2026-09-06T15:30:00Z"
+stale_after: "2027-09-06T15:30:00Z"
 generated: false
 verified: true
 sources:
   - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/START-HERE/"
     description: "DSOM protocol master onboarding entry point."
+  - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/governance/LLM-WIKI-ADOPTION/"
+    description: "LLM-WIKI adoption governance specification."
 topics:
   - dsom
   - spatial-memory
   - context-manifest
+  - llm-wiki
 ---
 
 # 🗺️ Active Context Manifest
 
-The following assets are currently in active development or audit scope:
+The following assets are currently in active development or audit scope under the DSOM Protocol and LLM-WIKI governance framework:
 
 ## 📜 Core Gateway & Governance Rules
 
@@ -48,6 +51,7 @@ The following assets are currently in active development or audit scope:
 - `_includes/footer.html`
 - `assets/css/style.scss`
 - `assets/js/theme-toggle.js`
+- `index.md`
 - `.gitlab-ci.yml`
 - `.gitbook.yaml`
 - `.readthedocs.yaml`

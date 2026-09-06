@@ -4,14 +4,17 @@ type: spatial_memory
 title: "DSOM Task List & Implementation Progress"
 description: "Active task checklist for Deep State of Mind protocol setup and spatial memory tracking."
 status: active
-timestamp: "2026-09-06T15:00:00Z"
+timestamp: "2026-09-06T15:30:00Z"
 sources:
   - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/START-HERE/"
     description: "DSOM protocol START-HERE entry point specification."
+  - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/governance/LLM-WIKI-ADOPTION/"
+    description: "LLM-WIKI adoption governance specification."
 topics:
   - dsom
   - task
   - spatial-memory
+  - llm-wiki
 ---
 
 # 🧠 DSOM Task List & Spatial Memory
@@ -33,4 +36,5 @@ topics:
 - [x] Create auto-discovery summary indexer `tools/generate_summary.py` and pre-commit guardrail installer `tools/install_git_guardrails.py`.
 - [x] Configure multi-platform hosting support (`.gitlab-ci.yml`, `.gitbook.yaml`, `.readthedocs.yaml`, `mkdocs.yml`).
 - [x] Complete PR review feedback fixes across SASS, Playwright webServer, ReadTheDocs MkDocs dependencies, and Git pre-commit hook backup guardrails.
-- [x] Perform EOD Palace Sync for DSOM Protocol spatial memory state.
+- [x] Complete second-round PR review feedback fixes across build exclusions, root index.md entrypoint, MkDocs nav tree, summary indexer determinism, and backup rotation.
+- [x] Adopt LLM-WIKI governance rules and perform End of Day (EOD) Palace Sync for DSOM Protocol spatial memory state.

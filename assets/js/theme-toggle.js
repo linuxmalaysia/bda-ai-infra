@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  /**
+   * Applies a theme to the document and marks its corresponding control as active.
+   * @param {string} theme - The theme to apply.
+   */
   function applyTheme(theme) {
     htmlEl.setAttribute('data-theme', theme);
     themeBtns.forEach(btn => {

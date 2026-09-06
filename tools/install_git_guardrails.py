@@ -27,7 +27,11 @@ git add SUMMARY.md _data/navigation.yml
 
 
 def install_hooks():
-    """Install pre-commit hook into .git/hooks."""
+    """
+    Install the Git pre-commit hook in the repository's hooks directory.
+    
+    If the hooks directory is unavailable, the function reports the missing directory and leaves the repository unchanged.
+    """
     if not HOOKS_DIR.exists():
         print("Not a git repository or .git/hooks missing.")
         return

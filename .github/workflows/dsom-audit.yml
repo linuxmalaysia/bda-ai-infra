@@ -13,31 +13,35 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        # actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        # actions/setup-python@v5
+        uses: actions/setup-python@39cd14951b08e74b54015e9e001cdef900eaed61
         with:
           python-version: '3.12'
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v5
+        # astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        # actions/setup-node@v4
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8
         with:
           node-version: '20'
 
       - name: Install Dependencies
         run: |
           uv sync --locked
-          npm install -g markdownlint-cli
+          npm ci
 
       - name: Run Markdownlint
         run: |
-          markdownlint --config .markdownlint.json "**/*.md"
+          npx markdownlint --config .markdownlint.json --ignore node_modules --ignore dist --ignore build "**/*.md"
 
       - name: Run Ruff Linter
         run: |

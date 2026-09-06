@@ -4,7 +4,7 @@ type: documentation_index
 title: "Modernizing Big Data Analytics Architecture — BDA Lakehouse SSoT"
 description: "Master index and navigation gateway for the Big Data Analytics (BDA) Lakehouse documentation suite."
 status: active
-timestamp: "2026-09-05T23:45:00Z"
+timestamp: "2026-09-06T00:00:00Z"
 sources:
   - url: "docs/README.md"
     description: "Internal BDA Lakehouse documentation index."
@@ -13,7 +13,7 @@ topics:
   - lakehouse
   - diataxis
   - dsom
-stale_after: "2027-09-05T23:45:00Z"
+stale_after: "2027-09-06T00:00:00Z"
 generated: false
 verified: true
 ---
@@ -26,7 +26,8 @@ Welcome to the authoritative baseline platform documentation for modernizing the
 
 - **Root AI Gateway:** [AGENTS.md](AGENTS.md)
 - **Sovereign AI Constitution:** [.agents/AGENTS.md](.agents/AGENTS.md)
-- **Spatial Memory Engine:** [.agents/brain/](.agents/brain/) (`task.md`, `walkthrough.md`, `palace_registry.md`)
+- **Spatial Memory Engine:** [.agents/brain/](.agents/brain/) (`task.md`, `walkthrough.md`, `palace_registry.md`, `active_context_manifest.md`)
+- **AI Cognitive Twin Protocol:** [docs/AI-COGNITIVE-TWIN-PROTOCOL.md](docs/AI-COGNITIVE-TWIN-PROTOCOL.md)
 - **Master Onboarding Map:** [START-HERE.md](START-HERE.md)
 
 ---
@@ -56,6 +57,15 @@ Following the **Diátaxis Framework**, documentation is categorized into four di
 - [The Human-to-AI Quarantine Model](docs/explanation/human-ai-quarantine-model.md)
 - [Model Context Protocol (MCP) & AI Sandboxing Architecture](docs/explanation/mcp-and-ai-sandboxing.md)
 - [Governance, Security, and Compliance Framework](docs/explanation/governance-and-compliance.md)
+
+---
+
+## 🛠️ CI/CD Workflows, Linters & Test Suites
+
+- **Automated OKF & Zero Link Decay Audit:** `.github/workflows/dsom-audit.yml` and `tests/test_okf_and_links.py`
+- **Code Health Linters:** `ruff` & `markdownlint-cli` configured via `pyproject.toml`, `.markdownlint.json`, and `.pre-commit-config.yaml`
+- **Ansible & Infrastructure Testing:** `.ansible-lint` and Molecule scenarios in `molecule/default/`
+- **Playwright E2E Search Tests:** `playwright.config.ts` and `tests/e2e/docs_search.spec.ts`
 
 ---
 

@@ -1,44 +1,25 @@
 ---
 okf_version: "0.2"
-type: spatial_memory_index
-title: "Sovereign Palace Registry & Ledger Index"
-description: "Central registry for spatial memory, documentation quadrants, and governance ledgers."
+type: spatial_memory
+title: "Sovereign Markdown Palace Registry"
+description: "Spatial registry index mapping wings, halls, and rooms within the DSOM Spatial Memory Engine."
 status: active
-timestamp: "2026-09-05T23:40:00Z"
+timestamp: "2026-09-06T00:00:00Z"
 sources:
-  - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/START-HERE/"
-    description: "DSOM protocol START-HERE entry point specification."
+  - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/.agents/brain/"
+    description: "Official online spatial memory palace registry."
 topics:
   - dsom
-  - registry
-  - spatial-memory
+  - palace-registry
+  - spatial-index
 ---
 
-# 🏛️ Sovereign Palace Registry
+# 🏰 Sovereign Markdown Palace Registry
 
-## 1. Spatial Memory Engine (`.agents/brain/`)
-
-- `task.md`: Active task list and completion status.
-- `walkthrough.md`: Chronological session logs, mental anchors, and execution records.
-- `palace_registry.md`: Sovereign index mapping spatial memory and documentation quadrants.
-
-## 2. Universal Gateway Matrix
-
-- `AGENTS.md` (root): Lightweight entry point redirecting agents to full constitution.
-- `.agents/AGENTS.md`: Core Sovereign Constitution containing all operational rules and persona details.
-- `.cursorrules`: Cursor AI agent rules and constraints.
-- `CLAUDE.md`: Anthropic Claude Code rules and execution constraints.
-- `.github/copilot-instructions.md`: GitHub Copilot guidelines and directives.
-
-## 3. Sovereign Documentation Quadrants (`docs/`)
-
-- **🎓 Tutorials:** `docs/tutorials/onboarding-and-setup.md`
-- **🛠️ How-To Guides:** `docs/how-to-guides/ingestion-pipeline-modernization.md`, `docs/how-to-guides/phased-migration-strategy.md`
-- **📚 Reference Material:** `docs/reference/legacy-architecture.md`, `docs/reference/lakehouse-architecture.md`, `docs/reference/business-applications.md`, `docs/reference/governance-matrix.md`
-- **💡 Explanation:** `docs/explanation/human-ai-quarantine-model.md`, `docs/explanation/mcp-and-ai-sandboxing.md`, `docs/explanation/governance-and-compliance.md`
-
-## 4. Triple-Ledger Synchronization
-
-- `README.md`: Primary navigation index and architecture overview.
-- `CHANGELOG.md`: Version tracking and release notes.
-- `HISTORY.md`: Universal execution history ledger.
+| Room ID | Wing / Sector | Description | Key Assets |
+| :--- | :--- | :--- | :--- |
+| `room_clean_architecture` | Reference Wing | Technical specifications, BDA Lakehouse target architecture, and domain analytical modules. | `docs/reference/` |
+| `room_crisp_strategy` | How-To & Tutorial Wing | Practical problem-solving, phased migration strategies, and developer onboarding. | `docs/tutorials/`, `docs/how-to-guides/` |
+| `room_dsom_protocol` | Governance & Protocol Wing | Sovereign AI Constitution, AI Cognitive Twin Protocol, and Universal Gateway Matrix rules. | `AGENTS.md`, `.agents/`, `docs/AI-COGNITIVE-TWIN-PROTOCOL.md`, `docs/explanation/` |
+| `room_tooling` | Automation & CI/CD Wing | Automated audit workflows, python pytest suites, ruff, markdownlint, Ansible Molecule, and Playwright tests. | `.github/workflows/`, `tests/`, `molecule/`, `playwright.config.ts` |
+| `room_ledger` | Sovereign Ledger Wing | Triple-ledger history, changelog, navigation compass, and llms sitemap. | `README.md`, `START-HERE.md`, `SUMMARY.md`, `llms.txt`, `CHANGELOG.md`, `HISTORY.md` |

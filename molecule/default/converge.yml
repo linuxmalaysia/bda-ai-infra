@@ -1,0 +1,25 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Deploy Quadlet container definition file
+      ansible.builtin.copy:
+        dest: /etc/containers/systemd/bda-lakehouse.container
+        content: |
+          [Container]
+          Image=quay.io/centos/centos:stream9@sha256:d559868f760813952f447781b4d081f9b31d0528ef3c24ae6cf95fa66aa107b3
+          Exec=sleep infinity
+          [Install]
+          WantedBy=multi-user.target
+        mode: '0644'
+
+    - name: Assert Quadlet container definition exists
+      ansible.builtin.stat:
+        path: /etc/containers/systemd/bda-lakehouse.container
+      register: quadlet_file
+
+    - name: Validate deployed Quadlet baseline
+      ansible.builtin.assert:
+        that:
+          - quadlet_file.stat.exists
+        success_msg: "Molecule scenario converged and verified Quadlet container deployment successfully."

@@ -57,16 +57,20 @@ Phase 4: Presentation Cutover and Legacy Decommissioning (Months 10–12)
 ## Phase Detailed Execution Plan
 
 ### Phase 1: Foundation Setup and Dual-Run Ingestion (Months 1–3)
+
 - **Actions:** Provision Ceph or MinIO distributed object storage on bare-metal hardware with S3 Object Lock immutability enabled. Deploy Apache Polaris and OpenMetadata catalogs. Position Apache NiFi at the network boundary to mirror incoming precipitation streams and satellite thermal anomaly data into object storage while preserving legacy pipelines.
 - **Goal:** Establish zero-impact parallel ingestion without altering production legacy operations.
 
 ### Phase 2: Compute Modernization and Data Contract Enforcement (Months 4–6)
+
 - **Actions:** Deploy Trino and Apache Spark/Sedona clusters integrated with the Polaris catalog. Formalize ODCS v3.1.0 data contracts across all analytical domain modules. Execute parallel Spark batch jobs to convert historical datasets from HDFS, GlusterFS, and relational stores into Apache Iceberg table formats. Validate row counts and SHA-256 checksums. Instrument Airflow orchestrators with OpenLineage hooks.
 
 ### Phase 3: AI Operational Sandboxing and MCP Deployment (Months 7–9)
+
 - **Actions:** Deploy containerized MCP servers (`mcp-catalog-context`, `mcp-trino-query-gen`, `mcp-pipeline-monitor`) in isolated DMZ environments using read-only database roles. Provision Tier 2 AI sandbox object storage with automated 30-day TTL purges. Conduct rigorous boundary testing to confirm AI models cannot execute unauthorized writes or alter Tier 0 records.
 
 ### Phase 4: Presentation Cutover and Legacy Decommissioning (Months 10–12)
+
 - **Actions:** Deploy Apache Superset and rebuild legacy BI dashboards using native Superset controls and deck.gl geospatial layers. Launch Next.js web application behind APISIX and Keycloak SSO. Execute a 30-day parallel run to validate data consistency, alert latency, and system performance. Upon formal sign-off, decommission legacy Hadoop, GlusterFS, relational instances, and proprietary BI server licenses.
 
 ---

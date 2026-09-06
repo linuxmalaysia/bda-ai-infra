@@ -1,0 +1,11 @@
+{
+  "name": "bda-lakehouse-docs-e2e",
+  "version": "1.0.0",
+  "description": "Playwright E2E testing for compiled documentation output and search modal indexing",
+  "scripts": {
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.0"
+  }
+}

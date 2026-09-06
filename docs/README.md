@@ -59,19 +59,23 @@ Following the **Diátaxis Documentation Framework**, this suite is organized int
 ## Master Directory Index
 
 ### 🎓 1. Tutorials (Practical Learning for Onboarding)
+
 - **[Onboarding and Setup Guide](tutorials/onboarding-and-setup.md):** Getting started with the modernized BDA lakehouse baseline documentation.
 
 ### 🛠️ 2. How-To Guides (Practical Problem-Solving for Engineers)
+
 - **[Ingestion Pipeline Modernization](how-to-guides/ingestion-pipeline-modernization.md):** Implementing Apache NiFi, Apache Airflow, Next.js web application, and Apache Superset visual analytics.
 - **[Phased Migration Strategy & Roadmap](how-to-guides/phased-migration-strategy.md):** Detailed 4-phase implementation roadmap over 12 months with risk mitigation and fallback procedures.
 
 ### 📚 3. Reference Material (Factual Technical Specifications)
+
 - **[Legacy Architecture Deconstruction](reference/legacy-architecture.md):** Deconstruction of legacy BDA environments, structural bottlenecks, file/database silos, and failure modes.
 - **[Target Lakehouse Architecture Specifications](reference/lakehouse-architecture.md):** Specs for decoupled storage and compute (Ceph/MinIO, Apache Iceberg, Apache Polaris, Trino, Apache Spark + Sedona).
 - **[Business Domain Specifications](reference/business-applications.md):** Detailed specifications for 5 core analytical domains: Incident Management, Groundwater Potential, Active Fire Tracking, Climate Adaptation, and Geological Hazard Risk.
 - **[Data Governance & Subsystems Matrix](reference/governance-matrix.md):** Mapping governance subsystems, OpenLineage provenance, ODCS contract standards, and geospatial standards.
 
 ### 💡 4. Explanation (Theoretical Rationale and Architecture Principles)
+
 - **[The Human-to-AI Quarantine Model](explanation/human-ai-quarantine-model.md):** Conceptual explanation of the 3-tier data classification topology (Tier 0 Golden Truth, Tier 1 Telemetry, Tier 2 AI Sandbox) preserving human ground truth.
 - **[Model Context Protocol (MCP) & AI Sandboxing](explanation/mcp-and-ai-sandboxing.md):** Explanation of how MCP confines AI models to operational tooling while barring direct writes to ground-truth data.
 - **[Governance, Security, and Compliance Framework](explanation/governance-and-compliance.md):** Enterprise catalog selection (OpenMetadata), Keycloak IAM, APISIX gateway, and compliance standards.

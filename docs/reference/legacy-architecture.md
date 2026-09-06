@@ -35,6 +35,7 @@ Legacy Big Data Analytics (BDA) platforms were typically conceived as centralize
 ## Architectural Breakdown by Subsystem
 
 ### 1. Data Ingestion Tier
+
 The data ingestion tier currently depends on fractured, unmonitored integration pathways:
 
 - **Precipitation & Meteorological Streams:** Telemetry enters the platform via unmonitored local network folder shares.
@@ -42,7 +43,8 @@ The data ingestion tier currently depends on fractured, unmonitored integration 
 - **Geospatial & Geological Boundaries:** Hazard boundaries and spatial coordinates are retrieved via point APIs.
 - **Departmental Datasets:** Manually transferred over SSH File Transfer Protocol (SFTP) or raw file uploads.
 
-#### Failure Modes:
+#### Failure Modes
+
 These ingestions lack pre-ingestion schema validation, data contracts, or automated provenance tracking. Upstream structural modifications or transient transmission failures silently break downstream transformation scripts without alerting data operations.
 
 ---
@@ -51,18 +53,22 @@ These ingestions lack pre-ingestion schema validation, data contracts, or automa
 
 The processing and storage foundation is fragmented across multiple disparate storage fabrics:
 
-#### Distributed File Storage:
+#### Distributed File Storage
+
 - **Hadoop HDFS Cluster:** Comprising 2 NameNodes, 3 DataNodes, and a Network File System (NFS) gateway.
 - **GlusterFS Cluster:** A six-node GlusterFS cluster (`GlusterFS-01` through `GlusterFS-06`).
 
-#### Relational Database Tier:
+#### Relational Database Tier
+
 Structured data processing is split across uncoordinated relational database instances:
+
 1. **MariaDB Web Portal Cluster:** A high-availability pair of MariaDB nodes (`MariaDB-HA1`, `MariaDB-HA2`) dedicated to web portal management.
 2. **MariaDB Data Projects Cluster:** A five-node MariaDB cluster (`MariaDB-01` through `MariaDB-05`) housing specific project tables.
 3. **PostgreSQL Web Application Cluster:** A three-node PostgreSQL cluster (`Postgresql-laravel-01` through `Postgresql-laravel-03`) supporting web application state.
 4. **PostgreSQL Analytics Cluster:** An independent three-node PostgreSQL cluster (`Postgresql-01` through `Postgresql-03`) executing business queries.
 
-#### Compute Transformations:
+#### Compute Transformations
+
 Cleansing, exploratory analysis, and entity merging run on legacy Red Hat WildFly application server instances. These run bespoke Java scripts without modern orchestration frameworks, declarative pipeline abstractions, or execution observability.
 
 ---
@@ -70,11 +76,13 @@ Cleansing, exploratory analysis, and entity merging run on legacy Red Hat WildFl
 ### 3. Access, Web Portal, and Visualization Tier
 
 The access and presentation tier is divided between:
+
 - **Primary Web Portal:** Hosted on an end-of-life Content Management System.
 - **Dashboard Portal:** A custom application web portal.
 - **Visual Analytics:** A proprietary Tableau Server cluster managed by Tableau Server Manager (TSM) alongside desktop client licenses.
 
-#### Security & Access Bottlenecks:
+#### Security & Access Bottlenecks
+
 This decoupled web and reporting topology lacks unified identity federation, relying instead on localized application access tables that complicate cross-domain authorization and identity management.
 
 ---

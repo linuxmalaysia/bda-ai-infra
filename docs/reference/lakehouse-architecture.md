@@ -33,15 +33,18 @@ The modern data lakehouse pattern resolves the limitations of legacy big data ar
 ## 1. Storage & Table Format Foundation
 
 ### Software-Defined Object Storage
+
 The persistent storage foundation for the modernized BDA platform replaces HDFS and GlusterFS with an on-premises, software-defined object storage cluster powered by **Ceph (via RADOS Gateway)** or **MinIO Enterprise Object Store**.
 
 - **S3 API Compatibility:** Both platforms provide high-throughput, horizontally scalable, S3-compatible APIs.
 - **Data Immutability (WORM):** Native support for Write-Once-Read-Many (WORM) storage through S3 Object Lock. Configuring object buckets with S3 Object Lock in **Compliance Mode** establishes hardware-grade data immutability, ensuring that ingested master records cannot be overwritten, modified, or prematurely purged by any user or compromised system account.
 
 ### Apache Iceberg Universal Open Table Format
+
 On top of the raw object storage layer, **Apache Iceberg** serves as the universal open table format, replacing relational database sprawl and raw file directories. Iceberg abstracts tabular data away from concrete object paths by maintaining a hierarchical metadata tree composed of metadata files, manifest lists, and manifest files that track immutable Parquet data files.
 
 Core Iceberg capabilities implemented in BDA:
+
 1. **ACID Transactions:** Serialized transaction guarantees through optimistic concurrency control, ensuring that partial or failed analytical writes never expose corrupted records to downstream readers.
 2. **In-Place Schema Evolution:** Allows columns to be added, dropped, renamed, or reordered without requiring physical table rewrites or corrupting historical schemas.
 3. **Hidden Partitioning & Evolution:** Removes the need for data consumers to know physical directory layout schemes and eliminates query failures caused by human user errors.
@@ -52,12 +55,14 @@ Core Iceberg capabilities implemented in BDA:
 ## 2. Open Catalog & Distributed Compute Engines
 
 ### Open-Source Lakehouse Catalog
+
 Centralized table management and commit resolution are decoupled from physical storage through an open-source Iceberg REST catalog, utilizing **Apache Polaris (incubating)** or **Project Nessie**.
 
 - **Apache Polaris:** Acts as the central authority for table registration, namespace allocation, transactional commit arbitration, and credential vending.
 - Implementing the open Iceberg REST catalog specification ensures that disparate compute engines can discover, read, and write Iceberg tables with consistent access control rules, completely eliminating vendor lock-in.
 
 ### Specialized Compute Engines
+
 The processing tier is split into two specialized, horizontally scalable compute engines:
 
 1. **Trino (Distributed MPP Query Engine):** Trino serves as the distributed massively parallel processing (MPP) SQL query engine, querying Iceberg tables directly via the Polaris REST catalog. Trino replaces the compute overhead of legacy relational clusters by executing low-latency federated queries across analytical datasets, spatial geometries, and operational stores.

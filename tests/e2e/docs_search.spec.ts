@@ -30,11 +30,11 @@ test.describe('Documentation Site & Interactive Template E2E Tests', () => {
     const sidebar = page.locator('.sidebar-nav');
     await expect(sidebar).toBeVisible();
 
-    const navLink = sidebar.locator('a.nav-link[href="/bda-ai-infra/SUMMARY.html"]');
+    const navLink = sidebar.locator('a.nav-link[href="/bda-ai-infra/CHANGELOG.html"]');
     await expect(navLink).toBeVisible();
     await navLink.click();
 
-    await expect(page).toHaveURL(/\/bda-ai-infra\/SUMMARY\.html/);
+    await expect(page).toHaveURL(/\/bda-ai-infra\/CHANGELOG\.html/);
 
     // Verify print button presence
     const printBtn = page.locator('.print-btn');

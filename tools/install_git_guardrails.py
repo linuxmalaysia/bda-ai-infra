@@ -34,6 +34,11 @@ def install_hooks(force: bool = False):
 
     if PRE_COMMIT_HOOK.exists() and force:
         backup_path = PRE_COMMIT_HOOK.with_suffix(".bak")
+        if backup_path.exists():
+            counter = 1
+            while backup_path.exists():
+                backup_path = PRE_COMMIT_HOOK.with_suffix(f".bak.{counter}")
+                counter += 1
         shutil.copy2(PRE_COMMIT_HOOK, backup_path)
         print(f"Created backup of existing pre-commit hook at {backup_path}")
 

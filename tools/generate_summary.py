@@ -39,17 +39,16 @@ def discover_markdown_files():
     root_files = []
     docs_files = []
 
-    # Priority root files
+    # Priority root files (excluding SUMMARY.md)
     priority_roots = [
         "README.md",
-        "SUMMARY.md",
         "CHANGELOG.md",
         "HISTORY.md",
         "START-HERE.md",
         "AGENTS.md",
         "llms.txt",
     ]
-    seen_root_paths = set()
+    seen_root_paths = {"SUMMARY.md"}
     for pr in priority_roots:
         p = REPO_ROOT / pr
         if p.exists():
@@ -57,9 +56,9 @@ def discover_markdown_files():
             title, _ = parse_frontmatter(p)
             root_files.append({"title": title, "path": pr, "url": f"/{pr.replace('.md', '.html')}"})
 
-    # Append all other root *.md files in sorted order
+    # Append all other root *.md files in sorted order (skipping SUMMARY.md and index.md)
     for item in sorted(REPO_ROOT.glob("*.md")):
-        if item.name not in seen_root_paths:
+        if item.name not in seen_root_paths and item.name != "index.md":
             title, _ = parse_frontmatter(item)
             root_files.append({
                 "title": title,
@@ -72,7 +71,7 @@ def discover_markdown_files():
         for root, dirs, files in os.walk(DOCS_DIR):
             dirs[:] = [d for d in dirs if not d.startswith(".") and d not in EXCLUDED_DIRS]
             for file in sorted(files):
-                if file.endswith(".md"):
+                if file.endswith(".md") and file != "SUMMARY.md":
                     full_path = Path(root) / file
                     rel_path = full_path.relative_to(REPO_ROOT)
                     rel_url = "/" + str(rel_path).replace(".md", ".html")
@@ -114,8 +113,9 @@ def main():
             sections[sec] = []
         sections[sec].append({"title": df["title"], "url": df["url"]})
 
-    for sec_name, items in sections.items():
-        nav.append({"title": sec_name, "items": items})
+    for sec_name in sorted(sections.keys()):
+        sorted_items = sorted(sections[sec_name], key=lambda x: x["title"])
+        nav.append({"title": sec_name, "items": sorted_items})
 
     NAV_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(NAV_PATH, "w", encoding="utf-8") as f:
@@ -153,10 +153,11 @@ def main():
 
     summary_lines.append("")
 
-    for sec_name, items in sections.items():
+    for sec_name in sorted(sections.keys()):
         summary_lines.append(f"## {sec_name}")
         summary_lines.append("")
-        for item in items:
+        sorted_items = sorted(sections[sec_name], key=lambda x: x["title"])
+        for item in sorted_items:
             path_str = item["url"].lstrip("/").replace(".html", ".md")
             if path_str == "index.md":
                 path_str = "README.md"

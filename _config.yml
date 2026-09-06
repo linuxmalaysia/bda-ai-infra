@@ -29,6 +29,7 @@ exclude:
   - .agents
   - molecule
   - tests
+  - tools
   - package.json
   - package-lock.json
   - pyproject.toml
@@ -37,3 +38,6 @@ exclude:
   - .pre-commit-config.yaml
   - .ansible-lint
   - .markdownlint.json
+  - AGENTS.md
+  - CLAUDE.md
+  - .cursorrules

@@ -1,7 +1,10 @@
 site_name: "BDA AI Infra Documentation"
 site_description: "Enterprise Big Data Analytics & AI Lakehouse Architecture Blueprint & Documentation"
-docs_dir: "."
+docs_dir: "docs"
 
 nav:
-  - Home: README.md
-  - Summary: SUMMARY.md
+  - Home: ../README.md
+  - Summary: ../SUMMARY.md
+  - Multi-Platform Hosting: multi-platform-hosting.md
+  - GitHub Pages Setup: github-pages-setup.md
+  - AI Cognitive Twin Protocol: AI-COGNITIVE-TWIN-PROTOCOL.md

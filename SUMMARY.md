@@ -22,12 +22,18 @@ topics:
 ## Root Overview
 
 * [Modernizing Big Data Analytics Architecture — BDA Lakehouse SSoT](README.md)
-* [Table of Contents & Documentation Index](SUMMARY.md)
 * [Changelog Ledger](CHANGELOG.md)
 * [Sovereign Execution History Ledger](HISTORY.md)
 * [START HERE — Sovereign AI & BDA Lakehouse Onboarding Gateway](START-HERE.md)
 * [AI Gateway & Sovereign Redirect](AGENTS.md)
 * [Llms](llms.txt)
+* [Anthropic Claude AI Rules](CLAUDE.md)
+
+## Explanation
+
+* [Governance, Security, and Compliance Framework](docs/explanation/governance-and-compliance.md)
+* [Model Context Protocol (MCP) and AI Sandboxing Architecture](docs/explanation/mcp-and-ai-sandboxing.md)
+* [The Human-to-AI Quarantine Model and Data Classification](docs/explanation/human-ai-quarantine-model.md)
 
 ## General Documentation
 
@@ -36,24 +42,18 @@ topics:
 * [GitHub Pages Setup & Deployment Guide](docs/github-pages-setup.md)
 * [Multi-Platform Hosting Guide (GitLab, GitBook, ReadTheDocs)](docs/multi-platform-hosting.md)
 
-## Reference
-
-* [Big Data Domain Specifications and Analytical Workflows](docs/reference/business-applications.md)
-* [Data Governance, Subsystems, and Standards Matrix](docs/reference/governance-matrix.md)
-* [Target 100% Open-Source Lakehouse Architecture](docs/reference/lakehouse-architecture.md)
-* [Legacy Big Data Analytics Environment Architectural Deconstruction](docs/reference/legacy-architecture.md)
-
-## Tutorials
-
-* [BDA Lakehouse Onboarding and Developer Setup](docs/tutorials/onboarding-and-setup.md)
-
-## Explanation
-
-* [Governance, Security, and Compliance Framework](docs/explanation/governance-and-compliance.md)
-* [The Human-to-AI Quarantine Model and Data Classification](docs/explanation/human-ai-quarantine-model.md)
-* [Model Context Protocol (MCP) and AI Sandboxing Architecture](docs/explanation/mcp-and-ai-sandboxing.md)
-
 ## How To Guides
 
 * [Ingestion Pipeline, Application Portal, and Superset Modernization](docs/how-to-guides/ingestion-pipeline-modernization.md)
 * [Phased Migration Strategy and Implementation Roadmap](docs/how-to-guides/phased-migration-strategy.md)
+
+## Reference
+
+* [Big Data Domain Specifications and Analytical Workflows](docs/reference/business-applications.md)
+* [Data Governance, Subsystems, and Standards Matrix](docs/reference/governance-matrix.md)
+* [Legacy Big Data Analytics Environment Architectural Deconstruction](docs/reference/legacy-architecture.md)
+* [Target 100% Open-Source Lakehouse Architecture](docs/reference/lakehouse-architecture.md)
+
+## Tutorials
+
+* [BDA Lakehouse Onboarding and Developer Setup](docs/tutorials/onboarding-and-setup.md)

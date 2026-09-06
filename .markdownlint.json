@@ -17,6 +17,7 @@
     "node_modules/**",
     ".venv/**",
     "dist/**",
-    "build/**"
+    "build/**",
+    "test-results/**"
   ]
 }

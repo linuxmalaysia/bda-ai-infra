@@ -14,7 +14,17 @@ EXCLUDED_DIRS = {"node_modules", "dist", "build", ".venv", ".git", ".pytest_cach
 
 
 def parse_frontmatter(file_path):
-    """Extract title and description from OKF frontmatter if present."""
+    """
+    Extract a document title and description from YAML frontmatter.
+    
+    Parameters:
+        file_path (Path): Path to the Markdown file.
+    
+    Returns:
+        tuple: The frontmatter title and description, or a title derived from the
+            filename and an empty description when frontmatter is unavailable or
+            invalid.
+    """
     try:
         content = file_path.read_text(encoding="utf-8")
         if content.startswith("---\n"):
@@ -35,7 +45,12 @@ def parse_frontmatter(file_path):
 
 
 def discover_markdown_files():
-    """Discover all .md files in root and docs/."""
+    """
+    Discover prioritized root Markdown files and documentation files under the docs directory.
+    
+    Returns:
+        tuple: A pair containing root file metadata and documentation file metadata.
+    """
     root_files = []
     docs_files = []
 
@@ -84,6 +99,11 @@ def discover_markdown_files():
 
 
 def main():
+    """
+    Generate navigation data and a documentation index from discovered Markdown files.
+    
+    Creates the navigation YAML file and updates `SUMMARY.md` with grouped links for root and documentation files.
+    """
     """Generate SUMMARY.md and _data/navigation.yml documentation indexes."""
     root_files, docs_files = discover_markdown_files()
 

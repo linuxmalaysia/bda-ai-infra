@@ -143,7 +143,7 @@ def main():
             summary_lines.append(f"* [{item['title']}]({path_str})")
         summary_lines.append("")
 
-    summary_content = "\n".join(summary_lines) + "\n"
+    summary_content = "\n".join(summary_lines).rstrip() + "\n"
     SUMMARY_PATH.write_text(summary_content, encoding="utf-8")
     print(f"Generated {NAV_PATH} and updated {SUMMARY_PATH}")
 

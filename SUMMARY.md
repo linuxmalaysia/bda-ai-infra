@@ -22,7 +22,7 @@ topics:
 ## Root Overview
 
 * [Modernizing Big Data Analytics Architecture — BDA Lakehouse SSoT](README.md)
-* [Summary Index & Navigation Map](SUMMARY.md)
+* [Table of Contents & Documentation Index](SUMMARY.md)
 * [Changelog Ledger](CHANGELOG.md)
 * [Sovereign Execution History Ledger](HISTORY.md)
 * [START HERE — Sovereign AI & BDA Lakehouse Onboarding Gateway](START-HERE.md)
@@ -57,4 +57,3 @@ topics:
 
 * [Ingestion Pipeline, Application Portal, and Superset Modernization](docs/how-to-guides/ingestion-pipeline-modernization.md)
 * [Phased Migration Strategy and Implementation Roadmap](docs/how-to-guides/phased-migration-strategy.md)
-

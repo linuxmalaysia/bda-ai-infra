@@ -1,27 +1,33 @@
-# BDA Lakehouse & Deep State of Mind (DSOM) Sitemap
+# BDA Lakehouse & DSOM Protocol Knowledge Map
 
-> Plain-text AI crawler sitemap following llms.txt protocol.
+> Documentation index designed for AI crawlers, LLMs, and agents.
 
-## Core Navigation & Gateways
-- [AGENTS.md](AGENTS.md): Lightweight AI Discovery Gateway
-- [.agents/AGENTS.md](.agents/AGENTS.md): Sovereign AI Constitution (31 Laws)
-- [START-HERE.md](START-HERE.md): Entry Points Map & Onboarding Topology
-- [README.md](README.md): Master BDA Lakehouse Platform Index
-- [SUMMARY.md](SUMMARY.md): GitBook & Navigation Table of Contents
+## Core Gateways & Protocols
+- [Root Gateway](AGENTS.md)
+- [Sovereign AI Constitution](.agents/AGENTS.md)
+- [AI Cognitive Twin Protocol](docs/AI-COGNITIVE-TWIN-PROTOCOL.md)
+- [Master Onboarding Map](START-HERE.md)
+- [Root Documentation Index](README.md)
 
 ## Spatial Memory
-- [.agents/brain/task.md](.agents/brain/task.md): Active task checklist
-- [.agents/brain/walkthrough.md](.agents/brain/walkthrough.md): Session walkthroughs & anchors
-- [.agents/brain/palace_registry.md](.agents/brain/palace_registry.md): Spatial memory index
+- [Task Progress](.agents/brain/task.md)
+- [Walkthrough Logs](.agents/brain/walkthrough.md)
+- [Palace Registry](.agents/brain/palace_registry.md)
+- [Active Context Manifest](.agents/brain/active_context_manifest.md)
 
-## Sovereign Documentation Suite
-- [docs/tutorials/onboarding-and-setup.md](docs/tutorials/onboarding-and-setup.md): Onboarding Tutorial
-- [docs/how-to-guides/ingestion-pipeline-modernization.md](docs/how-to-guides/ingestion-pipeline-modernization.md): Ingestion Pipeline Modernization
-- [docs/how-to-guides/phased-migration-strategy.md](docs/how-to-guides/phased-migration-strategy.md): Phased Migration Strategy
-- [docs/reference/legacy-architecture.md](docs/reference/legacy-architecture.md): Legacy Architecture Deconstruction
-- [docs/reference/lakehouse-architecture.md](docs/reference/lakehouse-architecture.md): Target Open-Source Lakehouse Specs
-- [docs/reference/business-applications.md](docs/reference/business-applications.md): Business Domain Specs
-- [docs/reference/governance-matrix.md](docs/reference/governance-matrix.md): Governance Subsystems Matrix
-- [docs/explanation/human-ai-quarantine-model.md](docs/explanation/human-ai-quarantine-model.md): Human-to-AI Quarantine Model
-- [docs/explanation/mcp-and-ai-sandboxing.md](docs/explanation/mcp-and-ai-sandboxing.md): MCP Sandboxing Rationale
-- [docs/explanation/governance-and-compliance.md](docs/explanation/governance-and-compliance.md): Security & Compliance Framework
+## Documentation Suite (Diátaxis)
+- [Tutorials](docs/tutorials/onboarding-and-setup.md)
+- [How-To: Ingestion Modernization](docs/how-to-guides/ingestion-pipeline-modernization.md)
+- [How-To: Phased Migration Strategy](docs/how-to-guides/phased-migration-strategy.md)
+- [Reference: Legacy Architecture](docs/reference/legacy-architecture.md)
+- [Reference: Lakehouse Architecture](docs/reference/lakehouse-architecture.md)
+- [Reference: Business Applications](docs/reference/business-applications.md)
+- [Reference: Governance Matrix](docs/reference/governance-matrix.md)
+- [Explanation: Quarantine Model](docs/explanation/human-ai-quarantine-model.md)
+- [Explanation: MCP Sandboxing](docs/explanation/mcp-and-ai-sandboxing.md)
+- [Explanation: Governance Framework](docs/explanation/governance-and-compliance.md)
+
+## Ledgers & Automation
+- [Changelog](CHANGELOG.md)
+- [History](HISTORY.md)
+- [Summary Map](SUMMARY.md)

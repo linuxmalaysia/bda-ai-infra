@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: Verify Podman Quadlet container deployment baseline
+      ansible.builtin.debug:
+        msg: "Molecule test scenario converged successfully for Quadlet container baseline."

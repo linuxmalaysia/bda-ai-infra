@@ -11,6 +11,7 @@ topics:
   - diataxis
   - index
   - dsom
+  - openwiki
 generated: false
 verified: true
 sources:
@@ -52,6 +53,7 @@ Following the **Diátaxis Documentation Framework**, this suite is organized int
                                   │     • Solution 1: AWS Native
                                   │     • Solution 2: Hybrid AI
                                   │     • Solution 3: On-Prem Sovereign
+                                  │     • OpenWiki SSoT Knowledge Base
                                   │
                       APPLICATION OF SKILL (Work)
 ```
@@ -78,6 +80,7 @@ Following the **Diátaxis Documentation Framework**, this suite is organized int
 - **[Solution 1 Reference Spec: AWS Native Infrastructure](reference/solution-1-aws-native.md):** Detailed reference specifications for All in Cloud deployment using AWS managed services (S3 Object Lock, Glue Catalog, EMR Serverless, Athena, Bedrock).
 - **[Solution 2 Reference Spec: Hybrid Cloud Lakehouse & On-Prem GPU](reference/solution-2-hybrid-ai.md):** Detailed reference specifications for Hybrid deployment retaining cloud lakehouse core while executing AI inference, local vector search, and MCP tools on-premises over AWS Direct Connect MACsec/IPsec.
 - **[Solution 3 Reference Spec: 100% On-Premises Sovereign Architecture](reference/solution-3-onprem-proxmox-rke2.md):** Detailed reference specifications for 100% sovereign deployment using Proxmox VE hypervisor, dual RKE2/K3s Kubernetes clusters, and Ceph SDS object/block storage.
+- **[OpenWiki SSoT Quickstart & Knowledge Base](../openwiki/quickstart.md):** BDA Lakehouse SSoT open-source relationship matrix, infrastructure, software, and governance knowledge graph.
 
 ### 💡 4. Explanation (Theoretical Rationale and Architecture Principles)
 

@@ -4,8 +4,8 @@ type: spatial_memory
 title: "Active Context Manifest"
 description: "Live tracking manifest of files currently in active engineering scope under the DSOM protocol and LLM-WIKI framework."
 status: active
-timestamp: "2026-09-06T15:30:00Z"
-stale_after: "2027-09-06T15:30:00Z"
+timestamp: "2026-09-07T11:20:00Z"
+stale_after: "2027-09-07T11:20:00Z"
 generated: false
 verified: true
 sources:
@@ -40,6 +40,24 @@ The following assets are currently in active development or audit scope under th
 - `.agents/brain/palace_registry.md`
 - `.agents/brain/active_context_manifest.md`
 - `.agents/brain/checkpoint_summary.txt`
+
+## 🌐 OpenWiki & BDA SSoT Knowledge Base
+
+- `tools/openwiki_emulator.py`
+- `openwiki/quickstart.md`
+- `openwiki/architecture/overview.md`
+- `openwiki/infrastructure/proxmox-rke2-ceph.md`
+- `openwiki/software/engines-and-storage.md`
+- `openwiki/software/ingestion-and-orchestration.md`
+- `openwiki/governance/governance-and-lineage.md`
+- `openwiki/governance/security-iam-gateway.md`
+- `openwiki/solutions/bi-and-mlops.md`
+- `openwiki/integrations/mcp-and-ci.md`
+- `openwiki/quality/verification.md`
+- `openwiki/INSTRUCTIONS.md`
+- `openwiki/_skeleton.md`
+- `openwiki/graph.html`
+- `tests/test_openwiki.py`
 
 ## 🌐 GitHub Pages & Multi-Platform Hosting
 

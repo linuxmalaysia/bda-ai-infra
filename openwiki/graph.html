@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDA Lakehouse SSoT OpenWiki Knowledge Graph</title>
+    <style>
+        body { background: #0f172a; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; max-width: 1100px; margin: auto; }
+        h1 { color: #38bdf8; border-bottom: 2px solid #334155; padding-bottom: 0.5rem; margin-bottom: 0.5rem; }
+        .subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 1.5rem; }
+        #canvas-wrapper { position: relative; width: 100%; height: 520px; background: #1e293b; border: 1px solid #334155; border-radius: 8px; margin-bottom: 1.5rem; overflow: hidden; }
+        canvas { display: block; width: 100%; height: 100%; cursor: pointer; }
+        .controls { margin-bottom: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+        .controls label { color: #cbd5e1; font-size: 0.9rem; margin-right: 0.5rem; }
+        .btn { background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+        .btn:hover, .btn.active { background: #0284c7; border-color: #38bdf8; }
+        .card { background: #1e293b; border-radius: 8px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; border: 1px solid #334155; }
+        .card h3 { margin-top: 0; color: #a855f7; }
+        .badge { background: #0284c7; color: #fff; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-right: 4px; margin-bottom: 4px; }
+        a { color: #38bdf8; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>🌐 BDA Lakehouse SSoT Knowledge Graph</h1>
+    <div class="subtitle">Last Generated: <code>2026-09-07T12:17:36Z</code> | Engine: <code>Native Python OpenWiki Emulator (100% Offline Canvas Renderer)</code></div>
+
+    <div class="controls">
+        <label>Filter Subsystem:</label>
+        <button class="btn active" onclick="setFilter('all', event)">All</button>
+        <button class="btn" onclick="setFilter('infra', event)">Infrastructure</button>
+        <button class="btn" onclick="setFilter('storage', event)">Storage</button>
+        <button class="btn" onclick="setFilter('ingestion', event)">Ingestion</button>
+        <button class="btn" onclick="setFilter('compute', event)">Compute/Query</button>
+        <button class="btn" onclick="setFilter('governance', event)">Governance</button>
+        <button class="btn" onclick="setFilter('security', event)">Security</button>
+        <button class="btn" onclick="setFilter('analytics', event)">BI/MLOps</button>
+    </div>
+
+    <div id="canvas-wrapper">
+        <canvas id="graph-canvas"></canvas>
+    </div>
+
+    <h2>📚 SSoT Component Reference Index</h2>
+
+    <div class="card">
+        <h3>📍 Entrypoint: Quickstart & BDA Navigation Map</h3>
+        <p>Master entrypoint, layer topology, task-routing table, canonical links, and validation commands.</p>
+        <span class="badge">quickstart</span><span class="badge">bda</span><span class="badge">ssot</span>
+        <p><a href="./quickstart.md">View quickstart.md</a></p>
+    </div>
+
+    <div class="card">
+        <h3>🏛️ BDA Lakehouse Architecture & 100% OSS Stack</h3>
+        <p>Component relationship matrix connecting Trino, Spark, DuckDB, Iceberg, NiFi, Kafka, Keycloak, and Superset.</p>
+        <span class="badge">architecture</span><span class="badge">lakehouse</span><span class="badge">oss</span>
+        <p><a href="./architecture/overview.md">View architecture/overview.md</a></p>
+    </div>
+
+    <div class="card">
+        <h3>🏗️ Sovereign Infrastructure: Proxmox VE, RKE2 & Ceph SDS</h3>
+        <p>Proxmox VE hypervisor, RKE2 Kubernetes, Ceph SDS distributed object store, OpenTofu, and Ansible playbooks.</p>
+        <span class="badge">infrastructure</span><span class="badge">proxmox</span><span class="badge">rke2</span><span class="badge">ceph</span>
+        <p><a href="./infrastructure/proxmox-rke2-ceph.md">View infrastructure/proxmox-rke2-ceph.md</a></p>
+    </div>
+
+    <div class="card">
+        <h3>⚡ Query Engines & Storage: Trino, Spark, DuckDB & Iceberg</h3>
+        <p>Distributed SQL processing, batch ETL, embedded analytics, and open table storage formats.</p>
+        <span class="badge">software</span><span class="badge">trino</span><span class="badge">spark</span><span class="badge">duckdb</span><span class="badge">iceberg</span>
+        <p><a href="./software/engines-and-storage.md">View software/engines-and-storage.md</a></p>
+    </div>
+
+    <div class="card">
+        <h3>🔄 Ingestion & Orchestration: NiFi, Kafka, Airflow & ODCS</h3>
+        <p>Automated flow design, event streaming bus, DAG pipeline orchestrator, and ODCS contract gates.</p>
+        <span class="badge">software</span><span class="badge">nifi</span><span class="badge">kafka</span><span class="badge">airflow</span><span class="badge">odcs</span>
+        <p><a href="./software/ingestion-and-orchestration.md">View software/ingestion-and-orchestration.md</a></p>
+    </div>
+
+    <div class="card">
+        <h3>📜 Governance & Lineage Matrix: OpenMetadata & OpenLineage</h3>
+        <p>Enterprise cataloging, automated lineage tracking, ODCS contracts, and MS ISO 19115 geospatial metadata.</p>
+        <span class="badge">governance</span><span class="badge">openmetadata</span><span class="badge">openlineage</span><span class="badge">iso19115</span>
+        <p><a href="./governance/governance-and-lineage.md">View governance/governance-and-lineage.md</a></p>
+    </div>
+
+    <div class="card">
+        <h3>🔐 Security, IAM & Gateway: Keycloak & Apache APISIX</h3>
+        <p>Centralized identity management (OIDC/OAuth2/MFA/RBAC) and high-performance API perimeter gateway.</p>
+        <span class="badge">governance</span><span class="badge">security</span><span class="badge">keycloak</span><span class="badge">apisix</span>
+        <p><a href="./governance/security-iam-gateway.md">View governance/security-iam-gateway.md</a></p>
+    </div>
+
+    <div class="card">
+        <h3>📈 BI & MLOps Solutions: Superset, MLflow & Ray</h3>
+        <p>Apache Superset BI dashboards, spatial deck.gl analytics, MLflow model tracking, and distributed ML training.</p>
+        <span class="badge">solutions</span><span class="badge">superset</span><span class="badge">mlflow</span><span class="badge">ray</span>
+        <p><a href="./solutions/bi-and-mlops.md">View solutions/bi-and-mlops.md</a></p>
+    </div>
+
+    <div class="card">
+        <h3>🔌 FastMCP Integration & Continuous Integration</h3>
+        <p>FastMCP server integration for AI agents and GitHub Actions CI/CD workflows.</p>
+        <span class="badge">integrations</span><span class="badge">fastmcp</span><span class="badge">ci-cd</span>
+        <p><a href="./integrations/mcp-and-ci.md">View integrations/mcp-and-ci.md</a></p>
+    </div>
+
+    <div class="card">
+        <h3>🛡️ Quality Verification & Zero Vendor Lock-in</h3>
+        <p>Automated test assertions, OKF v0.2 frontmatter validation, and open-source license assertions.</p>
+        <span class="badge">quality</span><span class="badge">verification</span><span class="badge">guardrails</span>
+        <p><a href="./quality/verification.md">View quality/verification.md</a></p>
+    </div>
+
+    <script type="text/javascript">
+        const rawNodes = [{"id": 1, "label": "Quickstart & Map", "group": "navigation", "title": "Master navigation map", "x": 100, "y": 100}, {"id": 2, "label": "Proxmox VE Hypervisor", "group": "infra", "title": "Bare-metal KVM virtualization", "x": 200, "y": 250}, {"id": 3, "label": "RKE2 Kubernetes", "group": "infra", "title": "FIPS-compliant K8s cluster", "x": 350, "y": 250}, {"id": 4, "label": "Ceph SDS / CSI", "group": "infra", "title": "Distributed block & file storage", "x": 200, "y": 380}, {"id": 5, "label": "MinIO / Ceph S3", "group": "storage", "title": "S3-compatible object store", "x": 380, "y": 380}, {"id": 6, "label": "Apache Iceberg / Delta", "group": "storage", "title": "ACID open table formats", "x": 550, "y": 380}, {"id": 7, "label": "Apache NiFi", "group": "ingestion", "title": "Visual data flow routing", "x": 200, "y": 100}, {"id": 8, "label": "Apache Kafka", "group": "ingestion", "title": "Distributed event streaming bus", "x": 350, "y": 100}, {"id": 9, "label": "Lakehouse Writer", "group": "ingestion", "title": "Spark / Iceberg commit writer", "x": 500, "y": 100}, {"id": 10, "label": "Apache Airflow", "group": "orchestration", "title": "DAG pipeline orchestrator", "x": 650, "y": 100}, {"id": 11, "label": "Trino SQL Engine", "group": "compute", "title": "Distributed SQL query engine", "x": 750, "y": 250}, {"id": 12, "label": "Apache Spark", "group": "compute", "title": "Large-scale batch & streaming ETL", "x": 600, "y": 250}, {"id": 13, "label": "DuckDB Analytics", "group": "compute", "title": "Embedded fast OLAP analytics", "x": 750, "y": 380}, {"id": 14, "label": "OpenMetadata Catalog", "group": "governance", "title": "Centralized metadata catalog", "x": 550, "y": 500}, {"id": 15, "label": "OpenLineage Standard", "group": "governance", "title": "Column-level operational lineage", "x": 700, "y": 500}, {"id": 16, "label": "Keycloak IAM", "group": "security", "title": "Unified OIDC/OAuth2/MFA", "x": 200, "y": 500}, {"id": 17, "label": "Apache APISIX Gateway", "group": "security", "title": "Perimeter API gateway", "x": 380, "y": 500}, {"id": 18, "label": "Apache Superset BI", "group": "analytics", "title": "Spatial BI & deck.gl analytics", "x": 900, "y": 250}, {"id": 19, "label": "MLflow Registry", "group": "analytics", "title": "ML model registry & tracking", "x": 900, "y": 380}, {"id": 20, "label": "Ray / Kubeflow", "group": "analytics", "title": "Distributed AI model training", "x": 900, "y": 500}];
+        const rawEdges = [{"from": 2, "to": 3, "label": "hosts K8s"}, {"from": 2, "to": 4, "label": "manages storage"}, {"from": 3, "to": 4, "label": "attaches PVCs"}, {"from": 3, "to": 5, "label": "hosts S3 pods"}, {"from": 5, "to": 6, "label": "stores Iceberg/Parquet"}, {"from": 7, "to": 8, "label": "publishes events"}, {"from": 8, "to": 9, "label": "streams to writer"}, {"from": 9, "to": 5, "label": "commits Parquet"}, {"from": 10, "to": 9, "label": "orchestrates commits"}, {"from": 11, "to": 6, "label": "queries in place"}, {"from": 12, "to": 6, "label": "processes batch"}, {"from": 13, "to": 6, "label": "embedded query"}, {"from": 14, "to": 6, "label": "crawls schema"}, {"from": 15, "to": 14, "label": "pushes lineage"}, {"from": 16, "to": 17, "label": "validates JWT"}, {"from": 17, "to": 18, "label": "HTTPS / mTLS"}, {"from": 17, "to": 11, "label": "HTTPS / mTLS"}, {"from": 17, "to": 14, "label": "HTTPS / mTLS"}, {"from": 11, "to": 18, "label": "SQL queries"}, {"from": 12, "to": 19, "label": "registers models"}, {"from": 20, "to": 19, "label": "trains & tracks"}];
+
+        const groupColors = {
+            navigation: '#0284c7',
+            infra: '#38bdf8',
+            storage: '#2563eb',
+            ingestion: '#f97316',
+            orchestration: '#eab308',
+            compute: '#a855f7',
+            governance: '#22c55e',
+            security: '#ef4444',
+            analytics: '#ec4899'
+        };
+
+        let activeGroup = 'all';
+        let selectedNode = null;
+
+        const canvas = document.getElementById('graph-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            draw();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        function setFilter(group, event) {
+            activeGroup = group;
+            document.querySelectorAll('.controls .btn').forEach(b => b.classList.remove('active'));
+            if (event) event.target.classList.add('active');
+            draw();
+        }
+
+        function getScale() {
+            const scaleX = canvas.width / 1000;
+            const scaleY = canvas.height / 600;
+            return Math.min(scaleX, scaleY) || 1;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const scale = getScale();
+
+            const filteredNodes = rawNodes.filter(n => activeGroup === 'all' || n.group === activeGroup || n.group === 'navigation');
+            const nodeMap = new Map(filteredNodes.map(n => [n.id, n]));
+
+            rawEdges.forEach(e => {
+                const source = nodeMap.get(e.from);
+                const target = nodeMap.get(e.to);
+                if (!source || !target) return;
+
+                const isConnected = selectedNode && (selectedNode.id === e.from || selectedNode.id === e.to);
+                ctx.beginPath();
+                ctx.moveTo(source.x * scale, source.y * scale);
+                ctx.lineTo(target.x * scale, target.y * scale);
+                ctx.strokeStyle = isConnected ? '#38bdf8' : '#334155';
+                ctx.lineWidth = Math.max(1, Math.round((isConnected ? 2 : 1) * scale));
+                ctx.stroke();
+
+                const midX = ((source.x + target.x) / 2) * scale;
+                const midY = ((source.y + target.y) / 2) * scale;
+                ctx.font = Math.max(8, Math.round(10 * scale)) + 'px sans-serif';
+                ctx.fillStyle = '#64748b';
+                ctx.fillText(e.label, midX, midY);
+            });
+
+            filteredNodes.forEach(n => {
+                const isSelected = selectedNode && selectedNode.id === n.id;
+                const color = groupColors[n.group] || '#38bdf8';
+
+                ctx.fillStyle = isSelected ? '#0284c7' : '#1e293b';
+                ctx.strokeStyle = color;
+                ctx.lineWidth = Math.max(1, Math.round((isSelected ? 3 : 1.5) * scale));
+
+                const padding = 10 * scale;
+                ctx.font = Math.max(8, Math.round(12 * scale)) + 'px sans-serif';
+                const textWidth = ctx.measureText(n.label).width;
+                const rectWidth = textWidth + padding * 2;
+                const rectHeight = 28 * scale;
+                const rx = n.x * scale - rectWidth / 2;
+                const ry = n.y * scale - rectHeight / 2;
+
+                ctx.beginPath();
+                if (ctx.roundRect) {
+                    ctx.roundRect(rx, ry, rectWidth, rectHeight, 6 * scale);
+                } else {
+                    ctx.rect(rx, ry, rectWidth, rectHeight);
+                }
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#f8fafc';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(n.label, n.x * scale, n.y * scale);
+            });
+        }
+
+        canvas.addEventListener('click', (evt) => {
+            const rect = canvas.getBoundingClientRect();
+            const clickX = evt.clientX - rect.left;
+            const clickY = evt.clientY - rect.top;
+            const scale = getScale();
+
+            const filteredNodes = rawNodes.filter(n => activeGroup === 'all' || n.group === activeGroup || n.group === 'navigation');
+
+            const clicked = filteredNodes.find(n => {
+                const padding = 10 * scale;
+                ctx.font = Math.max(8, Math.round(12 * scale)) + 'px sans-serif';
+                const textWidth = ctx.measureText(n.label).width;
+                const rectWidth = textWidth + padding * 2;
+                const rectHeight = 28 * scale;
+
+                const nodeCenterX = n.x * scale;
+                const nodeCenterY = n.y * scale;
+
+                return Math.abs(nodeCenterX - clickX) <= rectWidth / 2 && Math.abs(nodeCenterY - clickY) <= rectHeight / 2;
+            });
+
+            selectedNode = clicked || null;
+            draw();
+        });
+
+        setTimeout(resizeCanvas, 50);
+    </script>
+</body>
+</html>

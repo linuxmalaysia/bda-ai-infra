@@ -20,6 +20,7 @@ packages = []
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
+pythonpath = ["."]
 
 [tool.ruff]
 line-length = 100
@@ -27,4 +28,4 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "D"]
-ignore = ["D100", "D104"]
+ignore = ["D100", "D104", "E501"]

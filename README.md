@@ -13,6 +13,7 @@ topics:
   - lakehouse
   - diataxis
   - dsom
+  - openwiki
 stale_after: "2027-09-06T00:00:00Z"
 generated: false
 verified: true
@@ -28,6 +29,7 @@ Welcome to the authoritative baseline platform documentation for modernizing the
 - **Sovereign AI Constitution:** [.agents/AGENTS.md](.agents/AGENTS.md)
 - **Spatial Memory Engine:** [.agents/brain/](.agents/brain/) (`task.md`, `walkthrough.md`, `palace_registry.md`, `active_context_manifest.md`)
 - **AI Cognitive Twin Protocol:** [docs/AI-COGNITIVE-TWIN-PROTOCOL.md](docs/AI-COGNITIVE-TWIN-PROTOCOL.md)
+- **OpenWiki SSoT Navigation & Graph:** [openwiki/quickstart.md](openwiki/quickstart.md) (`tools/openwiki_emulator.py`)
 - **Master Onboarding Map:** [START-HERE.md](START-HERE.md)
 
 ---
@@ -54,6 +56,7 @@ Following the **Diátaxis Framework**, documentation is categorized into four di
 - [Solution 1 Reference Spec: AWS Native & Cloud Managed Infrastructure](docs/reference/solution-1-aws-native.md)
 - [Solution 2 Reference Spec: Hybrid Cloud Lakehouse & On-Premises GPU Infrastructure](docs/reference/solution-2-hybrid-ai.md)
 - [Solution 3 Reference Spec: 100% On-Premises Sovereign Architecture (Proxmox VE + RKE2 + Ceph SDS)](docs/reference/solution-3-onprem-proxmox-rke2.md)
+- [OpenWiki SSoT Knowledge Base & Quickstart](openwiki/quickstart.md)
 
 ### 💡 4. Explanation (Theoretical Rationale)
 
@@ -66,6 +69,7 @@ Following the **Diátaxis Framework**, documentation is categorized into four di
 ## 🛠️ CI/CD Workflows, Linters & Test Suites
 
 - **Automated OKF & Zero Link Decay Audit:** `.github/workflows/dsom-audit.yml` and `tests/test_okf_and_links.py`
+- **OpenWiki Emulator & Knowledge Graph:** `tools/openwiki_emulator.py` (`uv run python tools/openwiki_emulator.py --init`)
 - **Code Health Linters:** `ruff` & `markdownlint-cli` configured via `pyproject.toml`, `.markdownlint.json`, and `.pre-commit-config.yaml`
 - **Ansible & Infrastructure Testing:** `.ansible-lint` and Molecule scenarios in `molecule/default/`
 - **Playwright E2E Search Tests:** `playwright.config.ts` and `tests/e2e/docs_search.spec.ts`

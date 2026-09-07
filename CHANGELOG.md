@@ -4,8 +4,8 @@ type: changelog
 title: "Changelog Ledger"
 description: "Notable changes to the DSOM Big Data Analytics Lakehouse Documentation Platform."
 status: active
-timestamp: "2026-09-06T00:00:00Z"
-stale_after: "2027-09-06T00:00:00Z"
+timestamp: "2026-09-07T11:20:00Z"
+stale_after: "2027-09-07T11:20:00Z"
 generated: false
 verified: true
 sources:
@@ -28,6 +28,9 @@ and this project adheres to Semantic Versioning.
 
 ### Added
 
+- Adopted OpenWiki architecture and native Python emulator (`tools/openwiki_emulator.py`) establishing BDA Lakehouse Single Source of Truth (SSoT) open-source software relationship graph.
+- Materialized `openwiki/` knowledge base with 10 OKF v0.2 documentation pages and standalone offline HTML5 canvas knowledge graph visualizer (`openwiki/graph.html`).
+- Added unit test suite `tests/test_openwiki.py` covering CLI subcommands (`--init`, `--search`, `--export-graph`), pytest `tmp_path` output isolation, and Mermaid diagram self-healing/quote parsing.
 - Created `docs/AI-COGNITIVE-TWIN-PROTOCOL.md` defining the 4-tier infrastructure topology map (T1 Command Centre, T2 Dev Bridge, T3 Staging, T4 Production Node Fabric).
 - Added `.github/workflows/dsom-audit.yml` and `tests/test_okf_and_links.py` for CI/CD OKF v0.2 frontmatter verification and zero link decay detection.
 - Configured Python code health linter `ruff` and `.markdownlint.json` formatting rules alongside `.pre-commit-config.yaml`.
@@ -37,8 +40,8 @@ and this project adheres to Semantic Versioning.
 
 ### Changed
 
-- Updated root `README.md`, `START-HERE.md`, `SUMMARY.md`, `llms.txt`, `CHANGELOG.md`, and `HISTORY.md` to reference newly established protocols, CI/CD workflows, linters, and test suites.
-- Synchronized spatial memory engine in `.agents/brain/` (`task.md`, `walkthrough.md`, `palace_registry.md`).
+- Updated root `README.md`, `START-HERE.md`, `SUMMARY.md`, `llms.txt`, `CHANGELOG.md`, and `HISTORY.md` to reference newly established protocols, OpenWiki knowledge graph, CI/CD workflows, linters, and test suites.
+- Synchronized spatial memory engine in `.agents/brain/` (`task.md`, `walkthrough.md`, `palace_registry.md`, `active_context_manifest.md`, `checkpoint_summary.txt`).
 
 ## [1.0.0] - 2026-09-05
 

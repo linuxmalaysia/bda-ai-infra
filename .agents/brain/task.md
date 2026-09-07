@@ -4,7 +4,7 @@ type: spatial_memory
 title: "DSOM Task List & Implementation Progress"
 description: "Active task checklist for Deep State of Mind protocol setup and spatial memory tracking."
 status: active
-timestamp: "2026-09-06T22:35:00Z"
+timestamp: "2026-09-07T11:20:00Z"
 sources:
   - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/START-HERE/"
     description: "DSOM protocol START-HERE entry point specification."
@@ -36,5 +36,6 @@ topics:
 - [x] Create auto-discovery summary indexer `tools/generate_summary.py` and pre-commit guardrail installer `tools/install_git_guardrails.py`.
 - [x] Configure multi-platform hosting support (`.gitlab-ci.yml`, `.gitbook.yaml`, `.readthedocs.yaml`, `mkdocs.yml`).
 - [x] Create 3 Diátaxis Reference documents for Three (3) Infrastructure Deployment Solutions (`solution-1-aws-native.md`, `solution-2-hybrid-ai.md`, `solution-3-onprem-proxmox-rke2.md`).
-- [x] Address PR review feedback across EMR Serverless Glue Iceberg config, MACsec ciphers, Proxmox VE GPU passthrough failover limits, RKE2 FIPS boundaries, and mTLS APISIX validation.
+- [x] Adopt OpenWiki architecture & emulator tool (`tools/openwiki_emulator.py`) establishing BDA Lakehouse Single Source of Truth (SSoT) open-source software relationship graph.
+- [x] Address PR review feedback across APISIX mTLS security, Ceph CSI storage separation, Trino performance qualifications, Lakehouse Writer ingestion step, Superset tested concurrency, test output isolation, canvas graph scaling/fallback, file permissions preservation, and lock retention.
 - [x] Execute EOD Palace Sync for DSOM Protocol spatial memory state.

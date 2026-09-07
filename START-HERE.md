@@ -16,6 +16,7 @@ topics:
   - start-here
   - onboarding
   - bda
+  - openwiki
 ---
 
 # 🚀 START HERE — BDA Lakehouse & DSOM Protocol Onboarding
@@ -30,6 +31,7 @@ Welcome to the Big Data Analytics (BDA) Lakehouse SSoT modernization project ope
 2. **Sovereign Constitution:** [.agents/AGENTS.md](.agents/AGENTS.md)
 3. **Spatial Memory Engine:** [.agents/brain/](.agents/brain/)
 4. **AI Cognitive Twin Protocol:** [docs/AI-COGNITIVE-TWIN-PROTOCOL.md](docs/AI-COGNITIVE-TWIN-PROTOCOL.md)
+5. **OpenWiki SSoT Quickstart & Graph:** [openwiki/quickstart.md](openwiki/quickstart.md)
 
 ### 📚 Documentation Quadrants (Diátaxis)
 
@@ -41,6 +43,7 @@ Welcome to the Big Data Analytics (BDA) Lakehouse SSoT modernization project ope
 ### 🛠️ Workflows & Test Suites
 
 - **CI/CD OKF & Link Audit:** `.github/workflows/dsom-audit.yml`
+- **OpenWiki Emulator & Knowledge Graph:** `uv run python tools/openwiki_emulator.py --init`
 - **Python Linter & Unit Tests:** `uv run ruff check .` and `uv run pytest`
 - **Ansible & Quadlet Tests:** `.ansible-lint` and `molecule/default/`
 - **Playwright E2E Search Tests:** `tests/e2e/docs_search.spec.ts`

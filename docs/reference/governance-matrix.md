@@ -48,7 +48,7 @@ This reference document outlines the modern governance subsystems, metadata engi
 | **Public & Admin Web Portals** | Monolithic CMS, legacy web application frameworks. | Containerized Next.js / React Web Application | Headless modern architecture, responsive component design, zero legacy CMS vulnerabilities, optimized API integration. |
 | **Identity & Authentication** | Local database authentication tables. | Keycloak Identity & Access Management | Unified SSO, OpenID Connect / OAuth 2.0 federation, MFA enforcement, centralized role mapping. |
 | **API Management** | Unmanaged load balancers, direct port exposures. | Apache APISIX API Gateway | Dynamic routing, SSL termination, JWT token validation, rate-limiting, edge request transformation. |
-| **Business Intelligence Platform** | Proprietary BI server cluster (worker nodes, desktop authoring). | Apache Superset | 100% open-source, unlimited user concurrency, native Trino integration, deck.gl spatial analytics, Row-Level Security. |
+| **Business Intelligence Platform** | Proprietary BI server cluster (worker nodes, desktop authoring). | Apache Superset | 100% open-source, horizontally scalable user concurrency (tested across 4 worker nodes with 15–20% headroom), native Trino integration, deck.gl spatial analytics, Row-Level Security. |
 
 ---
 

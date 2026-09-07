@@ -28,6 +28,7 @@ and this project adheres to Semantic Versioning.
 
 ### Added
 
+- Adopted Next Technology Roadmap Stack (`docs/reference/next-technology-roadmap-stack.md`) detailing Apache Polaris multi-engine Iceberg REST catalog adoption (with Polaris vs Gravitino comparison), DuckDB `vss` / `pgvector` with OpenMetadata for zero-trust local semantic search & Hybrid RAG, and OpenTelemetry observability across Airflow DAGs, Spark jobs, and APISIX routes feeding Prometheus and Grafana.
 - Adopted OpenWiki architecture and native Python emulator (`tools/openwiki_emulator.py`) establishing BDA Lakehouse Single Source of Truth (SSoT) open-source software relationship graph.
 - Materialized `openwiki/` knowledge base with 10 OKF v0.2 documentation pages and standalone offline HTML5 canvas knowledge graph visualizer (`openwiki/graph.html`).
 - Added unit test suite `tests/test_openwiki.py` covering CLI subcommands (`--init`, `--search`, `--export-graph`), pytest `tmp_path` output isolation, and Mermaid diagram self-healing/quote parsing.

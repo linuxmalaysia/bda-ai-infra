@@ -38,4 +38,5 @@ topics:
 - [x] Create 3 Diátaxis Reference documents for Three (3) Infrastructure Deployment Solutions (`solution-1-aws-native.md`, `solution-2-hybrid-ai.md`, `solution-3-onprem-proxmox-rke2.md`).
 - [x] Adopt OpenWiki architecture & emulator tool (`tools/openwiki_emulator.py`) establishing BDA Lakehouse Single Source of Truth (SSoT) open-source software relationship graph.
 - [x] Address PR review feedback across APISIX mTLS security, Ceph CSI storage separation, Trino performance qualifications, Lakehouse Writer ingestion step, Superset tested concurrency, test output isolation, canvas graph scaling/fallback, file permissions preservation, and lock retention.
+- [x] Adopt Next Technology Roadmap Stack (Apache Polaris Iceberg REST catalog, DuckDB vss / pgvector zero-trust local RAG with OpenMetadata, OpenTelemetry observability) into project specs, OpenWiki, and triple-ledger.
 - [x] Execute EOD Palace Sync for DSOM Protocol spatial memory state.

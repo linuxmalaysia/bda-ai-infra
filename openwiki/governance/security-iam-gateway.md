@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Security, Identity & API Perimeter: Keycloak & Apache APISIX"
-timestamp: "2026-09-07T12:17:36Z"
+timestamp: "2026-09-07T14:15:39Z"
 topics: ["openwiki", "governance", "security", "keycloak", "apisix"]
 description: "Centralized identity management, Single Sign-On (SSO), OIDC/OAuth2, and API gateway perimeter defense."
 ---

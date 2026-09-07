@@ -69,13 +69,13 @@ resource: "{(target_dir / '_skeleton.md').as_uri()}"
 
 | Rank | Subsystem Layer | Why It Is Substantial | Primary Open-Source Software & Evidence |
 | :--- | :--- | :--- | :--- |
-| 1 | BDA Governance & Data Catalog | Establishes SSoT catalog, lineage, ODCS, ISO 19115. | OpenMetadata, OpenLineage, ODCS v3.1.0, ISO 19115 |
-| 2 | Compute & Query Engine Fabric | Distributed query, SQL processing, batch ETL, embedded. | Trino, Apache Spark, DuckDB |
-| 3 | Storage & Lakehouse Core | S3-compatible object storage and open table storage. | Ceph SDS, MinIO, Apache Iceberg, Delta Lake |
-| 4 | Ingestion & Orchestration | Flow routing, event streaming, DAG pipeline scheduling. | Apache NiFi, Apache Kafka, Apache Airflow |
+| 1 | BDA Governance & Data Catalog | Establishes SSoT catalog, Iceberg REST RBAC, lineage, ODCS, ISO 19115. | OpenMetadata, Apache Polaris, OpenLineage, ODCS v3.1.0 |
+| 2 | Compute & Query Engine Fabric | Distributed query, SQL processing, batch ETL, embedded vector search. | Trino, Apache Spark, DuckDB vss |
+| 3 | Storage & Lakehouse Core | S3-compatible object storage, open table formats, REST catalog. | Ceph SDS, MinIO, Apache Iceberg, Apache Polaris |
+| 4 | Ingestion & Orchestration | Flow routing, event streaming, DAG scheduling, OTel tracing. | Apache NiFi, Apache Kafka, Apache Airflow, OpenTelemetry |
 | 5 | Identity, Access & Gateway | Unified SSO, OIDC/OAuth2, RBAC, MFA, API gateway. | Keycloak, Apache APISIX |
-| 6 | Business Intelligence & MLOps | User analytics, deck.gl, model registry, distributed ML. | Apache Superset, MLflow, Ray, Kubeflow |
-| 7 | Infrastructure & Automation | Sovereign hypervisors, K8s orchestration, declarative IaC. | Proxmox VE, RKE2, OpenTofu, Ansible |
+| 6 | Business Intelligence, Vector & MLOps | User analytics, zero-trust local RAG search, model tracking. | Apache Superset, pgvector, DuckDB vss, MLflow, Ray |
+| 7 | Infrastructure & Observability | Sovereign hypervisors, K8s orchestration, OTel collector, Grafana. | Proxmox VE, RKE2, OpenTelemetry Collector, Prometheus, Grafana |
 
 ## Planned Tree
 
@@ -279,11 +279,11 @@ Welcome to the **Sovereign BDA OpenWiki Quickstart**. This document serves as th
 All software across the platform is **100% Open Source Software (OSS)**, organized into six interconnected operational layers:
 
 1. **Infrastructure & Virtualization:** Proxmox VE, RKE2 (Kubernetes), Ceph SDS, MinIO Object Storage, OpenTofu, Ansible.
-2. **Data Ingestion & Orchestration:** Apache NiFi, Apache Kafka, Apache Airflow.
-3. **Storage & Format Layer:** Ceph / MinIO S3 Object Storage, Apache Iceberg, Delta Lake, Apache Parquet.
-4. **Compute & Query Engines:** Trino, Apache Spark, DuckDB.
-5. **Governance, Catalog & Security:** OpenMetadata, OpenLineage, ODCS v3.1.0, Keycloak, Apache APISIX.
-6. **Analytics & Machine Learning:** Apache Superset, MLflow, Ray, Kubeflow.
+2. **Data Ingestion & Orchestration:** Apache NiFi, Apache Kafka, Apache Airflow, OpenTelemetry Collector.
+3. **Storage & Format Layer:** Ceph / MinIO S3 Object Storage, Apache Iceberg, Apache Polaris REST Catalog, Delta Lake, Apache Parquet.
+4. **Compute & Query Engines:** Trino, Apache Spark, DuckDB vss.
+5. **Governance, Catalog & Security:** OpenMetadata, Apache Polaris, pgvector, OpenLineage, ODCS v3.1.0, Keycloak, Apache APISIX.
+6. **Analytics, Vector Search & MLOps:** Apache Superset, DuckDB vss / pgvector Zero-Trust Local RAG, MLflow, Ray, Kubeflow.
 
 ## 📋 Active Task Routing Table
 
@@ -716,6 +716,9 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
         {"id": 4, "label": "Ceph SDS / CSI", "group": "infra", "title": "Distributed block & file storage", "x": 200, "y": 380},
         {"id": 5, "label": "MinIO / Ceph S3", "group": "storage", "title": "S3-compatible object store", "x": 380, "y": 380},
         {"id": 6, "label": "Apache Iceberg / Delta", "group": "storage", "title": "ACID open table formats", "x": 550, "y": 380},
+        {"id": 21, "label": "Apache Polaris Catalog", "group": "storage", "title": "Multi-engine Iceberg REST catalog", "x": 550, "y": 250},
+        {"id": 22, "label": "DuckDB vss / pgvector", "group": "analytics", "title": "Zero-trust local vector similarity search", "x": 750, "y": 500},
+        {"id": 23, "label": "OpenTelemetry Collector", "group": "orchestration", "title": "Unified OTLP traces, metrics, logs", "x": 650, "y": 250},
         {"id": 7, "label": "Apache NiFi", "group": "ingestion", "title": "Visual data flow routing", "x": 200, "y": 100},
         {"id": 8, "label": "Apache Kafka", "group": "ingestion", "title": "Distributed event streaming bus", "x": 350, "y": 100},
         {"id": 9, "label": "Lakehouse Writer", "group": "ingestion", "title": "Spark / Iceberg commit writer", "x": 500, "y": 100},
@@ -754,6 +757,14 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
         {"from": 11, "to": 18, "label": "SQL queries"},
         {"from": 12, "to": 19, "label": "registers models"},
         {"from": 20, "to": 19, "label": "trains & tracks"},
+        {"from": 21, "to": 6, "label": "manages catalog"},
+        {"from": 11, "to": 21, "label": "REST catalog API"},
+        {"from": 12, "to": 21, "label": "REST catalog API"},
+        {"from": 13, "to": 21, "label": "REST catalog API"},
+        {"from": 14, "to": 22, "label": "indexes vectors"},
+        {"from": 10, "to": 23, "label": "OTLP telemetry"},
+        {"from": 12, "to": 23, "label": "OTLP telemetry"},
+        {"from": 17, "to": 23, "label": "OTLP telemetry"},
     ])
 
     b1 = '<span class="badge">'

@@ -23,6 +23,7 @@
 - [Reference: Lakehouse Architecture](docs/reference/lakehouse-architecture.md)
 - [Reference: Business Applications](docs/reference/business-applications.md)
 - [Reference: Governance Matrix](docs/reference/governance-matrix.md)
+- [Reference: Next Tech Roadmap Stack](docs/reference/next-technology-roadmap-stack.md)
 - [Explanation: Quarantine Model](docs/explanation/human-ai-quarantine-model.md)
 - [Explanation: MCP Sandboxing](docs/explanation/mcp-and-ai-sandboxing.md)
 - [Explanation: Governance Framework](docs/explanation/governance-and-compliance.md)

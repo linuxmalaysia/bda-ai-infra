@@ -67,7 +67,18 @@ The processing tier is split into two specialized, horizontally scalable compute
 
 1. **Trino (Distributed MPP Query Engine):** Trino serves as the distributed massively parallel processing (MPP) SQL query engine, querying Iceberg tables directly via the Polaris REST catalog. Trino replaces the compute overhead of legacy relational clusters by executing low-latency federated queries across analytical datasets, spatial geometries, and operational stores.
 2. **Apache Spark + Apache Sedona (Distributed Geospatial Processing):** Apache Spark, coupled with Apache Sedona, manages intensive batch data transformations, continuous Change Data Capture (CDC) processing, and distributed spatial computing. Apache Sedona extends Spark's memory model with spatial Resilient Distributed Datasets (SpatialRDDs) and vectorized GeoParquet processors, enabling high-performance polygon intersection calculations, spatial joins, and coordinate transformations across massive territorial datasets.
-3. **PostgreSQL with PostGIS (Operational Serving Layer):** PostgreSQL enhanced with PostGIS is maintained strictly as an operational serving store and spatial cache, providing low-latency queries for interactive spatial dashboards and caching materialized views derived from the core Iceberg lakehouse.
+3. **DuckDB (Embedded Analytical & Vector Search Engine):** DuckDB with `vss` (Vector Similarity Search) extension operates as an in-process analytical engine for sub-second analytical queries and local zero-trust semantic search vectors over Parquet files without external network egress.
+4. **PostgreSQL with PostGIS & `pgvector` (Operational & Semantic Serving Layer):** PostgreSQL enhanced with PostGIS and `pgvector` serves as the operational store, spatial cache, and persistent HNSW vector similarity search backend for interactive search portals and OpenMetadata semantic RAG pipelines.
+
+---
+
+## 3. Full-Stack Observability & Zero-Trust Local RAG
+
+### OpenTelemetry Observability Pipeline
+A unified **OpenTelemetry (OTel)** collector pipeline replaces legacy isolated exporters:
+- **Airflow DAGs:** Instrumented via OpenTelemetry listener for pipeline execution, DAG task latency, and failure tracing.
+- **Apache Spark Jobs:** Instrumented via OTel JVM agent and Spark metrics sink for executor CPU, memory, shuffle statistics, and stage traces.
+- **Apache APISIX Routes:** Instrumented via `opentelemetry` plugin propagating W3C `traceparent` headers for distributed API route latency and status code monitoring feeding Prometheus and Grafana.
 
 ---
 
@@ -80,4 +91,5 @@ The processing tier is split into two specialized, horizontally scalable compute
 | **Lakehouse Catalog** | Custom relational schemas and local HDFS file directories. | Apache Polaris (Incubating) / Project Nessie. | Open REST catalog standard; centralized table metadata; cross-engine concurrency arbitration; credential vending and policy enforcement. |
 | **Analytical Query Engine** | Monolithic application server, local relational engines. | Trino Distributed SQL Query Engine. | In-memory massively parallel processing; sub-second analytical SQL execution; multi-catalog federation; cost-based query optimization. |
 | **Geospatial Processing Engine** | Local spatial libraries, fragmented spatial compute instances. | Apache Sedona executing on Apache Spark + GeoParquet. | Distributed spatial indexing (R-Tree, Quad-Tree); distributed spatial joins; native GeoParquet vector processing; EPSG transformation pipelines. |
-| **Operational Serving Layer** | Fractured operational database clusters. | Consolidated High-Availability PostgreSQL with PostGIS extension. | High-concurrency spatial index caching; sub-millisecond point queries; serving boundary layers directly to frontend map visualizers. |
+| **Operational & Vector Serving** | Fractured operational database clusters. | High-Availability PostgreSQL with PostGIS & `pgvector` extension; DuckDB `vss`. | High-concurrency spatial index caching; sub-10ms operational vector lookups; zero-trust local semantic search over OpenMetadata assets. |
+| **Full-Stack Observability** | Isolated JMX exporters, StatsD, and raw log files. | OpenTelemetry Collector feeding Prometheus & Grafana. | Unified OTLP tracing, metrics, and logs across Airflow DAGs, Spark jobs, and APISIX routes with W3C trace context propagation. |

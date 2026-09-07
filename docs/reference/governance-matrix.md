@@ -31,10 +31,12 @@ This reference document outlines the modern governance subsystems, metadata engi
 
 | Governance Subsystem | Legacy BDA Stack | Open-Source Replacement | Enterprise Capabilities & Operational Advantages |
 | :--- | :--- | :--- | :--- |
-| **Enterprise Data Catalog** | Local data dictionaries; unindexed table schemas. | OpenMetadata (backed by PostgreSQL & OpenSearch). | Centralized discovery; automated metadata crawlers; column-level lineage tracking; native ODCS contract integration. |
+| **Enterprise Data Catalog** | Local data dictionaries; unindexed table schemas. | OpenMetadata (backed by PostgreSQL & OpenSearch) & Apache Polaris REST Catalog. | Centralized discovery; automated metadata crawlers; column-level lineage tracking; native Iceberg REST RBAC & temporary S3 credential vending. |
+| **Vector Search & Local RAG** | Absence of semantic search; external cloud AI risk. | DuckDB `vss` & PostgreSQL `pgvector` integrated with OpenMetadata. | Zero-trust local semantic search over enterprise schemas and data assets; zero egress to cloud AI services. |
 | **Lineage & Provenance Engine** | Manual documentation, untracked operational scripts. | OpenLineage Standard (with custom `nres_provenance` facet). | Runtime operational lineage capture; automated tracking of inputs/outputs across Spark, Airflow, and Trino; cryptographic verification. |
 | **Identity & Access (IAM)** | Hardcoded user credentials, local application user tables. | Keycloak Identity and Access Management. | Centralized OpenID Connect (OIDC) / OAuth 2.0; role-based access control (RBAC); Single Sign-On; Multi-Factor Authentication. |
-| **API Perimeter Gateway** | Unmanaged load balancers, direct port exposures. | Apache APISIX Cloud-Native API Gateway. | High-performance dynamic routing; JWT validation at the perimeter; TLS termination; IP whitelisting; DDoS rate-limiting. |
+| **API Perimeter Gateway** | Unmanaged load balancers, direct port exposures. | Apache APISIX Cloud-Native API Gateway. | High-performance dynamic routing; JWT validation at the perimeter; TLS termination; IP whitelisting; OpenTelemetry trace context propagation (`opentelemetry` plugin). |
+| **Full-Stack Observability** | Fragmented JMX exporters and local log files. | OpenTelemetry Collector feeding Prometheus & Grafana. | Unified OTLP telemetry standard across Airflow DAGs, Spark jobs, and APISIX routes; automated alerting and SLI/SLO dashboards. |
 | **Geospatial Governance** | Undocumented local coordinate systems and file folders. | Standardized Geospatial Profiles (MS ISO 19115:2003 / OGC). | Standardized geospatial metadata; formal EPSG projection definitions; spatial clearinghouse exchange compatibility. |
 
 ---

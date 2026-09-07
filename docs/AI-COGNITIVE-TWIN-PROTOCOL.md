@@ -45,7 +45,10 @@ This protocol governs the operational behavior, execution boundaries, and infras
                                    v
 +-----------------------------------------------------------------------+
 | T4: Production Node Fabric                                            |
-| - Deployed S3-compatible Lakehouse, Podman Quadlet container services |
+| - Deployed S3 Lakehouse (Polaris REST Catalog, Ceph/MinIO)            |
+| - Zero-Trust Local Vector Search (DuckDB vss, pgvector, OpenMetadata) |
+| - OpenTelemetry Observability (OTel Collector, Prometheus, Grafana)   |
+| - Podman Quadlet container services                                   |
 +-----------------------------------------------------------------------+
 ```
 

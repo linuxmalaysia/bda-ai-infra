@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "BDA Lakehouse Architecture & 100% Open-Source Software Stack"
-timestamp: "2026-09-07T12:17:36Z"
+timestamp: "2026-09-07T14:15:39Z"
 topics: ["openwiki", "architecture", "bda", "lakehouse", "oss", "ssot"]
 description: "Multi-tier architecture detailing relationships between all open-source big data components establishing the SSoT."
 ---

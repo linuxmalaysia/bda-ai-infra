@@ -715,7 +715,8 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
         {"id": 3, "label": "RKE2 Kubernetes", "group": "infra", "title": "FIPS-compliant K8s cluster", "x": 350, "y": 250},
         {"id": 4, "label": "Ceph SDS / CSI", "group": "infra", "title": "Distributed block & file storage", "x": 200, "y": 380},
         {"id": 5, "label": "MinIO / Ceph S3", "group": "storage", "title": "S3-compatible object store", "x": 380, "y": 380},
-        {"id": 6, "label": "Apache Iceberg / Delta", "group": "storage", "title": "ACID open table formats", "x": 550, "y": 380},
+        {"id": 6, "label": "Apache Iceberg", "group": "storage", "title": "ACID open table format", "x": 550, "y": 380},
+        {"id": 24, "label": "Delta Lake", "group": "storage", "title": "ACID open table format", "x": 670, "y": 380},
         {"id": 21, "label": "Apache Polaris Catalog", "group": "storage", "title": "Multi-engine Iceberg REST catalog", "x": 550, "y": 250},
         {"id": 22, "label": "DuckDB vss / pgvector", "group": "analytics", "title": "Zero-trust local vector similarity search", "x": 750, "y": 500},
         {"id": 23, "label": "OpenTelemetry Collector", "group": "orchestration", "title": "Unified OTLP traces, metrics, logs", "x": 650, "y": 250},
@@ -802,6 +803,7 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
         <button class="btn" onclick="setFilter('infra', event)">Infrastructure</button>
         <button class="btn" onclick="setFilter('storage', event)">Storage</button>
         <button class="btn" onclick="setFilter('ingestion', event)">Ingestion</button>
+        <button class="btn" onclick="setFilter('orchestration', event)">Orchestration</button>
         <button class="btn" onclick="setFilter('compute', event)">Compute/Query</button>
         <button class="btn" onclick="setFilter('governance', event)">Governance</button>
         <button class="btn" onclick="setFilter('security', event)">Security</button>

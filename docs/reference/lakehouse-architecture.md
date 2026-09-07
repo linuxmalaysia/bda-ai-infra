@@ -56,18 +56,18 @@ Core Iceberg capabilities implemented in BDA:
 
 ### Open-Source Lakehouse Catalog
 
-Centralized table management and commit resolution are decoupled from physical storage through an open-source Iceberg REST catalog, utilizing **Apache Polaris (incubating)** or **Project Nessie**.
+Centralized table management and commit resolution are decoupled from physical storage through an open-source Iceberg REST catalog, utilizing **Apache Polaris (incubating)**.
 
-- **Apache Polaris:** Acts as the central authority for table registration, namespace allocation, transactional commit arbitration, and credential vending.
+- **Apache Polaris:** Acts as the sole central authority for table registration, namespace allocation, transactional commit arbitration, and credential vending.
 - Implementing the open Iceberg REST catalog specification ensures that disparate compute engines can discover, read, and write Iceberg tables with consistent access control rules, completely eliminating vendor lock-in.
 
 ### Specialized Compute Engines
 
-The processing tier is split into two specialized, horizontally scalable compute engines:
+The processing tier is split into specialized, horizontally scalable compute engines:
 
 1. **Trino (Distributed MPP Query Engine):** Trino serves as the distributed massively parallel processing (MPP) SQL query engine, querying Iceberg tables directly via the Polaris REST catalog. Trino replaces the compute overhead of legacy relational clusters by executing low-latency federated queries across analytical datasets, spatial geometries, and operational stores.
 2. **Apache Spark + Apache Sedona (Distributed Geospatial Processing):** Apache Spark, coupled with Apache Sedona, manages intensive batch data transformations, continuous Change Data Capture (CDC) processing, and distributed spatial computing. Apache Sedona extends Spark's memory model with spatial Resilient Distributed Datasets (SpatialRDDs) and vectorized GeoParquet processors, enabling high-performance polygon intersection calculations, spatial joins, and coordinate transformations across massive territorial datasets.
-3. **DuckDB (Embedded Analytical & Vector Search Engine):** DuckDB with `vss` (Vector Similarity Search) extension operates as an in-process analytical engine for sub-second analytical queries and local zero-trust semantic search vectors over Parquet files without external network egress.
+3. **DuckDB (Embedded Analytical & Vector Search Engine):** DuckDB with `vss` (Vector Similarity Search) extension operates as an in-process analytical engine for sub-second analytical queries and local zero-trust semantic search vectors; Parquet datasets are materialized into DuckDB tables with fixed-size `ARRAY` columns before `vss` creates HNSW indexes.
 4. **PostgreSQL with PostGIS & `pgvector` (Operational & Semantic Serving Layer):** PostgreSQL enhanced with PostGIS and `pgvector` serves as the operational store, spatial cache, and persistent HNSW vector similarity search backend for interactive search portals and OpenMetadata semantic RAG pipelines.
 
 ---
@@ -75,10 +75,10 @@ The processing tier is split into two specialized, horizontally scalable compute
 ## 3. Full-Stack Observability & Zero-Trust Local RAG
 
 ### OpenTelemetry Observability Pipeline
-A unified **OpenTelemetry (OTel)** collector pipeline replaces legacy isolated exporters:
+A unified **OpenTelemetry (OTel)** collector pipeline routes metrics to Prometheus, traces to Grafana Tempo, and logs to Grafana Loki, with Grafana connected to Prometheus, Tempo, and Loki backends:
 - **Airflow DAGs:** Instrumented via OpenTelemetry listener for pipeline execution, DAG task latency, and failure tracing.
 - **Apache Spark Jobs:** Instrumented via OTel JVM agent and Spark metrics sink for executor CPU, memory, shuffle statistics, and stage traces.
-- **Apache APISIX Routes:** Instrumented via `opentelemetry` plugin propagating W3C `traceparent` headers for distributed API route latency and status code monitoring feeding Prometheus and Grafana.
+- **Apache APISIX Routes:** Instrumented via `opentelemetry` plugin propagating W3C `traceparent` headers for distributed API route latency, HTTP status codes, and trace context monitoring.
 
 ---
 
@@ -88,8 +88,8 @@ A unified **OpenTelemetry (OTel)** collector pipeline replaces legacy isolated e
 | :--- | :--- | :--- | :--- |
 | **Distributed Object Storage** | Hadoop HDFS (2 NameNodes, 3 DataNodes), GlusterFS (6 Nodes). | Ceph Object Storage / MinIO Distributed Object Store. | Horizontal scale-out; unified S3 API; hardware-grade WORM S3 Object Lock immutability; elimination of small-file NameNode bottlenecks. |
 | **Open Table Format** | Unstructured CSV/JSON files, uncoordinated relational tables. | Apache Iceberg (backed by columnar Apache Parquet). | Serialized ACID transactions; schema and partition evolution without data restructuring; snapshot isolation; time-travel query replay. |
-| **Lakehouse Catalog** | Custom relational schemas and local HDFS file directories. | Apache Polaris (Incubating) / Project Nessie. | Open REST catalog standard; centralized table metadata; cross-engine concurrency arbitration; credential vending and policy enforcement. |
+| **Lakehouse Catalog** | Custom relational schemas and local HDFS file directories. | Apache Polaris (Incubating). | Open REST catalog standard; centralized table metadata; cross-engine concurrency arbitration; credential vending and policy enforcement. |
 | **Analytical Query Engine** | Monolithic application server, local relational engines. | Trino Distributed SQL Query Engine. | In-memory massively parallel processing; sub-second analytical SQL execution; multi-catalog federation; cost-based query optimization. |
 | **Geospatial Processing Engine** | Local spatial libraries, fragmented spatial compute instances. | Apache Sedona executing on Apache Spark + GeoParquet. | Distributed spatial indexing (R-Tree, Quad-Tree); distributed spatial joins; native GeoParquet vector processing; EPSG transformation pipelines. |
 | **Operational & Vector Serving** | Fractured operational database clusters. | High-Availability PostgreSQL with PostGIS & `pgvector` extension; DuckDB `vss`. | High-concurrency spatial index caching; sub-10ms operational vector lookups; zero-trust local semantic search over OpenMetadata assets. |
-| **Full-Stack Observability** | Isolated JMX exporters, StatsD, and raw log files. | OpenTelemetry Collector feeding Prometheus & Grafana. | Unified OTLP tracing, metrics, and logs across Airflow DAGs, Spark jobs, and APISIX routes with W3C trace context propagation. |
+| **Full-Stack Observability** | Isolated JMX exporters, StatsD, and raw log files. | OpenTelemetry Collector feeding Prometheus, Tempo, and Loki with Grafana dashboards. | Unified OTLP tracing, metrics, and logs across Airflow DAGs, Spark jobs, and APISIX routes; Tempo trace storage and Loki log aggregation. |

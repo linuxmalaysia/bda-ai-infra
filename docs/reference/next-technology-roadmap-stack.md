@@ -87,7 +87,7 @@ flowchart TD
 To enable local, privacy-preserving semantic search and Retrieval-Augmented Generation (RAG) across the BDA SSoT without transmitting sensitive enterprise metadata to external cloud SaaS APIs, the platform integrates **DuckDB `vss` (Vector Similarity Search)** and **`pgvector` (PostgreSQL Vector Extension)** with **OpenMetadata**.
 
 - **OpenMetadata:** Serves as the central metadata repository and lineage catalog. Metadata assets (table schemas, column descriptions, data contracts, and operational lineage) are ingested and converted into dense vector embeddings locally using open-source embedding models (e.g., `all-MiniLM-L6-v2` or `bge-small-en-v1.5`).
-- **DuckDB `vss`:** Provides embedded HNSW (Hierarchical Navigable Small World) indexing directly over Parquet files and local memory for ad-hoc analytical similarity queries and batch vector operations.
+- **DuckDB `vss`:** Provides embedded HNSW (Hierarchical Navigable Small World) indexing for ad-hoc analytical similarity queries and batch vector operations. Parquet datasets are materialized into DuckDB tables with fixed-size `ARRAY` columns (e.g., `FLOAT[384]`) before `vss` constructs HNSW vector indexes over those array columns.
 - **`pgvector`:** Embedded into the operational PostgreSQL serving layer (alongside PostGIS), providing persistent HNSW and IVFFlat vector indexing for high-concurrency API endpoint queries, interactive search portals, and Keycloak-gated semantic RAG agents.
 
 ### Comparison Table: DuckDB `vss` vs. `pgvector` vs. External Vector SaaS
@@ -96,8 +96,8 @@ To enable local, privacy-preserving semantic search and Retrieval-Augmented Gene
 | :--- | :--- | :--- | :--- |
 | **Deployment Model** | Embedded in-process extension for DuckDB | Native PostgreSQL extension in operational store | Cloud-hosted multi-tenant SaaS |
 | **Zero-Trust Sovereignty** | 100% On-Premises / Local Execution (Zero egress) | 100% On-Premises / Local Execution (Zero egress) | Requires sending sensitive enterprise data over WAN |
-| **Index Types Supported** | Array cosine/L2 distance, HNSW vector index | HNSW (Hierarchical Navigable Small World), IVFFlat | Proprietary cloud vector indexes |
-| **Integration with BDA SSoT** | Native query execution over Iceberg/Parquet files | Integrated with PostGIS operational serving tables | Requires separate ETL pipeline and SaaS synchronization |
+| **Index Types Supported** | Array cosine/L2 distance, HNSW vector index over fixed-size ARRAY columns | HNSW (Hierarchical Navigable Small World), IVFFlat | Proprietary cloud vector indexes |
+| **Integration with BDA SSoT** | Materializes Parquet into DuckDB tables with fixed-size ARRAY columns for vss HNSW indexing | Integrated with PostGIS operational serving tables | Requires separate ETL pipeline and SaaS synchronization |
 | **OpenMetadata Coupling** | Directly indexes OpenMetadata batch metadata exports | Powers OpenMetadata live semantic search backend | Secondary catalog copy required |
 | **Query Latency & Use Case** | Ultra-fast batch analytical similarity & local memory RAG | Sub-10ms operational vector lookups & concurrent API search | Variable network latency depending on cloud link |
 | **Operational Overhead** | Zero extra infrastructure (Runs inside client process) | Managed within existing HA PostgreSQL cluster | Third-party vendor subscription & cloud API lock-in |
@@ -115,7 +115,7 @@ flowchart TD
     end
 
     subgraph VectorStores ["Dual Local Vector Search Layer"]
-        Embedder -->|Batch Parquet HNSW Vectors| DuckDBVSS["DuckDB vss Extension<br/>(Analytical Memory Vector Search)"]
+        Embedder -->|Materialize Parquet to DuckDB ARRAY Columns| DuckDBVSS["DuckDB vss Extension<br/>(HNSW Index on Fixed-Size ARRAY)"]
         Embedder -->|Persistent HNSW Tables| PgVector["PostgreSQL pgvector Extension<br/>(Operational API Semantic Search)"]
     end
 
@@ -134,7 +134,7 @@ flowchart TD
 ## 3. OpenTelemetry Observability: Full-Stack Instrumenting
 
 ### Architectural Adoption
-The platform replaces fragmented logging and legacy monitoring agents with a unified **OpenTelemetry (OTel)** observability pipeline. OpenTelemetry collectors collect traces, metrics, and logs across **Apache Airflow DAGs**, **Apache Spark jobs**, and **Apache APISIX routes**, feeding centralized **Prometheus** time-series databases and **Grafana** visualization dashboards.
+The platform replaces fragmented logging and legacy monitoring agents with a unified **OpenTelemetry (OTel)** observability pipeline. OpenTelemetry collectors collect traces, metrics, and logs across **Apache Airflow DAGs**, **Apache Spark jobs**, and **Apache APISIX routes**, routing metrics to **Prometheus**, traces to **Grafana Tempo**, and logs to **Grafana Loki**, with **Grafana** connected to all three backend stores for unified dashboarding.
 
 - **Apache Airflow:** Instrumented using the OpenTelemetry Airflow listener and OTel StatsD exporter to capture DAG execution times, task failure rates, queue latencies, and pipeline lineage contexts.
 - **Apache Spark:** Instrumented using the Spark OpenTelemetry metrics sink and Java agent attached to Driver and Executors, capturing JVM garbage collection, executor CPU/memory utilization, shuffle spill metrics, and stage trace spans.
@@ -147,7 +147,7 @@ The platform replaces fragmented logging and legacy monitoring agents with a uni
 | **Telemetry Standard** | Unified CNCF Standard (Traces, Metrics, Logs) | Fragmented (StatsD for Airflow, JMX for Spark, custom logs) | Proprietary vendor agent formats |
 | **Context Propagation** | W3C TraceContext standard across HTTP and gRPC | Broken context across microservice boundaries | Proprietary tracing headers requiring vendor agent |
 | **Collector Architecture** | Single OTel Collector daemonset / sidecar pipeline | Multiple disparate exporter daemons | Vendor agent background daemons |
-| **Storage Backend** | Prometheus (Metrics) & Tempo/Loki (Traces/Logs) | Prometheus JMX Exporters + raw log files | Third-party cloud SaaS storage |
+| **Storage Backend** | Prometheus (Metrics), Grafana Tempo (Traces), Grafana Loki (Logs) | Prometheus JMX Exporters + raw log files | Third-party cloud SaaS storage |
 | **Vendor Independence** | 100% Vendor-Neutral Open Source | Open-source but uncoordinated extensions | Heavy commercial vendor lock-in |
 | **Resource Footprint** | Lightweight Go-based collector with agent buffering | High JVM/Python overhead per custom exporter | High resource agent footprint |
 
@@ -165,18 +165,27 @@ flowchart LR
         OTelCollector["OpenTelemetry Collector<br/>(DaemonSet / Sidecar)"]
     end
 
-    subgraph StorageAndVis ["Observability Storage & Visualization"]
+    subgraph StorageBackends ["Storage Backends"]
         Prometheus["Prometheus Time-Series DB<br/>(Metrics Store)"]
+        Tempo["Grafana Tempo<br/>(Distributed Traces Store)"]
+        Loki["Grafana Loki<br/>(Log Aggregation Store)"]
+    end
+
+    subgraph VisualizationLayer ["Visualization & Analytics"]
         Grafana["Grafana Dashboards<br/>(Unified Visualizer)"]
     end
 
-    Airflow -->|OTLP Traces & Metrics| OTelCollector
-    Spark -->|OTLP Traces & Metrics| OTelCollector
-    APISIX -->|OTLP / W3C TraceContext| OTelCollector
+    Airflow -->|OTLP Traces, Metrics, Logs| OTelCollector
+    Spark -->|OTLP Traces, Metrics, Logs| OTelCollector
+    APISIX -->|OTLP Traces & Metrics / W3C TraceContext| OTelCollector
 
-    OTelCollector -->|Prometheus Exporter / Push| Prometheus
+    OTelCollector -->|Export Metrics| Prometheus
+    OTelCollector -->|Export Traces| Tempo
+    OTelCollector -->|Export Logs| Loki
+
     Prometheus --> Grafana
-    OTelCollector -->|OTLP Traces| Grafana
+    Tempo --> Grafana
+    Loki --> Grafana
 ```
 
 ---
@@ -186,8 +195,8 @@ flowchart LR
 | Subsystem Layer | Target Open-Source Software | Primary Architectural Function | SSoT Platform Integration Point |
 | :--- | :--- | :--- | :--- |
 | **Iceberg REST Catalog** | **Apache Polaris (Incubating)** | Centralized Iceberg table catalog, RBAC, and temporary S3 credential vending. | Integrated with Trino, Apache Spark, and DuckDB. |
-| **Embedded Vector Search** | **DuckDB `vss` Extension** | Embedded HNSW vector indexing over local memory and Parquet files for fast analytical search. | OpenMetadata local analytical vector pipeline & local RAG. |
+| **Embedded Vector Search** | **DuckDB `vss` Extension** | Fixed-size ARRAY column materialization and embedded HNSW vector indexing for fast analytical search. | OpenMetadata local analytical vector pipeline & local RAG. |
 | **Operational Vector Store** | **PostgreSQL `pgvector`** | Persistent vector similarity index for high-concurrency API lookups and semantic portal search. | Integrated into PostgreSQL operational serving layer & APISIX API endpoints. |
 | **Metadata & Lineage** | **OpenMetadata** | Enterprise data catalog, automated column profiling, and local embedding extraction. | Synchronized with Polaris REST catalog and DuckDB `vss` / `pgvector`. |
-| **Observability Collector** | **OpenTelemetry Collector** | Unified collector for traces, metrics, and logs with W3C trace context propagation. | Receated from Airflow, Spark, and APISIX; exports to Prometheus & Grafana. |
-| **Metrics & Visualization** | **Prometheus & Grafana** | Time-series metrics storage and unified operational dashboards for platform SLOs. | Visualizes Airflow execution, Spark shuffle/JVM performance, and APISIX route latencies. |
+| **Observability Collector** | **OpenTelemetry Collector** | Unified collector for traces, metrics, and logs with W3C trace context propagation. | Receives telemetry from Airflow, Spark, and APISIX; exports to Prometheus, Tempo, and Loki. |
+| **Metrics, Traces, Logs & Visualization** | **Prometheus, Tempo, Loki & Grafana** | Unified storage and visualization for time-series metrics, distributed traces, and log aggregation. | Connects Grafana dashboards to Prometheus (metrics), Tempo (traces), and Loki (logs). |

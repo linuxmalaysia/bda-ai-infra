@@ -68,7 +68,7 @@ Phase 4: Presentation Cutover and Legacy Decommissioning (Months 10–12)
 
 ### Phase 3: AI Operational Sandboxing, Local Vector Search & OpenTelemetry (Months 7–9)
 
-- **Actions:** Deploy containerized MCP servers (`mcp-catalog-context`, `mcp-trino-query-gen`, `mcp-pipeline-monitor`) in isolated DMZ environments using read-only database roles. Provision Tier 2 AI sandbox object storage with automated 30-day TTL purges. Integrate DuckDB `vss` and `pgvector` with OpenMetadata to power zero-trust local semantic search & Hybrid RAG across the BDA SSoT without external network egress. Deploy OpenTelemetry Collectors to collect traces and metrics from Airflow DAGs, Spark jobs, and APISIX routes feeding Prometheus and Grafana dashboards. Conduct rigorous boundary testing to confirm AI models cannot execute unauthorized writes or alter Tier 0 records.
+- **Actions:** Deploy containerized MCP servers (`mcp-catalog-context`, `mcp-trino-query-gen`, `mcp-pipeline-monitor`) in isolated DMZ environments using read-only database roles. Provision Tier 2 AI sandbox object storage with automated 30-day TTL purges. Integrate DuckDB `vss` and `pgvector` with OpenMetadata to power zero-trust local semantic search & Hybrid RAG across the BDA SSoT without external network egress. Deploy OpenTelemetry Collectors to collect traces, metrics, and logs from Airflow DAGs, Spark jobs, and APISIX routes, routing metrics to Prometheus, traces to Grafana Tempo, and logs to Grafana Loki connected to Grafana dashboards. Conduct rigorous boundary testing to confirm AI models cannot execute unauthorized writes or alter Tier 0 records.
 
 ### Phase 4: Presentation Cutover and Legacy Decommissioning (Months 10–12)
 

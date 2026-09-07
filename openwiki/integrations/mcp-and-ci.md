@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "FastMCP Integration & Continuous Integration Workflows"
-timestamp: "2026-09-07T14:15:39Z"
+timestamp: "2026-09-07T20:23:26Z"
 topics: ["openwiki", "integrations", "mcp", "fastmcp", "ci-cd"]
 description: "Model Context Protocol (FastMCP) server contract and automated GitHub Actions verification workflows."
 ---

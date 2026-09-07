@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: documentation
 title: "OpenWiki Documentation Skeleton & BDA Subsystem Index"
-timestamp: "2026-09-07T11:03:22Z"
+timestamp: "2026-09-07T12:17:36Z"
 topics: ["openwiki", "skeleton", "bda", "inventory", "ssot"]
 description: "Authoritative inventory ranking, planned page tree, and evidence briefs for BDA SSoT."
 resource: "file:///app/openwiki/_skeleton.md"

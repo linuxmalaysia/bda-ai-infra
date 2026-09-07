@@ -932,12 +932,12 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
                 ctx.moveTo(source.x * scale, source.y * scale);
                 ctx.lineTo(target.x * scale, target.y * scale);
                 ctx.strokeStyle = isConnected ? '#38bdf8' : '#334155';
-                ctx.lineWidth = isConnected ? 2 : 1;
+                ctx.lineWidth = Math.max(1, Math.round((isConnected ? 2 : 1) * scale));
                 ctx.stroke();
 
                 const midX = ((source.x + target.x) / 2) * scale;
                 const midY = ((source.y + target.y) / 2) * scale;
-                ctx.font = '10px sans-serif';
+                ctx.font = Math.max(8, Math.round(10 * scale)) + 'px sans-serif';
                 ctx.fillStyle = '#64748b';
                 ctx.fillText(e.label, midX, midY);
             }});
@@ -948,19 +948,19 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
 
                 ctx.fillStyle = isSelected ? '#0284c7' : '#1e293b';
                 ctx.strokeStyle = color;
-                ctx.lineWidth = isSelected ? 3 : 1.5;
+                ctx.lineWidth = Math.max(1, Math.round((isSelected ? 3 : 1.5) * scale));
 
-                const padding = 10;
-                ctx.font = '12px sans-serif';
+                const padding = 10 * scale;
+                ctx.font = Math.max(8, Math.round(12 * scale)) + 'px sans-serif';
                 const textWidth = ctx.measureText(n.label).width;
                 const rectWidth = textWidth + padding * 2;
-                const rectHeight = 28;
+                const rectHeight = 28 * scale;
                 const rx = n.x * scale - rectWidth / 2;
                 const ry = n.y * scale - rectHeight / 2;
 
                 ctx.beginPath();
                 if (ctx.roundRect) {{
-                    ctx.roundRect(rx, ry, rectWidth, rectHeight, 6);
+                    ctx.roundRect(rx, ry, rectWidth, rectHeight, 6 * scale);
                 }} else {{
                     ctx.rect(rx, ry, rectWidth, rectHeight);
                 }}
@@ -983,11 +983,11 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
             const filteredNodes = rawNodes.filter(n => activeGroup === 'all' || n.group === activeGroup || n.group === 'navigation');
 
             const clicked = filteredNodes.find(n => {{
-                const padding = 10;
-                ctx.font = '12px sans-serif';
+                const padding = 10 * scale;
+                ctx.font = Math.max(8, Math.round(12 * scale)) + 'px sans-serif';
                 const textWidth = ctx.measureText(n.label).width;
                 const rectWidth = textWidth + padding * 2;
-                const rectHeight = 28;
+                const rectHeight = 28 * scale;
 
                 const nodeCenterX = n.x * scale;
                 const nodeCenterY = n.y * scale;

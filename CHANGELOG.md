@@ -28,7 +28,7 @@ and this project adheres to Semantic Versioning.
 
 ### Added
 
-- Adopted OpenWiki architecture and native Python emulator (`tools/openwiki_emulator.py`) establishing BDA Lakehouse Single Source of Truth (SSoT) open-source software relationship matrix.
+- Adopted OpenWiki architecture and native Python emulator (`tools/openwiki_emulator.py`) establishing BDA Lakehouse Single Source of Truth (SSoT) open-source software relationship graph.
 - Materialized `openwiki/` knowledge base with 10 OKF v0.2 documentation pages and standalone offline HTML5 canvas knowledge graph visualizer (`openwiki/graph.html`).
 - Added unit test suite `tests/test_openwiki.py` covering CLI subcommands (`--init`, `--search`, `--export-graph`), pytest `tmp_path` output isolation, and Mermaid diagram self-healing/quote parsing.
 - Created `docs/AI-COGNITIVE-TWIN-PROTOCOL.md` defining the 4-tier infrastructure topology map (T1 Command Centre, T2 Dev Bridge, T3 Staging, T4 Production Node Fabric).

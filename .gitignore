@@ -9,4 +9,4 @@ playwright-report/
 _site/
 .jekyll-cache/
 .jekyll-metadata
-*.lock
+*.md.lock

@@ -50,16 +50,7 @@ def ensure_openwiki_dirs(target_dir: pathlib.Path = OPENWIKI_DIR):
 
 
 def generate_skeleton(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_DIR) -> str:
-    """
-    Generate the Markdown skeleton containing the BDA subsystem inventory, planned documentation tree, and evidence brief index.
-    
-    Parameters:
-    	timestamp (str, optional): Timestamp to include in the document metadata. The current UTC timestamp is generated when omitted.
-    	target_dir (pathlib.Path): Directory used to construct the skeleton resource URI.
-    
-    Returns:
-    	str: Markdown content with OKF v0.2 frontmatter and documentation planning sections.
-    """
+    """Generate system ranking inventory and planned page tree skeleton."""
     if timestamp is None:
         timestamp = get_timestamp()
     skeleton = f"""---
@@ -114,15 +105,7 @@ resource: "{(target_dir / '_skeleton.md').as_uri()}"
 
 
 def generate_last_update_json(timestamp: str = None) -> str:
-    """
-    Generate JSON metadata describing the latest documentation update.
-    
-    Parameters:
-        timestamp (str, optional): Timestamp to include in the metadata. If omitted, the current UTC timestamp is used.
-    
-    Returns:
-        str: Indented JSON metadata containing the update time, engine status, and compiled page count.
-    """
+    """Generate JSON metadata summary for last update."""
     if timestamp is None:
         timestamp = get_timestamp()
     data = {
@@ -216,19 +199,7 @@ flowchart TD
 def generate_page(
     title: str, timestamp: str, topics: list[str], description: str, content_markdown: str
 ) -> str:
-    """
-    Format Markdown content as an OKF v0.2 documentation page with YAML frontmatter.
-    
-    Parameters:
-        title (str): Page title.
-        timestamp (str): Page generation timestamp.
-        topics (list[str]): Topics associated with the page.
-        description (str): Page description.
-        content_markdown (str): Markdown body content.
-    
-    Returns:
-        str: The formatted Markdown page.
-    """
+    """Format an OKF v0.2 compliant markdown page with YAML frontmatter."""
     topics_str = json.dumps(topics)
     return f"""---
 okf_version: "0.2"
@@ -250,12 +221,7 @@ class OpenWikiState:
         self.timestamp = timestamp or get_timestamp()
 
     def get_planned_pages(self) -> dict:
-        """
-        Return the planned OpenWiki page definitions for the BDA Lakehouse documentation.
-        
-        Returns:
-        	dict: A mapping of Markdown file paths to page metadata and content, including each page's title, topics, description, and Markdown body.
-        """
+        """Return planned wiki pages for 100% OSS BDA Lakehouse SSoT architecture."""
         desc_qs = (
             "Master entrypoint containing BDA SSoT topology map, task-routing table, "
             "and validation commands."
@@ -638,7 +604,7 @@ def get_planned_pages() -> dict:
 
 
 def cmd_init(target_dir: pathlib.Path = OPENWIKI_DIR):
-    """Initialize the wiki directory, generate all documentation pages and metadata, validate Mermaid diagrams, and export the knowledge graph."""
+    """Initialize full wiki directory structure, compiled pages, and standalone graph."""
     state = OpenWikiState()
     print(
         f"[OpenWiki Emulator] Generating BDA SSoT wiki under {target_dir} "
@@ -680,12 +646,7 @@ def cmd_init(target_dir: pathlib.Path = OPENWIKI_DIR):
 
 
 def cmd_update(target_dir: pathlib.Path = OPENWIKI_DIR):
-    """
-    Display the current Git status and regenerate the OpenWiki output.
-    
-    Parameters:
-        target_dir (pathlib.Path): Directory where OpenWiki files are generated.
-    """
+    """Compile recent git status and run full initialization."""
     print("[OpenWiki Emulator] Compiling recent Git status into evidence blocks...")
     try:
         diff_output = subprocess.check_output(
@@ -700,12 +661,7 @@ def cmd_update(target_dir: pathlib.Path = OPENWIKI_DIR):
 
 
 def cmd_search(query: str, target_dir: pathlib.Path = OPENWIKI_DIR):
-    """Search OpenWiki page metadata for a case-insensitive query and print matching pages.
-    
-    Parameters:
-    	query (str): Text to search for in page titles, descriptions, and topics.
-    	target_dir (pathlib.Path): Root directory containing the Markdown pages to search.
-    """
+    """Search OKF metadata across openwiki pages for a query string."""
     print(f"[OpenWiki Search] Querying frontmatter for: '{query}'...")
     results = []
     for md_file in target_dir.rglob("*.md"):
@@ -742,13 +698,7 @@ def cmd_search(query: str, target_dir: pathlib.Path = OPENWIKI_DIR):
 
 
 def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_DIR):
-    """
-    Generate an interactive HTML knowledge graph visualizer for the OpenWiki documentation.
-    
-    Parameters:
-        timestamp (str, optional): Generation timestamp displayed in the visualizer.
-        target_dir (pathlib.Path): Directory in which to create the graph file.
-    """
+    """Export offline standalone HTML interactive knowledge graph visualizer."""
     if timestamp is None:
         timestamp = get_timestamp()
     ensure_openwiki_dirs(target_dir)
@@ -967,15 +917,7 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
 
 
 def process_markdown_file(filepath: pathlib.Path):
-    """
-    Validate Mermaid code blocks in a Markdown file and repair invalid or recoverable diagrams.
-    
-    Parameters:
-        filepath (pathlib.Path): Path to the Markdown file to process.
-    
-    Raises:
-        ValueError: If a Mermaid or plain-text diagram fence is unterminated.
-    """
+    """Parse markdown file, validate embedded Mermaid blocks, and write repairs."""
     content = filepath.read_text(encoding="utf-8")
     lines = content.splitlines()
     output_lines = []
@@ -1083,15 +1025,7 @@ def process_markdown_file(filepath: pathlib.Path):
 
 
 def validate_mermaid_diagram(code: str) -> tuple[bool, str]:
-    """
-    Validate Mermaid diagram syntax and structure.
-    
-    Parameters:
-        code (str): Mermaid diagram content to validate.
-    
-    Returns:
-        tuple[bool, str]: A boolean indicating validity and an explanatory error message; the message is empty when valid.
-    """
+    """Validate a Mermaid diagram block code. Return (True, "") or (False, reason)."""
     lines = [line.strip() for line in code.splitlines() if line.strip()]
     if not lines:
         return False, "Empty diagram block"
@@ -1237,12 +1171,7 @@ def validate_mermaid_diagram(code: str) -> tuple[bool, str]:
 
 
 def main():
-    """
-    Parse command-line arguments and dispatch the requested OpenWiki operation.
-    
-    The update, search, and graph export commands take precedence in that order;
-    initialization runs when none of them is selected.
-    """
+    """Execute main CLI entrypoint for OpenWiki Emulator."""
     parser = argparse.ArgumentParser(
         description="DSOM Native Python OpenWiki Emulator for BDA AI Infra"
     )

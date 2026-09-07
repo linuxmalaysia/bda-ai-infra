@@ -709,26 +709,26 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
     )
 
     nodes_json = json.dumps([
-        {"id": 1, "label": "Quickstart & Map", "group": "navigation", "title": "Master navigation map"},
-        {"id": 2, "label": "Proxmox VE Hypervisor", "group": "infra", "title": "Bare-metal KVM virtualization"},
-        {"id": 3, "label": "RKE2 Kubernetes", "group": "infra", "title": "FIPS-compliant K8s cluster"},
-        {"id": 4, "label": "Ceph SDS / CSI", "group": "infra", "title": "Distributed block & file storage"},
-        {"id": 5, "label": "MinIO / Ceph S3", "group": "storage", "title": "S3-compatible object store"},
-        {"id": 6, "label": "Apache Iceberg / Delta", "group": "storage", "title": "ACID open table formats"},
-        {"id": 7, "label": "Apache NiFi", "group": "ingestion", "title": "Visual data flow routing"},
-        {"id": 8, "label": "Apache Kafka", "group": "ingestion", "title": "Distributed event streaming bus"},
-        {"id": 9, "label": "Lakehouse Writer", "group": "ingestion", "title": "Spark / Iceberg commit writer"},
-        {"id": 10, "label": "Apache Airflow", "group": "orchestration", "title": "DAG pipeline orchestrator"},
-        {"id": 11, "label": "Trino SQL Engine", "group": "compute", "title": "Distributed SQL query engine"},
-        {"id": 12, "label": "Apache Spark", "group": "compute", "title": "Large-scale batch & streaming ETL"},
-        {"id": 13, "label": "DuckDB Analytics", "group": "compute", "title": "Embedded fast OLAP analytics"},
-        {"id": 14, "label": "OpenMetadata Catalog", "group": "governance", "title": "Centralized metadata catalog"},
-        {"id": 15, "label": "OpenLineage Standard", "group": "governance", "title": "Column-level operational lineage"},
-        {"id": 16, "label": "Keycloak IAM", "group": "security", "title": "Unified OIDC/OAuth2/MFA"},
-        {"id": 17, "label": "Apache APISIX Gateway", "group": "security", "title": "Perimeter API gateway"},
-        {"id": 18, "label": "Apache Superset BI", "group": "analytics", "title": "Spatial BI & deck.gl analytics"},
-        {"id": 19, "label": "MLflow Registry", "group": "analytics", "title": "ML model registry & tracking"},
-        {"id": 20, "label": "Ray / Kubeflow", "group": "analytics", "title": "Distributed AI model training"},
+        {"id": 1, "label": "Quickstart & Map", "group": "navigation", "title": "Master navigation map", "x": 100, "y": 100},
+        {"id": 2, "label": "Proxmox VE Hypervisor", "group": "infra", "title": "Bare-metal KVM virtualization", "x": 200, "y": 250},
+        {"id": 3, "label": "RKE2 Kubernetes", "group": "infra", "title": "FIPS-compliant K8s cluster", "x": 350, "y": 250},
+        {"id": 4, "label": "Ceph SDS / CSI", "group": "infra", "title": "Distributed block & file storage", "x": 200, "y": 380},
+        {"id": 5, "label": "MinIO / Ceph S3", "group": "storage", "title": "S3-compatible object store", "x": 380, "y": 380},
+        {"id": 6, "label": "Apache Iceberg / Delta", "group": "storage", "title": "ACID open table formats", "x": 550, "y": 380},
+        {"id": 7, "label": "Apache NiFi", "group": "ingestion", "title": "Visual data flow routing", "x": 200, "y": 100},
+        {"id": 8, "label": "Apache Kafka", "group": "ingestion", "title": "Distributed event streaming bus", "x": 350, "y": 100},
+        {"id": 9, "label": "Lakehouse Writer", "group": "ingestion", "title": "Spark / Iceberg commit writer", "x": 500, "y": 100},
+        {"id": 10, "label": "Apache Airflow", "group": "orchestration", "title": "DAG pipeline orchestrator", "x": 650, "y": 100},
+        {"id": 11, "label": "Trino SQL Engine", "group": "compute", "title": "Distributed SQL query engine", "x": 750, "y": 250},
+        {"id": 12, "label": "Apache Spark", "group": "compute", "title": "Large-scale batch & streaming ETL", "x": 600, "y": 250},
+        {"id": 13, "label": "DuckDB Analytics", "group": "compute", "title": "Embedded fast OLAP analytics", "x": 750, "y": 380},
+        {"id": 14, "label": "OpenMetadata Catalog", "group": "governance", "title": "Centralized metadata catalog", "x": 550, "y": 500},
+        {"id": 15, "label": "OpenLineage Standard", "group": "governance", "title": "Column-level operational lineage", "x": 700, "y": 500},
+        {"id": 16, "label": "Keycloak IAM", "group": "security", "title": "Unified OIDC/OAuth2/MFA", "x": 200, "y": 500},
+        {"id": 17, "label": "Apache APISIX Gateway", "group": "security", "title": "Perimeter API gateway", "x": 380, "y": 500},
+        {"id": 18, "label": "Apache Superset BI", "group": "analytics", "title": "Spatial BI & deck.gl analytics", "x": 900, "y": 250},
+        {"id": 19, "label": "MLflow Registry", "group": "analytics", "title": "ML model registry & tracking", "x": 900, "y": 380},
+        {"id": 20, "label": "Ray / Kubeflow", "group": "analytics", "title": "Distributed AI model training", "x": 900, "y": 500},
     ])
 
     edges_json = json.dumps([
@@ -763,12 +763,12 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDA Lakehouse SSoT OpenWiki Knowledge Graph</title>
-    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <style>
         body {{ background: #0f172a; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; max-width: 1100px; margin: auto; }}
         h1 {{ color: #38bdf8; border-bottom: 2px solid #334155; padding-bottom: 0.5rem; margin-bottom: 0.5rem; }}
         .subtitle {{ color: #94a3b8; font-size: 0.95rem; margin-bottom: 1.5rem; }}
-        #network-container {{ height: 500px; background: #1e293b; border: 1px solid #334155; border-radius: 8px; margin-bottom: 1.5rem; }}
+        #canvas-wrapper {{ position: relative; width: 100%; height: 520px; background: #1e293b; border: 1px solid #334155; border-radius: 8px; margin-bottom: 1.5rem; overflow: hidden; }}
+        canvas {{ display: block; width: 100%; height: 100%; cursor: pointer; }}
         .controls {{ margin-bottom: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }}
         .controls label {{ color: #cbd5e1; font-size: 0.9rem; margin-right: 0.5rem; }}
         .btn {{ background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }}
@@ -782,21 +782,23 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
 </head>
 <body>
     <h1>🌐 BDA Lakehouse SSoT Knowledge Graph</h1>
-    <div class="subtitle">Last Generated: <code>{timestamp}</code> | Engine: <code>Native Python OpenWiki Emulator (100% OSS Stack)</code></div>
+    <div class="subtitle">Last Generated: <code>{timestamp}</code> | Engine: <code>Native Python OpenWiki Emulator (100% Offline Canvas Renderer)</code></div>
 
     <div class="controls">
         <label>Filter Subsystem:</label>
-        <button class="btn active" onclick="filterGraph('all')">All</button>
-        <button class="btn" onclick="filterGraph('infra')">Infrastructure</button>
-        <button class="btn" onclick="filterGraph('storage')">Storage</button>
-        <button class="btn" onclick="filterGraph('ingestion')">Ingestion</button>
-        <button class="btn" onclick="filterGraph('compute')">Compute/Query</button>
-        <button class="btn" onclick="filterGraph('governance')">Governance</button>
-        <button class="btn" onclick="filterGraph('security')">Security</button>
-        <button class="btn" onclick="filterGraph('analytics')">BI/MLOps</button>
+        <button class="btn active" onclick="setFilter('all', event)">All</button>
+        <button class="btn" onclick="setFilter('infra', event)">Infrastructure</button>
+        <button class="btn" onclick="setFilter('storage', event)">Storage</button>
+        <button class="btn" onclick="setFilter('ingestion', event)">Ingestion</button>
+        <button class="btn" onclick="setFilter('compute', event)">Compute/Query</button>
+        <button class="btn" onclick="setFilter('governance', event)">Governance</button>
+        <button class="btn" onclick="setFilter('security', event)">Security</button>
+        <button class="btn" onclick="setFilter('analytics', event)">BI/MLOps</button>
     </div>
 
-    <div id="network-container"></div>
+    <div id="canvas-wrapper">
+        <canvas id="graph-canvas"></canvas>
+    </div>
 
     <h2>📚 SSoT Component Reference Index</h2>
 
@@ -874,41 +876,106 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
         const rawNodes = {nodes_json};
         const rawEdges = {edges_json};
 
-        const nodes = new vis.DataSet(rawNodes.map(n => ({{
-            ...n,
-            shape: 'box',
-            font: {{ color: '#ffffff', size: 14 }},
-            color: {{ background: '#334155', border: '#38bdf8', highlight: {{ background: '#0284c7', border: '#a855f7' }} }}
-        }})));
-
-        const edges = new vis.DataSet(rawEdges.map(e => ({{
-            ...e,
-            arrows: 'to',
-            color: {{ color: '#64748b', highlight: '#38bdf8' }},
-            font: {{ color: '#94a3b8', size: 10, align: 'top' }}
-        }})));
-
-        const container = document.getElementById('network-container');
-        const data = {{ nodes: nodes, edges: edges }};
-        const options = {{
-            physics: {{ solver: 'forceAtlas2Based', forceAtlas2Based: {{ gravitationalConstant: -50, centralGravity: 0.01, springLength: 100 }} }},
-            interaction: {{ hover: true, tooltipDelay: 100 }}
+        const groupColors = {{
+            navigation: '#0284c7',
+            infra: '#38bdf8',
+            storage: '#2563eb',
+            ingestion: '#f97316',
+            orchestration: '#eab308',
+            compute: '#a855f7',
+            governance: '#22c55e',
+            security: '#ef4444',
+            analytics: '#ec4899'
         }};
 
-        const network = new vis.Network(container, data, options);
+        let activeGroup = 'all';
+        let selectedNode = null;
 
-        function filterGraph(group) {{
-            document.querySelectorAll('.controls .btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
+        const canvas = document.getElementById('graph-canvas');
+        const ctx = canvas.getContext('2d');
 
-            if (group === 'all') {{
-                nodes.forEach(n => nodes.update({{ id: n.id, hidden: false }}));
-            }} else {{
-                nodes.forEach(n => {{
-                    nodes.update({{ id: n.id, hidden: n.group !== group && group !== 'all' }});
-                }});
-            }}
+        function resizeCanvas() {{
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            draw();
         }}
+        window.addEventListener('resize', resizeCanvas);
+
+        function setFilter(group, event) {{
+            activeGroup = group;
+            document.querySelectorAll('.controls .btn').forEach(b => b.classList.remove('active'));
+            if (event) event.target.classList.add('active');
+            draw();
+        }}
+
+        function draw() {{
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const filteredNodes = rawNodes.filter(n => activeGroup === 'all' || n.group === activeGroup || n.group === 'navigation');
+            const nodeMap = new Map(filteredNodes.map(n => [n.id, n]));
+
+            rawEdges.forEach(e => {{
+                const source = nodeMap.get(e.from);
+                const target = nodeMap.get(e.to);
+                if (!source || !target) return;
+
+                const isConnected = selectedNode && (selectedNode.id === e.from || selectedNode.id === e.to);
+                ctx.beginPath();
+                ctx.moveTo(source.x, source.y);
+                ctx.lineTo(target.x, target.y);
+                ctx.strokeStyle = isConnected ? '#38bdf8' : '#334155';
+                ctx.lineWidth = isConnected ? 2 : 1;
+                ctx.stroke();
+
+                const midX = (source.x + target.x) / 2;
+                const midY = (source.y + target.y) / 2;
+                ctx.font = '10px sans-serif';
+                ctx.fillStyle = '#64748b';
+                ctx.fillText(e.label, midX, midY);
+            }});
+
+            filteredNodes.forEach(n => {{
+                const isSelected = selectedNode && selectedNode.id === n.id;
+                const color = groupColors[n.group] || '#38bdf8';
+
+                ctx.fillStyle = isSelected ? '#0284c7' : '#1e293b';
+                ctx.strokeStyle = color;
+                ctx.lineWidth = isSelected ? 3 : 1.5;
+
+                const padding = 10;
+                ctx.font = '12px sans-serif';
+                const textWidth = ctx.measureText(n.label).width;
+                const rectWidth = textWidth + padding * 2;
+                const rectHeight = 28;
+                const rx = n.x - rectWidth / 2;
+                const ry = n.y - rectHeight / 2;
+
+                ctx.beginPath();
+                ctx.roundRect(rx, ry, rectWidth, rectHeight, 6);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.fillStyle = '#f8fafc';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(n.label, n.x, n.y);
+            }});
+        }}
+
+        canvas.addEventListener('click', (evt) => {{
+            const rect = canvas.getBoundingClientRect();
+            const clickX = evt.clientX - rect.left;
+            const clickY = evt.clientY - rect.top;
+
+            const clicked = rawNodes.find(n => {{
+                return Math.abs(n.x - clickX) < 60 && Math.abs(n.y - clickY) < 20;
+            }});
+
+            selectedNode = clicked || null;
+            draw();
+        }});
+
+        setTimeout(resizeCanvas, 50);
     </script>
 </body>
 </html>"""
@@ -918,110 +985,115 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
 
 def process_markdown_file(filepath: pathlib.Path):
     """Parse markdown file, validate embedded Mermaid blocks, and write repairs."""
-    content = filepath.read_text(encoding="utf-8")
-    lines = content.splitlines()
-    output_lines = []
-    i = 0
-    modified = False
-
-    while i < len(lines):
-        line_s = lines[i].strip()
-        next_line_s = lines[i + 1].strip() if i + 1 < len(lines) else ""
-
-        if line_s == "```" and next_line_s.startswith("%% openwiki-error:"):
-            modified = True
-            j = i + 2
-            block_lines = []
-            while j < len(lines) and lines[j].strip() != "```":
-                block_lines.append(lines[j])
-                j += 1
-
-            if j >= len(lines):
-                raise ValueError(f"Unterminated plain text fence starting at line {i + 1}")
-
-            code_block = "\n".join(block_lines)
-            is_valid, reason = validate_mermaid_diagram(code_block)
-            if is_valid:
-                output_lines.append("```mermaid")
-                output_lines.extend(block_lines)
-                output_lines.append("```")
-            else:
-                output_lines.append("```")
-                output_lines.append(f"%% openwiki-error: {reason}")
-                output_lines.extend(block_lines)
-                output_lines.append("```")
-
-            i = j + 1 if j < len(lines) else j
-            continue
-
-        elif line_s == "```mermaid":
-            j = i + 1
-            block_lines = []
-            while j < len(lines) and lines[j].strip() != "```":
-                block_lines.append(lines[j])
-                j += 1
-
-            if j >= len(lines):
-                raise ValueError(f"Unterminated Mermaid fence starting at line {i + 1}")
-
-            code_block = "\n".join(block_lines)
-            is_valid, reason = validate_mermaid_diagram(code_block)
-            if is_valid:
-                output_lines.append("```mermaid")
-                output_lines.extend(block_lines)
-                output_lines.append("```")
-            else:
-                modified = True
-                output_lines.append("```")
-                output_lines.append(f"%% openwiki-error: {reason}")
-                output_lines.extend(block_lines)
-                output_lines.append("```")
-
-            i = j + 1 if j < len(lines) else j
-            continue
-
-        else:
-            output_lines.append(lines[i])
-            i += 1
-
-    if modified:
-        temp_fd, temp_path = tempfile.mkstemp(dir=str(filepath.parent), suffix=".tmp", text=True)
+    lock_path = filepath.with_suffix(filepath.suffix + ".lock")
+    lock_fd = None
+    try:
         try:
-            with os.fdopen(temp_fd, "w", encoding="utf-8") as f:
-                f.write("\n".join(output_lines) + "\n")
-                f.flush()
-                try:
-                    os.fsync(temp_fd)
-                except OSError:
-                    pass
+            import fcntl
 
-            lock_fd = None
+            lock_fd = os.open(str(lock_path), os.O_RDWR | os.O_CREAT, 0o600)
+            fcntl.flock(lock_fd, fcntl.LOCK_EX)
+        except (ImportError, AttributeError, OSError):
+            pass
+
+        content = filepath.read_text(encoding="utf-8")
+        lines = content.splitlines()
+        output_lines = []
+        i = 0
+        modified = False
+
+        while i < len(lines):
+            line_s = lines[i].strip()
+            next_line_s = lines[i + 1].strip() if i + 1 < len(lines) else ""
+
+            if line_s == "```" and next_line_s.startswith("%% openwiki-error:"):
+                modified = True
+                j = i + 2
+                block_lines = []
+                while j < len(lines) and lines[j].strip() != "```":
+                    block_lines.append(lines[j])
+                    j += 1
+
+                if j >= len(lines):
+                    raise ValueError(f"Unterminated plain text fence starting at line {i + 1}")
+
+                code_block = "\n".join(block_lines)
+                is_valid, reason = validate_mermaid_diagram(code_block)
+                if is_valid:
+                    output_lines.append("```mermaid")
+                    output_lines.extend(block_lines)
+                    output_lines.append("```")
+                else:
+                    output_lines.append("```")
+                    output_lines.append(f"%% openwiki-error: {reason}")
+                    output_lines.extend(block_lines)
+                    output_lines.append("```")
+
+                i = j + 1 if j < len(lines) else j
+                continue
+
+            elif line_s == "```mermaid":
+                j = i + 1
+                block_lines = []
+                while j < len(lines) and lines[j].strip() != "```":
+                    block_lines.append(lines[j])
+                    j += 1
+
+                if j >= len(lines):
+                    raise ValueError(f"Unterminated Mermaid fence starting at line {i + 1}")
+
+                code_block = "\n".join(block_lines)
+                is_valid, reason = validate_mermaid_diagram(code_block)
+                if is_valid:
+                    output_lines.append("```mermaid")
+                    output_lines.extend(block_lines)
+                    output_lines.append("```")
+                else:
+                    modified = True
+                    output_lines.append("```")
+                    output_lines.append(f"%% openwiki-error: {reason}")
+                    output_lines.extend(block_lines)
+                    output_lines.append("```")
+
+                i = j + 1 if j < len(lines) else j
+                continue
+
+            else:
+                output_lines.append(lines[i])
+                i += 1
+
+        if modified:
+            temp_fd, temp_path = tempfile.mkstemp(dir=str(filepath.parent), suffix=".tmp", text=True)
+            try:
+                with os.fdopen(temp_fd, "w", encoding="utf-8") as f:
+                    f.write("\n".join(output_lines) + "\n")
+                    f.flush()
+                    try:
+                        os.fsync(temp_fd)
+                    except OSError:
+                        pass
+
+                os.replace(temp_path, str(filepath))
+            except Exception:
+                if os.path.exists(temp_path):
+                    try:
+                        os.unlink(temp_path)
+                    except OSError:
+                        pass
+                raise
+    finally:
+        if lock_fd is not None:
             try:
                 import fcntl
 
-                lock_fd = os.open(str(filepath), os.O_RDWR | os.O_CREAT)
-                fcntl.flock(lock_fd, fcntl.LOCK_EX)
+                fcntl.flock(lock_fd, fcntl.LOCK_UN)
             except (ImportError, AttributeError, OSError):
                 pass
-
+            os.close(lock_fd)
             try:
-                os.replace(temp_path, str(filepath))
-            finally:
-                if lock_fd is not None:
-                    try:
-                        import fcntl
-
-                        fcntl.flock(lock_fd, fcntl.LOCK_UN)
-                    except (ImportError, AttributeError, OSError):
-                        pass
-                    os.close(lock_fd)
-        except Exception:
-            if os.path.exists(temp_path):
-                try:
-                    os.unlink(temp_path)
-                except OSError:
-                    pass
-            raise
+                os.unlink(str(lock_path))
+            except OSError:
+                pass
 
 
 def validate_mermaid_diagram(code: str) -> tuple[bool, str]:

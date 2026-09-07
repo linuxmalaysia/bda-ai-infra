@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Data Ingestion & Pipeline Orchestration: NiFi, Kafka, Airflow & ODCS"
-timestamp: "2026-09-07T01:00:02Z"
+timestamp: "2026-09-07T10:30:49Z"
 topics: ["openwiki", "software", "nifi", "kafka", "airflow", "odcs"]
 description: "Automated data movement pipelines, event streaming bus, DAG orchestration, and ODCS contract gates."
 ---

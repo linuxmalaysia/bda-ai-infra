@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Governance, Catalog & Lineage Matrix: OpenMetadata & OpenLineage"
-timestamp: "2026-09-07T00:33:35Z"
+timestamp: "2026-09-07T00:42:59Z"
 topics: ["openwiki", "governance", "openmetadata", "openlineage", "odcs", "iso19115"]
 description: "Enterprise cataloging, column-level lineage tracking, ODCS data contracts, and OGC geospatial standards."
 ---

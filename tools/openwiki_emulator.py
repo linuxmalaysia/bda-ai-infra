@@ -67,7 +67,7 @@ resource: "{(OPENWIKI_DIR / '_skeleton.md').as_uri()}"
 ## Inventory and Ranking
 
 | Rank | Subsystem Layer | Why It Is Substantial | Primary Open-Source Software & Evidence |
-|---|---|---|---|
+| :--- | :--- | :--- | :--- |
 | 1 | BDA Governance & Data Catalog | Establishes SSoT catalog, lineage, ODCS, ISO 19115. | OpenMetadata, OpenLineage, ODCS v3.1.0, ISO 19115 |
 | 2 | Compute & Query Engine Fabric | Distributed query, SQL processing, batch ETL, embedded. | Trino, Apache Spark, DuckDB |
 | 3 | Storage & Lakehouse Core | S3-compatible object storage and open table storage. | Ceph SDS, MinIO, Apache Iceberg, Delta Lake |
@@ -92,7 +92,7 @@ resource: "{(OPENWIKI_DIR / '_skeleton.md').as_uri()}"
 ## Evidence Briefs Completed Before Drafting
 
 | Planned Page | Subsystem Focus | Open-Source Software Inspected | SSoT Integration Point |
-|---|---|---|---|
+| :--- | :--- | :--- | :--- |
 | Architecture Overview | BDA Lakehouse Platform | All 100% Open Source Software Stack | `docs/reference/lakehouse-architecture.md` |
 | Infrastructure Spec | On-Premises & Hybrid Infra | Proxmox VE, RKE2, Ceph, OpenTofu, Ansible | `docs/reference/solution-3-onprem-proxmox-rke2.md` |
 | Software & Engines | Query & Lakehouse Storage | Trino, Apache Spark, DuckDB, Iceberg | `docs/reference/solution-1-aws-native.md` |

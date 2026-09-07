@@ -33,23 +33,23 @@ def get_timestamp() -> str:
     return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def ensure_openwiki_dirs():
-    """Ensure physical directory structure exists under openwiki/."""
+def ensure_openwiki_dirs(target_dir: pathlib.Path = OPENWIKI_DIR):
+    """Ensure physical directory structure exists under target_dir."""
     dirs = [
-        OPENWIKI_DIR,
-        OPENWIKI_DIR / "architecture",
-        OPENWIKI_DIR / "infrastructure",
-        OPENWIKI_DIR / "software",
-        OPENWIKI_DIR / "governance",
-        OPENWIKI_DIR / "solutions",
-        OPENWIKI_DIR / "integrations",
-        OPENWIKI_DIR / "quality",
+        target_dir,
+        target_dir / "architecture",
+        target_dir / "infrastructure",
+        target_dir / "software",
+        target_dir / "governance",
+        target_dir / "solutions",
+        target_dir / "integrations",
+        target_dir / "quality",
     ]
     for d in dirs:
         d.mkdir(parents=True, exist_ok=True)
 
 
-def generate_skeleton(timestamp: str = None) -> str:
+def generate_skeleton(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_DIR) -> str:
     """Generate system ranking inventory and planned page tree skeleton."""
     if timestamp is None:
         timestamp = get_timestamp()
@@ -60,7 +60,7 @@ title: "OpenWiki Documentation Skeleton & BDA Subsystem Index"
 timestamp: "{timestamp}"
 topics: ["openwiki", "skeleton", "bda", "inventory", "ssot"]
 description: "Authoritative inventory ranking, planned page tree, and evidence briefs for BDA SSoT."
-resource: "{(OPENWIKI_DIR / '_skeleton.md').as_uri()}"
+resource: "{(target_dir / '_skeleton.md').as_uri()}"
 ---
 # OpenWiki Documentation Skeleton & BDA Subsystem Index
 
@@ -375,7 +375,8 @@ graph TD
     Hardware["Bare-Metal Compute & Storage Servers"] --> Proxmox["Proxmox VE Virtualization"]
     Proxmox --> Ceph["Ceph Software-Defined Storage (SDS)"]
     Proxmox --> RKE2["RKE2 Kubernetes Control Plane & Workers"]
-    RKE2 --> Longhorn["MinIO / Ceph S3 CSI Storage Class"]
+    RKE2 --> CephCSI["Ceph CSI Driver (RBD & CephFS Persistent Volumes)"]
+    RKE2 --> S3Store["MinIO / Ceph RADOS Gateway (S3 Object Storage)"]
     OpenTofu["OpenTofu IaC"] --> Proxmox
     Ansible["Ansible Playbooks"] --> RKE2
 ```
@@ -405,14 +406,14 @@ The analytics core relies on high-performance compute and query engines decouple
 ```mermaid
 flowchart LR
     S3Storage[("Ceph / MinIO Object Store<br/>Parquet / ORC Files")] <--> TableFormat["Apache Iceberg / Delta Lake<br/>ACID Metadata Layer"]
-    TableFormat <--> Trino Engine["Trino Distributed SQL Engine<br/>Interactive Ad-Hoc Analytics"]
-    TableFormat <--> Spark Engine["Apache Spark<br/>Large-Scale Batch ETL"]
-    TableFormat <--> DuckDB Engine["DuckDB Engine<br/>Embedded Fast Analytics"]
+    TableFormat <--> TrinoEngine["Trino Distributed SQL Engine<br/>Interactive Ad-Hoc Analytics"]
+    TableFormat <--> SparkEngine["Apache Spark<br/>Large-Scale Batch ETL"]
+    TableFormat <--> DuckDBEngine["DuckDB Engine<br/>Embedded Fast Analytics"]
 ```
 
 ## 📊 Software Engine Capabilities
 
-- **Trino (Apache 2.0):** Distributed SQL query engine capable of running sub-second ad-hoc queries across petabytes of Iceberg/Parquet data with zero data movement.
+- **Trino (Apache 2.0):** Distributed SQL query engine capable of running interactive ad-hoc queries (sub-second on cached/in-memory workloads depending on cluster sizing) across petabytes of Iceberg/Parquet data with zero data movement (querying data in place without copying data into proprietary database formats).
 - **Apache Spark (Apache 2.0):** Unified analytics engine for large-scale data processing, streaming ETL, and graph computation.
 - **DuckDB (MIT):** In-process SQL OLAP database engine optimized for fast local memory processing and vector analytics.
 - **Apache Iceberg (Apache 2.0):** High-performance open table format for huge analytic datasets providing ACID transactions, time travel queries, and schema evolution.
@@ -436,6 +437,7 @@ sequenceDiagram
     participant NiFi as Apache NiFi
     participant ODCS as ODCS Contract Gate
     participant Kafka as Apache Kafka
+    participant Writer as Lakehouse Writer (Spark / Iceberg Commit)
     participant Airflow as Apache Airflow
     participant S3 as MinIO / Ceph S3
 
@@ -444,7 +446,8 @@ sequenceDiagram
     alt Valid Payload
         ODCS-->>NiFi: Pass Validation
         NiFi->>Kafka: Publish Event Stream
-        Kafka->>S3: Persist Parquet / Iceberg Data
+        Kafka->>Writer: Consume Event Stream
+        Writer->>S3: Serialize & Commit Parquet / Iceberg Data
         Airflow->>Airflow: Trigger downstream Spark DAG
     else Non-Compliant Payload
         ODCS-->>NiFi: Reject Payload
@@ -507,15 +510,15 @@ Perimeter security and identity management guarantee zero-trust access control a
 flowchart LR
     Client["User / Web Application"] --> APISIX["Apache APISIX API Gateway<br/>TLS Termination & Rate Limiting"]
     APISIX <--> Keycloak["Keycloak IAM Server<br/>OIDC / OAuth2 / MFA / RBAC"]
-    APISIX --> Superset["Apache Superset BI"]
-    APISIX --> Trino["Trino Query Gateway"]
-    APISIX --> OpenMetadata["OpenMetadata Portal"]
+    APISIX -->|HTTPS / mTLS + Service Account Token| Superset["Apache Superset BI"]
+    APISIX -->|HTTPS / mTLS + Service Account Token| Trino["Trino Query Gateway"]
+    APISIX -->|HTTPS / mTLS + Service Account Token| OpenMetadata["OpenMetadata Portal"]
 ```
 
 ## 🛡️ Security Capabilities
 
 - **Keycloak (Apache 2.0):** Unified Identity & Access Management (IAM) supporting OpenID Connect (OIDC), OAuth 2.0 federation, Role-Based Access Control (RBAC), and Multi-Factor Authentication (MFA).
-- **Apache APISIX (Apache 2.0):** Cloud-native, dynamic API gateway handling perimeter TLS termination, JWT token validation, IP whitelisting, and rate limiting.
+- **Apache APISIX (Apache 2.0):** Cloud-native, dynamic API gateway handling perimeter TLS termination, JWT token validation, IP whitelisting, and rate limiting. Downstream connections to Superset, Trino, and OpenMetadata are strictly authenticated and encrypted via HTTPS/mTLS and service account token propagation.
 - **Row-Level Security (RLS):** Integrated RLS policies in Superset and Trino mapping directly to Keycloak user roles.
 """,
             },
@@ -540,7 +543,7 @@ flowchart TD
 
 ## 📊 Solution Highlights
 
-- **Apache Superset (Apache 2.0):** Modern enterprise Business Intelligence platform with unlimited user concurrency, native Trino connectivity, SQL Lab, deck.gl spatial analytics, and granular RLS.
+- **Apache Superset (Apache 2.0):** Modern enterprise Business Intelligence platform with horizontally scalable user concurrency (tested across 4 application worker nodes with 15–20% headroom), native Trino connectivity, SQL Lab, deck.gl spatial analytics, and granular RLS.
 - **MLflow (Apache 2.0):** Open-source platform for managing the end-to-end machine learning lifecycle, including experiment tracking, model registry, and evaluation metrics.
 - **Ray (Apache 2.0) & Kubeflow (Apache 2.0):** Distributed AI execution framework powering scalable model training, hyperparameter tuning, and orchestration on Kubernetes (RKE2).
 """,
@@ -600,21 +603,21 @@ def get_planned_pages() -> dict:
     return OpenWikiState().get_planned_pages()
 
 
-def cmd_init():
+def cmd_init(target_dir: pathlib.Path = OPENWIKI_DIR):
     """Initialize full wiki directory structure, compiled pages, and standalone graph."""
     state = OpenWikiState()
     print(
-        f"[OpenWiki Emulator] Generating BDA SSoT wiki under {OPENWIKI_DIR} "
+        f"[OpenWiki Emulator] Generating BDA SSoT wiki under {target_dir} "
         f"with timestamp {state.timestamp}..."
     )
-    ensure_openwiki_dirs()
-    (OPENWIKI_DIR / "_skeleton.md").write_text(
-        generate_skeleton(state.timestamp), encoding="utf-8"
+    ensure_openwiki_dirs(target_dir)
+    (target_dir / "_skeleton.md").write_text(
+        generate_skeleton(state.timestamp, target_dir), encoding="utf-8"
     )
-    (OPENWIKI_DIR / ".last-update.json").write_text(
+    (target_dir / ".last-update.json").write_text(
         generate_last_update_json(state.timestamp), encoding="utf-8"
     )
-    (OPENWIKI_DIR / "INSTRUCTIONS.md").write_text(
+    (target_dir / "INSTRUCTIONS.md").write_text(
         generate_instructions_md(state.timestamp), encoding="utf-8"
     )
 
@@ -626,23 +629,23 @@ def cmd_init():
             description=info["description"],
             content_markdown=info["content"],
         )
-        dest_file = OPENWIKI_DIR / relative_path
+        dest_file = target_dir / relative_path
         dest_file.parent.mkdir(parents=True, exist_ok=True)
         dest_file.write_text(page_content, encoding="utf-8")
         print(f"[OpenWiki Emulator] Generated: {dest_file}")
 
     print("[OpenWiki Emulator] Validating and self-healing Mermaid diagrams...")
-    for md_file in OPENWIKI_DIR.rglob("*.md"):
+    for md_file in target_dir.rglob("*.md"):
         try:
             process_markdown_file(md_file)
         except Exception as e:
             print(f"[OpenWiki Emulator Warning] Could not process {md_file}: {e}")
 
-    cmd_export_graph(state.timestamp)
-    print("[OpenWiki Emulator] Successfully updated ./openwiki/ structure.")
+    cmd_export_graph(state.timestamp, target_dir)
+    print(f"[OpenWiki Emulator] Successfully updated {target_dir} structure.")
 
 
-def cmd_update():
+def cmd_update(target_dir: pathlib.Path = OPENWIKI_DIR):
     """Compile recent git status and run full initialization."""
     print("[OpenWiki Emulator] Compiling recent Git status into evidence blocks...")
     try:
@@ -654,14 +657,14 @@ def cmd_update():
         )
     except Exception as e:
         print(f"[Git Status Warning]: {e}")
-    cmd_init()
+    cmd_init(target_dir)
 
 
-def cmd_search(query: str):
+def cmd_search(query: str, target_dir: pathlib.Path = OPENWIKI_DIR):
     """Search OKF metadata across openwiki pages for a query string."""
     print(f"[OpenWiki Search] Querying frontmatter for: '{query}'...")
     results = []
-    for md_file in OPENWIKI_DIR.rglob("*.md"):
+    for md_file in target_dir.rglob("*.md"):
         try:
             content = md_file.read_text(encoding="utf-8")
             if not content.startswith("---"):
@@ -677,7 +680,7 @@ def cmd_search(query: str):
                     if query.lower() in searchable.lower():
                         results.append(
                             (
-                                md_file.relative_to(REPO_ROOT),
+                                md_file.relative_to(REPO_ROOT) if REPO_ROOT in md_file.parents else md_file,
                                 meta.get("title"),
                                 meta.get("description"),
                             )
@@ -694,26 +697,82 @@ def cmd_search(query: str):
         print(f"No OpenWiki pages matched query '{query}'.")
 
 
-def cmd_export_graph(timestamp: str = None):
-    """Export offline standalone HTML interactive knowledge graph visualizer."""
+def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_DIR):
+    """Export offline standalone HTML interactive knowledge graph visualizer with Vis.js."""
     if timestamp is None:
         timestamp = get_timestamp()
-    graph_path = OPENWIKI_DIR / "graph.html"
+    ensure_openwiki_dirs(target_dir)
+    graph_path = target_dir / "graph.html"
     print(
         f"[OpenWiki Emulator] Generating offline standalone graph visualizer at "
         f"{graph_path} with timestamp {timestamp}..."
     )
+
+    nodes_json = json.dumps([
+        {"id": 1, "label": "Quickstart & Map", "group": "navigation", "title": "Master navigation map"},
+        {"id": 2, "label": "Proxmox VE Hypervisor", "group": "infra", "title": "Bare-metal KVM virtualization"},
+        {"id": 3, "label": "RKE2 Kubernetes", "group": "infra", "title": "FIPS-compliant K8s cluster"},
+        {"id": 4, "label": "Ceph SDS / CSI", "group": "infra", "title": "Distributed block & file storage"},
+        {"id": 5, "label": "MinIO / Ceph S3", "group": "storage", "title": "S3-compatible object store"},
+        {"id": 6, "label": "Apache Iceberg / Delta", "group": "storage", "title": "ACID open table formats"},
+        {"id": 7, "label": "Apache NiFi", "group": "ingestion", "title": "Visual data flow routing"},
+        {"id": 8, "label": "Apache Kafka", "group": "ingestion", "title": "Distributed event streaming bus"},
+        {"id": 9, "label": "Lakehouse Writer", "group": "ingestion", "title": "Spark / Iceberg commit writer"},
+        {"id": 10, "label": "Apache Airflow", "group": "orchestration", "title": "DAG pipeline orchestrator"},
+        {"id": 11, "label": "Trino SQL Engine", "group": "compute", "title": "Distributed SQL query engine"},
+        {"id": 12, "label": "Apache Spark", "group": "compute", "title": "Large-scale batch & streaming ETL"},
+        {"id": 13, "label": "DuckDB Analytics", "group": "compute", "title": "Embedded fast OLAP analytics"},
+        {"id": 14, "label": "OpenMetadata Catalog", "group": "governance", "title": "Centralized metadata catalog"},
+        {"id": 15, "label": "OpenLineage Standard", "group": "governance", "title": "Column-level operational lineage"},
+        {"id": 16, "label": "Keycloak IAM", "group": "security", "title": "Unified OIDC/OAuth2/MFA"},
+        {"id": 17, "label": "Apache APISIX Gateway", "group": "security", "title": "Perimeter API gateway"},
+        {"id": 18, "label": "Apache Superset BI", "group": "analytics", "title": "Spatial BI & deck.gl analytics"},
+        {"id": 19, "label": "MLflow Registry", "group": "analytics", "title": "ML model registry & tracking"},
+        {"id": 20, "label": "Ray / Kubeflow", "group": "analytics", "title": "Distributed AI model training"},
+    ])
+
+    edges_json = json.dumps([
+        {"from": 2, "to": 3, "label": "hosts K8s"},
+        {"from": 2, "to": 4, "label": "manages storage"},
+        {"from": 3, "to": 4, "label": "attaches PVCs"},
+        {"from": 3, "to": 5, "label": "hosts S3 pods"},
+        {"from": 5, "to": 6, "label": "stores Iceberg/Parquet"},
+        {"from": 7, "to": 8, "label": "publishes events"},
+        {"from": 8, "to": 9, "label": "streams to writer"},
+        {"from": 9, "to": 5, "label": "commits Parquet"},
+        {"from": 10, "to": 9, "label": "orchestrates commits"},
+        {"from": 11, "to": 6, "label": "queries in place"},
+        {"from": 12, "to": 6, "label": "processes batch"},
+        {"from": 13, "to": 6, "label": "embedded query"},
+        {"from": 14, "to": 6, "label": "crawls schema"},
+        {"from": 15, "to": 14, "label": "pushes lineage"},
+        {"from": 16, "to": 17, "label": "validates JWT"},
+        {"from": 17, "to": 18, "label": "HTTPS / mTLS"},
+        {"from": 17, "to": 11, "label": "HTTPS / mTLS"},
+        {"from": 17, "to": 14, "label": "HTTPS / mTLS"},
+        {"from": 11, "to": 18, "label": "SQL queries"},
+        {"from": 12, "to": 19, "label": "registers models"},
+        {"from": 20, "to": 19, "label": "trains & tracks"},
+    ])
+
     b1 = '<span class="badge">'
     b2 = "</span>"
     html_content = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDA Lakehouse SSoT OpenWiki Knowledge Graph</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <style>
-        body {{ background: #0f172a; color: #f8fafc; font-family: system-ui, sans-serif; padding: 2rem; max-width: 960px; margin: auto; }}
-        h1 {{ color: #38bdf8; border-bottom: 2px solid #334155; padding-bottom: 0.5rem; }}
+        body {{ background: #0f172a; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; max-width: 1100px; margin: auto; }}
+        h1 {{ color: #38bdf8; border-bottom: 2px solid #334155; padding-bottom: 0.5rem; margin-bottom: 0.5rem; }}
         .subtitle {{ color: #94a3b8; font-size: 0.95rem; margin-bottom: 1.5rem; }}
+        #network-container {{ height: 500px; background: #1e293b; border: 1px solid #334155; border-radius: 8px; margin-bottom: 1.5rem; }}
+        .controls {{ margin-bottom: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }}
+        .controls label {{ color: #cbd5e1; font-size: 0.9rem; margin-right: 0.5rem; }}
+        .btn {{ background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }}
+        .btn:hover, .btn.active {{ background: #0284c7; border-color: #38bdf8; }}
         .card {{ background: #1e293b; border-radius: 8px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; border: 1px solid #334155; }}
         .card h3 {{ margin-top: 0; color: #a855f7; }}
         .badge {{ background: #0284c7; color: #fff; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-right: 4px; margin-bottom: 4px; }}
@@ -724,6 +783,22 @@ def cmd_export_graph(timestamp: str = None):
 <body>
     <h1>🌐 BDA Lakehouse SSoT Knowledge Graph</h1>
     <div class="subtitle">Last Generated: <code>{timestamp}</code> | Engine: <code>Native Python OpenWiki Emulator (100% OSS Stack)</code></div>
+
+    <div class="controls">
+        <label>Filter Subsystem:</label>
+        <button class="btn active" onclick="filterGraph('all')">All</button>
+        <button class="btn" onclick="filterGraph('infra')">Infrastructure</button>
+        <button class="btn" onclick="filterGraph('storage')">Storage</button>
+        <button class="btn" onclick="filterGraph('ingestion')">Ingestion</button>
+        <button class="btn" onclick="filterGraph('compute')">Compute/Query</button>
+        <button class="btn" onclick="filterGraph('governance')">Governance</button>
+        <button class="btn" onclick="filterGraph('security')">Security</button>
+        <button class="btn" onclick="filterGraph('analytics')">BI/MLOps</button>
+    </div>
+
+    <div id="network-container"></div>
+
+    <h2>📚 SSoT Component Reference Index</h2>
 
     <div class="card">
         <h3>📍 Entrypoint: Quickstart & BDA Navigation Map</h3>
@@ -794,6 +869,47 @@ def cmd_export_graph(timestamp: str = None):
         {b1}quality{b2}{b1}verification{b2}{b1}guardrails{b2}
         <p><a href="./quality/verification.md">View quality/verification.md</a></p>
     </div>
+
+    <script type="text/javascript">
+        const rawNodes = {nodes_json};
+        const rawEdges = {edges_json};
+
+        const nodes = new vis.DataSet(rawNodes.map(n => ({{
+            ...n,
+            shape: 'box',
+            font: {{ color: '#ffffff', size: 14 }},
+            color: {{ background: '#334155', border: '#38bdf8', highlight: {{ background: '#0284c7', border: '#a855f7' }} }}
+        }})));
+
+        const edges = new vis.DataSet(rawEdges.map(e => ({{
+            ...e,
+            arrows: 'to',
+            color: {{ color: '#64748b', highlight: '#38bdf8' }},
+            font: {{ color: '#94a3b8', size: 10, align: 'top' }}
+        }})));
+
+        const container = document.getElementById('network-container');
+        const data = {{ nodes: nodes, edges: edges }};
+        const options = {{
+            physics: {{ solver: 'forceAtlas2Based', forceAtlas2Based: {{ gravitationalConstant: -50, centralGravity: 0.01, springLength: 100 }} }},
+            interaction: {{ hover: true, tooltipDelay: 100 }}
+        }};
+
+        const network = new vis.Network(container, data, options);
+
+        function filterGraph(group) {{
+            document.querySelectorAll('.controls .btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (group === 'all') {{
+                nodes.forEach(n => nodes.update({{ id: n.id, hidden: false }}));
+            }} else {{
+                nodes.forEach(n => {{
+                    nodes.update({{ id: n.id, hidden: n.group !== group && group !== 'all' }});
+                }});
+            }}
+        }}
+    </script>
 </body>
 </html>"""
     graph_path.write_text(html_content, encoding="utf-8")
@@ -970,7 +1086,23 @@ def validate_mermaid_diagram(code: str) -> tuple[bool, str]:
         ):
             continue
 
+        escaped = False
+        in_quoted_label = False
         for char in line:
+            if char == "\\":
+                escaped = not escaped
+                continue
+            elif char == '"':
+                if not escaped:
+                    in_quoted_label = not in_quoted_label
+                escaped = False
+                continue
+            else:
+                escaped = False
+
+            if in_quoted_label:
+                continue
+
             if char in "([{":
                 stack.append((char, idx + 1))
             elif char in ")]}":
@@ -1053,17 +1185,24 @@ def main():
         action="store_true",
         help="Generate standalone offline HTML graph visualizer",
     )
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default=str(OPENWIKI_DIR),
+        help="Directory path to output openwiki files",
+    )
 
     args = parser.parse_args()
+    target_dir = pathlib.Path(args.output_dir).resolve()
 
     if args.update:
-        cmd_update()
+        cmd_update(target_dir)
     elif args.search:
-        cmd_search(args.search)
+        cmd_search(args.search, target_dir)
     elif args.export_graph:
-        cmd_export_graph()
+        cmd_export_graph(get_timestamp(), target_dir)
     else:
-        cmd_init()
+        cmd_init(target_dir)
 
 
 if __name__ == "__main__":

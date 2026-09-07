@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Data Ingestion & Pipeline Orchestration: NiFi, Kafka, Airflow & ODCS"
-timestamp: "2026-09-07T00:42:59Z"
+timestamp: "2026-09-07T01:00:02Z"
 topics: ["openwiki", "software", "nifi", "kafka", "airflow", "odcs"]
 description: "Automated data movement pipelines, event streaming bus, DAG orchestration, and ODCS contract gates."
 ---
@@ -19,6 +19,7 @@ sequenceDiagram
     participant NiFi as Apache NiFi
     participant ODCS as ODCS Contract Gate
     participant Kafka as Apache Kafka
+    participant Writer as Lakehouse Writer (Spark / Iceberg Commit)
     participant Airflow as Apache Airflow
     participant S3 as MinIO / Ceph S3
 
@@ -27,7 +28,8 @@ sequenceDiagram
     alt Valid Payload
         ODCS-->>NiFi: Pass Validation
         NiFi->>Kafka: Publish Event Stream
-        Kafka->>S3: Persist Parquet / Iceberg Data
+        Kafka->>Writer: Consume Event Stream
+        Writer->>S3: Serialize & Commit Parquet / Iceberg Data
         Airflow->>Airflow: Trigger downstream Spark DAG
     else Non-Compliant Payload
         ODCS-->>NiFi: Reject Payload

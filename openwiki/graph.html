@@ -2,11 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDA Lakehouse SSoT OpenWiki Knowledge Graph</title>
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     <style>
-        body { background: #0f172a; color: #f8fafc; font-family: system-ui, sans-serif; padding: 2rem; max-width: 960px; margin: auto; }
-        h1 { color: #38bdf8; border-bottom: 2px solid #334155; padding-bottom: 0.5rem; }
+        body { background: #0f172a; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; max-width: 1100px; margin: auto; }
+        h1 { color: #38bdf8; border-bottom: 2px solid #334155; padding-bottom: 0.5rem; margin-bottom: 0.5rem; }
         .subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 1.5rem; }
+        #network-container { height: 500px; background: #1e293b; border: 1px solid #334155; border-radius: 8px; margin-bottom: 1.5rem; }
+        .controls { margin-bottom: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+        .controls label { color: #cbd5e1; font-size: 0.9rem; margin-right: 0.5rem; }
+        .btn { background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 0.4rem 0.8rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+        .btn:hover, .btn.active { background: #0284c7; border-color: #38bdf8; }
         .card { background: #1e293b; border-radius: 8px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; border: 1px solid #334155; }
         .card h3 { margin-top: 0; color: #a855f7; }
         .badge { background: #0284c7; color: #fff; font-size: 0.75rem; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-right: 4px; margin-bottom: 4px; }
@@ -16,7 +23,23 @@
 </head>
 <body>
     <h1>🌐 BDA Lakehouse SSoT Knowledge Graph</h1>
-    <div class="subtitle">Last Generated: <code>2026-09-07T00:42:59Z</code> | Engine: <code>Native Python OpenWiki Emulator (100% OSS Stack)</code></div>
+    <div class="subtitle">Last Generated: <code>2026-09-07T01:00:02Z</code> | Engine: <code>Native Python OpenWiki Emulator (100% OSS Stack)</code></div>
+
+    <div class="controls">
+        <label>Filter Subsystem:</label>
+        <button class="btn active" onclick="filterGraph('all')">All</button>
+        <button class="btn" onclick="filterGraph('infra')">Infrastructure</button>
+        <button class="btn" onclick="filterGraph('storage')">Storage</button>
+        <button class="btn" onclick="filterGraph('ingestion')">Ingestion</button>
+        <button class="btn" onclick="filterGraph('compute')">Compute/Query</button>
+        <button class="btn" onclick="filterGraph('governance')">Governance</button>
+        <button class="btn" onclick="filterGraph('security')">Security</button>
+        <button class="btn" onclick="filterGraph('analytics')">BI/MLOps</button>
+    </div>
+
+    <div id="network-container"></div>
+
+    <h2>📚 SSoT Component Reference Index</h2>
 
     <div class="card">
         <h3>📍 Entrypoint: Quickstart & BDA Navigation Map</h3>
@@ -87,5 +110,46 @@
         <span class="badge">quality</span><span class="badge">verification</span><span class="badge">guardrails</span>
         <p><a href="./quality/verification.md">View quality/verification.md</a></p>
     </div>
+
+    <script type="text/javascript">
+        const rawNodes = [{"id": 1, "label": "Quickstart & Map", "group": "navigation", "title": "Master navigation map"}, {"id": 2, "label": "Proxmox VE Hypervisor", "group": "infra", "title": "Bare-metal KVM virtualization"}, {"id": 3, "label": "RKE2 Kubernetes", "group": "infra", "title": "FIPS-compliant K8s cluster"}, {"id": 4, "label": "Ceph SDS / CSI", "group": "infra", "title": "Distributed block & file storage"}, {"id": 5, "label": "MinIO / Ceph S3", "group": "storage", "title": "S3-compatible object store"}, {"id": 6, "label": "Apache Iceberg / Delta", "group": "storage", "title": "ACID open table formats"}, {"id": 7, "label": "Apache NiFi", "group": "ingestion", "title": "Visual data flow routing"}, {"id": 8, "label": "Apache Kafka", "group": "ingestion", "title": "Distributed event streaming bus"}, {"id": 9, "label": "Lakehouse Writer", "group": "ingestion", "title": "Spark / Iceberg commit writer"}, {"id": 10, "label": "Apache Airflow", "group": "orchestration", "title": "DAG pipeline orchestrator"}, {"id": 11, "label": "Trino SQL Engine", "group": "compute", "title": "Distributed SQL query engine"}, {"id": 12, "label": "Apache Spark", "group": "compute", "title": "Large-scale batch & streaming ETL"}, {"id": 13, "label": "DuckDB Analytics", "group": "compute", "title": "Embedded fast OLAP analytics"}, {"id": 14, "label": "OpenMetadata Catalog", "group": "governance", "title": "Centralized metadata catalog"}, {"id": 15, "label": "OpenLineage Standard", "group": "governance", "title": "Column-level operational lineage"}, {"id": 16, "label": "Keycloak IAM", "group": "security", "title": "Unified OIDC/OAuth2/MFA"}, {"id": 17, "label": "Apache APISIX Gateway", "group": "security", "title": "Perimeter API gateway"}, {"id": 18, "label": "Apache Superset BI", "group": "analytics", "title": "Spatial BI & deck.gl analytics"}, {"id": 19, "label": "MLflow Registry", "group": "analytics", "title": "ML model registry & tracking"}, {"id": 20, "label": "Ray / Kubeflow", "group": "analytics", "title": "Distributed AI model training"}];
+        const rawEdges = [{"from": 2, "to": 3, "label": "hosts K8s"}, {"from": 2, "to": 4, "label": "manages storage"}, {"from": 3, "to": 4, "label": "attaches PVCs"}, {"from": 3, "to": 5, "label": "hosts S3 pods"}, {"from": 5, "to": 6, "label": "stores Iceberg/Parquet"}, {"from": 7, "to": 8, "label": "publishes events"}, {"from": 8, "to": 9, "label": "streams to writer"}, {"from": 9, "to": 5, "label": "commits Parquet"}, {"from": 10, "to": 9, "label": "orchestrates commits"}, {"from": 11, "to": 6, "label": "queries in place"}, {"from": 12, "to": 6, "label": "processes batch"}, {"from": 13, "to": 6, "label": "embedded query"}, {"from": 14, "to": 6, "label": "crawls schema"}, {"from": 15, "to": 14, "label": "pushes lineage"}, {"from": 16, "to": 17, "label": "validates JWT"}, {"from": 17, "to": 18, "label": "HTTPS / mTLS"}, {"from": 17, "to": 11, "label": "HTTPS / mTLS"}, {"from": 17, "to": 14, "label": "HTTPS / mTLS"}, {"from": 11, "to": 18, "label": "SQL queries"}, {"from": 12, "to": 19, "label": "registers models"}, {"from": 20, "to": 19, "label": "trains & tracks"}];
+
+        const nodes = new vis.DataSet(rawNodes.map(n => ({
+            ...n,
+            shape: 'box',
+            font: { color: '#ffffff', size: 14 },
+            color: { background: '#334155', border: '#38bdf8', highlight: { background: '#0284c7', border: '#a855f7' } }
+        })));
+
+        const edges = new vis.DataSet(rawEdges.map(e => ({
+            ...e,
+            arrows: 'to',
+            color: { color: '#64748b', highlight: '#38bdf8' },
+            font: { color: '#94a3b8', size: 10, align: 'top' }
+        })));
+
+        const container = document.getElementById('network-container');
+        const data = { nodes: nodes, edges: edges };
+        const options = {
+            physics: { solver: 'forceAtlas2Based', forceAtlas2Based: { gravitationalConstant: -50, centralGravity: 0.01, springLength: 100 } },
+            interaction: { hover: true, tooltipDelay: 100 }
+        };
+
+        const network = new vis.Network(container, data, options);
+
+        function filterGraph(group) {
+            document.querySelectorAll('.controls .btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (group === 'all') {
+                nodes.forEach(n => nodes.update({ id: n.id, hidden: false }));
+            } else {
+                nodes.forEach(n => {
+                    nodes.update({ id: n.id, hidden: n.group !== group && group !== 'all' });
+                });
+            }
+        }
+    </script>
 </body>
 </html>

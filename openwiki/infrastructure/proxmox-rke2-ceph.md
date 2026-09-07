@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Sovereign Infrastructure: Proxmox VE, RKE2, Ceph SDS & Automation"
-timestamp: "2026-09-07T00:42:59Z"
+timestamp: "2026-09-07T01:00:02Z"
 topics: ["openwiki", "infrastructure", "proxmox", "rke2", "ceph", "opentofu"]
 description: "Complete reference specification for 100% on-premises sovereign infrastructure hosting the BDA platform."
 ---
@@ -17,7 +17,8 @@ graph TD
     Hardware["Bare-Metal Compute & Storage Servers"] --> Proxmox["Proxmox VE Virtualization"]
     Proxmox --> Ceph["Ceph Software-Defined Storage (SDS)"]
     Proxmox --> RKE2["RKE2 Kubernetes Control Plane & Workers"]
-    RKE2 --> Longhorn["MinIO / Ceph S3 CSI Storage Class"]
+    RKE2 --> CephCSI["Ceph CSI Driver (RBD & CephFS Persistent Volumes)"]
+    RKE2 --> S3Store["MinIO / Ceph RADOS Gateway (S3 Object Storage)"]
     OpenTofu["OpenTofu IaC"] --> Proxmox
     Ansible["Ansible Playbooks"] --> RKE2
 ```

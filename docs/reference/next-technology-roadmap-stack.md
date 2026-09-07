@@ -136,9 +136,9 @@ flowchart TD
 ### Architectural Adoption
 The platform replaces fragmented logging and legacy monitoring agents with a unified **OpenTelemetry (OTel)** observability pipeline. OpenTelemetry collectors collect traces, metrics, and logs across **Apache Airflow DAGs**, **Apache Spark jobs**, and **Apache APISIX routes**, routing metrics to **Prometheus**, traces to **Grafana Tempo**, and logs to **Grafana Loki**, with **Grafana** connected to all three backend stores for unified dashboarding.
 
-- **Apache Airflow:** Instrumented using the OpenTelemetry Airflow listener and OTel StatsD exporter to capture DAG execution times, task failure rates, queue latencies, and pipeline lineage contexts.
-- **Apache Spark:** Instrumented using the Spark OpenTelemetry metrics sink and Java agent attached to Driver and Executors, capturing JVM garbage collection, executor CPU/memory utilization, shuffle spill metrics, and stage trace spans.
-- **Apache APISIX:** Instrumented using the native APISIX `opentelemetry` plugin for distributed HTTP tracing (propagating W3C `traceparent` headers) and `prometheus` metrics plugin capturing request latency, HTTP status codes, and bandwidth.
+- **Apache Airflow:** Instrumented using the OpenTelemetry Airflow listener for OTLP trace generation, alongside the StatsD exporter feeding the OpenTelemetry Collector's `statsd` receiver to capture DAG execution times, task failure rates, queue latencies, and pipeline lineage contexts.
+- **Apache Spark:** Instrumented using the Spark OpenTelemetry metrics sink and Java agent attached to Driver and Executors, transmitting OTLP traces and metrics capturing JVM garbage collection, executor CPU/memory utilization, shuffle spill metrics, and stage trace spans.
+- **Apache APISIX:** Instrumented using the native APISIX `opentelemetry` plugin for distributed HTTP OTLP tracing (propagating W3C `traceparent` headers), alongside the `prometheus` metrics plugin exposing endpoint metrics scraped directly by Prometheus or the OTel Collector `prometheus` receiver.
 
 ### Comparison Table: OpenTelemetry Stack vs. Legacy Monitoring Solutions
 
@@ -175,9 +175,10 @@ flowchart LR
         Grafana["Grafana Dashboards<br/>(Unified Visualizer)"]
     end
 
-    Airflow -->|OTLP Traces, Metrics, Logs| OTelCollector
-    Spark -->|OTLP Traces, Metrics, Logs| OTelCollector
-    APISIX -->|OTLP Traces & Metrics / W3C TraceContext| OTelCollector
+    Airflow -->|OTLP Traces & StatsD Metrics| OTelCollector
+    Spark -->|OTLP Traces & OTLP Metrics| OTelCollector
+    APISIX -->|OTLP Traces (opentelemetry plugin)| OTelCollector
+    APISIX -->|Scrape Prometheus Metrics| Prometheus
 
     OTelCollector -->|Export Metrics| Prometheus
     OTelCollector -->|Export Traces| Tempo

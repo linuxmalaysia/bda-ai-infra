@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Sovereign Infrastructure: Proxmox VE, RKE2, Ceph SDS & Automation"
-timestamp: "2026-09-07T20:23:26Z"
+timestamp: "2026-09-07T20:57:01Z"
 topics: ["openwiki", "infrastructure", "proxmox", "rke2", "ceph", "opentofu"]
 description: "Complete reference specification for 100% on-premises sovereign infrastructure hosting the BDA platform."
 ---

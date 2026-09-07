@@ -758,6 +758,8 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
         {"from": 11, "to": 18, "label": "SQL queries"},
         {"from": 12, "to": 19, "label": "registers models"},
         {"from": 20, "to": 19, "label": "trains & tracks"},
+        {"from": 5, "to": 24, "label": "stores Delta tables"},
+        {"from": 12, "to": 24, "label": "processes Delta batch"},
         {"from": 21, "to": 6, "label": "manages catalog"},
         {"from": 11, "to": 21, "label": "REST catalog API"},
         {"from": 12, "to": 21, "label": "REST catalog API"},
@@ -799,15 +801,15 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
 
     <div class="controls">
         <label>Filter Subsystem:</label>
-        <button class="btn active" onclick="setFilter('all', event)">All</button>
-        <button class="btn" onclick="setFilter('infra', event)">Infrastructure</button>
-        <button class="btn" onclick="setFilter('storage', event)">Storage</button>
-        <button class="btn" onclick="setFilter('ingestion', event)">Ingestion</button>
-        <button class="btn" onclick="setFilter('orchestration', event)">Orchestration</button>
-        <button class="btn" onclick="setFilter('compute', event)">Compute/Query</button>
-        <button class="btn" onclick="setFilter('governance', event)">Governance</button>
-        <button class="btn" onclick="setFilter('security', event)">Security</button>
-        <button class="btn" onclick="setFilter('analytics', event)">BI/MLOps</button>
+        <button type="button" class="btn active" onclick="setFilter('all', event)">All</button>
+        <button type="button" class="btn" onclick="setFilter('infra', event)">Infrastructure</button>
+        <button type="button" class="btn" onclick="setFilter('storage', event)">Storage</button>
+        <button type="button" class="btn" onclick="setFilter('ingestion', event)">Ingestion</button>
+        <button type="button" class="btn" onclick="setFilter('orchestration', event)">Orchestration</button>
+        <button type="button" class="btn" onclick="setFilter('compute', event)">Compute/Query</button>
+        <button type="button" class="btn" onclick="setFilter('governance', event)">Governance</button>
+        <button type="button" class="btn" onclick="setFilter('security', event)">Security</button>
+        <button type="button" class="btn" onclick="setFilter('analytics', event)">BI/MLOps</button>
     </div>
 
     <div id="canvas-wrapper">

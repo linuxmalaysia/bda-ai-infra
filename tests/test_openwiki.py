@@ -13,7 +13,9 @@ REPO_ROOT = Path(__file__).parent.parent
 
 
 def test_openwiki_emulator_init(tmp_path):
-    """Verify python tools/openwiki_emulator.py --init with --output-dir isolates output."""
+    """
+    Verify that initialization succeeds and creates the expected OpenWiki files in an isolated output directory.
+    """
     output_dir = tmp_path / "openwiki_out"
     result = subprocess.run(
         [sys.executable, "tools/openwiki_emulator.py", "--init", "--output-dir", str(output_dir)],

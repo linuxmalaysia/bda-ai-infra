@@ -23,7 +23,7 @@
 </head>
 <body>
     <h1>🌐 BDA Lakehouse SSoT Knowledge Graph</h1>
-    <div class="subtitle">Last Generated: <code>2026-09-07T10:30:49Z</code> | Engine: <code>Native Python OpenWiki Emulator (100% Offline Canvas Renderer)</code></div>
+    <div class="subtitle">Last Generated: <code>2026-09-07T11:03:22Z</code> | Engine: <code>Native Python OpenWiki Emulator (100% Offline Canvas Renderer)</code></div>
 
     <div class="controls">
         <label>Filter Subsystem:</label>
@@ -149,8 +149,15 @@
             draw();
         }
 
+        function getScale() {
+            const scaleX = canvas.width / 1000;
+            const scaleY = canvas.height / 600;
+            return Math.min(scaleX, scaleY) || 1;
+        }
+
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const scale = getScale();
 
             const filteredNodes = rawNodes.filter(n => activeGroup === 'all' || n.group === activeGroup || n.group === 'navigation');
             const nodeMap = new Map(filteredNodes.map(n => [n.id, n]));
@@ -162,14 +169,14 @@
 
                 const isConnected = selectedNode && (selectedNode.id === e.from || selectedNode.id === e.to);
                 ctx.beginPath();
-                ctx.moveTo(source.x, source.y);
-                ctx.lineTo(target.x, target.y);
+                ctx.moveTo(source.x * scale, source.y * scale);
+                ctx.lineTo(target.x * scale, target.y * scale);
                 ctx.strokeStyle = isConnected ? '#38bdf8' : '#334155';
                 ctx.lineWidth = isConnected ? 2 : 1;
                 ctx.stroke();
 
-                const midX = (source.x + target.x) / 2;
-                const midY = (source.y + target.y) / 2;
+                const midX = ((source.x + target.x) / 2) * scale;
+                const midY = ((source.y + target.y) / 2) * scale;
                 ctx.font = '10px sans-serif';
                 ctx.fillStyle = '#64748b';
                 ctx.fillText(e.label, midX, midY);
@@ -188,18 +195,22 @@
                 const textWidth = ctx.measureText(n.label).width;
                 const rectWidth = textWidth + padding * 2;
                 const rectHeight = 28;
-                const rx = n.x - rectWidth / 2;
-                const ry = n.y - rectHeight / 2;
+                const rx = n.x * scale - rectWidth / 2;
+                const ry = n.y * scale - rectHeight / 2;
 
                 ctx.beginPath();
-                ctx.roundRect(rx, ry, rectWidth, rectHeight, 6);
+                if (ctx.roundRect) {
+                    ctx.roundRect(rx, ry, rectWidth, rectHeight, 6);
+                } else {
+                    ctx.rect(rx, ry, rectWidth, rectHeight);
+                }
                 ctx.fill();
                 ctx.stroke();
 
                 ctx.fillStyle = '#f8fafc';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(n.label, n.x, n.y);
+                ctx.fillText(n.label, n.x * scale, n.y * scale);
             });
         }
 
@@ -207,9 +218,21 @@
             const rect = canvas.getBoundingClientRect();
             const clickX = evt.clientX - rect.left;
             const clickY = evt.clientY - rect.top;
+            const scale = getScale();
 
-            const clicked = rawNodes.find(n => {
-                return Math.abs(n.x - clickX) < 60 && Math.abs(n.y - clickY) < 20;
+            const filteredNodes = rawNodes.filter(n => activeGroup === 'all' || n.group === activeGroup || n.group === 'navigation');
+
+            const clicked = filteredNodes.find(n => {
+                const padding = 10;
+                ctx.font = '12px sans-serif';
+                const textWidth = ctx.measureText(n.label).width;
+                const rectWidth = textWidth + padding * 2;
+                const rectHeight = 28;
+
+                const nodeCenterX = n.x * scale;
+                const nodeCenterY = n.y * scale;
+
+                return Math.abs(nodeCenterX - clickX) <= rectWidth / 2 && Math.abs(nodeCenterY - clickY) <= rectHeight / 2;
             });
 
             selectedNode = clicked || null;

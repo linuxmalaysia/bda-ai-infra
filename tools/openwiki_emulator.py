@@ -20,6 +20,7 @@ import datetime
 import json
 import os
 import pathlib
+import stat
 import subprocess
 import tempfile
 import yaml
@@ -908,8 +909,15 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
             draw();
         }}
 
+        function getScale() {{
+            const scaleX = canvas.width / 1000;
+            const scaleY = canvas.height / 600;
+            return Math.min(scaleX, scaleY) || 1;
+        }}
+
         function draw() {{
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const scale = getScale();
 
             const filteredNodes = rawNodes.filter(n => activeGroup === 'all' || n.group === activeGroup || n.group === 'navigation');
             const nodeMap = new Map(filteredNodes.map(n => [n.id, n]));
@@ -921,14 +929,14 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
 
                 const isConnected = selectedNode && (selectedNode.id === e.from || selectedNode.id === e.to);
                 ctx.beginPath();
-                ctx.moveTo(source.x, source.y);
-                ctx.lineTo(target.x, target.y);
+                ctx.moveTo(source.x * scale, source.y * scale);
+                ctx.lineTo(target.x * scale, target.y * scale);
                 ctx.strokeStyle = isConnected ? '#38bdf8' : '#334155';
                 ctx.lineWidth = isConnected ? 2 : 1;
                 ctx.stroke();
 
-                const midX = (source.x + target.x) / 2;
-                const midY = (source.y + target.y) / 2;
+                const midX = ((source.x + target.x) / 2) * scale;
+                const midY = ((source.y + target.y) / 2) * scale;
                 ctx.font = '10px sans-serif';
                 ctx.fillStyle = '#64748b';
                 ctx.fillText(e.label, midX, midY);
@@ -947,18 +955,22 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
                 const textWidth = ctx.measureText(n.label).width;
                 const rectWidth = textWidth + padding * 2;
                 const rectHeight = 28;
-                const rx = n.x - rectWidth / 2;
-                const ry = n.y - rectHeight / 2;
+                const rx = n.x * scale - rectWidth / 2;
+                const ry = n.y * scale - rectHeight / 2;
 
                 ctx.beginPath();
-                ctx.roundRect(rx, ry, rectWidth, rectHeight, 6);
+                if (ctx.roundRect) {{
+                    ctx.roundRect(rx, ry, rectWidth, rectHeight, 6);
+                }} else {{
+                    ctx.rect(rx, ry, rectWidth, rectHeight);
+                }}
                 ctx.fill();
                 ctx.stroke();
 
                 ctx.fillStyle = '#f8fafc';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText(n.label, n.x, n.y);
+                ctx.fillText(n.label, n.x * scale, n.y * scale);
             }});
         }}
 
@@ -966,9 +978,21 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
             const rect = canvas.getBoundingClientRect();
             const clickX = evt.clientX - rect.left;
             const clickY = evt.clientY - rect.top;
+            const scale = getScale();
 
-            const clicked = rawNodes.find(n => {{
-                return Math.abs(n.x - clickX) < 60 && Math.abs(n.y - clickY) < 20;
+            const filteredNodes = rawNodes.filter(n => activeGroup === 'all' || n.group === activeGroup || n.group === 'navigation');
+
+            const clicked = filteredNodes.find(n => {{
+                const padding = 10;
+                ctx.font = '12px sans-serif';
+                const textWidth = ctx.measureText(n.label).width;
+                const rectWidth = textWidth + padding * 2;
+                const rectHeight = 28;
+
+                const nodeCenterX = n.x * scale;
+                const nodeCenterY = n.y * scale;
+
+                return Math.abs(nodeCenterX - clickX) <= rectWidth / 2 && Math.abs(nodeCenterY - clickY) <= rectHeight / 2;
             }});
 
             selectedNode = clicked || null;
@@ -1073,6 +1097,8 @@ def process_markdown_file(filepath: pathlib.Path):
                     except OSError:
                         pass
 
+                orig_mode = stat.S_IMODE(os.stat(filepath).st_mode)
+                os.chmod(temp_path, orig_mode)
                 os.replace(temp_path, str(filepath))
             except Exception:
                 if os.path.exists(temp_path):
@@ -1090,10 +1116,6 @@ def process_markdown_file(filepath: pathlib.Path):
             except (ImportError, AttributeError, OSError):
                 pass
             os.close(lock_fd)
-            try:
-                os.unlink(str(lock_path))
-            except OSError:
-                pass
 
 
 def validate_mermaid_diagram(code: str) -> tuple[bool, str]:
@@ -1269,7 +1291,7 @@ def main():
 
     if args.update:
         cmd_update(target_dir)
-    elif args.search:
+    elif args.search is not None:
         cmd_search(args.search, target_dir)
     elif args.export_graph:
         cmd_export_graph(get_timestamp(), target_dir)

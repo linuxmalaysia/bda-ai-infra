@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "OpenWiki Quickstart & BDA SSoT Navigation Map"
-timestamp: "2026-09-07T10:30:49Z"
+timestamp: "2026-09-07T11:03:22Z"
 topics: ["openwiki", "quickstart", "bda", "ssot", "navigation"]
 description: "Master entrypoint containing BDA SSoT topology map, task-routing table, and validation commands."
 ---

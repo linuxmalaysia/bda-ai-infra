@@ -1,46 +1,71 @@
 #!/usr/bin/env python3
-"""Generates SUMMARY.md and _data/navigation.yml by scanning root and docs/ for .md files."""
+"""Generates SUMMARY.md and _data/navigation.yml by scanning root and docs/ for .md files.
+
+Protocol: Deep State of Mind (DSOM) Protocol
+Author: Harisfazillah Jamel (LinuxMalaysia)
+License: GNU General Public License v3.0
+"""
 
 import os
 from pathlib import Path
+from typing import Dict, List, Tuple
 import yaml
 
-REPO_ROOT = Path(__file__).parent.parent
-DOCS_DIR = REPO_ROOT / "docs"
-SUMMARY_PATH = REPO_ROOT / "SUMMARY.md"
-NAV_PATH = REPO_ROOT / "_data" / "navigation.yml"
+REPO_ROOT: Path = Path(__file__).parent.parent
+DOCS_DIR: Path = REPO_ROOT / "docs"
+SUMMARY_PATH: Path = REPO_ROOT / "SUMMARY.md"
+NAV_PATH: Path = REPO_ROOT / "_data" / "navigation.yml"
 
-EXCLUDED_DIRS = {"node_modules", "dist", "build", ".venv", ".git", ".pytest_cache", "_site"}
+EXCLUDED_DIRS: set[str] = {
+    "node_modules",
+    "dist",
+    "build",
+    ".venv",
+    ".git",
+    ".pytest_cache",
+    "_site",
+}
 
 
-def parse_frontmatter(file_path):
-    """Extract title and description from OKF frontmatter if present."""
+def parse_frontmatter(file_path: Path) -> Tuple[str, str]:
+    """Extract title and description from OKF frontmatter if present.
+
+    Args:
+        file_path (Path): Path to the Markdown file.
+
+    Returns:
+        Tuple[str, str]: A tuple containing (title, description).
+
+    """
     try:
-        content = file_path.read_text(encoding="utf-8")
+        content: str = file_path.read_text(encoding="utf-8")
         if content.startswith("---\n"):
-            parts = content.split("---\n", 2)
+            parts: List[str] = content.split("---\n", 2)
             if len(parts) >= 3:
-                data = yaml.safe_load(parts[1])
+                data: dict = yaml.safe_load(parts[1])
                 if isinstance(data, dict):
-                    title = data.get("title")
-                    desc = data.get("description", "")
+                    title: str = data.get("title")
+                    desc: str = data.get("description", "")
                     if title:
                         return title, desc
     except Exception:
         pass
 
-    # Fallback to file name formatted
-    name = file_path.stem.replace("-", " ").replace("_", " ").title()
+    name: str = file_path.stem.replace("-", " ").replace("_", " ").title()
     return name, ""
 
 
-def discover_markdown_files():
-    """Discover all .md files in root and docs/."""
-    root_files = []
-    docs_files = []
+def discover_markdown_files() -> Tuple[List[Dict[str, str]], List[Dict[str, str]]]:
+    """Discover all .md files in root and docs/ directory.
 
-    # Priority root files (excluding SUMMARY.md)
-    priority_roots = [
+    Returns:
+        Tuple[List[Dict[str, str]], List[Dict[str, str]]]: Root files and docs files entries.
+
+    """
+    root_files: List[Dict[str, str]] = []
+    docs_files: List[Dict[str, str]] = []
+
+    priority_roots: List[str] = [
         "README.md",
         "CHANGELOG.md",
         "HISTORY.md",
@@ -48,15 +73,14 @@ def discover_markdown_files():
         "AGENTS.md",
         "llms.txt",
     ]
-    seen_root_paths = {"SUMMARY.md"}
+    seen_root_paths: set[str] = {"SUMMARY.md"}
     for pr in priority_roots:
-        p = REPO_ROOT / pr
+        p: Path = REPO_ROOT / pr
         if p.exists():
             seen_root_paths.add(pr)
             title, _ = parse_frontmatter(p)
             root_files.append({"title": title, "path": pr, "url": f"/{pr.replace('.md', '.html')}"})
 
-    # Append all other root *.md files in sorted order (skipping SUMMARY.md and index.md)
     for item in sorted(REPO_ROOT.glob("*.md")):
         if item.name not in seen_root_paths and item.name != "index.md":
             title, _ = parse_frontmatter(item)
@@ -66,18 +90,16 @@ def discover_markdown_files():
                 "url": f"/{item.name.replace('.md', '.html')}",
             })
 
-    # Docs directory traversal
     if DOCS_DIR.exists():
         for root, dirs, files in os.walk(DOCS_DIR):
             dirs[:] = [d for d in dirs if not d.startswith(".") and d not in EXCLUDED_DIRS]
             for file in sorted(files):
                 if file.endswith(".md") and file != "SUMMARY.md":
-                    full_path = Path(root) / file
-                    rel_path = full_path.relative_to(REPO_ROOT)
-                    rel_url = "/" + str(rel_path).replace(".md", ".html")
+                    full_path: Path = Path(root) / file
+                    rel_path: Path = full_path.relative_to(REPO_ROOT)
+                    rel_url: str = "/" + str(rel_path).replace(".md", ".html")
                     title, _ = parse_frontmatter(full_path)
 
-                    # Section determined by subdirectory under docs
                     parts = rel_path.parts
                     if len(parts) > 2:
                         section = parts[1].replace("-", " ").title()
@@ -94,21 +116,20 @@ def discover_markdown_files():
     return root_files, docs_files
 
 
-def main():
+def main() -> None:
     """Generate SUMMARY.md and _data/navigation.yml documentation indexes."""
     root_files, docs_files = discover_markdown_files()
 
-    # Build navigation yaml
-    nav = []
+    nav: List[Dict[str, object]] = []
 
-    # Root section
-    root_items = [{"title": rf["title"], "url": rf["url"]} for rf in root_files]
+    root_items: List[Dict[str, str]] = [
+        {"title": rf["title"], "url": rf["url"]} for rf in root_files
+    ]
     nav.append({"title": "Root Overview", "items": root_items})
 
-    # Group docs by section
-    sections = {}
+    sections: Dict[str, List[Dict[str, str]]] = {}
     for df in docs_files:
-        sec = df["section"]
+        sec: str = df["section"]
         if sec not in sections:
             sections[sec] = []
         sections[sec].append({"title": df["title"], "url": df["url"]})
@@ -121,8 +142,7 @@ def main():
     with open(NAV_PATH, "w", encoding="utf-8") as f:
         yaml.dump(nav, f, default_flow_style=False, sort_keys=False)
 
-    # Build SUMMARY.md
-    summary_lines = [
+    summary_lines: List[str] = [
         "---",
         'okf_version: "0.2"',
         'type: reference',
@@ -164,7 +184,7 @@ def main():
             summary_lines.append(f"* [{item['title']}]({path_str})")
         summary_lines.append("")
 
-    summary_content = "\n".join(summary_lines).rstrip() + "\n"
+    summary_content: str = "\n".join(summary_lines).rstrip() + "\n"
     SUMMARY_PATH.write_text(summary_content, encoding="utf-8")
     print(f"Generated {NAV_PATH} and updated {SUMMARY_PATH}")
 

@@ -39,9 +39,10 @@ Phase 2: Compute Modernization and Data Contract Enforcement (Months 4–6)
 └── Execute parallel Spark jobs to migrate legacy data into Apache Iceberg format
 └── Integrate OpenLineage runtime emission across Airflow DAGs
 
-Phase 3: AI Operational Sandboxing and MCP Deployment (Months 7–9)
+Phase 3: AI Operational Sandboxing, Local Vector Search & OpenTelemetry (Months 7–9)
 └── Deploy containerized MCP servers with read-only database connections
-└── Configure isolated Tier 2 scratch storage with automated 30-day TTLs
+└── Integrate DuckDB vss and pgvector with OpenMetadata for local zero-trust semantic search
+└── Instrument Airflow DAGs, Spark jobs, and APISIX routes with OpenTelemetry collectors
 └── Restrict AI interactions to operational tooling and schema discovery
 └── Enforce cryptographic verification gates for promoting data to Tier 0
 
@@ -65,9 +66,9 @@ Phase 4: Presentation Cutover and Legacy Decommissioning (Months 10–12)
 
 - **Actions:** Deploy Trino and Apache Spark/Sedona clusters integrated with the Polaris catalog. Formalize ODCS v3.1.0 data contracts across all analytical domain modules. Execute parallel Spark batch jobs to convert historical datasets from HDFS, GlusterFS, and relational stores into Apache Iceberg table formats. Validate row counts and SHA-256 checksums. Instrument Airflow orchestrators with OpenLineage hooks.
 
-### Phase 3: AI Operational Sandboxing and MCP Deployment (Months 7–9)
+### Phase 3: AI Operational Sandboxing, Local Vector Search & OpenTelemetry (Months 7–9)
 
-- **Actions:** Deploy containerized MCP servers (`mcp-catalog-context`, `mcp-trino-query-gen`, `mcp-pipeline-monitor`) in isolated DMZ environments using read-only database roles. Provision Tier 2 AI sandbox object storage with automated 30-day TTL purges. Conduct rigorous boundary testing to confirm AI models cannot execute unauthorized writes or alter Tier 0 records.
+- **Actions:** Deploy containerized MCP servers (`mcp-catalog-context`, `mcp-trino-query-gen`, `mcp-pipeline-monitor`) in isolated DMZ environments using read-only database roles. Provision Tier 2 AI sandbox object storage with automated 30-day TTL purges. Integrate DuckDB `vss` and `pgvector` with OpenMetadata to power zero-trust local semantic search & Hybrid RAG across the BDA SSoT without external network egress. Deploy OpenTelemetry Collectors to collect traces, metrics, and logs from Airflow DAGs, Spark jobs, and APISIX routes, routing metrics to Prometheus, traces to Grafana Tempo, and logs to Grafana Loki connected to Grafana dashboards. Conduct rigorous boundary testing to confirm AI models cannot execute unauthorized writes or alter Tier 0 records.
 
 ### Phase 4: Presentation Cutover and Legacy Decommissioning (Months 10–12)
 
@@ -81,5 +82,5 @@ Phase 4: Presentation Cutover and Legacy Decommissioning (Months 10–12)
 | :--- | :--- | :--- | :--- | :--- |
 | **Phase 1: Foundation & Dual Ingestion** (Months 1–3) | Point-to-point SFTP, local folder shares, manual email ingestion. | Ceph / MinIO (WORM), Apache Polaris, OpenMetadata, Apache NiFi. | Upstream format modifications during mirroring; network saturation at boundary. | Operate NiFi in non-intrusive listening mode; legacy production paths remain authoritative; allocate isolated NICs. |
 | **Phase 2: Compute & Contract Migration** (Months 4–6) | Hadoop HDFS, GlusterFS, relational project stores, WildFly. | Apache Iceberg, Trino, Apache Spark + Sedona, Data Contract CLI. | Data truncation or encoding errors during historical Iceberg Parquet conversions. | Execute automated row-count and partition checksum verifications; preserve raw source stores in read-only mode. |
-| **Phase 3: AI Sandboxing & MCP Deploy** (Months 7–9) | Unmonitored administrative scripts, ad-hoc Python workflows. | Model Context Protocol servers, Keycloak IAM, Tier 2 Sandbox. | Over-privileged AI agents attempting schema adjustments or unauthorized queries. | Enforce read-only database connections; block write verbs at API gateway; isolate MCP network routes. |
+| **Phase 3: AI Sandboxing, Local RAG & OTel Deploy** (Months 7–9) | Unmonitored administrative scripts, ad-hoc Python workflows, legacy StatsD/JMX exporters. | Model Context Protocol servers, Keycloak IAM, Tier 2 Sandbox, DuckDB `vss`, `pgvector`, OpenTelemetry Collectors. | Over-privileged AI agents attempting schema adjustments; WAN data leakage from cloud vector services; broken trace context. | Enforce read-only database connections; run local embedding models with zero egress; standardize W3C trace context across APISIX and OTel collectors. |
 | **Phase 4: Cutover & Decommissioning** (Months 10–12) | Proprietary BI server cluster, legacy CMS, web portal. | Apache Superset (deck.gl), Next.js / React portal, Apache APISIX. | Discrepancies between legacy BI and Superset spatial maps; user resistance to new UI. | Run 30-day side-by-side verification runs; validate geospatial rendering against PostGIS base layers; conduct user training. |

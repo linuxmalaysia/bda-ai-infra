@@ -2,7 +2,14 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Business Intelligence & MLOps Solutions: Superset, MLflow & Ray"
-timestamp: "2026-09-07T12:17:36Z"
+timestamp: "2026-09-08T11:02:34Z"
+status: active
+stale_after: "2027-09-08T00:00:00Z"
+generated: true
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 topics: ["openwiki", "solutions", "superset", "mlflow", "ray", "kubeflow"]
 description: "100% open-source BI dashboards, deck.gl geospatial analytics, model tracking, and distributed ML training."
 ---

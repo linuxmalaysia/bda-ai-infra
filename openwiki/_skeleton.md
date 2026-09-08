@@ -2,7 +2,14 @@
 okf_version: "0.2"
 type: documentation
 title: "OpenWiki Documentation Skeleton & BDA Subsystem Index"
-timestamp: "2026-09-07T12:17:36Z"
+timestamp: "2026-09-08T11:02:34Z"
+status: active
+stale_after: "2027-09-08T00:00:00Z"
+generated: true
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 topics: ["openwiki", "skeleton", "bda", "inventory", "ssot"]
 description: "Authoritative inventory ranking, planned page tree, and evidence briefs for BDA SSoT."
 resource: "file:///app/openwiki/_skeleton.md"
@@ -13,13 +20,13 @@ resource: "file:///app/openwiki/_skeleton.md"
 
 | Rank | Subsystem Layer | Why It Is Substantial | Primary Open-Source Software & Evidence |
 | :--- | :--- | :--- | :--- |
-| 1 | BDA Governance & Data Catalog | Establishes SSoT catalog, lineage, ODCS, ISO 19115. | OpenMetadata, OpenLineage, ODCS v3.1.0, ISO 19115 |
-| 2 | Compute & Query Engine Fabric | Distributed query, SQL processing, batch ETL, embedded. | Trino, Apache Spark, DuckDB |
-| 3 | Storage & Lakehouse Core | S3-compatible object storage and open table storage. | Ceph SDS, MinIO, Apache Iceberg, Delta Lake |
-| 4 | Ingestion & Orchestration | Flow routing, event streaming, DAG pipeline scheduling. | Apache NiFi, Apache Kafka, Apache Airflow |
+| 1 | BDA Governance & Data Catalog | Establishes SSoT catalog, Iceberg REST RBAC, lineage, ODCS, ISO 19115. | OpenMetadata, Apache Polaris, OpenLineage, ODCS v3.1.0 |
+| 2 | Compute & Query Engine Fabric | Distributed query, SQL processing, batch ETL, embedded vector search. | Trino, Apache Spark, DuckDB vss |
+| 3 | Storage & Lakehouse Core | S3-compatible object storage, open table formats, REST catalog. | Ceph SDS, MinIO, Apache Iceberg, Apache Polaris |
+| 4 | Ingestion & Orchestration | Flow routing, event streaming, DAG scheduling, OTel tracing. | Apache NiFi, Apache Kafka, Apache Airflow, OpenTelemetry |
 | 5 | Identity, Access & Gateway | Unified SSO, OIDC/OAuth2, RBAC, MFA, API gateway. | Keycloak, Apache APISIX |
-| 6 | Business Intelligence & MLOps | User analytics, deck.gl, model registry, distributed ML. | Apache Superset, MLflow, Ray, Kubeflow |
-| 7 | Infrastructure & Automation | Sovereign hypervisors, K8s orchestration, declarative IaC. | Proxmox VE, RKE2, OpenTofu, Ansible |
+| 6 | Business Intelligence, Vector & MLOps | User analytics, zero-trust local RAG search, model tracking. | Apache Superset, pgvector, DuckDB vss, MLflow, Ray |
+| 7 | Infrastructure & Observability | Sovereign hypervisors, K8s orchestration, OTel collector, full telemetry backend. | Proxmox VE, RKE2, OpenTelemetry Collector, Prometheus, Grafana Tempo, Grafana Loki, Grafana Dashboards |
 
 ## Planned Tree
 

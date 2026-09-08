@@ -59,6 +59,13 @@ okf_version: "0.2"
 type: documentation
 title: "OpenWiki Documentation Skeleton & BDA Subsystem Index"
 timestamp: "{timestamp}"
+status: active
+stale_after: "2027-09-08T00:00:00Z"
+generated: true
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 topics: ["openwiki", "skeleton", "bda", "inventory", "ssot"]
 description: "Authoritative inventory ranking, planned page tree, and evidence briefs for BDA SSoT."
 resource: "{(target_dir / '_skeleton.md').as_uri()}"
@@ -69,13 +76,13 @@ resource: "{(target_dir / '_skeleton.md').as_uri()}"
 
 | Rank | Subsystem Layer | Why It Is Substantial | Primary Open-Source Software & Evidence |
 | :--- | :--- | :--- | :--- |
-| 1 | BDA Governance & Data Catalog | Establishes SSoT catalog, lineage, ODCS, ISO 19115. | OpenMetadata, OpenLineage, ODCS v3.1.0, ISO 19115 |
-| 2 | Compute & Query Engine Fabric | Distributed query, SQL processing, batch ETL, embedded. | Trino, Apache Spark, DuckDB |
-| 3 | Storage & Lakehouse Core | S3-compatible object storage and open table storage. | Ceph SDS, MinIO, Apache Iceberg, Delta Lake |
-| 4 | Ingestion & Orchestration | Flow routing, event streaming, DAG pipeline scheduling. | Apache NiFi, Apache Kafka, Apache Airflow |
+| 1 | BDA Governance & Data Catalog | Establishes SSoT catalog, Iceberg REST RBAC, lineage, ODCS, ISO 19115. | OpenMetadata, Apache Polaris, OpenLineage, ODCS v3.1.0 |
+| 2 | Compute & Query Engine Fabric | Distributed query, SQL processing, batch ETL, embedded vector search. | Trino, Apache Spark, DuckDB vss |
+| 3 | Storage & Lakehouse Core | S3-compatible object storage, open table formats, REST catalog. | Ceph SDS, MinIO, Apache Iceberg, Apache Polaris |
+| 4 | Ingestion & Orchestration | Flow routing, event streaming, DAG scheduling, OTel tracing. | Apache NiFi, Apache Kafka, Apache Airflow, OpenTelemetry |
 | 5 | Identity, Access & Gateway | Unified SSO, OIDC/OAuth2, RBAC, MFA, API gateway. | Keycloak, Apache APISIX |
-| 6 | Business Intelligence & MLOps | User analytics, deck.gl, model registry, distributed ML. | Apache Superset, MLflow, Ray, Kubeflow |
-| 7 | Infrastructure & Automation | Sovereign hypervisors, K8s orchestration, declarative IaC. | Proxmox VE, RKE2, OpenTofu, Ansible |
+| 6 | Business Intelligence, Vector & MLOps | User analytics, zero-trust local RAG search, model tracking. | Apache Superset, pgvector, DuckDB vss, MLflow, Ray |
+| 7 | Infrastructure & Observability | Sovereign hypervisors, K8s orchestration, OTel collector, full telemetry backend. | Proxmox VE, RKE2, OpenTelemetry Collector, Prometheus, Grafana Tempo, Grafana Loki, Grafana Dashboards |
 
 ## Planned Tree
 
@@ -127,6 +134,13 @@ okf_version: "0.2"
 type: "documentation"
 title: "OpenWiki Instructions — BDA Lakehouse SSoT Edition"
 timestamp: "{timestamp}"
+status: active
+stale_after: "2027-09-08T00:00:00Z"
+generated: true
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 topics: ["openwiki", "instructions", "bda", "ssot"]
 description: "Standard instructions for operating OpenWiki Native Python Emulator in BDA AI Infra."
 ---
@@ -207,6 +221,13 @@ okf_version: "0.2"
 type: "documentation"
 title: "{title}"
 timestamp: "{timestamp}"
+status: active
+stale_after: "2027-09-08T00:00:00Z"
+generated: true
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 topics: {topics_str}
 description: "{description}"
 ---
@@ -279,11 +300,11 @@ Welcome to the **Sovereign BDA OpenWiki Quickstart**. This document serves as th
 All software across the platform is **100% Open Source Software (OSS)**, organized into six interconnected operational layers:
 
 1. **Infrastructure & Virtualization:** Proxmox VE, RKE2 (Kubernetes), Ceph SDS, MinIO Object Storage, OpenTofu, Ansible.
-2. **Data Ingestion & Orchestration:** Apache NiFi, Apache Kafka, Apache Airflow.
-3. **Storage & Format Layer:** Ceph / MinIO S3 Object Storage, Apache Iceberg, Delta Lake, Apache Parquet.
-4. **Compute & Query Engines:** Trino, Apache Spark, DuckDB.
-5. **Governance, Catalog & Security:** OpenMetadata, OpenLineage, ODCS v3.1.0, Keycloak, Apache APISIX.
-6. **Analytics & Machine Learning:** Apache Superset, MLflow, Ray, Kubeflow.
+2. **Data Ingestion & Orchestration:** Apache NiFi, Apache Kafka, Apache Airflow, OpenTelemetry Collector.
+3. **Storage & Format Layer:** Ceph / MinIO S3 Object Storage, Apache Iceberg, Apache Polaris REST Catalog, Delta Lake, Apache Parquet.
+4. **Compute & Query Engines:** Trino, Apache Spark, DuckDB vss.
+5. **Governance, Catalog & Security:** OpenMetadata, Apache Polaris, pgvector, OpenLineage, ODCS v3.1.0, Keycloak, Apache APISIX.
+6. **Analytics, Vector Search & MLOps:** Apache Superset, DuckDB vss / pgvector Zero-Trust Local RAG, MLflow, Ray, Kubeflow.
 
 ## 📋 Active Task Routing Table
 
@@ -328,19 +349,24 @@ flowchart TD
 
     subgraph StorageLayer ["S3 Lakehouse Storage & Table Formats"]
         Kafka --> MinIO["MinIO / Ceph S3 Object Storage"]
-        MinIO --> Iceberg["Apache Iceberg / Delta Lake Formats"]
+        MinIO --> Iceberg["Apache Iceberg Format"]
+        Polaris["Apache Polaris REST Catalog"] <--> Iceberg
     end
 
     subgraph ComputeLayer ["Compute & Query Engines"]
-        Iceberg --> Trino["Trino Distributed SQL Engine"]
-        Iceberg --> Spark["Apache Spark Batch ETL"]
-        Iceberg --> DuckDB["DuckDB Embedded Analytics"]
+        Polaris <--> Trino["Trino Distributed SQL Engine"]
+        Polaris <--> Spark["Apache Spark Batch ETL"]
+        Polaris <--> DuckDB["DuckDB vss Embedded Analytics"]
     end
 
-    subgraph GovernanceLayer ["Governance, Lineage & Security"]
-        OpenMeta["OpenMetadata Catalog"] <--> Iceberg
+    subgraph GovernanceLayer ["Governance, Lineage & Observability"]
+        OpenMeta["OpenMetadata Catalog"] <--> Polaris
+        OpenMeta <--> PgVector["pgvector & DuckDB vss (Zero-Trust Local RAG)"]
         OpenLineage["OpenLineage Engine"] <--> Spark
         OpenLineage <--> Airflow["Apache Airflow Orchestrator"]
+        OTel["OpenTelemetry Collector"] <--> Airflow
+        OTel <--> Spark
+        OTel <--> APISIX
         Keycloak["Keycloak IAM"] <--> APISIX
         Keycloak <--> Superset["Apache Superset BI"]
     end
@@ -406,18 +432,22 @@ The analytics core relies on high-performance compute and query engines decouple
 
 ```mermaid
 flowchart LR
-    S3Storage[("Ceph / MinIO Object Store<br/>Parquet / ORC Files")] <--> TableFormat["Apache Iceberg / Delta Lake<br/>ACID Metadata Layer"]
-    TableFormat <--> TrinoEngine["Trino Distributed SQL Engine<br/>Interactive Ad-Hoc Analytics"]
-    TableFormat <--> SparkEngine["Apache Spark<br/>Large-Scale Batch ETL"]
-    TableFormat <--> DuckDBEngine["DuckDB Engine<br/>Embedded Fast Analytics"]
+    S3Storage[("Ceph / MinIO Object Store<br/>Parquet Files")] <--> Iceberg["Apache Iceberg Table Format"]
+    Iceberg <--> Polaris["Apache Polaris REST Catalog"]
+    Polaris <--> TrinoEngine["Trino Distributed SQL Engine<br/>Interactive Ad-Hoc Analytics"]
+    Polaris <--> SparkEngine["Apache Spark<br/>Large-Scale Batch ETL"]
+    Polaris <--> DuckDBEngine["DuckDB vss Engine<br/>HNSW Indexing on Fixed-Size ARRAY"]
+    DuckDBEngine <--> PgVectorEngine["PostgreSQL pgvector<br/>Operational Semantic Search"]
 ```
 
 ## 📊 Software Engine Capabilities
 
-- **Trino (Apache 2.0):** Distributed SQL query engine capable of running interactive ad-hoc queries (sub-second on cached/in-memory workloads depending on cluster sizing) across petabytes of Iceberg/Parquet data with zero data movement (querying data in place without copying data into proprietary database formats).
-- **Apache Spark (Apache 2.0):** Unified analytics engine for large-scale data processing, streaming ETL, and graph computation.
-- **DuckDB (MIT):** In-process SQL OLAP database engine optimized for fast local memory processing and vector analytics.
-- **Apache Iceberg (Apache 2.0):** High-performance open table format for huge analytic datasets providing ACID transactions, time travel queries, and schema evolution.
+- **Trino (Apache 2.0):** Distributed SQL query engine executing interactive ad-hoc queries across petabytes of Iceberg tables via the Polaris REST catalog without data copying.
+- **Apache Spark (Apache 2.0):** Unified analytics engine for large-scale batch data processing, streaming ETL, and Iceberg table commits via Polaris REST API.
+- **Apache Polaris (Apache 2.0):** Multi-engine open-source Iceberg REST catalog providing centralized RBAC, credential vending, and transaction commit arbitration.
+- **DuckDB `vss` (MIT):** In-process OLAP database engine with `vss` vector similarity search; materializes Parquet into tables with fixed-size `ARRAY` columns before building HNSW indexes.
+- **PostgreSQL `pgvector` (PostgreSQL):** Operational vector store providing persistent HNSW vector similarity search for high-concurrency API portals and OpenMetadata semantic search.
+- **Apache Iceberg (Apache 2.0):** High-performance open table format providing ACID transactions, time travel queries, and schema evolution.
 """,
             },
             "software/ingestion-and-orchestration.md": {
@@ -715,7 +745,16 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
         {"id": 3, "label": "RKE2 Kubernetes", "group": "infra", "title": "FIPS-compliant K8s cluster", "x": 350, "y": 250},
         {"id": 4, "label": "Ceph SDS / CSI", "group": "infra", "title": "Distributed block & file storage", "x": 200, "y": 380},
         {"id": 5, "label": "MinIO / Ceph S3", "group": "storage", "title": "S3-compatible object store", "x": 380, "y": 380},
-        {"id": 6, "label": "Apache Iceberg / Delta", "group": "storage", "title": "ACID open table formats", "x": 550, "y": 380},
+        {"id": 6, "label": "Apache Iceberg", "group": "storage", "title": "ACID open table format", "x": 550, "y": 380},
+        {"id": 24, "label": "Delta Lake", "group": "storage", "title": "ACID open table format", "x": 670, "y": 380},
+        {"id": 21, "label": "Apache Polaris Catalog", "group": "storage", "title": "Multi-engine Iceberg REST catalog", "x": 550, "y": 250},
+        {"id": 22, "label": "DuckDB vss Extension", "group": "compute", "title": "In-process vector similarity search on fixed-size ARRAY columns", "x": 750, "y": 500},
+        {"id": 29, "label": "PostgreSQL pgvector", "group": "storage", "title": "Persistent HNSW operational vector similarity search", "x": 870, "y": 500},
+        {"id": 23, "label": "OpenTelemetry Collector", "group": "orchestration", "title": "Unified OTLP traces, metrics, logs", "x": 650, "y": 250},
+        {"id": 25, "label": "Prometheus", "group": "orchestration", "title": "Time-series metrics store", "x": 650, "y": 380},
+        {"id": 26, "label": "Grafana Tempo", "group": "orchestration", "title": "Distributed tracing store", "x": 770, "y": 250},
+        {"id": 27, "label": "Grafana Loki", "group": "orchestration", "title": "Log aggregation store", "x": 770, "y": 380},
+        {"id": 28, "label": "Grafana Dashboards", "group": "analytics", "title": "Unified visualization dashboards", "x": 900, "y": 100},
         {"id": 7, "label": "Apache NiFi", "group": "ingestion", "title": "Visual data flow routing", "x": 200, "y": 100},
         {"id": 8, "label": "Apache Kafka", "group": "ingestion", "title": "Distributed event streaming bus", "x": 350, "y": 100},
         {"id": 9, "label": "Lakehouse Writer", "group": "ingestion", "title": "Spark / Iceberg commit writer", "x": 500, "y": 100},
@@ -754,6 +793,26 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
         {"from": 11, "to": 18, "label": "SQL queries"},
         {"from": 12, "to": 19, "label": "registers models"},
         {"from": 20, "to": 19, "label": "trains & tracks"},
+        {"from": 5, "to": 24, "label": "stores Delta tables"},
+        {"from": 12, "to": 24, "label": "processes Delta batch"},
+        {"from": 21, "to": 6, "label": "manages catalog"},
+        {"from": 11, "to": 21, "label": "REST catalog API"},
+        {"from": 12, "to": 21, "label": "REST catalog API"},
+        {"from": 13, "to": 21, "label": "REST catalog API"},
+        {"from": 14, "to": 22, "label": "indexes Parquet vectors"},
+        {"from": 14, "to": 29, "label": "stores operational vectors"},
+        {"from": 13, "to": 22, "label": "executes vss queries"},
+        {"from": 17, "to": 29, "label": "API vector lookups"},
+        {"from": 10, "to": 23, "label": "StatsD metrics & filelog logs"},
+        {"from": 12, "to": 23, "label": "OTLP traces/metrics & filelog logs"},
+        {"from": 17, "to": 23, "label": "OTLP traces & filelog logs"},
+        {"from": 25, "to": 17, "label": "scrapes Prometheus metrics"},
+        {"from": 23, "to": 25, "label": "exports metrics"},
+        {"from": 23, "to": 26, "label": "exports traces"},
+        {"from": 23, "to": 27, "label": "exports logs"},
+        {"from": 25, "to": 28, "label": "visualize metrics"},
+        {"from": 26, "to": 28, "label": "visualize traces"},
+        {"from": 27, "to": 28, "label": "visualize logs"},
     ])
 
     b1 = '<span class="badge">'
@@ -787,14 +846,15 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
 
     <div class="controls">
         <label>Filter Subsystem:</label>
-        <button class="btn active" onclick="setFilter('all', event)">All</button>
-        <button class="btn" onclick="setFilter('infra', event)">Infrastructure</button>
-        <button class="btn" onclick="setFilter('storage', event)">Storage</button>
-        <button class="btn" onclick="setFilter('ingestion', event)">Ingestion</button>
-        <button class="btn" onclick="setFilter('compute', event)">Compute/Query</button>
-        <button class="btn" onclick="setFilter('governance', event)">Governance</button>
-        <button class="btn" onclick="setFilter('security', event)">Security</button>
-        <button class="btn" onclick="setFilter('analytics', event)">BI/MLOps</button>
+        <button type="button" class="btn active" onclick="setFilter('all', event)">All</button>
+        <button type="button" class="btn" onclick="setFilter('infra', event)">Infrastructure</button>
+        <button type="button" class="btn" onclick="setFilter('storage', event)">Storage</button>
+        <button type="button" class="btn" onclick="setFilter('ingestion', event)">Ingestion</button>
+        <button type="button" class="btn" onclick="setFilter('orchestration', event)">Orchestration</button>
+        <button type="button" class="btn" onclick="setFilter('compute', event)">Compute/Query</button>
+        <button type="button" class="btn" onclick="setFilter('governance', event)">Governance</button>
+        <button type="button" class="btn" onclick="setFilter('security', event)">Security</button>
+        <button type="button" class="btn" onclick="setFilter('analytics', event)">BI/MLOps</button>
     </div>
 
     <div id="canvas-wrapper">

@@ -2,7 +2,14 @@
 okf_version: "0.2"
 type: "documentation"
 title: "OpenWiki Quickstart & BDA SSoT Navigation Map"
-timestamp: "2026-09-07T12:17:36Z"
+timestamp: "2026-09-08T11:02:34Z"
+status: active
+stale_after: "2027-09-08T00:00:00Z"
+generated: true
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 topics: ["openwiki", "quickstart", "bda", "ssot", "navigation"]
 description: "Master entrypoint containing BDA SSoT topology map, task-routing table, and validation commands."
 ---
@@ -15,11 +22,11 @@ Welcome to the **Sovereign BDA OpenWiki Quickstart**. This document serves as th
 All software across the platform is **100% Open Source Software (OSS)**, organized into six interconnected operational layers:
 
 1. **Infrastructure & Virtualization:** Proxmox VE, RKE2 (Kubernetes), Ceph SDS, MinIO Object Storage, OpenTofu, Ansible.
-2. **Data Ingestion & Orchestration:** Apache NiFi, Apache Kafka, Apache Airflow.
-3. **Storage & Format Layer:** Ceph / MinIO S3 Object Storage, Apache Iceberg, Delta Lake, Apache Parquet.
-4. **Compute & Query Engines:** Trino, Apache Spark, DuckDB.
-5. **Governance, Catalog & Security:** OpenMetadata, OpenLineage, ODCS v3.1.0, Keycloak, Apache APISIX.
-6. **Analytics & Machine Learning:** Apache Superset, MLflow, Ray, Kubeflow.
+2. **Data Ingestion & Orchestration:** Apache NiFi, Apache Kafka, Apache Airflow, OpenTelemetry Collector.
+3. **Storage & Format Layer:** Ceph / MinIO S3 Object Storage, Apache Iceberg, Apache Polaris REST Catalog, Delta Lake, Apache Parquet.
+4. **Compute & Query Engines:** Trino, Apache Spark, DuckDB vss.
+5. **Governance, Catalog & Security:** OpenMetadata, Apache Polaris, pgvector, OpenLineage, ODCS v3.1.0, Keycloak, Apache APISIX.
+6. **Analytics, Vector Search & MLOps:** Apache Superset, DuckDB vss / pgvector Zero-Trust Local RAG, MLflow, Ray, Kubeflow.
 
 ## 📋 Active Task Routing Table
 

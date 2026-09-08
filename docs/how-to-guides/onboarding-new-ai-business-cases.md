@@ -48,33 +48,33 @@ To maintain zero-trust security and data sovereignty while encouraging rapid AI 
 1. **Define Business Objectives & Metrics:** Document the core mandate, targeted domain (e.g., deforestation detection, disaster dispatching), required prediction frequency, and key performance indicators (KPIs).
 2. **Formulate ODCS v3.1.0 Data Contract:** Create a YAML specification defining input schema requirements, acceptable field bounds, spatial coordinate systems (`EPSG:4326` or `EPSG:3168`), and data quality rules.
 
-```yaml
-# example-ai-business-case-contract.yaml
-kind: DataContract
-version: 3.1.0
-id: contract-deforestation-alert-v1
-dataset: raw_deforestation_canopy_telemetry
-domain: Environmental_Monitoring
-owner: domain_specialist_team
-schema:
-  - name: image_id
-    type: string
-    required: true
-  - name: acquisition_timestamp
-    type: timestamp
-    required: true
-  - name: canopy_loss_percentage
-    type: double
-    required: true
-    quality_checks:
-      - rule: min_value
-        value: 0.0
-      - rule: max_value
-        value: 100.0
-  - name: geometry_wkt
-    type: string
-    required: true
-```
+   ```yaml
+   # example-ai-business-case-contract.yaml
+   kind: DataContract
+   version: 3.1.0
+   id: contract-deforestation-alert-v1
+   dataset: raw_deforestation_canopy_telemetry
+   domain: Environmental_Monitoring
+   owner: domain_specialist_team
+   schema:
+     - name: image_id
+       type: string
+       required: true
+     - name: acquisition_timestamp
+       type: timestamp
+       required: true
+     - name: canopy_loss_percentage
+       type: double
+       required: true
+       quality_checks:
+         - rule: min_value
+           value: 0.0
+         - rule: max_value
+           value: 100.0
+     - name: geometry_wkt
+       type: string
+       required: true
+   ```
 
 3. **Validate Contract:** Run the local contract linter via CLI:
    ```bash
@@ -87,10 +87,10 @@ schema:
 
 1. **Provision Ingestion Pipeline in Apache NiFi:** Configure a NiFi process group to ingest incoming telemetry (REST API, Webhook, or S3 bucket notification) and route records through the ODCS contract validation processor.
 2. **Register Metadata in OpenMetadata:** Attach domain tags, classification tags (`Classification.Internal`, `Domain.Forestry`), and security classifications.
-3. **Configure Polaris REST Catalog Namespace:** Register the target Apache Iceberg namespace under Apache Polaris:
+3. **Configure Polaris REST Catalog Namespace:** Register the target Apache Iceberg namespace under Apache Polaris using HTTPS with TLS certificate verification over secure internal networks (e.g. `https://polaris.internal:8182/api/catalog/v1/{catalog}/namespaces`). Where mTLS service mesh sidecars (e.g., Linkerd or Istio) secure this internal endpoint, explicit cryptographic identity verification is enforced alongside the bearer token:
    ```bash
-   # Register namespace via Polaris REST API
-   curl -X POST http://polaris:8181/api/catalog/v1/namespaces \
+   # Register namespace via Polaris REST API over HTTPS with catalog identifier 'bda_catalog'
+   curl -X POST https://polaris.internal:8182/api/catalog/v1/bda_catalog/namespaces \
      -H "Authorization: Bearer ${POLARIS_TOKEN}" \
      -H "Content-Type: application/json" \
      -d '{"namespace": ["environmental", "deforestation"]}'

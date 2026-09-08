@@ -34,12 +34,17 @@
     url: /docs/multi-platform-hosting.html
 - title: How To Guides
   items:
+  - title: 'How-To Guide: Onboarding and Scaling New AI/ML Business Cases'
+    url: /docs/how-to-guides/onboarding-new-ai-business-cases.html
   - title: Ingestion Pipeline, Application Portal, and Superset Modernization
     url: /docs/how-to-guides/ingestion-pipeline-modernization.html
   - title: Phased Migration Strategy and Implementation Roadmap
     url: /docs/how-to-guides/phased-migration-strategy.html
 - title: Reference
   items:
+  - title: "5-Year Strategic BDA & AI Roadmap & Master Business Case Specification\
+      \ (2026\u20132030)"
+    url: /docs/reference/5-year-bda-ai-roadmap-and-business-case.html
   - title: Big Data Domain Specifications and Analytical Workflows
     url: /docs/reference/business-applications.html
   - title: Data Governance, Subsystems, and Standards Matrix

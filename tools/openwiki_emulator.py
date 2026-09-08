@@ -222,7 +222,12 @@ class OpenWikiState:
         self.timestamp = timestamp or get_timestamp()
 
     def get_planned_pages(self) -> dict:
-        """Return planned wiki pages for 100% OSS BDA Lakehouse SSoT architecture."""
+        """
+        Return the complete planned OpenWiki page definitions for the BDA Lakehouse SSoT architecture.
+        
+        Returns:
+        	dict: A mapping of relative Markdown page paths to their titles, topics, descriptions, and content.
+        """
         desc_qs = (
             "Master entrypoint containing BDA SSoT topology map, task-routing table, "
             "and validation commands."
@@ -699,7 +704,14 @@ def cmd_search(query: str, target_dir: pathlib.Path = OPENWIKI_DIR):
 
 
 def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_DIR):
-    """Export offline standalone HTML interactive knowledge graph visualizer."""
+    """
+    Export an offline standalone HTML visualizer for the OpenWiki knowledge graph.
+    
+    Parameters:
+    	timestamp (str): Timestamp displayed in the generated visualizer. A current UTC timestamp is generated when omitted.
+    	target_dir (pathlib.Path): Directory in which to create the graph file.
+    
+    """
     if timestamp is None:
         timestamp = get_timestamp()
     ensure_openwiki_dirs(target_dir)

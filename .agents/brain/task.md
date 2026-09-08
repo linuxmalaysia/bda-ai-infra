@@ -42,4 +42,6 @@ topics:
 - [x] Adopt OpenWiki architecture & emulator tool (`tools/openwiki_emulator.py`) establishing BDA Lakehouse Single Source of Truth (SSoT) open-source software relationship graph.
 - [x] Address PR review feedback across APISIX mTLS security, Ceph CSI storage separation, Trino performance qualifications, Lakehouse Writer ingestion step, Superset tested concurrency, test output isolation, canvas graph scaling/fallback, file permissions preservation, and lock retention.
 - [x] Adopt Next Technology Roadmap Stack (Apache Polaris Iceberg REST catalog, DuckDB vss / pgvector zero-trust local RAG with OpenMetadata, OpenTelemetry observability) into project specs, OpenWiki, and triple-ledger.
+- [x] Implement Master 5-Year Strategic BDA & AI Roadmap & Business Case Specification (2026–2030) (`docs/reference/5-year-bda-ai-roadmap-and-business-case.md`).
+- [x] Create How-To Guide for Onboarding and Scaling New AI/ML Business Cases (`docs/how-to-guides/onboarding-new-ai-business-cases.md`).
 - [x] Execute EOD Palace Sync for DSOM Protocol spatial memory state.

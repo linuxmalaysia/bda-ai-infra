@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Quality Verification & Zero Vendor Lock-in Guardrails"
-timestamp: "2026-09-07T20:57:01Z"
+timestamp: "2026-09-08T06:06:09Z"
 topics: ["openwiki", "quality", "verification", "testing", "guardrails"]
 description: "Automated regression testing, OKF compliance, link integrity, and open-source verification."
 ---

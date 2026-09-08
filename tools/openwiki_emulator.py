@@ -328,19 +328,24 @@ flowchart TD
 
     subgraph StorageLayer ["S3 Lakehouse Storage & Table Formats"]
         Kafka --> MinIO["MinIO / Ceph S3 Object Storage"]
-        MinIO --> Iceberg["Apache Iceberg / Delta Lake Formats"]
+        MinIO --> Iceberg["Apache Iceberg Format"]
+        Polaris["Apache Polaris REST Catalog"] <--> Iceberg
     end
 
     subgraph ComputeLayer ["Compute & Query Engines"]
-        Iceberg --> Trino["Trino Distributed SQL Engine"]
-        Iceberg --> Spark["Apache Spark Batch ETL"]
-        Iceberg --> DuckDB["DuckDB Embedded Analytics"]
+        Polaris <--> Trino["Trino Distributed SQL Engine"]
+        Polaris <--> Spark["Apache Spark Batch ETL"]
+        Polaris <--> DuckDB["DuckDB vss Embedded Analytics"]
     end
 
-    subgraph GovernanceLayer ["Governance, Lineage & Security"]
-        OpenMeta["OpenMetadata Catalog"] <--> Iceberg
+    subgraph GovernanceLayer ["Governance, Lineage & Observability"]
+        OpenMeta["OpenMetadata Catalog"] <--> Polaris
+        OpenMeta <--> PgVector["pgvector & DuckDB vss (Zero-Trust Local RAG)"]
         OpenLineage["OpenLineage Engine"] <--> Spark
         OpenLineage <--> Airflow["Apache Airflow Orchestrator"]
+        OTel["OpenTelemetry Collector"] <--> Airflow
+        OTel <--> Spark
+        OTel <--> APISIX
         Keycloak["Keycloak IAM"] <--> APISIX
         Keycloak <--> Superset["Apache Superset BI"]
     end
@@ -406,18 +411,22 @@ The analytics core relies on high-performance compute and query engines decouple
 
 ```mermaid
 flowchart LR
-    S3Storage[("Ceph / MinIO Object Store<br/>Parquet / ORC Files")] <--> TableFormat["Apache Iceberg / Delta Lake<br/>ACID Metadata Layer"]
-    TableFormat <--> TrinoEngine["Trino Distributed SQL Engine<br/>Interactive Ad-Hoc Analytics"]
-    TableFormat <--> SparkEngine["Apache Spark<br/>Large-Scale Batch ETL"]
-    TableFormat <--> DuckDBEngine["DuckDB Engine<br/>Embedded Fast Analytics"]
+    S3Storage[("Ceph / MinIO Object Store<br/>Parquet Files")] <--> Iceberg["Apache Iceberg Table Format"]
+    Iceberg <--> Polaris["Apache Polaris REST Catalog"]
+    Polaris <--> TrinoEngine["Trino Distributed SQL Engine<br/>Interactive Ad-Hoc Analytics"]
+    Polaris <--> SparkEngine["Apache Spark<br/>Large-Scale Batch ETL"]
+    Polaris <--> DuckDBEngine["DuckDB vss Engine<br/>HNSW Indexing on Fixed-Size ARRAY"]
+    DuckDBEngine <--> PgVectorEngine["PostgreSQL pgvector<br/>Operational Semantic Search"]
 ```
 
 ## 📊 Software Engine Capabilities
 
-- **Trino (Apache 2.0):** Distributed SQL query engine capable of running interactive ad-hoc queries (sub-second on cached/in-memory workloads depending on cluster sizing) across petabytes of Iceberg/Parquet data with zero data movement (querying data in place without copying data into proprietary database formats).
-- **Apache Spark (Apache 2.0):** Unified analytics engine for large-scale data processing, streaming ETL, and graph computation.
-- **DuckDB (MIT):** In-process SQL OLAP database engine optimized for fast local memory processing and vector analytics.
-- **Apache Iceberg (Apache 2.0):** High-performance open table format for huge analytic datasets providing ACID transactions, time travel queries, and schema evolution.
+- **Trino (Apache 2.0):** Distributed SQL query engine executing interactive ad-hoc queries across petabytes of Iceberg tables via the Polaris REST catalog without data copying.
+- **Apache Spark (Apache 2.0):** Unified analytics engine for large-scale batch data processing, streaming ETL, and Iceberg table commits via Polaris REST API.
+- **Apache Polaris (Apache 2.0):** Multi-engine open-source Iceberg REST catalog providing centralized RBAC, credential vending, and transaction commit arbitration.
+- **DuckDB `vss` (MIT):** In-process OLAP database engine with `vss` vector similarity search; materializes Parquet into tables with fixed-size `ARRAY` columns before building HNSW indexes.
+- **PostgreSQL `pgvector` (PostgreSQL):** Operational vector store providing persistent HNSW vector similarity search for high-concurrency API portals and OpenMetadata semantic search.
+- **Apache Iceberg (Apache 2.0):** High-performance open table format providing ACID transactions, time travel queries, and schema evolution.
 """,
             },
             "software/ingestion-and-orchestration.md": {
@@ -720,6 +729,10 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
         {"id": 21, "label": "Apache Polaris Catalog", "group": "storage", "title": "Multi-engine Iceberg REST catalog", "x": 550, "y": 250},
         {"id": 22, "label": "DuckDB vss / pgvector", "group": "analytics", "title": "Zero-trust local vector similarity search", "x": 750, "y": 500},
         {"id": 23, "label": "OpenTelemetry Collector", "group": "orchestration", "title": "Unified OTLP traces, metrics, logs", "x": 650, "y": 250},
+        {"id": 25, "label": "Prometheus", "group": "orchestration", "title": "Time-series metrics store", "x": 650, "y": 380},
+        {"id": 26, "label": "Grafana Tempo", "group": "orchestration", "title": "Distributed tracing store", "x": 770, "y": 250},
+        {"id": 27, "label": "Grafana Loki", "group": "orchestration", "title": "Log aggregation store", "x": 770, "y": 380},
+        {"id": 28, "label": "Grafana Dashboards", "group": "analytics", "title": "Unified visualization dashboards", "x": 900, "y": 100},
         {"id": 7, "label": "Apache NiFi", "group": "ingestion", "title": "Visual data flow routing", "x": 200, "y": 100},
         {"id": 8, "label": "Apache Kafka", "group": "ingestion", "title": "Distributed event streaming bus", "x": 350, "y": 100},
         {"id": 9, "label": "Lakehouse Writer", "group": "ingestion", "title": "Spark / Iceberg commit writer", "x": 500, "y": 100},
@@ -768,6 +781,12 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
         {"from": 10, "to": 23, "label": "OTLP telemetry"},
         {"from": 12, "to": 23, "label": "OTLP telemetry"},
         {"from": 17, "to": 23, "label": "OTLP telemetry"},
+        {"from": 23, "to": 25, "label": "exports metrics"},
+        {"from": 23, "to": 26, "label": "exports traces"},
+        {"from": 23, "to": 27, "label": "exports logs"},
+        {"from": 25, "to": 28, "label": "visualize metrics"},
+        {"from": 26, "to": 28, "label": "visualize traces"},
+        {"from": 27, "to": 28, "label": "visualize logs"},
     ])
 
     b1 = '<span class="badge">'

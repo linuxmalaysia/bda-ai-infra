@@ -70,6 +70,7 @@ Following the **Diátaxis Documentation Framework**, this suite is organized int
 
 - **[Ingestion Pipeline Modernization](how-to-guides/ingestion-pipeline-modernization.md):** Implementing Apache NiFi, Apache Airflow, Next.js web application, and Apache Superset visual analytics.
 - **[Phased Migration Strategy & Roadmap](how-to-guides/phased-migration-strategy.md):** Detailed 4-phase implementation roadmap over 12 months with risk mitigation and fallback procedures.
+- [Onboarding and Scaling New AI/ML Business Cases](how-to-guides/onboarding-new-ai-business-cases.md)
 
 ### 📚 3. Reference Material (Factual Technical Specifications)
 

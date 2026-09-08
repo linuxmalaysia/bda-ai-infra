@@ -22,6 +22,16 @@ topics:
 
 # 📜 DSOM Execution Walkthrough & Mental Anchors
 
+## Session Anchor: 2026-09-08 — 5-Year Strategic BDA & AI Roadmap, Business Case, & Onboarding Framework
+
+- **Context:** Formulated the master 5-Year Strategic BDA & AI Roadmap (2026–2030), big-picture business case, zero-downtime migration strategy for existing domain cases, and 6-stage operational framework for onboarding new AI/ML business cases onto the BDA SSoT Lakehouse.
+- **Actions Taken:**
+  1. Created `docs/reference/5-year-bda-ai-roadmap-and-business-case.md` detailing Year 1–5 milestones, big picture business case ROI, migration matrix for the 5 core legacy domains (HWC, GroW, Forest Fire, MAIN, GeoSlide), MLOps feature store architecture (Feast + MLflow), experimental DuckDB vss qualification gate with pgvector fallback, and zero-WAN-egress security controls.
+  2. Created `docs/how-to-guides/onboarding-new-ai-business-cases.md` detailing the 6-stage lifecycle for onboarding new AI business cases with valid ODCS v3.1.0 contract YAML syntax, HTTPS/mTLS Polaris REST catalog commands, Tier 2 AI sandboxing, human cryptographic verification, and APISIX/OTel deployment.
+  3. Updated documentation indexes (`README.md`, `docs/README.md`), generated `SUMMARY.md` and `_data/navigation.yml` via `tools/generate_summary.py`, and updated OpenWiki SSoT structure and graph via `tools/openwiki_emulator.py`.
+  4. Verified all 167 pytest unit tests and markdownlint checks pass with 0 errors.
+  5. Executed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory files.
+
 ## Session Anchor: 2026-09-07 — OpenWiki Architecture & Emulator Adoption for BDA SSoT
 
 - **Context:** Adopted OpenWiki architecture and native Python emulator (`tools/openwiki_emulator.py`) for `bda-ai-infra` to establish open-source software relationships for the BDA Lakehouse Single Source of Truth (SSoT) platform.

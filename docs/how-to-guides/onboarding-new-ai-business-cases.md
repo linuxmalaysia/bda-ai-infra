@@ -50,30 +50,32 @@ To maintain zero-trust security and data sovereignty while encouraging rapid AI 
 
    ```yaml
    # example-ai-business-case-contract.yaml
+   apiVersion: v3.1.0
    kind: DataContract
-   version: 3.1.0
    id: contract-deforestation-alert-v1
+   version: 1.0.0
    dataset: raw_deforestation_canopy_telemetry
    domain: Environmental_Monitoring
    owner: domain_specialist_team
    schema:
-     - name: image_id
-       type: string
-       required: true
-     - name: acquisition_timestamp
-       type: timestamp
-       required: true
-     - name: canopy_loss_percentage
-       type: double
-       required: true
-       quality_checks:
-         - rule: min_value
-           value: 0.0
-         - rule: max_value
-           value: 100.0
-     - name: geometry_wkt
-       type: string
-       required: true
+     deforestation_canopy_telemetry:
+       logicalType: object
+       properties:
+         image_id:
+           logicalType: string
+           required: true
+         acquisition_timestamp:
+           logicalType: timestamp
+           required: true
+         canopy_loss_percentage:
+           logicalType: number
+           required: true
+           logicalTypeOptions:
+             minimum: 0.0
+             maximum: 100.0
+         geometry_wkt:
+           logicalType: string
+           required: true
    ```
 
 3. **Validate Contract:** Run the local contract linter via CLI:

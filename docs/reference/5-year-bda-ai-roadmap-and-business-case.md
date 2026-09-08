@@ -78,7 +78,7 @@ Year 3 (2028): Local AI/ML Sandboxing & Zero-Trust RAG
 └── OpenTelemetry Full-Stack Observability (Airflow, Spark, APISIX)
 
 Year 4 (2029): MLOps Pipeline & Enterprise Autonomous Agents
-├── Feature Store (Feast backed by PostgreSQL online & Iceberg offline), MLflow Model Registry & vLLM Local Inference
+├── Feature Store (Feast for feature versioning & retrieval), MLflow (Model Registry & Experiment Tracking) & vLLM Local Inference
 ├── Automated Anomaly Detection & Real-Time Predictive Pipelines
 └── Keycloak-Gated Natural Language Query & Interactive Copilots
 
@@ -108,7 +108,7 @@ Year 5 (2030): Predictive Digital Twin & Self-Healing Lakehouse
 - Instrument Airflow, Spark, and APISIX with OpenTelemetry Collectors feeding Prometheus, Tempo, Loki, and Grafana.
 
 #### Year 4 (2029) — MLOps Pipeline & Enterprise Autonomous Agents
-- Implement MLflow for experiment tracking and model registry, coupled with Feast as the concrete Feature Store implementation (utilizing PostgreSQL for low-latency online serving, Apache Iceberg/Parquet for offline training data generation, Feast feature versioning, and unified training-serving feature definitions to prevent data leakage).
+- Implement Feast as the enterprise Feature Store responsible for feature versioning, feature definitions, online feature retrieval (backed by PostgreSQL), and offline training dataset generation (backed by Apache Iceberg Parquet). Deploy MLflow for experiment tracking, model lineage, and central model registry, while DuckDB is utilized strictly for local ad-hoc vector and analytical queries.
 - Deploy local GPU-accelerated inference endpoints using vLLM or Ollama for local LLM execution.
 - Launch automated real-time prediction pipelines across all five core business domains.
 - Roll out Keycloak-gated conversational AI assistants for natural language SQL query generation and spatial data exploration.
@@ -193,7 +193,7 @@ Stage 2: Ingestion & Metadata Registration in OpenMetadata
 └── Provision NiFi flow, register asset in OpenMetadata, attach security & domain tags.
 
 Stage 3: Feature Engineering & Tier 2 AI Sandboxing
-└── Materialize features in Feast (offline Iceberg store & online PostgreSQL store); log experiment tracking in MLflow and DuckDB; execute exploratory modeling in Tier 2 Sandbox.
+└── Materialize features in Feast (offline Iceberg store & online PostgreSQL store); log experiment tracking in MLflow; run exploratory vector analytics in DuckDB; execute exploratory modeling in Tier 2 Sandbox.
 
 Stage 4: Model Validation & Human Cryptographic Sign-Off
 └── Validate model precision/recall metrics; human domain specialist signs payload for Tier 0.
@@ -299,7 +299,7 @@ flowchart TB
    - Operating in an isolated DMZ container environment over JSON-RPC 2.0.
    - Restricted to stateless operational utilities (`validate_sql`, `lint_contract`, `read_schema`) with zero write capabilities to ground truth.
 3. **Local Zero-Trust Vector Search & Hybrid RAG:**
-   - **DuckDB `vss`:** Evaluated during Stage 3 / Year 3 for embedded HNSW vector indexing over fixed-size `ARRAY` columns in Parquet tables for ultra-fast batch analytical similarity search. Due to its in-memory, RAM-bound constraints, adoption requires passing a formal qualification gate; PostgreSQL `pgvector` serves as the primary supported production fallback.
+   - **DuckDB `vss`:** Explicitly labeled as an experimental extension, evaluated during Stage 3 / Year 3 for embedded HNSW vector indexing over fixed-size `ARRAY` columns in Parquet tables for fast batch analytical similarity search. Due to its experimental status and in-memory, RAM-bound constraints, production adoption requires passing a formal qualification gate; PostgreSQL `pgvector` serves as the primary supported production fallback.
    - **`pgvector`:** Powers sub-10ms operational API search and interactive portal lookups inside the HA PostgreSQL database.
    - **Zero WAN Egress:** Local sentence transformer embeddings ensure sensitive enterprise metadata never leaves on-premises infrastructure. Egress isolation is strictly enforced via deny-by-default network security policies, egress proxy allowlists, local DNS sinkholing, and automated CI/CD acceptance tests verifying zero WAN egress.
 4. **Full-Stack OpenTelemetry Observability:**

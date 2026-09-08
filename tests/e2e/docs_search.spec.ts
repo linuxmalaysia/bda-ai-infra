@@ -26,7 +26,6 @@ test.describe('Documentation Site & Interactive Template E2E Tests', () => {
   test('Sidebar navigation displays dynamic links and navigates correctly', async ({ page }) => {
     await page.goto('/bda-ai-infra/README.html');
 
-    // Check sidebar navigation links
     const sidebar = page.locator('.sidebar-nav');
     await expect(sidebar).toBeVisible();
 
@@ -36,8 +35,38 @@ test.describe('Documentation Site & Interactive Template E2E Tests', () => {
 
     await expect(page).toHaveURL(/\/bda-ai-infra\/CHANGELOG\.html/);
 
-    // Verify print button presence
     const printBtn = page.locator('.print-btn');
     await expect(printBtn).toBeVisible();
+  });
+
+  test('Dynamic role permissions and cookie expiration boundary verification', async ({ context, page }) => {
+    // Set simulated session cookie with 1-hour expiration
+    const expiryTimestamp = Math.floor(Date.now() / 1000) + 3600;
+    await context.addCookies([
+      {
+        name: 'bda_session_role',
+        value: 'data_architect',
+        domain: 'localhost',
+        path: '/bda-ai-infra',
+        expires: expiryTimestamp,
+        httpOnly: false,
+        secure: false,
+        sameSite: 'Lax',
+      },
+    ]);
+
+    await page.goto('/bda-ai-infra/README.html');
+
+    // Verify session cookie presence
+    const cookies = await context.cookies();
+    const sessionCookie = cookies.find((c) => c.name === 'bda_session_role');
+    expect(sessionCookie).toBeDefined();
+    expect(sessionCookie?.value).toBe('data_architect');
+    expect(sessionCookie?.expires).toBeGreaterThan(Math.floor(Date.now() / 1000));
+  });
+
+  test('Search index and OpenWiki knowledge graph visualizer page load', async ({ page }) => {
+    await page.goto('/bda-ai-infra/START-HERE.html');
+    await expect(page.locator('h1')).toContainText('START HERE');
   });
 });

@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
-"""Installs pre-commit hook guardrails to auto-generate SUMMARY.md and verify OKF metadata."""
+"""Installs pre-commit hook guardrails to auto-generate SUMMARY.md and verify OKF metadata.
+
+Protocol: Deep State of Mind (DSOM) Protocol
+Author: Harisfazillah Jamel (LinuxMalaysia)
+License: GNU General Public License v3.0
+"""
 
 import argparse
 from pathlib import Path
 import shutil
 
-REPO_ROOT = Path(__file__).parent.parent
-HOOKS_DIR = REPO_ROOT / ".git" / "hooks"
-PRE_COMMIT_HOOK = HOOKS_DIR / "pre-commit"
+REPO_ROOT: Path = Path(__file__).parent.parent
+HOOKS_DIR: Path = REPO_ROOT / ".git" / "hooks"
+PRE_COMMIT_HOOK: Path = HOOKS_DIR / "pre-commit"
 
-HOOK_CONTENT = """#!/bin/bash
+HOOK_CONTENT: str = """#!/bin/bash
 set -e
 
 echo "Running pre-commit summary generator..."
@@ -22,8 +27,13 @@ git add SUMMARY.md _data/navigation.yml
 """
 
 
-def install_hooks(force: bool = False):
-    """Install pre-commit hook into .git/hooks."""
+def install_hooks(force: bool = False) -> None:
+    """Install pre-commit hook into .git/hooks directory.
+
+    Args:
+        force (bool, optional): Force overwrite existing hook with backup. Defaults to False.
+
+    """
     if not HOOKS_DIR.exists():
         print("Not a git repository or .git/hooks missing.")
         return
@@ -33,7 +43,7 @@ def install_hooks(force: bool = False):
         return
 
     if PRE_COMMIT_HOOK.exists() and force:
-        backup_path = PRE_COMMIT_HOOK.with_suffix(".bak")
+        backup_path: Path = PRE_COMMIT_HOOK.with_suffix(".bak")
         if backup_path.exists():
             counter = 1
             while backup_path.exists():

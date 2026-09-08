@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "OpenWiki Instructions — BDA Lakehouse SSoT Edition"
-timestamp: "2026-09-08T06:06:09Z"
+timestamp: "2026-09-08T09:24:36Z"
 topics: ["openwiki", "instructions", "bda", "ssot"]
 description: "Standard instructions for operating OpenWiki Native Python Emulator in BDA AI Infra."
 ---

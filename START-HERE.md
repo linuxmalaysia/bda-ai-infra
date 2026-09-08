@@ -37,7 +37,7 @@ Welcome to the Big Data Analytics (BDA) Lakehouse SSoT modernization project ope
 
 - **Tutorials:** [docs/tutorials/onboarding-and-setup.md](docs/tutorials/onboarding-and-setup.md)
 - **How-To Guides:** [docs/how-to-guides/phased-migration-strategy.md](docs/how-to-guides/phased-migration-strategy.md)
-- **Reference Material:** [docs/reference/lakehouse-architecture.md](docs/reference/lakehouse-architecture.md) | [docs/reference/next-technology-roadmap-stack.md](docs/reference/next-technology-roadmap-stack.md)
+- **Reference Material:** [docs/reference/lakehouse-architecture.md](docs/reference/lakehouse-architecture.md) | [docs/reference/postgresql-pgvector-enterprise-strategy.md](docs/reference/postgresql-pgvector-enterprise-strategy.md) | [docs/reference/next-technology-roadmap-stack.md](docs/reference/next-technology-roadmap-stack.md)
 - **Explanation:** [docs/explanation/governance-and-compliance.md](docs/explanation/governance-and-compliance.md)
 
 ### 🛠️ Workflows & Test Suites

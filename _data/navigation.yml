@@ -53,6 +53,8 @@
     url: /docs/reference/legacy-architecture.html
   - title: Next Technology Roadmap Stack Specification
     url: /docs/reference/next-technology-roadmap-stack.html
+  - title: PostgreSQL & pgvector Enterprise Strategy Specification
+    url: /docs/reference/postgresql-pgvector-enterprise-strategy.html
   - title: 'Solution 1 Reference Spec: AWS Native & Cloud Managed Infrastructure'
     url: /docs/reference/solution-1-aws-native.html
   - title: 'Solution 2 Reference Spec: Hybrid Cloud Lakehouse & On-Premises GPU Infrastructure'

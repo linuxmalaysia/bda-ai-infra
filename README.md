@@ -58,6 +58,7 @@ Following the **Diátaxis Framework**, documentation is categorized into four di
 - [Solution 2 Reference Spec: Hybrid Cloud Lakehouse & On-Premises GPU Infrastructure](docs/reference/solution-2-hybrid-ai.md)
 - [Solution 3 Reference Spec: 100% On-Premises Sovereign Architecture (Proxmox VE + RKE2 + Ceph SDS)](docs/reference/solution-3-onprem-proxmox-rke2.md)
 - [Next Technology Roadmap Stack Specification (Apache Polaris, DuckDB vss / pgvector, OpenTelemetry)](docs/reference/next-technology-roadmap-stack.md)
+- [PostgreSQL & pgvector Enterprise Strategy Specification](docs/reference/postgresql-pgvector-enterprise-strategy.md)
 - [5-Year Strategic BDA & AI Roadmap & Master Business Case Specification (2026–2030)](docs/reference/5-year-bda-ai-roadmap-and-business-case.md)
 - [OpenWiki SSoT Knowledge Base & Quickstart](openwiki/quickstart.md)
 

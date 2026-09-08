@@ -5,6 +5,9 @@ title: "DSOM Execution Walkthrough & Session Logs"
 description: "Historical session log and mental anchors for project bootstrap, setup, governance adoption, and LLM-WIKI integration."
 status: active
 timestamp: "2026-09-07T11:20:00Z"
+stale_after: "2027-09-07T11:20:00Z"
+generated: false
+verified: true
 sources:
   - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/START-AI-AGENTS-PROMPT/"
     description: "Start AI Agents Master Setup Prompt & Execution Protocol."

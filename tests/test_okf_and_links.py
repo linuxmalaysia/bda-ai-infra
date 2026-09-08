@@ -71,6 +71,11 @@ def test_okf_v02_frontmatter(md_path: Path) -> None:
     assert "type" in data or "title" in data, f"Missing title/type header in {md_path}"
     assert "description" in data, f"Missing description in {md_path}"
 
+    # Mandatory OKF v0.2 trust signal keys
+    mandatory_trust_signals = ["sources", "generated", "verified", "status", "stale_after"]
+    for key in mandatory_trust_signals:
+        assert key in data, f"Missing mandatory trust signal '{key}' in {md_path}"
+
 
 @pytest.mark.parametrize(
     "md_path",
@@ -78,7 +83,7 @@ def test_okf_v02_frontmatter(md_path: Path) -> None:
     ids=lambda p: str(p.relative_to(REPO_ROOT)),
 )
 def test_okf_v02_trust_signals(md_path: Path) -> None:
-    """Verify OKF v0.2 trust signals (status, timestamp, stale_after, verified, topics).
+    """Verify OKF v0.2 trust signals values (status, timestamp, stale_after, verified, topics).
 
     Args:
         md_path (Path): Path to the Markdown file being tested.
@@ -96,11 +101,9 @@ def test_okf_v02_trust_signals(md_path: Path) -> None:
     if not isinstance(data, dict):
         return
 
-    # Check trust signal attributes if present
-    if "status" in data:
-        assert data["status"] in ["active", "verified", "draft", "deprecated", "archived"], (
-            f"Invalid status '{data['status']}' in {md_path}"
-        )
+    assert data["status"] in ["active", "verified", "draft", "deprecated", "archived"], (
+        f"Invalid status '{data['status']}' in {md_path}"
+    )
 
     if "timestamp" in data:
         assert isinstance(data["timestamp"], str), f"Timestamp in {md_path} must be string"
@@ -134,17 +137,18 @@ def _get_markdown_headings(target_path_or_content: Union[Path, str]) -> List[str
         indent_len: int = len(line) - len(line.lstrip(" "))
         if indent_len <= 3:
             stripped_line: str = line.strip()
-            fence_match = re.match(r"^(`{3,}|~{3,})", stripped_line)
-            if fence_match:
-                match_str: str = fence_match.group(1)
-                m_char: str = match_str[0]
-                m_len: int = len(match_str)
 
-                if fence_char is None:
-                    fence_char = m_char
-                    fence_len = m_len
+            if fence_char is None:
+                fence_match = re.match(r"^(`{3,}|~{3,})", stripped_line)
+                if fence_match:
+                    match_str: str = fence_match.group(1)
+                    fence_char = match_str[0]
+                    fence_len = len(match_str)
                     continue
-                elif m_char == fence_char and m_len >= fence_len:
+            else:
+                # Closing fence matcher: must start with at least fence_len fence_char and contain only optional trailing whitespace
+                closing_pattern = rf"^{re.escape(fence_char)}{{{fence_len},}}\s*$"
+                if re.match(closing_pattern, stripped_line):
                     fence_char = None
                     fence_len = 0
                     continue

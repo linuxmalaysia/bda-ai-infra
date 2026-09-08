@@ -5,6 +5,9 @@ title: "Sovereign Markdown Palace Registry"
 description: "Spatial registry index mapping wings, halls, and rooms within the DSOM Spatial Memory Engine."
 status: active
 timestamp: "2026-09-07T11:20:00Z"
+stale_after: "2027-09-07T11:20:00Z"
+generated: false
+verified: true
 sources:
   - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/.agents/brain/"
     description: "Official online spatial memory palace registry."

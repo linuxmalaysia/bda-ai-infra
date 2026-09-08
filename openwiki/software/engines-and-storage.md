@@ -2,7 +2,14 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Query Engines & Lakehouse Storage: Trino, Spark, DuckDB & Iceberg"
-timestamp: "2026-09-08T09:24:36Z"
+timestamp: "2026-09-08T11:02:34Z"
+status: active
+stale_after: "2027-09-08T00:00:00Z"
+generated: true
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 topics: ["openwiki", "software", "trino", "spark", "duckdb", "iceberg"]
 description: "Technical specifications for distributed query engines, batch processing, and open lakehouse storage formats."
 ---

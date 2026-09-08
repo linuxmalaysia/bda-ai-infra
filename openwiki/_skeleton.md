@@ -2,7 +2,14 @@
 okf_version: "0.2"
 type: documentation
 title: "OpenWiki Documentation Skeleton & BDA Subsystem Index"
-timestamp: "2026-09-08T09:24:36Z"
+timestamp: "2026-09-08T11:02:34Z"
+status: active
+stale_after: "2027-09-08T00:00:00Z"
+generated: true
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 topics: ["openwiki", "skeleton", "bda", "inventory", "ssot"]
 description: "Authoritative inventory ranking, planned page tree, and evidence briefs for BDA SSoT."
 resource: "file:///app/openwiki/_skeleton.md"
@@ -19,7 +26,7 @@ resource: "file:///app/openwiki/_skeleton.md"
 | 4 | Ingestion & Orchestration | Flow routing, event streaming, DAG scheduling, OTel tracing. | Apache NiFi, Apache Kafka, Apache Airflow, OpenTelemetry |
 | 5 | Identity, Access & Gateway | Unified SSO, OIDC/OAuth2, RBAC, MFA, API gateway. | Keycloak, Apache APISIX |
 | 6 | Business Intelligence, Vector & MLOps | User analytics, zero-trust local RAG search, model tracking. | Apache Superset, pgvector, DuckDB vss, MLflow, Ray |
-| 7 | Infrastructure & Observability | Sovereign hypervisors, K8s orchestration, OTel collector, Grafana. | Proxmox VE, RKE2, OpenTelemetry Collector, Prometheus, Grafana |
+| 7 | Infrastructure & Observability | Sovereign hypervisors, K8s orchestration, OTel collector, full telemetry backend. | Proxmox VE, RKE2, OpenTelemetry Collector, Prometheus, Grafana Tempo, Grafana Loki, Grafana Dashboards |
 
 ## Planned Tree
 

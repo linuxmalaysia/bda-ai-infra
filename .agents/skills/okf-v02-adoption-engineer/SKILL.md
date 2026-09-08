@@ -6,6 +6,12 @@ title: "OKF v0.2 Adoption & Compliance Skill"
 description: "Audits and applies OKF v0.2 frontmatter metadata standards and zero link decay."
 status: active
 timestamp: "2026-09-06T00:00:00Z"
+stale_after: "2027-09-06T00:00:00Z"
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 topics:
   - dsom
   - skill

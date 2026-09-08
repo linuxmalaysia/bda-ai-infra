@@ -6,6 +6,12 @@ title: "Docstring & Function Reference Skill"
 description: "Injects PEP-257 Google-style docstrings into Python files and JSDoc into Node.js, JavaScript, and TypeScript files."
 status: active
 timestamp: "2026-09-06T00:00:00Z"
+stale_after: "2027-09-06T00:00:00Z"
+generated: false
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 topics:
   - dsom
   - skill

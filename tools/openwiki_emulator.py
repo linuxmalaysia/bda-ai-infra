@@ -59,6 +59,13 @@ okf_version: "0.2"
 type: documentation
 title: "OpenWiki Documentation Skeleton & BDA Subsystem Index"
 timestamp: "{timestamp}"
+status: active
+stale_after: "2027-09-08T00:00:00Z"
+generated: true
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 topics: ["openwiki", "skeleton", "bda", "inventory", "ssot"]
 description: "Authoritative inventory ranking, planned page tree, and evidence briefs for BDA SSoT."
 resource: "{(target_dir / '_skeleton.md').as_uri()}"
@@ -75,7 +82,7 @@ resource: "{(target_dir / '_skeleton.md').as_uri()}"
 | 4 | Ingestion & Orchestration | Flow routing, event streaming, DAG scheduling, OTel tracing. | Apache NiFi, Apache Kafka, Apache Airflow, OpenTelemetry |
 | 5 | Identity, Access & Gateway | Unified SSO, OIDC/OAuth2, RBAC, MFA, API gateway. | Keycloak, Apache APISIX |
 | 6 | Business Intelligence, Vector & MLOps | User analytics, zero-trust local RAG search, model tracking. | Apache Superset, pgvector, DuckDB vss, MLflow, Ray |
-| 7 | Infrastructure & Observability | Sovereign hypervisors, K8s orchestration, OTel collector, Grafana. | Proxmox VE, RKE2, OpenTelemetry Collector, Prometheus, Grafana |
+| 7 | Infrastructure & Observability | Sovereign hypervisors, K8s orchestration, OTel collector, full telemetry backend. | Proxmox VE, RKE2, OpenTelemetry Collector, Prometheus, Grafana Tempo, Grafana Loki, Grafana Dashboards |
 
 ## Planned Tree
 
@@ -127,6 +134,13 @@ okf_version: "0.2"
 type: "documentation"
 title: "OpenWiki Instructions — BDA Lakehouse SSoT Edition"
 timestamp: "{timestamp}"
+status: active
+stale_after: "2027-09-08T00:00:00Z"
+generated: true
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 topics: ["openwiki", "instructions", "bda", "ssot"]
 description: "Standard instructions for operating OpenWiki Native Python Emulator in BDA AI Infra."
 ---
@@ -207,6 +221,13 @@ okf_version: "0.2"
 type: "documentation"
 title: "{title}"
 timestamp: "{timestamp}"
+status: active
+stale_after: "2027-09-08T00:00:00Z"
+generated: true
+verified: true
+sources:
+  - url: "README.md"
+    description: "Master platform index."
 topics: {topics_str}
 description: "{description}"
 ---
@@ -727,7 +748,8 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
         {"id": 6, "label": "Apache Iceberg", "group": "storage", "title": "ACID open table format", "x": 550, "y": 380},
         {"id": 24, "label": "Delta Lake", "group": "storage", "title": "ACID open table format", "x": 670, "y": 380},
         {"id": 21, "label": "Apache Polaris Catalog", "group": "storage", "title": "Multi-engine Iceberg REST catalog", "x": 550, "y": 250},
-        {"id": 22, "label": "DuckDB vss / pgvector", "group": "analytics", "title": "Zero-trust local vector similarity search", "x": 750, "y": 500},
+        {"id": 22, "label": "DuckDB vss Extension", "group": "compute", "title": "In-process vector similarity search on fixed-size ARRAY columns", "x": 750, "y": 500},
+        {"id": 29, "label": "PostgreSQL pgvector", "group": "storage", "title": "Persistent HNSW operational vector similarity search", "x": 870, "y": 500},
         {"id": 23, "label": "OpenTelemetry Collector", "group": "orchestration", "title": "Unified OTLP traces, metrics, logs", "x": 650, "y": 250},
         {"id": 25, "label": "Prometheus", "group": "orchestration", "title": "Time-series metrics store", "x": 650, "y": 380},
         {"id": 26, "label": "Grafana Tempo", "group": "orchestration", "title": "Distributed tracing store", "x": 770, "y": 250},
@@ -777,10 +799,14 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
         {"from": 11, "to": 21, "label": "REST catalog API"},
         {"from": 12, "to": 21, "label": "REST catalog API"},
         {"from": 13, "to": 21, "label": "REST catalog API"},
-        {"from": 14, "to": 22, "label": "indexes vectors"},
-        {"from": 10, "to": 23, "label": "OTLP telemetry"},
-        {"from": 12, "to": 23, "label": "OTLP telemetry"},
-        {"from": 17, "to": 23, "label": "OTLP telemetry"},
+        {"from": 14, "to": 22, "label": "indexes Parquet vectors"},
+        {"from": 14, "to": 29, "label": "stores operational vectors"},
+        {"from": 13, "to": 22, "label": "executes vss queries"},
+        {"from": 17, "to": 29, "label": "API vector lookups"},
+        {"from": 10, "to": 23, "label": "StatsD metrics & filelog logs"},
+        {"from": 12, "to": 23, "label": "OTLP traces/metrics & filelog logs"},
+        {"from": 17, "to": 23, "label": "OTLP traces & filelog logs"},
+        {"from": 25, "to": 17, "label": "scrapes Prometheus metrics"},
         {"from": 23, "to": 25, "label": "exports metrics"},
         {"from": 23, "to": 26, "label": "exports traces"},
         {"from": 23, "to": 27, "label": "exports logs"},

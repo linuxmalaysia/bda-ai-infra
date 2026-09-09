@@ -47,4 +47,5 @@ topics:
 - [x] Adopt PostgreSQL and pgvector as the primary master database and AI infrastructure foundation based on Percona research guidance (`docs/reference/postgresql-pgvector-enterprise-strategy.md`).
 - [x] Implement Dual-Render Architecture Diagram Specification (SVG + Mermaid) AI skill (`.agents/skills/dual-render-architecture-diagram/SKILL.md`).
 - [x] Refactor all existing architecture, topology, sequence, and workflow diagrams across `docs/reference/`, `openwiki/`, and `tools/openwiki_emulator.py` to Dual-Render standard.
+- [x] Update relative Markdown links to `.html` across documentation entrypoints (`README.md`, `START-HERE.md`, `AGENTS.md`, `docs/README.md`, `docs/reference/*.md`) to eliminate 404 errors on GitHub Pages and update `tests/test_okf_and_links.py` link decay resolver.
 - [x] Execute EOD Palace Sync for DSOM Protocol spatial memory state.

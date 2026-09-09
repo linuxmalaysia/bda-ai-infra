@@ -192,6 +192,8 @@ uv run --with pyyaml python tools/openwiki_emulator.py --export-graph
 
 The emulator incorporates a zero-dependency Mermaid diagram compiler with self-healing capabilities.
 
+### Dual-Render Architecture Specification: Mermaid Validation & Self-Healing Pipeline
+
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
 ```xml
@@ -383,6 +385,8 @@ The modern Big Data Analytics (BDA) Lakehouse platform establishes an authoritat
 
 ## 🧩 Open-Source Software Component Relationship Matrix
 
+### Dual-Render Architecture Specification: Component Relationship Matrix
+
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
 ```xml
@@ -523,6 +527,8 @@ The infrastructure foundation delivers high availability, fault tolerance, and a
 
 ## 🏗️ Infrastructure Stack Layers
 
+### Dual-Render Architecture Specification: Sovereign Infrastructure Stack
+
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
 ```xml
@@ -602,6 +608,8 @@ graph TD
 The analytics core relies on high-performance compute and query engines decoupled from columnar object storage.
 
 ## ⚡ Query & Compute Architecture
+
+### Dual-Render Architecture Specification: Query & Compute Architecture
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
@@ -696,6 +704,8 @@ Data ingestion converts fragmented external data into structured, validated SSoT
 
 ## 🔄 Ingestion & Lineage Pipeline Flow
 
+### Dual-Render Architecture Specification: Ingestion Pipeline Flow
+
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
 ```xml
@@ -784,6 +794,8 @@ Data governance establishes automated metadata extraction, dataset discovery, an
 
 ## 🏛️ Governance Subsystem Architecture
 
+### Dual-Render Architecture Specification: Governance Subsystem Architecture
+
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
 ```xml
@@ -871,6 +883,8 @@ Perimeter security and identity management guarantee zero-trust access control a
 
 ## 🔐 Perimeter Security Architecture
 
+### Dual-Render Architecture Specification: Perimeter Security Architecture
+
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
 ```xml
@@ -953,6 +967,8 @@ Analytical applications provide intuitive decision-support interfaces and scalab
 
 ## 📈 BI & Machine Learning Lifecycle
 
+### Dual-Render Architecture Specification: BI & Machine Learning Lifecycle
+
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
 ```xml
@@ -1031,6 +1047,8 @@ flowchart TD
 Automated CI pipelines and Model Context Protocol (MCP) integrations expose SSoT knowledge directly to human operators and AI agents.
 
 ## 🔌 MCP & CI Pipeline Architecture
+
+### Dual-Render Architecture Specification: MCP & CI Pipeline Architecture
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 

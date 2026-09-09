@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "OpenWiki Instructions — BDA Lakehouse SSoT Edition"
-timestamp: "2026-09-09T06:31:15Z"
+timestamp: "2026-09-09T06:40:31Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -60,6 +60,8 @@ uv run --with pyyaml python tools/openwiki_emulator.py --export-graph
 ## 🧜‍♀️ Mermaid Diagram Validation & Self-Healing
 
 The emulator incorporates a zero-dependency Mermaid diagram compiler with self-healing capabilities.
+
+### Dual-Render Architecture Specification: Mermaid Validation & Self-Healing Pipeline
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 

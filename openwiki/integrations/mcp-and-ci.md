@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "FastMCP Integration & Continuous Integration Workflows"
-timestamp: "2026-09-09T06:31:15Z"
+timestamp: "2026-09-09T06:40:31Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -18,6 +18,8 @@ description: "Model Context Protocol (FastMCP) server contract and automated Git
 Automated CI pipelines and Model Context Protocol (MCP) integrations expose SSoT knowledge directly to human operators and AI agents.
 
 ## 🔌 MCP & CI Pipeline Architecture
+
+### Dual-Render Architecture Specification: MCP & CI Pipeline Architecture
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 

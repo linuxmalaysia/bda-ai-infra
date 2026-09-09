@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Data Ingestion & Pipeline Orchestration: NiFi, Kafka, Airflow & ODCS"
-timestamp: "2026-09-09T06:31:15Z"
+timestamp: "2026-09-09T06:40:31Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -18,6 +18,8 @@ description: "Automated data movement pipelines, event streaming bus, DAG orches
 Data ingestion converts fragmented external data into structured, validated SSoT streams.
 
 ## 🔄 Ingestion & Lineage Pipeline Flow
+
+### Dual-Render Architecture Specification: Ingestion Pipeline Flow
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 

@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Sovereign Infrastructure: Proxmox VE, RKE2, Ceph SDS & Automation"
-timestamp: "2026-09-09T06:31:15Z"
+timestamp: "2026-09-09T06:40:31Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -18,6 +18,8 @@ description: "Complete reference specification for 100% on-premises sovereign in
 The infrastructure foundation delivers high availability, fault tolerance, and absolute data sovereignty through a hyperconverged, open-source stack.
 
 ## 🏗️ Infrastructure Stack Layers
+
+### Dual-Render Architecture Specification: Sovereign Infrastructure Stack
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 

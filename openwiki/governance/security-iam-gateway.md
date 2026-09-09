@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Security, Identity & API Perimeter: Keycloak & Apache APISIX"
-timestamp: "2026-09-09T06:31:15Z"
+timestamp: "2026-09-09T06:40:31Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -18,6 +18,8 @@ description: "Centralized identity management, Single Sign-On (SSO), OIDC/OAuth2
 Perimeter security and identity management guarantee zero-trust access control across all analytical portals and APIs.
 
 ## 🔐 Perimeter Security Architecture
+
+### Dual-Render Architecture Specification: Perimeter Security Architecture
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 

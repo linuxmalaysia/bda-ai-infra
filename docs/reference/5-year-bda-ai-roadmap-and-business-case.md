@@ -124,6 +124,8 @@ Year 5 (2030): Predictive Digital Twin & Self-Healing Lakehouse
 
 To ensure complete business continuity, the 5 core legacy business cases are systematically migrated to the modern AI Lakehouse without operational disruption, followed by long-term maintenance and AI enhancement plans.
 
+### Dual-Render Architecture Specification: Business Cases Migration Pipeline
+
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
 ```xml
@@ -319,6 +321,8 @@ Stage 6: Full-Stack OTel Monitoring & Lifecycle Management
 ## 5. End-to-End Machine Learning and AI Architecture
 
 The platform embeds ML and AI capabilities directly into the Lakehouse ecosystem while enforcing strict isolation, security, and observability.
+
+### Dual-Render Architecture Specification: End-to-End Machine Learning & AI Architecture
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 

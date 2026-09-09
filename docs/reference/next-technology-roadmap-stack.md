@@ -271,7 +271,8 @@ flowchart TD
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **OpenMetadata Server** | **Local Embedder** | In-Memory CUDA / IPC | Zone 1 -> Zone 2 (Local Container Memory) | Extracts schema metadata and generates dense 384-dim / 1024-dim embeddings locally. |
-| **Local Embedder** | **DuckDB vss & pgvector** | `TCP 5432` / PostgreSQL TLS | Zone 2 -> Zone 3 (Zero WAN Egress) | Materializes embeddings into in-process DuckDB ARRAY columns and persistent PostgreSQL HNSW tables. |
+| **Local Embedder** | **DuckDB vss Extension** | In-Process Memory IPC | Zone 2 -> Zone 3 (Zero WAN Egress) | Indexes analytical vector embeddings in-process over fixed-size ARRAY columns. |
+| **Local Embedder** | **pgvector Store** | `TCP 5432` / PostgreSQL TLS | Zone 2 -> Zone 3 (Zero WAN Egress) | Materializes persistent HNSW vector similarity tables in HA PostgreSQL cluster. |
 | **APISIX Gateway** | **Hybrid Controller** | `TCP 443` / HTTPS OIDC | Zone 4 Perimeter (Keycloak JWT) | Authenticates incoming RAG queries and dispatches hybrid BM25 + vector search requests. |
 | **Hybrid Controller** | **Local LLM Inference** | `TCP 8000` / HTTP REST | Zone 4 Internal (Local Host GPU) | Supplies retrieved grounded context chunks to local LLM for zero-hallucination response generation. |
 
@@ -400,7 +401,7 @@ flowchart LR
     Airflow -->|"OTLP Traces / StatsD"| OTelCollector
     Spark -->|"OTLP Traces &amp; Metrics"| OTelCollector
     APISIX -->|"OTLP Traces &amp; Logs"| OTelCollector
-    APISIX -->|"Scrape Metrics"| Prometheus
+    Prometheus -->|"Scrape Metrics"| APISIX
 
     OTelCollector -->|"Export Metrics"| Prometheus
     OTelCollector -->|"Export Traces"| Tempo
@@ -415,10 +416,14 @@ flowchart LR
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Airflow / Spark / APISIX** | **OTel Collector** | `TCP 4317` gRPC / `4318` HTTP | Zone 1 -> Zone 2 (Internal Telemetry Network) | Streams distributed traces, metrics, and log events to central collector. |
-| **OTel Collector** | **Prometheus** | `TCP 9090` / Prometheus OTLP | Zone 2 -> Zone 3 | Exports aggregated time-series infrastructure and application performance metrics. |
-| **OTel Collector** | **Grafana Tempo & Loki** | `TCP 3200` & `3100` / gRPC | Zone 2 -> Zone 3 | Exports distributed W3C trace spans to Tempo and structured log streams to Loki. |
-| **Grafana UI** | **Prometheus / Tempo / Loki** | `TCP 3000` / Unified HTTP API | Zone 4 Operations Dashboard | Renders cross-signal correlated observability dashboards combining metrics, traces, and logs. |
+| **Airflow / Spark / APISIX** | **OTel Collector** | `TCP 4317` gRPC / `4318` HTTP | Zone 1 -> Zone 2 (Internal Telemetry Network) | Streams distributed traces and log events via OTLP to central collector. |
+| **Airflow Workload** | **OTel Collector** | `UDP 8125` / StatsD | Zone 1 -> Zone 2 | Transmits Airflow DAG execution metrics to OTel Collector StatsD receiver. |
+| **Workload Log Files** | **OTel Collector** | Filelog Receiver / Local Log Mount | Zone 1 -> Zone 2 | Ingests Airflow, Spark, and APISIX container stdout/file logs via OTel filelog receiver. |
+| **OTel Collector** | **Prometheus** | `TCP 9090` / Prometheus OTLP | Zone 2 -> Zone 3 | Exports aggregated time-series infrastructure and application metrics. |
+| **Prometheus** | **Apache APISIX** | `TCP 9091` / HTTP Scrape | Zone 3 -> Zone 1 | Initiates periodic Prometheus metrics scrape against APISIX gateway endpoint. |
+| **OTel Collector** | **Grafana Tempo** | `TCP 4317` gRPC / `4318` HTTP | Zone 2 -> Zone 3 | Exports distributed W3C trace spans to Grafana Tempo storage backend. |
+| **OTel Collector** | **Grafana Loki** | `TCP 3100` / HTTP Loki Push API | Zone 2 -> Zone 3 | Exports structured log streams to Grafana Loki log aggregation backend. |
+| **Grafana UI** | **Prometheus / Tempo / Loki** | `TCP 3000` / HTTP Query APIs | Zone 4 Operations Dashboard | Queries Prometheus (9090), Tempo (3200), and Loki (3100) backends for unified dashboarding. |
 
 ---
 

@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "BDA Lakehouse Architecture & 100% Open-Source Software Stack"
-timestamp: "2026-09-09T06:40:31Z"
+timestamp: "2026-09-09T07:02:13Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -140,7 +140,7 @@ flowchart TD
 | **Apache APISIX** | **Apache NiFi** | `TCP 8443` / HTTPS | Perimeter Gate -> Ingestion Boundary | Ingests external API payloads through APISIX gateway for NiFi flow distribution. |
 | **Apache Polaris Catalog** | **Trino & Spark** | `TCP 8181` / REST | Catalog Tier -> Compute Engines | Manages Iceberg table namespace commits and vends short-lived S3 storage tokens. |
 | **OpenMetadata Catalog** | **pgvector & DuckDB vss** | `TCP 5432` / TLS | Governance Tier -> Local Vector Store | Synchronizes dataset metadata and column descriptions into local zero-trust vector stores. |
-| **OpenTelemetry Collector** | **Prometheus / Tempo / Loki** | `TCP 4317` gRPC / `4318` HTTP | Internal Operations Network | Collects distributed traces, metrics, and logs across Airflow, Spark, and APISIX. |
+| **OpenTelemetry Collector** | **Prometheus / Tempo / Loki** | `TCP 4317` gRPC / `4318` HTTP OTLP Exporters | Internal Operations Network | Collects distributed traces, metrics, and logs across Airflow, Spark, and APISIX, exporting to backend stores. |
 
 ## 🎯 Architecture Core Directives
 

@@ -244,9 +244,9 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Markdown Scanner** | **Diagram Parser Gate** | Native File IPC | Local Build Sandbox | Parses markdown files for embedded diagram code fences. |
-| **Diagram Parser Gate** | **Mermaid Validator** | Internal Python AST | Local Build Sandbox | Validates syntax; degrades invalid diagrams safely without breaking build. |
-| **Mermaid Validator** | **Self-Healing Engine** | Internal AST Callback | Local Build Sandbox | Automatically restores degraded diagrams to standard ```mermaid blocks once syntax errors are fixed. |
+| **Markdown Scanner** | **Diagram Parser Gate** | In-Process File I/O | Local Build Sandbox | Parses markdown files for embedded diagram code fences. |
+| **Diagram Parser Gate** | **Mermaid Validator** | In-Process String Parsing | Local Build Sandbox | Validates syntax; degrades invalid diagrams safely without breaking build. |
+| **Mermaid Validator** | **Self-Healing Engine** | In-Process String Mutation | Local Build Sandbox | Automatically restores degraded diagrams to standard ```mermaid blocks once syntax errors are fixed. |
 
 ---
 
@@ -506,7 +506,7 @@ flowchart TD
 | **Apache APISIX** | **Apache NiFi** | `TCP 8443` / HTTPS | Perimeter Gate -> Ingestion Boundary | Ingests external API payloads through APISIX gateway for NiFi flow distribution. |
 | **Apache Polaris Catalog** | **Trino & Spark** | `TCP 8181` / REST | Catalog Tier -> Compute Engines | Manages Iceberg table namespace commits and vends short-lived S3 storage tokens. |
 | **OpenMetadata Catalog** | **pgvector & DuckDB vss** | `TCP 5432` / TLS | Governance Tier -> Local Vector Store | Synchronizes dataset metadata and column descriptions into local zero-trust vector stores. |
-| **OpenTelemetry Collector** | **Prometheus / Tempo / Loki** | `TCP 4317` gRPC / `4318` HTTP | Internal Operations Network | Collects distributed traces, metrics, and logs across Airflow, Spark, and APISIX. |
+| **OpenTelemetry Collector** | **Prometheus / Tempo / Loki** | `TCP 4317` gRPC / `4318` HTTP OTLP Exporters | Internal Operations Network | Collects distributed traces, metrics, and logs across Airflow, Spark, and APISIX, exporting to backend stores. |
 
 ## 🎯 Architecture Core Directives
 
@@ -563,6 +563,8 @@ The infrastructure foundation delivers high availability, fault tolerance, and a
   <line x1="450" y1="80" x2="450" y2="110" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
   <line x1="225" y1="170" x2="225" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
   <line x1="675" y1="170" x2="675" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
+  <line x1="225" y1="280" x2="450" y2="310" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
+  <line x1="675" y1="280" x2="450" y2="310" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
 </svg>
 ```
 
@@ -628,7 +630,7 @@ The analytics core relies on high-performance compute and query engines decouple
   <text x="30" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#334155">1. S3 OBJECT STORAGE</text>
   <rect x="35" y="110" width="170" height="100" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
   <text x="45" y="135" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Ceph / MinIO S3</text>
-  <text x="45" y="155" font-family="Consolas, Monaco, monospace" font-size="10" fill="#475569">Port 9000 / Parquet</text>
+  <text x="45" y="155" font-family="Consolas, Monaco, monospace" font-size="10" fill="#475569">Port 9000 / S3 REST API</text>
 
   <rect x="240" y="20" width="220" height="320" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
   <rect x="240" y="20" width="220" height="30" fill="#EFF6FF" rx="8"/>
@@ -637,6 +639,7 @@ The analytics core relies on high-performance compute and query engines decouple
   <text x="265" y="95" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache Iceberg</text>
   <rect x="255" y="170" width="190" height="80" fill="#F8FAFC" stroke="#A7F3D0" rx="6"/>
   <text x="265" y="195" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#065F46">Polaris REST Catalog</text>
+  <text x="265" y="215" font-family="Consolas, Monaco, monospace" font-size="10" fill="#047857">Port 8181 / REST</text>
 
   <rect x="480" y="20" width="220" height="320" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
   <rect x="480" y="20" width="220" height="30" fill="#DCFCE7" rx="8"/>
@@ -653,9 +656,10 @@ The analytics core relies on high-performance compute and query engines decouple
   <text x="730" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">4. OPERATIONAL VECTOR</text>
   <rect x="735" y="110" width="180" height="100" fill="#F8FAFC" stroke="#A7F3D0" rx="6"/>
   <text x="745" y="135" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#065F46">pgvector Store</text>
-  <text x="745" y="155" font-family="Consolas, Monaco, monospace" font-size="10" fill="#047857">Port 5432 / HNSW</text>
+  <text x="745" y="155" font-family="Consolas, Monaco, monospace" font-size="10" fill="#047857">Port 5432 / PostgreSQL TLS</text>
 
   <line x1="205" y1="160" x2="255" y2="110" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-eng)"/>
+  <line x1="350" y1="150" x2="350" y2="170" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-eng)"/>
   <line x1="445" y1="210" x2="495" y2="90" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-eng)"/>
   <line x1="445" y1="210" x2="495" y2="160" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-eng)"/>
   <line x1="445" y1="210" x2="495" y2="230" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-eng)"/>
@@ -718,24 +722,28 @@ Data ingestion converts fragmented external data into structured, validated SSoT
 
   <rect width="950" height="380" fill="#F8FAFC" rx="10"/>
 
-  <rect x="20" y="20" width="180" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <text x="35" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">External Data Source</text>
+  <rect x="20" y="20" width="150" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <text x="30" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">External Systems</text>
 
-  <rect x="230" y="20" width="180" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <text x="245" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache NiFi</text>
-  <text x="245" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 8443 / Flow Engine</text>
+  <rect x="190" y="20" width="160" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <text x="200" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">APISIX Gateway</text>
+  <text x="200" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 443 / TLS Gate</text>
 
-  <rect x="440" y="20" width="180" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <text x="455" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">ODCS Contract Gate</text>
-  <text x="455" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">v3.1.0 Validation</text>
+  <rect x="370" y="20" width="160" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <text x="380" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache NiFi</text>
+  <text x="380" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">Port 8443 / mTLS Flow</text>
 
-  <rect x="650" y="20" width="280" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <text x="665" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Kafka &amp; Spark Commit Writer</text>
-  <text x="665" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Ceph / MinIO S3 Commit</text>
+  <rect x="550" y="20" width="160" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <text x="560" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">ODCS Gate</text>
+  <text x="560" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">v3.1.0 Validation</text>
 
-  <line x1="200" y1="120" x2="230" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
-  <line x1="410" y1="120" x2="440" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
-  <line x1="620" y1="120" x2="650" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
+  <rect x="730" y="20" width="200" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <text x="740" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Kafka &amp; Spark S3 Writer</text>
+
+  <line x1="170" y1="120" x2="190" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
+  <line x1="350" y1="120" x2="370" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
+  <line x1="530" y1="120" x2="550" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
+  <line x1="710" y1="120" x2="730" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
 </svg>
 ```
 
@@ -745,6 +753,7 @@ Data ingestion converts fragmented external data into structured, validated SSoT
 sequenceDiagram
     autonumber
     participant Ext as External Data Source
+    participant APISIX as Apache APISIX Gateway
     participant NiFi as Apache NiFi
     participant ODCS as ODCS Contract Gate
     participant Kafka as Apache Kafka
@@ -752,7 +761,8 @@ sequenceDiagram
     participant Airflow as Apache Airflow
     participant S3 as MinIO / Ceph S3
 
-    Ext->>NiFi: Ingest Raw Payload (HTTPS Port 8443)
+    Ext->>APISIX: External Ingress Request (Port 443 / TLS)
+    APISIX->>NiFi: Forward Flow Payload (Port 8443 / mTLS)
     NiFi->>ODCS: Validate Schema &amp; Quality (ODCS v3.1.0)
     alt Valid Payload
         ODCS-->>NiFi: Pass Validation
@@ -770,7 +780,8 @@ sequenceDiagram
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **External Data Source** | **Apache NiFi** | `TCP 8443` / HTTPS | Perimeter -> Ingestion DMZ | Ingests unvalidated raw external payloads into visual flow processing engine. |
+| **External Data Source** | **Apache APISIX Gateway** | `TCP 443` / HTTPS TLS | Public -> Perimeter Gate | Authenticates external ingress requests before forwarding to ingestion pipelines. |
+| **Apache APISIX Gateway** | **Apache NiFi** | `TCP 8443` / HTTPS mTLS | Perimeter Gate -> Ingestion DMZ | Routes perimeter payloads into NiFi visual flow queues. |
 | **Apache NiFi** | **ODCS Contract Gate** | In-Memory Flow | Ingestion DMZ | Validates payload against Bitol ODCS v3.1.0 schema definitions prior to event streaming. |
 | **Apache NiFi** | **Apache Kafka** | `TCP 9092` / mTLS | Ingestion DMZ -> Internal Bus | Publishes validated event streams to Kafka topics for real-time consumption. |
 | **Lakehouse Writer** | **Ceph / MinIO S3 Store** | `TCP 9000` / S3 REST | Internal Bus -> SSoT Storage | Commits Parquet data files into Apache Iceberg table format. |
@@ -924,6 +935,7 @@ Perimeter security and identity management guarantee zero-trust access control a
   <text x="505" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">OpenMetadata Portal</text>
 
   <line x1="185" y1="160" x2="245" y2="110" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
+  <line x1="340" y1="150" x2="340" y2="170" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
   <line x1="435" y1="110" x2="495" y2="90" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
   <line x1="435" y1="110" x2="495" y2="160" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
   <line x1="435" y1="110" x2="495" y2="230" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
@@ -1026,7 +1038,7 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Trino Engine** | **Apache Superset** | `TCP 8088` / SQL REST | Trust Zone -> BI Portal | Queries Lakehouse SSoT tables directly for interactive dashboards and spatial maps. |
+| **Apache Superset** | **Trino Engine** | `TCP 8080` / SQL REST | BI Portal -> Trust Zone | Connects to Trino query gateway to execute interactive analytical queries. |
 | **Ray / Kubeflow** | **MLflow Registry** | `TCP 5000` / HTTP REST | Training Sandbox -> Model Registry | Registers trained model artifacts, metrics, and parameters into central repository. |
 | **MLflow Registry** | **APISIX Gateway** | `TCP 443` / HTTPS | Model Registry -> APISIX Gateway | Exposes versioned ML model inference endpoints behind APISIX security policy. |
 
@@ -1107,7 +1119,8 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **GitHub Repository** | **GitHub Actions** | Git Webhook / Event | GitHub Runner Sandbox | Triggers `dsom-audit.yml` and `openwiki_emulator.py` verification workflows on push. |
+| **GitHub Repository** | **GitHub Actions CI/CD** | Git Push Event / Webhook | GitHub Runner Sandbox | Triggers `dsom-audit.yml` workflow for OKF frontmatter, link integrity, and pytest execution. |
+| **OpenWiki Auto-Compiler** | **openwiki/ Directory** | Local Python Script (`tools/openwiki_emulator.py`) | Local Build / CI Environment | Generates and compiles OpenWiki documentation pages and standalone HTML knowledge graph. |
 | **FastMCP Server** | **AI Coding Agents** | Stdio / JSON-RPC 2.0 | Local Agent Sandbox | Serves SSoT schema context, data contracts, and catalog metadata to AI coding agents. |
 
 ## ⚙️ Automated Workflows

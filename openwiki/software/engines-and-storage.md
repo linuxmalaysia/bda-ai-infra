@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Query Engines & Lakehouse Storage: Trino, Spark, DuckDB & Iceberg"
-timestamp: "2026-09-09T06:40:31Z"
+timestamp: "2026-09-09T07:02:13Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -38,7 +38,7 @@ The analytics core relies on high-performance compute and query engines decouple
   <text x="30" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#334155">1. S3 OBJECT STORAGE</text>
   <rect x="35" y="110" width="170" height="100" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
   <text x="45" y="135" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Ceph / MinIO S3</text>
-  <text x="45" y="155" font-family="Consolas, Monaco, monospace" font-size="10" fill="#475569">Port 9000 / Parquet</text>
+  <text x="45" y="155" font-family="Consolas, Monaco, monospace" font-size="10" fill="#475569">Port 9000 / S3 REST API</text>
 
   <rect x="240" y="20" width="220" height="320" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
   <rect x="240" y="20" width="220" height="30" fill="#EFF6FF" rx="8"/>
@@ -47,6 +47,7 @@ The analytics core relies on high-performance compute and query engines decouple
   <text x="265" y="95" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache Iceberg</text>
   <rect x="255" y="170" width="190" height="80" fill="#F8FAFC" stroke="#A7F3D0" rx="6"/>
   <text x="265" y="195" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#065F46">Polaris REST Catalog</text>
+  <text x="265" y="215" font-family="Consolas, Monaco, monospace" font-size="10" fill="#047857">Port 8181 / REST</text>
 
   <rect x="480" y="20" width="220" height="320" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
   <rect x="480" y="20" width="220" height="30" fill="#DCFCE7" rx="8"/>
@@ -63,9 +64,10 @@ The analytics core relies on high-performance compute and query engines decouple
   <text x="730" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">4. OPERATIONAL VECTOR</text>
   <rect x="735" y="110" width="180" height="100" fill="#F8FAFC" stroke="#A7F3D0" rx="6"/>
   <text x="745" y="135" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#065F46">pgvector Store</text>
-  <text x="745" y="155" font-family="Consolas, Monaco, monospace" font-size="10" fill="#047857">Port 5432 / HNSW</text>
+  <text x="745" y="155" font-family="Consolas, Monaco, monospace" font-size="10" fill="#047857">Port 5432 / PostgreSQL TLS</text>
 
   <line x1="205" y1="160" x2="255" y2="110" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-eng)"/>
+  <line x1="350" y1="150" x2="350" y2="170" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-eng)"/>
   <line x1="445" y1="210" x2="495" y2="90" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-eng)"/>
   <line x1="445" y1="210" x2="495" y2="160" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-eng)"/>
   <line x1="445" y1="210" x2="495" y2="230" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-eng)"/>

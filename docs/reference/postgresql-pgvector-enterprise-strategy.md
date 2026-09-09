@@ -146,14 +146,14 @@ Without an index, vector search executes an exact k-Nearest Neighbors (kNN) sequ
 ```mermaid
 flowchart LR
     subgraph HNSW ["HNSW (Hierarchical Navigable Small World)"]
-        Layer2["Top Layer: Sparse Express Links"] -->|"m=16 / Graph Traversal"| Layer1["Middle Layer: Medium Links"]
-        Layer1 -->|"ef_construction=64"| Layer0["Base Layer: Dense Local Graph"]
+        Layer2["Top Layer: Sparse Express Links"] -->|"hnsw.ef_search / Graph Traversal"| Layer1["Middle Layer: Medium Links"]
+        Layer1 -->|"Local Neighbor Traversal"| Layer0["Base Layer: Dense Local Graph"]
     end
 
     subgraph IVFFlat ["IVFFlat (Inverted File Flat)"]
-        Centroids["Voronoi Centroids (Lists)"] -->|"k-Means Probing"| ClusterA["Cluster A Embeddings"]
-        Centroids -->|"k-Means Probing"| ClusterB["Cluster B Embeddings"]
-        Centroids -->|"k-Means Probing"| ClusterC["Cluster C Embeddings"]
+        Centroids["Voronoi Centroids (Lists)"] -->|"k-Means Centroid Probing"| ClusterA["Cluster A Embeddings"]
+        Centroids -->|"k-Means Centroid Probing"| ClusterB["Cluster B Embeddings"]
+        Centroids -->|"k-Means Centroid Probing"| ClusterC["Cluster C Embeddings"]
     end
 ```
 

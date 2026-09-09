@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Sovereign Infrastructure: Proxmox VE, RKE2, Ceph SDS & Automation"
-timestamp: "2026-09-09T06:40:31Z"
+timestamp: "2026-09-09T07:02:13Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -55,6 +55,8 @@ The infrastructure foundation delivers high availability, fault tolerance, and a
   <line x1="450" y1="80" x2="450" y2="110" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
   <line x1="225" y1="170" x2="225" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
   <line x1="675" y1="170" x2="675" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
+  <line x1="225" y1="280" x2="450" y2="310" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
+  <line x1="675" y1="280" x2="450" y2="310" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
 </svg>
 ```
 

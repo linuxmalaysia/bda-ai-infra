@@ -267,7 +267,10 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Legacy Ingest Feeds** | **Apache NiFi** | `TCP 8443` / HTTPS & SFTP | Public / Perimeter Boundary -> Ingestion DMZ | Captures legacy feeds into NiFi boundary pipelines without altering production upstream. |
+| **Unvalidated Forms Feed** | **Apache NiFi** | `TCP 8443` / HTTPS REST API | Public Boundary -> Ingestion DMZ | Ingests web/mobile incident form submissions into NiFi flow queues. |
+| **CSVs & Spreadsheets Feed** | **Apache NiFi** | `TCP 9000` / S3 Multipart Upload | DMZ File Boundary -> Ingestion DMZ | Streams tabular CSV borehole and climate spreadsheets into NiFi flow processors. |
+| **Email Text Hotspots Feed** | **Apache NiFi** | `TCP 8443` / IMAP & REST API | Email Server -> Ingestion DMZ | Polling thermal hotspot alert emails and parsing spatial text payloads. |
+| **Ad-Hoc SFTP Transfers Feed** | **Apache NiFi** | `TCP 22` / SFTP Stream | External Partner Network -> Ingestion DMZ | Streams geological landslide telemetry files directly into NiFi boundary intake. |
 | **Apache NiFi** | **ODCS Contract Gate** | In-Memory Flow | Ingestion DMZ | Enforces Linux Foundation ODCS v3.1.0 schema validation and rejects invalid payloads to quarantine. |
 | **ODCS Gate** | **Apache Iceberg S3 Store** | `TCP 9000` / S3 REST API | Ingestion DMZ -> Tier 0 SSoT Storage | Commits verified Parquet datasets into Apache Iceberg table format with WORM object lock. |
 | **Trino Engine** | **pgvector Search** | `TCP 5432` / PostgreSQL TLS | Trust Zone -> Operational DB | Executes sub-10ms semantic similarity queries joining spatial and relational predicates. |
@@ -487,7 +490,8 @@ flowchart TB
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **Tier 0 Storage** | **Apache Polaris** | `TCP 9000` / S3 REST | Compliance Lock (Read-Only to AI) | Prevents AI models from overwriting certified human ground truth datasets. |
-| **Local Embedding Engine** | **pgvector & DuckDB vss** | In-Memory CUDA / IPC | Local GPU Sandbox (Zero WAN Egress) | Generates dense 1024-dim embeddings on local GPUs without transmitting metadata to public clouds. |
+| **Local Embedding Engine** | **DuckDB vss Extension** | In-Process Memory IPC | Local GPU Sandbox (Zero WAN Egress) | Generates and indexes analytical embeddings in-process over fixed-size ARRAY columns. |
+| **Local Embedding Engine** | **pgvector Store** | `TCP 5432` / PostgreSQL TLS | Local GPU -> Operational DB Boundary | Materializes persistent HNSW vector similarity tables in HA PostgreSQL cluster. |
 | **MLflow Model Registry** | **FastMCP DMZ Servers** | `TCP 8080` / JSON-RPC 2.0 | DMZ Isolated Container Boundary | Exposes read-only model context and SQL query generation to sandboxed AI agents. |
 | **vLLM / Ollama** | **APISIX Gateway** | `TCP 8000` / HTTP REST | Local GPU -> Keycloak OIDC Boundary | Serves grounded local LLM inferences secured by Keycloak JWT authentication. |
 | **APISIX / Spark / vLLM** | **OTel Collector** | `TCP 4317` gRPC / `4318` HTTP | Internal Management Network | Aggregates all distributed traces, metrics, and logs into Prometheus, Tempo, and Loki backends. |

@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Business Intelligence & MLOps Solutions: Superset, MLflow & Ray"
-timestamp: "2026-09-09T06:40:31Z"
+timestamp: "2026-09-09T07:02:13Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -78,7 +78,7 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Trino Engine** | **Apache Superset** | `TCP 8088` / SQL REST | Trust Zone -> BI Portal | Queries Lakehouse SSoT tables directly for interactive dashboards and spatial maps. |
+| **Apache Superset** | **Trino Engine** | `TCP 8080` / SQL REST | BI Portal -> Trust Zone | Connects to Trino query gateway to execute interactive analytical queries. |
 | **Ray / Kubeflow** | **MLflow Registry** | `TCP 5000` / HTTP REST | Training Sandbox -> Model Registry | Registers trained model artifacts, metrics, and parameters into central repository. |
 | **MLflow Registry** | **APISIX Gateway** | `TCP 443` / HTTPS | Model Registry -> APISIX Gateway | Exposes versioned ML model inference endpoints behind APISIX security policy. |
 

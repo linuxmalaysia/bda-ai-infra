@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "OpenWiki Instructions — BDA Lakehouse SSoT Edition"
-timestamp: "2026-09-09T06:40:31Z"
+timestamp: "2026-09-09T07:02:13Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -113,9 +113,9 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Markdown Scanner** | **Diagram Parser Gate** | Native File IPC | Local Build Sandbox | Parses markdown files for embedded diagram code fences. |
-| **Diagram Parser Gate** | **Mermaid Validator** | Internal Python AST | Local Build Sandbox | Validates syntax; degrades invalid diagrams safely without breaking build. |
-| **Mermaid Validator** | **Self-Healing Engine** | Internal AST Callback | Local Build Sandbox | Automatically restores degraded diagrams to standard ```mermaid blocks once syntax errors are fixed. |
+| **Markdown Scanner** | **Diagram Parser Gate** | In-Process File I/O | Local Build Sandbox | Parses markdown files for embedded diagram code fences. |
+| **Diagram Parser Gate** | **Mermaid Validator** | In-Process String Parsing | Local Build Sandbox | Validates syntax; degrades invalid diagrams safely without breaking build. |
+| **Mermaid Validator** | **Self-Healing Engine** | In-Process String Mutation | Local Build Sandbox | Automatically restores degraded diagrams to standard ```mermaid blocks once syntax errors are fixed. |
 
 ---
 

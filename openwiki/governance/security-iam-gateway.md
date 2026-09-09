@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Security, Identity & API Perimeter: Keycloak & Apache APISIX"
-timestamp: "2026-09-09T06:40:31Z"
+timestamp: "2026-09-09T07:02:13Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -60,6 +60,7 @@ Perimeter security and identity management guarantee zero-trust access control a
   <text x="505" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">OpenMetadata Portal</text>
 
   <line x1="185" y1="160" x2="245" y2="110" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
+  <line x1="340" y1="150" x2="340" y2="170" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
   <line x1="435" y1="110" x2="495" y2="90" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
   <line x1="435" y1="110" x2="495" y2="160" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
   <line x1="435" y1="110" x2="495" y2="230" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sec)"/>

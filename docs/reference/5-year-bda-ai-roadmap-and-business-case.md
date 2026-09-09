@@ -223,7 +223,7 @@ flowchart TD
     subgraph LegacyIngest ["Legacy Ingestion Paths"]
         L1["Manual Unvalidated Forms"]
         L2["Spreadsheets &amp; Raw CSVs"]
-        L3["Email Hotspot Text Parsing"]
+        L3["Thermal Anomaly REST API"]
         L4["Ad-Hoc SFTP File Transfers"]
     end
 
@@ -248,7 +248,7 @@ flowchart TD
 
     L1 -->|"HTTP Push"| NiFi
     L2 -->|"S3 Upload"| NiFi
-    L3 -->|"IMAP / REST"| NiFi
+    L3 -->|"HTTPS REST Poll"| NiFi
     L4 -->|"SFTP Stream"| NiFi
 
     NiFi -->|"Flow File"| ODCS -->|"Validated Event"| Iceberg
@@ -269,11 +269,17 @@ flowchart TD
 | :--- | :--- | :--- | :--- | :--- |
 | **Unvalidated Forms Feed** | **Apache NiFi** | `TCP 8443` / HTTPS REST API | Public Boundary -> Ingestion DMZ | Ingests web/mobile incident form submissions into NiFi flow queues. |
 | **CSVs & Spreadsheets Feed** | **Apache NiFi** | `TCP 9000` / S3 Multipart Upload | DMZ File Boundary -> Ingestion DMZ | Streams tabular CSV borehole and climate spreadsheets into NiFi flow processors. |
-| **Email Text Hotspots Feed** | **Apache NiFi** | `TCP 8443` / IMAP & REST API | Email Server -> Ingestion DMZ | Polling thermal hotspot alert emails and parsing spatial text payloads. |
+| **Thermal Anomaly API Feed** | **Apache NiFi** | `TCP 443` / HTTPS REST API | External Satellite API -> Ingestion DMZ | Polls satellite thermal anomaly endpoints over HTTPS REST API. |
 | **Ad-Hoc SFTP Transfers Feed** | **Apache NiFi** | `TCP 22` / SFTP Stream | External Partner Network -> Ingestion DMZ | Streams geological landslide telemetry files directly into NiFi boundary intake. |
 | **Apache NiFi** | **ODCS Contract Gate** | In-Memory Flow | Ingestion DMZ | Enforces Linux Foundation ODCS v3.1.0 schema validation and rejects invalid payloads to quarantine. |
 | **ODCS Gate** | **Apache Iceberg S3 Store** | `TCP 9000` / S3 REST API | Ingestion DMZ -> Tier 0 SSoT Storage | Commits verified Parquet datasets into Apache Iceberg table format with WORM object lock. |
+| **Apache Iceberg S3 Store** | **Apache Spark & Sedona** | `TCP 9000` / S3 REST API | Tier 0 SSoT -> Compute Zone | Scans S3 Parquet tables for large-scale spatial vector compute and model feature pipelines. |
+| **Apache Iceberg S3 Store** | **Trino Engine** | `TCP 8181` / Iceberg REST API | Tier 0 SSoT -> Compute Zone | Executes multi-engine Iceberg REST catalog table queries across S3 object storage. |
+| **Apache Spark & Sedona** | **MLOps / MLflow** | `TCP 5000` / HTTP REST API | Compute Zone -> MLOps Registry | Registers spatial features, training datasets, and model artifacts in MLflow. |
+| **Apache Spark & Sedona** | **APISIX Alerts** | `TCP 443` / HTTPS REST API | Compute Zone -> Presentation Gate | Dispatches real-time hazard triggers and alert payloads to APISIX notification gateways. |
 | **Trino Engine** | **pgvector Search** | `TCP 5432` / PostgreSQL TLS | Trust Zone -> Operational DB | Executes sub-10ms semantic similarity queries joining spatial and relational predicates. |
+| **Trino Engine** | **Apache Superset** | `TCP 8088` / SQL REST API | Compute Zone -> BI Portal | Delivers high-performance interactive SQL query results to Apache Superset dashboards. |
+| **pgvector Search** | **Next.js Web Portal** | `TCP 443` / HTTPS OIDC | Operational DB -> Presentation Portal | Feeds grounded vector context chunks to Next.js portal RAG assistants. |
 | **MLOps / vLLM** | **APISIX Gateway** | `TCP 443` / HTTPS OIDC | Trust Zone -> Presentation Portal | Exposes sandboxed AI model inference and notification alerts behind Keycloak RBAC. |
 
 ### Core Business Domains Migration & Maintenance Matrix
@@ -455,7 +461,7 @@ flowchart TB
         Grafana["Unified Grafana Dashboards<br/>(Port 3000)"]
     end
 
-    Tier0 -->|"S3 REST Read"| Polaris
+    Polaris -->|"Catalog Commit &amp; S3 Token"| Tier0
     Tier1 -->|"Telemetry Commit"| Polaris
     Polaris -->|"Catalog Sync"| OpenMetadata
 

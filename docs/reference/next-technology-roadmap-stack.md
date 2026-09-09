@@ -274,6 +274,8 @@ flowchart TD
 | **Local Embedder** | **DuckDB vss Extension** | In-Process Memory IPC | Zone 2 -> Zone 3 (Zero WAN Egress) | Indexes analytical vector embeddings in-process over fixed-size ARRAY columns. |
 | **Local Embedder** | **pgvector Store** | `TCP 5432` / PostgreSQL TLS | Zone 2 -> Zone 3 (Zero WAN Egress) | Materializes persistent HNSW vector similarity tables in HA PostgreSQL cluster. |
 | **APISIX Gateway** | **Hybrid Controller** | `TCP 443` / HTTPS OIDC | Zone 4 Perimeter (Keycloak JWT) | Authenticates incoming RAG queries and dispatches hybrid BM25 + vector search requests. |
+| **Hybrid Controller** | **pgvector Store** | `TCP 5432` / PostgreSQL TLS | Zone 4 -> Zone 3 | Executes sub-10ms operational vector similarity lookups during hybrid RAG retrieval. |
+| **Hybrid Controller** | **DuckDB vss Extension** | In-Process Memory IPC | Zone 4 -> Zone 3 | Executes in-process batch analytical similarity searches over ARRAY columns during hybrid RAG retrieval. |
 | **Hybrid Controller** | **Local LLM Inference** | `TCP 8000` / HTTP REST | Zone 4 Internal (Local Host GPU) | Supplies retrieved grounded context chunks to local LLM for zero-hallucination response generation. |
 
 ---
@@ -350,7 +352,7 @@ The platform replaces fragmented logging and legacy monitoring agents with a uni
 
   <rect x="505" y="160" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
   <text x="515" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Grafana Tempo</text>
-  <text x="515" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">Port 3200 / Traces</text>
+  <text x="515" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">Port 3200 / Query API</text>
 
   <rect x="505" y="250" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
   <text x="515" y="272" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Grafana Loki</text>
@@ -390,7 +392,7 @@ flowchart LR
 
     subgraph StorageBackends ["Storage Backends"]
         Prometheus["Prometheus Time-Series DB<br/>(Port 9090 / Metrics Store)"]
-        Tempo["Grafana Tempo<br/>(Port 3200 / Traces Store)"]
+        Tempo["Grafana Tempo<br/>(Port 3200 / Query API)"]
         Loki["Grafana Loki<br/>(Port 3100 / Log Aggregation Store)"]
     end
 
@@ -404,7 +406,7 @@ flowchart LR
     Prometheus -->|"Scrape Metrics"| APISIX
 
     OTelCollector -->|"Export Metrics"| Prometheus
-    OTelCollector -->|"Export Traces"| Tempo
+    OTelCollector -->|"OTLP gRPC 4317 / HTTP 4318"| Tempo
     OTelCollector -->|"Export Logs"| Loki
 
     Prometheus --> Grafana
@@ -416,14 +418,14 @@ flowchart LR
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Airflow / Spark / APISIX** | **OTel Collector** | `TCP 4317` gRPC / `4318` HTTP | Zone 1 -> Zone 2 (Internal Telemetry Network) | Streams distributed traces and log events via OTLP to central collector. |
+| **Airflow / Spark / APISIX** | **OTel Collector** | `TCP 4317` gRPC / `4318` HTTP | Zone 1 -> Zone 2 (Internal Telemetry Network) | Streams distributed OTLP traces to central collector. |
 | **Airflow Workload** | **OTel Collector** | `UDP 8125` / StatsD | Zone 1 -> Zone 2 | Transmits Airflow DAG execution metrics to OTel Collector StatsD receiver. |
 | **Workload Log Files** | **OTel Collector** | Filelog Receiver / Local Log Mount | Zone 1 -> Zone 2 | Ingests Airflow, Spark, and APISIX container stdout/file logs via OTel filelog receiver. |
 | **OTel Collector** | **Prometheus** | `TCP 9090` / Prometheus OTLP | Zone 2 -> Zone 3 | Exports aggregated time-series infrastructure and application metrics. |
 | **Prometheus** | **Apache APISIX** | `TCP 9091` / HTTP Scrape | Zone 3 -> Zone 1 | Initiates periodic Prometheus metrics scrape against APISIX gateway endpoint. |
 | **OTel Collector** | **Grafana Tempo** | `TCP 4317` gRPC / `4318` HTTP | Zone 2 -> Zone 3 | Exports distributed W3C trace spans to Grafana Tempo storage backend. |
 | **OTel Collector** | **Grafana Loki** | `TCP 3100` / HTTP Loki Push API | Zone 2 -> Zone 3 | Exports structured log streams to Grafana Loki log aggregation backend. |
-| **Grafana UI** | **Prometheus / Tempo / Loki** | `TCP 3000` / HTTP Query APIs | Zone 4 Operations Dashboard | Queries Prometheus (9090), Tempo (3200), and Loki (3100) backends for unified dashboarding. |
+| **Grafana UI Listener** | **Prometheus / Tempo / Loki Query Endpoints** | `TCP 3000` (UI) -> `9090` / `3200` / `3100` | Zone 4 Operations Dashboard | Exposes UI listener on port 3000 while querying Prometheus (9090), Tempo (3200), and Loki (3100) backends. |
 
 ---
 

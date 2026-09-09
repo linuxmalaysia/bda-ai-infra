@@ -557,8 +557,11 @@ The infrastructure foundation delivers high availability, fault tolerance, and a
   <text x="485" y="230" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">RKE2 Kubernetes Engine</text>
   <text x="485" y="250" font-family="Consolas, Monaco, monospace" font-size="11" fill="#D97706">FIPS 140-2 CIS Hardened / Ansible</text>
 
-  <rect x="20" y="310" width="860" height="60" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <text x="35" y="345" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Ceph CSI Driver &amp; S3 RADOS Gateway / MinIO</text>
+  <rect x="20" y="310" width="410" height="60" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <text x="35" y="345" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Ceph CSI Driver (TCP 6789)</text>
+
+  <rect x="470" y="310" width="410" height="60" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <text x="485" y="345" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">MinIO / Ceph RADOS S3 Gateway (TCP 9000)</text>
 
   <line x1="450" y1="80" x2="450" y2="110" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
   <line x1="225" y1="170" x2="225" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
@@ -833,6 +836,7 @@ Data governance establishes automated metadata extraction, dataset discovery, an
   <text x="320" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#166534">CRAWLERS &amp; LINEAGE COLLECTORS</text>
   <rect x="325" y="80" width="250" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
   <text x="335" y="102" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">OpenMetadata Crawlers</text>
+  <text x="335" y="122" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 8585 / REST API</text>
   <rect x="325" y="180" width="250" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
   <text x="335" y="202" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">OpenLineage Collector</text>
   <text x="335" y="222" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 5000 / OpenLineage API</text>
@@ -1014,13 +1018,18 @@ Analytical applications provide intuitive decision-support interfaces and scalab
   <rect x="660" y="20" width="270" height="320" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
   <rect x="660" y="20" width="270" height="30" fill="#FEF3C7" rx="8"/>
   <text x="670" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">MLOPS REGISTRY &amp; INFERENCE</text>
-  <rect x="675" y="130" width="240" height="100" fill="#F8FAFC" stroke="#FDE68A" rx="6"/>
-  <text x="685" y="155" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">MLflow Model Registry</text>
-  <text x="685" y="175" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Port 5000 / Artifact Store</text>
+  <rect x="675" y="80" width="240" height="80" fill="#F8FAFC" stroke="#FDE68A" rx="6"/>
+  <text x="685" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">MLflow Model Registry</text>
+  <text x="685" y="125" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Port 5000 / Artifact Store</text>
+
+  <rect x="675" y="180" width="240" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="685" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Model Serving APIs</text>
+  <text x="685" y="225" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">APISIX Managed</text>
 
   <line x1="285" y1="120" x2="355" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sol)"/>
   <line x1="285" y1="220" x2="355" y2="220" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sol)"/>
-  <line x1="605" y1="220" x2="675" y2="180" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sol)"/>
+  <line x1="605" y1="220" x2="675" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sol)"/>
+  <line x1="795" y1="160" x2="795" y2="180" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sol)"/>
 </svg>
 ```
 
@@ -1110,7 +1119,6 @@ Automated CI pipelines and Model Context Protocol (MCP) integrations expose SSoT
 flowchart TD
     Repo["GitHub Repository (bda-ai-infra)"] --> Actions["GitHub Actions CI/CD"]
     Actions --> Audit["dsom-audit.yml<br/>(OKF &amp; Link Integrity)"]
-    Actions --> WikiUpdate["OpenWiki Auto-Compiler"]
     Repo --> MCP["FastMCP Server<br/>(tools/mcp/server.py / JSON-RPC)"]
     MCP --> Agent["AI Coding Agents<br/>(Jules, Cursor, Claude Code)"]
 ```

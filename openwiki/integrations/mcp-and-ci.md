@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "FastMCP Integration & Continuous Integration Workflows"
-timestamp: "2026-09-09T07:30:37Z"
+timestamp: "2026-09-09T13:33:03Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -69,7 +69,6 @@ Automated CI pipelines and Model Context Protocol (MCP) integrations expose SSoT
 flowchart TD
     Repo["GitHub Repository (bda-ai-infra)"] --> Actions["GitHub Actions CI/CD"]
     Actions --> Audit["dsom-audit.yml<br/>(OKF &amp; Link Integrity)"]
-    Actions --> WikiUpdate["OpenWiki Auto-Compiler"]
     Repo --> MCP["FastMCP Server<br/>(tools/mcp/server.py / JSON-RPC)"]
     MCP --> Agent["AI Coding Agents<br/>(Jules, Cursor, Claude Code)"]
 ```

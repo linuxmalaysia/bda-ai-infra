@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Governance, Catalog & Lineage Matrix: OpenMetadata & OpenLineage"
-timestamp: "2026-09-09T07:30:37Z"
+timestamp: "2026-09-09T13:33:03Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -47,6 +47,7 @@ Data governance establishes automated metadata extraction, dataset discovery, an
   <text x="320" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#166534">CRAWLERS &amp; LINEAGE COLLECTORS</text>
   <rect x="325" y="80" width="250" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
   <text x="335" y="102" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">OpenMetadata Crawlers</text>
+  <text x="335" y="122" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 8585 / REST API</text>
   <rect x="325" y="180" width="250" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
   <text x="335" y="202" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">OpenLineage Collector</text>
   <text x="335" y="222" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 5000 / OpenLineage API</text>

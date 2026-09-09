@@ -166,9 +166,9 @@ LIMIT 5;
 
 Following the research patterns established in Percona's technical guidance (*Create an AI Expert With Open Source Tools and pgvector*), the BDA platform implements an end-to-end, 100% open-source AI Expert RAG pipeline.
 
-#### Dual-Render Architecture Specification: Enterprise AI Expert & RAG Pipeline
+### Dual-Render Architecture Specification: Enterprise AI Expert & RAG Pipeline
 
-##### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
 ```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 580" width="100%" height="100%">
@@ -286,7 +286,7 @@ Following the research patterns established in Percona's technical guidance (*Cr
 </svg>
 ```
 
-##### 2. Git-Native Mermaid Diagram (`.mmd`)
+#### 2. Git-Native Mermaid Diagram (`.mmd`)
 
 ```mermaid
 flowchart TD
@@ -314,7 +314,7 @@ flowchart TD
     end
 ```
 
-##### 3. Summary Interface & Routing Table
+#### 3. Summary Interface & Routing Table
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |

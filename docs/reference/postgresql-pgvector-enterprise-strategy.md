@@ -83,19 +83,87 @@ PostgreSQL is the world's most trusted open-source relational database engine. W
 ### Indexing Strategies: HNSW vs. IVFFlat
 Without an index, vector search executes an exact k-Nearest Neighbors (kNN) sequential scan (`ORDER BY embedding <=> query_embedding LIMIT k`), guaranteeing 100% recall but scaling $O(N)$ with dataset size. For large-scale datasets, `pgvector` provides two high-performance indexing mechanisms:
 
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-pg" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect width="900" height="360" fill="#F8FAFC" rx="10"/>
+
+  <rect x="20" y="20" width="410" height="320" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="410" height="36" fill="#EFF6FF" rx="8"/>
+  <text x="35" y="43" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#1E40AF">HNSW (HIERARCHICAL NAVIGABLE SMALL WORLD)</text>
+
+  <rect x="40" y="75" width="370" height="60" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" rx="6"/>
+  <text x="50" y="98" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Layer 2: Top Sparse Layer</text>
+  <text x="50" y="118" font-family="Consolas, Monaco, monospace" font-size="11" fill="#2563EB">Express skip links across graph</text>
+
+  <line x1="225" y1="135" x2="225" y2="160" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-pg)"/>
+
+  <rect x="40" y="160" width="370" height="60" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" rx="6"/>
+  <text x="50" y="183" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Layer 1: Middle Layer</text>
+  <text x="50" y="203" font-family="Consolas, Monaco, monospace" font-size="11" fill="#475569">Medium-density graph connections</text>
+
+  <line x1="225" y1="220" x2="225" y2="245" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-pg)"/>
+
+  <rect x="40" y="245" width="370" height="70" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" rx="6"/>
+  <text x="50" y="268" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Layer 0: Base Dense Layer</text>
+  <text x="50" y="288" font-family="Consolas, Monaco, monospace" font-size="11" fill="#059669">Full k-NN vector node neighborhood</text>
+
+  <rect x="470" y="20" width="410" height="320" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="470" y="20" width="410" height="36" fill="#F1F5F9" rx="8"/>
+  <text x="485" y="43" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#334155">IVFFLAT (INVERTED FILE FLAT)</text>
+
+  <rect x="490" y="75" width="370" height="60" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" rx="6"/>
+  <text x="500" y="98" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Voronoi Centroids</text>
+  <text x="500" y="118" font-family="Consolas, Monaco, monospace" font-size="11" fill="#D97706">K-Means spatial vector partitioning</text>
+
+  <line x1="560" y1="135" x2="540" y2="180" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-pg)"/>
+  <line x1="675" y1="135" x2="675" y2="180" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-pg)"/>
+  <line x1="790" y1="135" x2="810" y2="180" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-pg)"/>
+
+  <rect x="490" y="180" width="110" height="135" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" rx="6"/>
+  <text x="500" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Cluster A</text>
+  <text x="500" y="223" font-family="Consolas, Monaco, monospace" font-size="10" fill="#64748B">Inverted List</text>
+
+  <rect x="620" y="180" width="110" height="135" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" rx="6"/>
+  <text x="630" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Cluster B</text>
+  <text x="630" y="223" font-family="Consolas, Monaco, monospace" font-size="10" fill="#64748B">Inverted List</text>
+
+  <rect x="750" y="180" width="110" height="135" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" rx="6"/>
+  <text x="760" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Cluster C</text>
+  <text x="760" y="223" font-family="Consolas, Monaco, monospace" font-size="10" fill="#64748B">Inverted List</text>
+</svg>
+```
+
+#### 2. Git-Native Mermaid Diagram (`.mmd`)
+
 ```mermaid
 flowchart LR
     subgraph HNSW ["HNSW (Hierarchical Navigable Small World)"]
-        Layer2["Top Layer: Sparse Express Links"] --> Layer1["Middle Layer: Medium Links"]
-        Layer1 --> Layer0["Base Layer: Dense Local Graph"]
+        Layer2["Top Layer: Sparse Express Links"] -->|"m=16 / Graph Traversal"| Layer1["Middle Layer: Medium Links"]
+        Layer1 -->|"ef_construction=64"| Layer0["Base Layer: Dense Local Graph"]
     end
 
     subgraph IVFFlat ["IVFFlat (Inverted File Flat)"]
-        Centroids["Voronoi Centroids (Lists)"] --> ClusterA["Cluster A Embeddings"]
-        Centroids --> ClusterB["Cluster B Embeddings"]
-        Centroids --> ClusterC["Cluster C Embeddings"]
+        Centroids["Voronoi Centroids (Lists)"] -->|"k-Means Probing"| ClusterA["Cluster A Embeddings"]
+        Centroids -->|"k-Means Probing"| ClusterB["Cluster B Embeddings"]
+        Centroids -->|"k-Means Probing"| ClusterC["Cluster C Embeddings"]
     end
 ```
+
+#### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Top Express Layer 2** | **Middle Layer 1** | In-Memory Graph Pointers | Internal PostgreSQL Shared Memory | Traverses sparse multi-layer skip connections to quickly narrow candidate vector region. |
+| **Middle Layer 1** | **Base Dense Layer 0** | In-Memory Graph Pointers | Internal PostgreSQL Shared Memory | Drills down into high-density local vector neighborhood for sub-10ms nearest neighbor search. |
+| **Voronoi Centroids** | **Inverted Cluster Lists** | In-Memory Index Search | Internal PostgreSQL Shared Memory | Probes closest centroid lists during IVFFlat search; fast build time but lower recall under dynamic updates. |
 
 | Dimension / Index Type | HNSW Index (Hierarchical Navigable Small World) | IVFFlat Index (Inverted File Flat) |
 | :--- | :--- | :--- |

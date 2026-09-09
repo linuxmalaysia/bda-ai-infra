@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Business Intelligence & MLOps Solutions: Superset, MLflow & Ray"
-timestamp: "2026-09-08T22:54:58Z"
+timestamp: "2026-09-09T06:31:15Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -19,13 +19,66 @@ Analytical applications provide intuitive decision-support interfaces and scalab
 
 ## 📈 BI & Machine Learning Lifecycle
 
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 360" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-sol" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect width="950" height="360" fill="#F8FAFC" rx="10"/>
+
+  <rect x="20" y="20" width="280" height="320" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="280" height="30" fill="#EFF6FF" rx="8"/>
+  <text x="30" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#1E40AF">DATA ASSETS</text>
+  <rect x="35" y="80" width="250" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="45" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Trino / Lakehouse SSoT</text>
+  <rect x="35" y="180" width="250" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="45" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Spark Clean Datasets</text>
+
+  <rect x="340" y="20" width="280" height="320" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="340" y="20" width="280" height="30" fill="#DCFCE7" rx="8"/>
+  <text x="350" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#166534">ANALYTICS &amp; MODEL TRAINING</text>
+  <rect x="355" y="80" width="250" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="365" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache Superset</text>
+  <text x="365" y="125" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 8088 / deck.gl</text>
+  <rect x="355" y="180" width="250" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="365" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Ray &amp; Kubeflow</text>
+  <text x="365" y="225" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Distributed Training</text>
+
+  <rect x="660" y="20" width="270" height="320" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="660" y="20" width="270" height="30" fill="#FEF3C7" rx="8"/>
+  <text x="670" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">MLOPS REGISTRY &amp; INFERENCE</text>
+  <rect x="675" y="130" width="240" height="100" fill="#F8FAFC" stroke="#FDE68A" rx="6"/>
+  <text x="685" y="155" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">MLflow Model Registry</text>
+  <text x="685" y="175" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Port 5000 / Artifact Store</text>
+
+  <line x1="285" y1="120" x2="355" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sol)"/>
+  <line x1="285" y1="220" x2="355" y2="220" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sol)"/>
+  <line x1="605" y1="220" x2="675" y2="180" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-sol)"/>
+</svg>
+```
+
+#### 2. Git-Native Mermaid Diagram (`.mmd`)
+
 ```mermaid
 flowchart TD
-    TrinoData["Trino / Lakehouse SSoT"] --> Superset["Apache Superset<br/>Interactive Dashboards & deck.gl Maps"]
-    SparkData["Spark Clean Datasets"] --> Training["Ray / Kubeflow<br/>Distributed Model Training"]
-    Training --> MLflow["MLflow Model Registry<br/>Model Tracking & Artifacts"]
-    MLflow --> Inference["Model Serving APIs (APISIX Managed)"]
+    TrinoData["Trino / Lakehouse SSoT"] --> Superset["Apache Superset<br/>(Port 8088 / Interactive Dashboards)"]
+    SparkData["Spark Clean Datasets"] --> Training["Ray / Kubeflow<br/>(Distributed Model Training)"]
+    Training --> MLflow["MLflow Model Registry<br/>(Port 5000 / Tracking &amp; Artifacts)"]
+    MLflow --> Inference["Model Serving APIs<br/>(APISIX Managed)"]
 ```
+
+#### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Trino Engine** | **Apache Superset** | `TCP 8088` / SQL REST | Trust Zone -> BI Portal | Queries Lakehouse SSoT tables directly for interactive dashboards and spatial maps. |
+| **Ray / Kubeflow** | **MLflow Registry** | `TCP 5000` / HTTP REST | Training Sandbox -> Model Registry | Registers trained model artifacts, metrics, and parameters into central repository. |
+| **MLflow Registry** | **APISIX Gateway** | `TCP 443` / HTTPS | Model Registry -> APISIX Gateway | Exposes versioned ML model inference endpoints behind APISIX security policy. |
 
 ## 📊 Solution Highlights
 

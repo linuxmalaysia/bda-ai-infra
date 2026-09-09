@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "OpenWiki Instructions — BDA Lakehouse SSoT Edition"
-timestamp: "2026-09-08T22:54:58Z"
+timestamp: "2026-09-09T06:31:15Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -61,6 +61,42 @@ uv run --with pyyaml python tools/openwiki_emulator.py --export-graph
 
 The emulator incorporates a zero-dependency Mermaid diagram compiler with self-healing capabilities.
 
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-inst" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect width="800" height="350" fill="#F8FAFC" rx="10"/>
+
+  <rect x="20" y="20" width="210" height="90" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <text x="35" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Scan Markdown</text>
+  <text x="35" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">openwiki/**/*.md</text>
+
+  <rect x="280" y="20" width="220" height="90" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <text x="295" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Detect Diagram</text>
+  <text x="295" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">Parser Gate</text>
+
+  <rect x="550" y="20" width="220" height="90" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <text x="565" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Save Valid Mermaid</text>
+  <text x="565" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">```mermaid Fence</text>
+
+  <rect x="280" y="200" width="220" height="90" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <text x="295" y="225" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Self-Healing Recheck</text>
+  <text x="295" y="245" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Validate Syntax</text>
+
+  <line x1="230" y1="65" x2="280" y2="65" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inst)"/>
+  <line x1="500" y1="65" x2="550" y2="65" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inst)"/>
+  <line x1="390" y1="110" x2="390" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inst)"/>
+</svg>
+```
+
+#### 2. Git-Native Mermaid Diagram (`.mmd`)
+
 ```mermaid
 flowchart TD
     Scan["Scan Markdown Files"] --> Detect{"Detect Diagram Block"}
@@ -70,6 +106,14 @@ flowchart TD
     Recheck -->|Now Valid/Repaired| Heal["Heal and upgrade back to ```mermaid"]
     Recheck -->|Still Invalid| KeepDegraded["Keep degraded status"]
 ```
+
+#### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Markdown Scanner** | **Diagram Parser Gate** | Native File IPC | Local Build Sandbox | Parses markdown files for embedded diagram code fences. |
+| **Diagram Parser Gate** | **Mermaid Validator** | Internal Python AST | Local Build Sandbox | Validates syntax; degrades invalid diagrams safely without breaking build. |
+| **Mermaid Validator** | **Self-Healing Engine** | Internal AST Callback | Local Build Sandbox | Automatically restores degraded diagrams to standard ```mermaid blocks once syntax errors are fixed. |
 
 ---
 

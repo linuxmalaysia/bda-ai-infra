@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Sovereign Infrastructure: Proxmox VE, RKE2, Ceph SDS & Automation"
-timestamp: "2026-09-09T14:03:15Z"
+timestamp: "2026-09-09T19:45:34Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -83,6 +83,7 @@ graph TD
 | **OpenTofu IaC** | **Proxmox VE** | `TCP 8006` / HTTPS REST API | Admin Management Network | Provisions KVM virtual machines and virtual network bridges idempotently. |
 | **Ansible Playbooks** | **RKE2 K8s Nodes** | `TCP 22` / SSH | Admin Management Network (SSH Key) | Bootstraps CIS-hardened RKE2 control plane and worker nodes. |
 | **RKE2 Worker Nodes** | **Ceph SDS Storage** | `TCP 6789` / Ceph Protocol | Internal Storage Fabric | Mounts resilient block (RBD) and file (CephFS) persistent volume claims via Ceph CSI. |
+| **RKE2 Worker Nodes** | **MinIO / Ceph RADOS S3 Gateway** | `TCP 9000` / S3 REST API | Internal Storage Fabric | Connects Kubernetes workload pods to S3 object storage bucket endpoints. |
 
 ## 🛠️ Component Specifications
 

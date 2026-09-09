@@ -506,7 +506,13 @@ flowchart TD
 | **Apache APISIX** | **Apache NiFi** | `TCP 8443` / HTTPS | Perimeter Gate -> Ingestion Boundary | Ingests external API payloads through APISIX gateway for NiFi flow distribution. |
 | **Apache Polaris Catalog** | **Trino & Spark** | `TCP 8181` / REST | Catalog Tier -> Compute Engines | Manages Iceberg table namespace commits and vends short-lived S3 storage tokens. |
 | **OpenMetadata Catalog** | **pgvector & DuckDB vss** | `TCP 5432` / TLS | Governance Tier -> Local Vector Store | Synchronizes dataset metadata and column descriptions into local zero-trust vector stores. |
-| **OpenTelemetry Collector** | **Prometheus / Tempo / Loki** | `TCP 4317` gRPC / `4318` HTTP OTLP Exporters | Internal Operations Network | Collects distributed traces, metrics, and logs across Airflow, Spark, and APISIX, exporting to backend stores. |
+| **Airflow / Spark / APISIX** | **OTel Collector** | `TCP 4317` gRPC / `4318` HTTP | Internal Operations Network | Streams OTLP traces to central OpenTelemetry collector. |
+| **Airflow Workloads** | **OTel Collector** | `UDP 8125` / StatsD | Internal Operations Network | Transmits Airflow DAG execution metrics to OTel Collector StatsD receiver. |
+| **Workload Log Files** | **OTel Collector** | Filelog Receiver / Local Log Mount | Internal Operations Network | Ingests Airflow, Spark, and APISIX container logs via filelog receiver. |
+| **OTel Collector** | **Prometheus** | `TCP 9090` / Prometheus OTLP | Internal Operations Network | Exports aggregated time-series metrics to Prometheus backend. |
+| **Prometheus** | **Apache APISIX** | `TCP 9091` / HTTP Scrape | Internal Operations Network | Initiates periodic Prometheus metrics scrape against APISIX gateway endpoint. |
+| **OTel Collector** | **Grafana Tempo** | `TCP 4317` gRPC / `4318` HTTP | Internal Operations Network | Exports distributed W3C trace spans to Grafana Tempo storage backend. |
+| **OTel Collector** | **Grafana Loki** | `TCP 3100` / HTTP Loki Push API | Internal Operations Network | Exports structured log streams to Grafana Loki log aggregation backend. |
 
 ## 🎯 Architecture Core Directives
 
@@ -591,6 +597,7 @@ graph TD
 | **OpenTofu IaC** | **Proxmox VE** | `TCP 8006` / HTTPS REST API | Admin Management Network | Provisions KVM virtual machines and virtual network bridges idempotently. |
 | **Ansible Playbooks** | **RKE2 K8s Nodes** | `TCP 22` / SSH | Admin Management Network (SSH Key) | Bootstraps CIS-hardened RKE2 control plane and worker nodes. |
 | **RKE2 Worker Nodes** | **Ceph SDS Storage** | `TCP 6789` / Ceph Protocol | Internal Storage Fabric | Mounts resilient block (RBD) and file (CephFS) persistent volume claims via Ceph CSI. |
+| **RKE2 Worker Nodes** | **MinIO / Ceph RADOS S3 Gateway** | `TCP 9000` / S3 REST API | Internal Storage Fabric | Connects Kubernetes workload pods to S3 object storage bucket endpoints. |
 
 ## 🛠️ Component Specifications
 

@@ -274,13 +274,14 @@ flowchart TD
 | **Apache NiFi** | **ODCS Contract Gate** | In-Memory Flow | Ingestion DMZ | Enforces Linux Foundation ODCS v3.1.0 schema validation and rejects invalid payloads to quarantine. |
 | **ODCS Gate** | **Apache Iceberg S3 Store** | `TCP 9000` / S3 REST API | Ingestion DMZ -> Tier 0 SSoT Storage | Commits verified Parquet datasets into Apache Iceberg table format with WORM object lock. |
 | **Apache Iceberg S3 Store** | **Apache Spark & Sedona** | `TCP 9000` / S3 REST API | Tier 0 SSoT -> Compute Zone | Scans S3 Parquet tables for large-scale spatial vector compute and model feature pipelines. |
-| **Apache Iceberg S3 Store** | **Trino Engine** | `TCP 8181` / Iceberg REST API | Tier 0 SSoT -> Compute Zone | Executes multi-engine Iceberg REST catalog table queries across S3 object storage. |
+| **Trino Engine** | **Apache Polaris** | `TCP 8181` / Iceberg REST API | Compute Zone -> Catalog Zone | Calls Apache Polaris REST catalog for Iceberg metadata and short-lived S3 access tokens. |
+| **Trino Engine** | **Apache Iceberg S3 Store** | `TCP 9000` / S3 REST API | Compute Zone -> Tier 0 SSoT Storage | Reads and writes Parquet data objects directly using temporary S3 credentials. |
 | **Apache Spark & Sedona** | **MLOps / MLflow** | `TCP 5000` / HTTP REST API | Compute Zone -> MLOps Registry | Registers spatial features, training datasets, and model artifacts in MLflow. |
 | **Apache Spark & Sedona** | **APISIX Alerts** | `TCP 443` / HTTPS REST API | Compute Zone -> Presentation Gate | Dispatches real-time hazard triggers and alert payloads to APISIX notification gateways. |
-| **Trino Engine** | **pgvector Search** | `TCP 5432` / PostgreSQL TLS | Trust Zone -> Operational DB | Executes sub-10ms semantic similarity queries joining spatial and relational predicates. |
-| **Apache Superset** | **Trino Engine** | `TCP 8080` / SQL REST API | Compute Zone -> BI Portal | Delivers high-performance interactive SQL query results to Apache Superset dashboards. |
-| **pgvector Search** | **Next.js Web Portal** | `TCP 443` / HTTPS OIDC | Operational DB -> Presentation Portal | Feeds grounded vector context chunks to Next.js portal RAG assistants. |
-| **MLOps / vLLM** | **APISIX Gateway** | `TCP 443` / HTTPS OIDC | Trust Zone -> Presentation Portal | Exposes sandboxed AI model inference and notification alerts behind Keycloak RBAC. |
+| **RAG Backend** | **pgvector Search** | `TCP 5432` / PostgreSQL TLS | Trust Zone -> Operational DB | Executes sub-10ms semantic similarity queries joining spatial and relational predicates. |
+| **Apache Superset** | **Trino Engine** | `TCP 8080` / SQL REST API | BI Portal -> Compute Zone | Apache Superset connects to Trino query engine to execute ad-hoc SQL queries and receive dataset results. |
+| **RAG Backend** | **Next.js Web Portal** | `TCP 443` / HTTPS OIDC | Trust Zone -> Presentation Portal | Feeds grounded vector context chunks and search responses to Next.js portal RAG assistants. |
+| **Presentation Portal** | **APISIX Gateway -> MLOps / vLLM** | `TCP 443` / HTTPS OIDC | Presentation Portal -> APISIX -> Trust Zone | Routes user inference requests through APISIX gateway with JWT validation to vLLM endpoints. |
 
 ### Core Business Domains Migration & Maintenance Matrix
 

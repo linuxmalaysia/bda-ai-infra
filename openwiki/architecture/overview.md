@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "BDA Lakehouse Architecture & 100% Open-Source Software Stack"
-timestamp: "2026-09-09T14:03:15Z"
+timestamp: "2026-09-09T19:45:34Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -140,7 +140,13 @@ flowchart TD
 | **Apache APISIX** | **Apache NiFi** | `TCP 8443` / HTTPS | Perimeter Gate -> Ingestion Boundary | Ingests external API payloads through APISIX gateway for NiFi flow distribution. |
 | **Apache Polaris Catalog** | **Trino & Spark** | `TCP 8181` / REST | Catalog Tier -> Compute Engines | Manages Iceberg table namespace commits and vends short-lived S3 storage tokens. |
 | **OpenMetadata Catalog** | **pgvector & DuckDB vss** | `TCP 5432` / TLS | Governance Tier -> Local Vector Store | Synchronizes dataset metadata and column descriptions into local zero-trust vector stores. |
-| **OpenTelemetry Collector** | **Prometheus / Tempo / Loki** | `TCP 4317` gRPC / `4318` HTTP OTLP Exporters | Internal Operations Network | Collects distributed traces, metrics, and logs across Airflow, Spark, and APISIX, exporting to backend stores. |
+| **Airflow / Spark / APISIX** | **OTel Collector** | `TCP 4317` gRPC / `4318` HTTP | Internal Operations Network | Streams OTLP traces to central OpenTelemetry collector. |
+| **Airflow Workloads** | **OTel Collector** | `UDP 8125` / StatsD | Internal Operations Network | Transmits Airflow DAG execution metrics to OTel Collector StatsD receiver. |
+| **Workload Log Files** | **OTel Collector** | Filelog Receiver / Local Log Mount | Internal Operations Network | Ingests Airflow, Spark, and APISIX container logs via filelog receiver. |
+| **OTel Collector** | **Prometheus** | `TCP 9090` / Prometheus OTLP | Internal Operations Network | Exports aggregated time-series metrics to Prometheus backend. |
+| **Prometheus** | **Apache APISIX** | `TCP 9091` / HTTP Scrape | Internal Operations Network | Initiates periodic Prometheus metrics scrape against APISIX gateway endpoint. |
+| **OTel Collector** | **Grafana Tempo** | `TCP 4317` gRPC / `4318` HTTP | Internal Operations Network | Exports distributed W3C trace spans to Grafana Tempo storage backend. |
+| **OTel Collector** | **Grafana Loki** | `TCP 3100` / HTTP Loki Push API | Internal Operations Network | Exports structured log streams to Grafana Loki log aggregation backend. |
 
 ## 🎯 Architecture Core Directives
 

@@ -50,34 +50,100 @@ Polaris implements the open Apache Iceberg REST Catalog specification, providing
 
 ### Polaris Integration Topology
 
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-pol" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect width="900" height="420" fill="#F8FAFC" rx="10"/>
+
+  <!-- Compute Tier -->
+  <rect x="20" y="20" width="860" height="100" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="860" height="28" fill="#EFF6FF" rx="8"/>
+  <text x="30" y="39" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#1E40AF">DISTRIBUTED &amp; EMBEDDED COMPUTE ENGINES</text>
+
+  <rect x="35" y="55" width="250" height="50" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="45" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Trino MPP Engine</text>
+  <text x="45" y="92" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 8080 / SQL</text>
+
+  <rect x="325" y="55" width="250" height="50" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="335" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache Spark Batch</text>
+  <text x="335" y="92" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Port 7077 / Batch ETL</text>
+
+  <rect x="615" y="55" width="250" height="50" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="625" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">DuckDB OLAP &amp; vss</text>
+  <text x="625" y="92" font-family="Consolas, Monaco, monospace" font-size="10" fill="#92400E">In-Process Library</text>
+
+  <!-- Catalog Tier -->
+  <rect x="20" y="150" width="860" height="110" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="150" width="860" height="28" fill="#DCFCE7" rx="8"/>
+  <text x="30" y="169" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#166534">OPEN ICEBERG REST CATALOG TIER</text>
+
+  <rect x="230" y="190" width="440" height="55" fill="#F8FAFC" stroke="#A7F3D0" rx="6"/>
+  <text x="240" y="212" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#065F46">Apache Polaris REST Catalog</text>
+  <text x="240" y="230" font-family="Consolas, Monaco, monospace" font-size="11" fill="#047857">Port 8181 / Iceberg REST API (RBAC &amp; Credential Vending)</text>
+
+  <!-- Storage Tier -->
+  <rect x="20" y="290" width="860" height="110" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="290" width="860" height="28" fill="#F1F5F9" rx="8"/>
+  <text x="30" y="309" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#334155">S3-COMPATIBLE OBJECT STORAGE</text>
+
+  <rect x="230" y="330" width="440" height="55" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="240" y="352" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Ceph RADOS Gateway / MinIO</text>
+  <text x="240" y="370" font-family="Consolas, Monaco, monospace" font-size="11" fill="#475569">Port 9000 / S3 API (Parquet &amp; Iceberg Metadata)</text>
+
+  <!-- Arrows -->
+  <line x1="160" y1="105" x2="310" y2="190" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-pol)"/>
+  <line x1="450" y1="105" x2="450" y2="190" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-pol)"/>
+  <line x1="740" y1="105" x2="590" y2="190" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-pol)"/>
+
+  <line x1="450" y1="245" x2="450" y2="330" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-pol)"/>
+</svg>
+```
+
+#### 2. Git-Native Mermaid Diagram (`.mmd`)
+
 ```mermaid
 flowchart TD
-    subgraph ComputeEngines ["Distributed & Embedded Compute Engines"]
-        Trino["Trino MPP SQL Engine"]
-        Spark["Apache Spark Batch ETL"]
-        DuckDB["DuckDB Vector & OLAP"]
+    subgraph ComputeEngines ["Distributed &amp; Embedded Compute Engines"]
+        Trino["Trino MPP SQL Engine<br/>(Port 8080)"]
+        Spark["Apache Spark Batch ETL<br/>(Port 7077)"]
+        DuckDB["DuckDB Vector &amp; OLAP<br/>(In-Process)"]
     end
 
     subgraph CatalogTier ["Open REST Catalog Layer"]
-        Polaris["Apache Polaris REST Catalog<br/>(RBAC & Credential Vending)"]
+        Polaris["Apache Polaris REST Catalog<br/>(Port 8181 / RBAC &amp; Credential Vending)"]
     end
 
     subgraph StorageTier ["S3-Compatible Object Storage"]
-        Ceph["Ceph RADOS Gateway / MinIO<br/>(Apache Iceberg / Parquet)"]
+        Ceph["Ceph RADOS Gateway / MinIO<br/>(Port 9000 / Iceberg Parquet)"]
     end
 
-    Trino -->|Iceberg REST API / Get Short-Lived S3 Token| Polaris
-    Spark -->|Iceberg REST API / Get Short-Lived S3 Token| Polaris
-    DuckDB -->|Iceberg REST API / Get Short-Lived S3 Token| Polaris
+    Trino -->|"Iceberg REST API / Get Short-Lived S3 Token"| Polaris
+    Spark -->|"Iceberg REST API / Get Short-Lived S3 Token"| Polaris
+    DuckDB -->|"Iceberg REST API / Get Short-Lived S3 Token"| Polaris
 
-    Polaris -->|Vend Temporary S3 Credentials| Trino
-    Polaris -->|Vend Temporary S3 Credentials| Spark
-    Polaris -->|Vend Temporary S3 Credentials| DuckDB
+    Polaris -->|"Vend Temporary S3 Credentials"| Trino
+    Polaris -->|"Vend Temporary S3 Credentials"| Spark
+    Polaris -->|"Vend Temporary S3 Credentials"| DuckDB
 
-    Trino -->|Read/Write Parquet via Temporary Token| Ceph
-    Spark -->|Read/Write Parquet via Temporary Token| Ceph
-    DuckDB -->|Read/Write Parquet via Temporary Token| Ceph
+    Trino -->|"Read/Write Parquet via Temporary Token"| Ceph
+    Spark -->|"Read/Write Parquet via Temporary Token"| Ceph
+    DuckDB -->|"Read/Write Parquet via Temporary Token"| Ceph
 ```
+
+#### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Trino / Spark / DuckDB** | **Apache Polaris** | `TCP 8181` / Iceberg REST API | Internal Management Network -> Catalog Zone | Requests table catalog commits and short-lived scoped S3 storage access tokens. |
+| **Apache Polaris** | **Compute Engines** | `TCP 8181` / REST Response | Catalog Zone -> Compute Engines | Vends short-lived, scoped S3 access credentials without distributing permanent secrets. |
+| **Compute Engines** | **Ceph / MinIO Storage** | `TCP 9000` / S3 REST API | Compute Engines -> S3 Storage | Reads/writes Parquet columnar data directly using temporary Polaris credentials. |
 
 ---
 
@@ -104,30 +170,113 @@ To enable local, privacy-preserving semantic search and Retrieval-Augmented Gene
 
 ### Zero-Trust Local Hybrid RAG Architecture
 
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 480" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-rag" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect width="950" height="480" fill="#F8FAFC" rx="10"/>
+
+  <!-- Zone 1: OpenMetadata -->
+  <rect x="20" y="20" width="210" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="210" height="32" fill="#EFF6FF" rx="8"/>
+  <text x="30" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#1E40AF">1. OPENMETADATA CATALOG</text>
+
+  <rect x="35" y="110" width="180" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="45" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">OpenMetadata Server</text>
+  <text x="45" y="152" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Schemas &amp; ODCS Contracts</text>
+
+  <!-- Zone 2: Embedding Pipeline -->
+  <rect x="250" y="20" width="210" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="250" y="20" width="210" height="32" fill="#F1F5F9" rx="8"/>
+  <text x="260" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#334155">2. LOCAL EMBEDDING</text>
+
+  <rect x="265" y="110" width="180" height="100" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="275" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">SentenceTransformer</text>
+  <text x="275" y="152" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">Local GPU Execution</text>
+  <text x="275" y="172" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#64748B">Zero WAN Egress</text>
+
+  <!-- Zone 3: Vector Stores -->
+  <rect x="480" y="20" width="220" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="480" y="20" width="220" height="32" fill="#DCFCE7" rx="8"/>
+  <text x="490" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#166534">3. DUAL VECTOR STORES</text>
+
+  <rect x="495" y="80" width="190" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="505" y="102" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">DuckDB vss</text>
+  <text x="505" y="122" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">ARRAY HNSW Index</text>
+
+  <rect x="495" y="180" width="190" height="80" fill="#F8FAFC" stroke="#A7F3D0" rx="6"/>
+  <text x="505" y="202" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">pgvector Store</text>
+  <text x="505" y="222" font-family="Consolas, Monaco, monospace" font-size="10" fill="#047857">Port 5432 / Persistent HNSW</text>
+
+  <!-- Zone 4: Hybrid RAG Agent -->
+  <rect x="720" y="20" width="210" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="720" y="20" width="210" height="32" fill="#FEF3C7" rx="8"/>
+  <text x="730" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">4. HYBRID RAG AGENT</text>
+
+  <rect x="735" y="70" width="180" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="745" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">APISIX Gateway</text>
+  <text x="745" y="112" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Keycloak OIDC</text>
+
+  <rect x="735" y="150" width="180" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="745" y="172" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Hybrid Controller</text>
+  <text x="745" y="192" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">BM25 + Vector Distance</text>
+
+  <rect x="735" y="250" width="180" height="80" fill="#F8FAFC" stroke="#FDE68A" rx="6"/>
+  <text x="745" y="272" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Local vLLM / Ollama</text>
+  <text x="745" y="292" font-family="Consolas, Monaco, monospace" font-size="10" fill="#92400E">Grounded Answer Output</text>
+
+  <!-- Connectors -->
+  <line x1="215" y1="150" x2="265" y2="150" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
+  <line x1="445" y1="140" x2="495" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
+  <line x1="445" y1="180" x2="495" y2="210" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
+  <line x1="685" y1="220" x2="735" y2="190" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
+</svg>
+```
+
+#### 2. Git-Native Mermaid Diagram (`.mmd`)
+
 ```mermaid
 flowchart TD
-    subgraph OpenMetadataCatalog ["OpenMetadata Catalog & Lineage"]
-        OM["OpenMetadata Server"] --> DataAssets["Schemas, Column Descriptions, ODCS Contracts"]
+    subgraph OpenMetadataCatalog ["OpenMetadata Catalog &amp; Lineage"]
+        OM["OpenMetadata Server<br/>(Port 8585 / REST API)"] --> DataAssets["Schemas, Column Descriptions, ODCS Contracts"]
     end
 
     subgraph EmbeddingEngine ["Local Zero-Trust Embedding Pipeline"]
-        DataAssets -->|Local Embedding Model| Embedder["Local SentenceTransformer / HuggingFace Model<br/>(Zero WAN Egress)"]
+        DataAssets -->|"Local Embedding Model"| Embedder["Local SentenceTransformer / HuggingFace Model<br/>(Zero WAN Egress)"]
     end
 
     subgraph VectorStores ["Dual Local Vector Search Layer"]
-        Embedder -->|Materialize Parquet to DuckDB ARRAY Columns| DuckDBVSS["DuckDB vss Extension<br/>(HNSW Index on Fixed-Size ARRAY)"]
-        Embedder -->|Persistent HNSW Tables| PgVector["PostgreSQL pgvector Extension<br/>(Operational API Semantic Search)"]
+        Embedder -->|"Materialize Parquet to DuckDB ARRAY Columns"| DuckDBVSS["DuckDB vss Extension<br/>(HNSW Index on Fixed-Size ARRAY)"]
+        Embedder -->|"Persistent HNSW Tables"| PgVector["PostgreSQL pgvector Extension<br/>(Port 5432 / Persistent HNSW)"]
     end
 
     subgraph HybridRAGAgent ["Zero-Trust Semantic RAG Search"]
-        UserQuery["User / AI Agent Query"] --> APISIX["Apache APISIX Gateway (Keycloak RBAC)"]
+        UserQuery["User / AI Agent Query"] --> APISIX["Apache APISIX Gateway<br/>(Port 443 / Keycloak RBAC)"]
         APISIX --> HybridSearch["Hybrid Search Controller<br/>(BM25 Keyword + Vector Distance)"]
-        HybridSearch -->|Operational Vector Lookup| PgVector
-        HybridSearch -->|Batch Analytical Similarity| DuckDBVSS
-        HybridSearch -->|Retrieved Context + Prompt| LocalLLM["Local / Sandboxed LLM<br/>(Ollama / vLLM on Local GPU)"]
+        HybridSearch -->|"Operational Vector Lookup"| PgVector
+        HybridSearch -->|"Batch Analytical Similarity"| DuckDBVSS
+        HybridSearch -->|"Retrieved Context + Prompt"| LocalLLM["Local / Sandboxed LLM<br/>(Port 8000 / vLLM / Ollama)"]
         LocalLLM --> Response["Grounded Answer with SSoT Lineage Provenance"]
     end
 ```
+
+#### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **OpenMetadata Server** | **Local Embedder** | In-Memory CUDA / IPC | Zone 1 -> Zone 2 (Local Container Memory) | Extracts schema metadata and generates dense 384-dim / 1024-dim embeddings locally. |
+| **Local Embedder** | **DuckDB vss Extension** | In-Process Memory IPC | Zone 2 -> Zone 3 (Zero WAN Egress) | Indexes analytical vector embeddings in-process over fixed-size ARRAY columns. |
+| **Local Embedder** | **pgvector Store** | `TCP 5432` / PostgreSQL TLS | Zone 2 -> Zone 3 (Zero WAN Egress) | Materializes persistent HNSW vector similarity tables in HA PostgreSQL cluster. |
+| **APISIX Gateway** | **Hybrid Controller** | `TCP 443` / HTTPS OIDC | Zone 4 Perimeter (Keycloak JWT) | Authenticates incoming RAG queries and dispatches hybrid BM25 + vector search requests. |
+| **Hybrid Controller** | **pgvector Store** | `TCP 5432` / PostgreSQL TLS | Zone 4 -> Zone 3 | Executes sub-10ms operational vector similarity lookups during hybrid RAG retrieval. |
+| **Hybrid Controller** | **DuckDB vss Extension** | In-Process Memory IPC | Zone 4 -> Zone 3 | Executes in-process batch analytical similarity searches over ARRAY columns during hybrid RAG retrieval. |
+| **Hybrid Controller** | **Local LLM Inference** | `TCP 8000` / HTTP REST | Zone 4 Internal (Local Host GPU) | Supplies retrieved grounded context chunks to local LLM for zero-hallucination response generation. |
 
 ---
 
@@ -153,6 +302,82 @@ The platform replaces fragmented logging and legacy monitoring agents with a uni
 
 ### OpenTelemetry Telemetry Pipeline
 
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 420" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-otel" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect width="950" height="420" fill="#F8FAFC" rx="10"/>
+
+  <!-- Zone 1: Workloads -->
+  <rect x="20" y="20" width="220" height="380" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="220" height="32" fill="#F1F5F9" rx="8"/>
+  <text x="30" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#334155">1. WORKLOADS</text>
+
+  <rect x="35" y="70" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="45" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache Airflow DAGs</text>
+  <text x="45" y="112" font-family="Consolas, Monaco, monospace" font-size="10" fill="#475569">OTel Listener &amp; StatsD</text>
+
+  <rect x="35" y="160" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="45" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache Spark Jobs</text>
+  <text x="45" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Spark OTel Java Agent</text>
+
+  <rect x="35" y="250" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="45" y="272" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache APISIX</text>
+  <text x="45" y="292" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">APISIX OTel Plugin</text>
+
+  <!-- Zone 2: OTel Collector -->
+  <rect x="260" y="20" width="210" height="380" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="260" y="20" width="210" height="32" fill="#EFF6FF" rx="8"/>
+  <text x="270" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#1E40AF">2. OTEL COLLECTOR</text>
+
+  <rect x="275" y="140" width="180" height="120" fill="#F8FAFC" stroke="#CBD5E1" rx="6"/>
+  <text x="285" y="165" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">OTel Collector</text>
+  <text x="285" y="185" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 4317 gRPC / 4318</text>
+  <text x="285" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">Traces, Metrics, Logs</text>
+
+  <!-- Zone 3: Storage Backends -->
+  <rect x="490" y="20" width="220" height="380" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="490" y="20" width="220" height="32" fill="#DCFCE7" rx="8"/>
+  <text x="500" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#166534">3. BACKEND STORES</text>
+
+  <rect x="505" y="70" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="515" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Prometheus</text>
+  <text x="515" y="112" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 9090 / Metrics</text>
+
+  <rect x="505" y="160" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="515" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Grafana Tempo</text>
+  <text x="515" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">Port 3200 / Query API</text>
+
+  <rect x="505" y="250" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="515" y="272" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Grafana Loki</text>
+  <text x="515" y="292" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Port 3100 / Logs</text>
+
+  <!-- Zone 4: Visualization -->
+  <rect x="730" y="20" width="200" height="380" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="730" y="20" width="200" height="32" fill="#FEF3C7" rx="8"/>
+  <text x="740" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">4. VISUALIZATION</text>
+
+  <rect x="745" y="150" width="170" height="100" fill="#F8FAFC" stroke="#FDE68A" rx="6"/>
+  <text x="755" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Grafana</text>
+  <text x="755" y="195" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Port 3000 / Dashboards</text>
+
+  <!-- Connectors -->
+  <line x1="225" y1="200" x2="275" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
+  <line x1="455" y1="180" x2="505" y2="105" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
+  <line x1="455" y1="200" x2="505" y2="195" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
+  <line x1="455" y1="220" x2="505" y2="285" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
+  <line x1="695" y1="200" x2="745" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
+</svg>
+```
+
+#### 2. Git-Native Mermaid Diagram (`.mmd`)
+
 ```mermaid
 flowchart LR
     subgraph Workloads ["Instrumented Workloads"]
@@ -162,32 +387,45 @@ flowchart LR
     end
 
     subgraph OTelCollectorLayer ["OpenTelemetry Collector Pipeline"]
-        OTelCollector["OpenTelemetry Collector<br/>(DaemonSet / Sidecar)"]
+        OTelCollector["OpenTelemetry Collector<br/>(Port 4317 gRPC / 4318 HTTP)"]
     end
 
     subgraph StorageBackends ["Storage Backends"]
-        Prometheus["Prometheus Time-Series DB<br/>(Metrics Store)"]
-        Tempo["Grafana Tempo<br/>(Distributed Traces Store)"]
-        Loki["Grafana Loki<br/>(Log Aggregation Store)"]
+        Prometheus["Prometheus Time-Series DB<br/>(Port 9090 / Metrics Store)"]
+        Tempo["Grafana Tempo<br/>(Port 3200 / Query API)"]
+        Loki["Grafana Loki<br/>(Port 3100 / Log Aggregation Store)"]
     end
 
-    subgraph VisualizationLayer ["Visualization & Analytics"]
-        Grafana["Grafana Dashboards<br/>(Unified Visualizer)"]
+    subgraph VisualizationLayer ["Visualization &amp; Analytics"]
+        Grafana["Grafana Dashboards<br/>(Port 3000 / Unified Visualizer)"]
     end
 
-    Airflow -->|OTLP Traces, StatsD Metrics, stdout JSON Logs (filelog)| OTelCollector
-    Spark -->|OTLP Traces, Metrics, stdout Logs (filelog)| OTelCollector
-    APISIX -->|OTLP Traces & stdout Logs (filelog)| OTelCollector
-    APISIX -->|Scrape Prometheus Metrics| Prometheus
+    Airflow -->|"OTLP Traces / StatsD"| OTelCollector
+    Spark -->|"OTLP Traces &amp; Metrics"| OTelCollector
+    APISIX -->|"OTLP Traces &amp; Logs"| OTelCollector
+    Prometheus -->|"Scrape Metrics"| APISIX
 
-    OTelCollector -->|Export Metrics| Prometheus
-    OTelCollector -->|Export Traces| Tempo
-    OTelCollector -->|Export Logs| Loki
+    OTelCollector -->|"Export Metrics"| Prometheus
+    OTelCollector -->|"OTLP gRPC 4317 / HTTP 4318"| Tempo
+    OTelCollector -->|"Export Logs"| Loki
 
     Prometheus --> Grafana
     Tempo --> Grafana
     Loki --> Grafana
 ```
+
+#### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Airflow / Spark / APISIX** | **OTel Collector** | `TCP 4317` gRPC / `4318` HTTP | Zone 1 -> Zone 2 (Internal Telemetry Network) | Streams distributed OTLP traces to central collector. |
+| **Airflow Workload** | **OTel Collector** | `UDP 8125` / StatsD | Zone 1 -> Zone 2 | Transmits Airflow DAG execution metrics to OTel Collector StatsD receiver. |
+| **Workload Log Files** | **OTel Collector** | Filelog Receiver / Local Log Mount | Zone 1 -> Zone 2 | Ingests Airflow, Spark, and APISIX container stdout/file logs via OTel filelog receiver. |
+| **OTel Collector** | **Prometheus** | `TCP 9090` / Prometheus OTLP | Zone 2 -> Zone 3 | Exports aggregated time-series infrastructure and application metrics. |
+| **Prometheus** | **Apache APISIX** | `TCP 9091` / HTTP Scrape | Zone 3 -> Zone 1 | Initiates periodic Prometheus metrics scrape against APISIX gateway endpoint. |
+| **OTel Collector** | **Grafana Tempo** | `TCP 4317` gRPC / `4318` HTTP | Zone 2 -> Zone 3 | Exports distributed W3C trace spans to Grafana Tempo storage backend. |
+| **OTel Collector** | **Grafana Loki** | `TCP 3100` / HTTP Loki Push API | Zone 2 -> Zone 3 | Exports structured log streams to Grafana Loki log aggregation backend. |
+| **Grafana UI Listener** | **Prometheus / Tempo / Loki Query Endpoints** | `TCP 3000` (UI) -> `9090` / `3200` / `3100` | Zone 4 Operations Dashboard | Exposes UI listener on port 3000 while querying Prometheus (9090), Tempo (3200), and Loki (3100) backends. |
 
 ---
 

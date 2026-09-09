@@ -124,50 +124,164 @@ Year 5 (2030): Predictive Digital Twin & Self-Healing Lakehouse
 
 To ensure complete business continuity, the 5 core legacy business cases are systematically migrated to the modern AI Lakehouse without operational disruption, followed by long-term maintenance and AI enhancement plans.
 
+### Dual-Render Architecture Specification: Business Cases Migration Pipeline
+
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-mig" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect width="1000" height="480" fill="#F8FAFC" rx="10"/>
+
+  <!-- Zone 1: Legacy Ingest -->
+  <rect x="20" y="20" width="220" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="220" height="32" fill="#F1F5F9" rx="8"/>
+  <text x="30" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#334155">LEGACY INGESTION PATHS</text>
+
+  <rect x="35" y="70" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="45" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Unvalidated Forms</text>
+
+  <rect x="35" y="155" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="45" y="177" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">CSVs &amp; Spreadsheets</text>
+
+  <rect x="35" y="240" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="45" y="262" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Email Text Hotspots</text>
+
+  <rect x="35" y="325" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="45" y="347" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Ad-Hoc SFTP Transfers</text>
+
+  <!-- Zone 2: Dual Run Pipeline -->
+  <rect x="260" y="20" width="220" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="260" y="20" width="220" height="32" fill="#EFF6FF" rx="8"/>
+  <text x="270" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#1E40AF">DUAL-RUN PIPELINE</text>
+
+  <rect x="275" y="110" width="190" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="285" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache NiFi</text>
+  <text x="285" y="152" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Boundary Mirroring</text>
+
+  <rect x="275" y="210" width="190" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="285" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">ODCS v3.1.0 Gate</text>
+  <text x="285" y="252" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">Contract Validation</text>
+
+  <rect x="275" y="310" width="190" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="285" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache Iceberg</text>
+  <text x="285" y="352" font-family="Consolas, Monaco, monospace" font-size="10" fill="#475569">Parquet S3 Tables</text>
+
+  <!-- Zone 3: Modern Compute AI -->
+  <rect x="500" y="20" width="230" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="500" y="20" width="230" height="32" fill="#DCFCE7" rx="8"/>
+  <text x="510" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#166534">COMPUTE &amp; AI LAYER</text>
+
+  <rect x="515" y="80" width="200" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="525" y="102" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Spark &amp; Sedona</text>
+  <text x="525" y="122" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Spatial Vector Processing</text>
+
+  <rect x="515" y="170" width="200" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="525" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Trino Engine</text>
+  <text x="525" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">MPP SQL Queries</text>
+
+  <rect x="515" y="260" width="200" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="525" y="282" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">MLflow &amp; vLLM</text>
+
+  <rect x="515" y="350" width="200" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="525" y="372" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">pgvector &amp; DuckDB vss</text>
+
+  <!-- Zone 4: Presentation -->
+  <rect x="750" y="20" width="230" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="750" y="20" width="230" height="32" fill="#FEF3C7" rx="8"/>
+  <text x="760" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">PRESENTATION LAYER</text>
+
+  <rect x="765" y="110" width="200" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="775" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache Superset</text>
+  <text x="775" y="152" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">deck.gl Spatial Maps</text>
+
+  <rect x="765" y="210" width="200" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="775" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Next.js Portal</text>
+  <text x="775" y="252" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Keycloak OIDC / APISIX</text>
+
+  <rect x="765" y="310" width="200" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="775" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">APISIX Alerts</text>
+  <text x="775" y="352" font-family="Consolas, Monaco, monospace" font-size="10" fill="#DC2626">Push Dispatch APIs</text>
+
+  <!-- Connectors -->
+  <line x1="225" y1="190" x2="275" y2="150" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
+  <line x1="465" y1="150" x2="515" y2="115" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
+  <line x1="715" y1="115" x2="765" y2="150" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
+  <line x1="715" y1="385" x2="765" y2="250" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
+</svg>
+```
+
+#### 2. Git-Native Mermaid Diagram (`.mmd`)
+
 ```mermaid
 flowchart TD
     subgraph LegacyIngest ["Legacy Ingestion Paths"]
         L1["Manual Unvalidated Forms"]
-        L2["Spreadsheets & Raw CSVs"]
-        L3["Email Hotspot Text Parsing"]
+        L2["Spreadsheets &amp; Raw CSVs"]
+        L3["Thermal Anomaly REST API"]
         L4["Ad-Hoc SFTP File Transfers"]
     end
 
-    subgraph DualRunPipeline ["Phase 1 & 2: Dual-Run Ingestion & Contract Enforcement"]
-        NiFi["Apache NiFi Boundary Ingestion"]
-        ODCS["ODCS v3.1.0 Contract Gate"]
-        Iceberg["Apache Iceberg Parquet Storage"]
+    subgraph DualRunPipeline ["Phase 1 &amp; 2: Dual-Run Ingestion &amp; Contract Enforcement"]
+        NiFi["Apache NiFi Boundary Ingestion<br/>(Port 8443 / mTLS)"]
+        ODCS["ODCS v3.1.0 Contract Gate<br/>(Schema &amp; Quality Validation)"]
+        Iceberg["Apache Iceberg Parquet Storage<br/>(S3 API / WORM Lock)"]
     end
 
-    subgraph ModernComputeAI ["Phase 3 & 4: Modern Compute & AI/ML Layer"]
-        SparkSedona["Apache Spark & Sedona Spatial Compute"]
-        Trino["Trino MPP SQL Engine"]
-        MLOps["MLflow & Local Inference Engines"]
-        VectorSearch["DuckDB vss & pgvector Search"]
+    subgraph ModernComputeAI ["Phase 3 &amp; 4: Modern Compute &amp; AI/ML Layer"]
+        SparkSedona["Apache Spark &amp; Sedona Spatial Compute"]
+        Trino["Trino MPP SQL Engine<br/>(Port 8080 / REST)"]
+        MLOps["MLflow &amp; Local Inference Engines"]
+        VectorSearch["DuckDB vss &amp; pgvector Search<br/>(Port 5432 / mTLS)"]
     end
 
     subgraph Presentation ["Phase 4: Modernized Presentation Layer"]
-        Superset["Apache Superset & deck.gl Maps"]
-        Portal["Next.js Web Portal (APISIX / Keycloak)"]
-        Alerts["APISIX Dispatch & Notification APIs"]
+        Superset["Apache Superset &amp; deck.gl Maps"]
+        Portal["Next.js Web Portal<br/>(APISIX / Keycloak OIDC)"]
+        Alerts["APISIX Dispatch &amp; Notification APIs"]
     end
 
-    L1 --> NiFi
-    L2 --> NiFi
-    L3 --> NiFi
-    L4 --> NiFi
+    L1 -->|"HTTP Push"| NiFi
+    L2 -->|"S3 Upload"| NiFi
+    L3 -->|"HTTPS REST Poll"| NiFi
+    L4 -->|"SFTP Stream"| NiFi
 
-    NiFi --> ODCS --> Iceberg
-    Iceberg --> SparkSedona
-    Iceberg --> Trino
-    SparkSedona --> MLOps
-    Trino --> VectorSearch
+    NiFi -->|"Flow File"| ODCS -->|"Validated Event"| Iceberg
+    Iceberg -->|"S3 Table Scan"| SparkSedona
+    Iceberg -->|"Iceberg REST"| Trino
+    SparkSedona -->|"Model Pipeline"| MLOps
+    Trino -->|"Embedding Search"| VectorSearch
 
-    MLOps --> Superset
-    SparkSedona --> Alerts
-    Trino --> Superset
-    VectorSearch --> Portal
+    MLOps -->|"Model Predictions"| Superset
+    SparkSedona -->|"Hazard Triggers"| Alerts
+    Trino -->|"SQL Query Results"| Superset
+    VectorSearch -->|"Semantic Context"| Portal
 ```
+
+#### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Unvalidated Forms Feed** | **Apache NiFi** | `TCP 8443` / HTTPS REST API | Public Boundary -> Ingestion DMZ | Ingests web/mobile incident form submissions into NiFi flow queues. |
+| **CSVs & Spreadsheets Feed** | **Apache NiFi** | `TCP 9000` / S3 Multipart Upload | DMZ File Boundary -> Ingestion DMZ | Streams tabular CSV borehole and climate spreadsheets into NiFi flow processors. |
+| **Thermal Anomaly API Feed** | **Apache NiFi** | `TCP 443` / HTTPS REST API | External Satellite API -> Ingestion DMZ | Polls satellite thermal anomaly endpoints over HTTPS REST API. |
+| **Ad-Hoc SFTP Transfers Feed** | **Apache NiFi** | `TCP 22` / SFTP Stream | External Partner Network -> Ingestion DMZ | Streams geological landslide telemetry files directly into NiFi boundary intake. |
+| **Apache NiFi** | **ODCS Contract Gate** | In-Memory Flow | Ingestion DMZ | Enforces Linux Foundation ODCS v3.1.0 schema validation and rejects invalid payloads to quarantine. |
+| **ODCS Gate** | **Apache Iceberg S3 Store** | `TCP 9000` / S3 REST API | Ingestion DMZ -> Tier 0 SSoT Storage | Commits verified Parquet datasets into Apache Iceberg table format with WORM object lock. |
+| **Apache Iceberg S3 Store** | **Apache Spark & Sedona** | `TCP 9000` / S3 REST API | Tier 0 SSoT -> Compute Zone | Scans S3 Parquet tables for large-scale spatial vector compute and model feature pipelines. |
+| **Trino Engine** | **Apache Polaris** | `TCP 8181` / Iceberg REST API | Compute Zone -> Catalog Zone | Calls Apache Polaris REST catalog for Iceberg metadata and short-lived S3 access tokens. |
+| **Trino Engine** | **Apache Iceberg S3 Store** | `TCP 9000` / S3 REST API | Compute Zone -> Tier 0 SSoT Storage | Reads and writes Parquet data objects directly using temporary S3 credentials. |
+| **Apache Spark & Sedona** | **MLOps / MLflow** | `TCP 5000` / HTTP REST API | Compute Zone -> MLOps Registry | Registers spatial features, training datasets, and model artifacts in MLflow. |
+| **Apache Spark & Sedona** | **APISIX Alerts** | `TCP 443` / HTTPS REST API | Compute Zone -> Presentation Gate | Dispatches real-time hazard triggers and alert payloads to APISIX notification gateways. |
+| **RAG Backend** | **pgvector Search** | `TCP 5432` / PostgreSQL TLS | Trust Zone -> Operational DB | Executes sub-10ms semantic similarity queries joining spatial and relational predicates. |
+| **Apache Superset** | **Trino Engine** | `TCP 8080` / SQL REST API | BI Portal -> Compute Zone | Apache Superset connects to Trino query engine to execute ad-hoc SQL queries and receive dataset results. |
+| **RAG Backend** | **Next.js Web Portal** | `TCP 443` / HTTPS OIDC | Trust Zone -> Presentation Portal | Feeds grounded vector context chunks and search responses to Next.js portal RAG assistants. |
+| **Presentation Portal** | **APISIX Gateway -> MLOps / vLLM** | `TCP 443` / HTTPS OIDC | Presentation Portal -> APISIX -> Trust Zone | Routes user inference requests through APISIX gateway with JWT validation to vLLM endpoints. |
 
 ### Core Business Domains Migration & Maintenance Matrix
 
@@ -218,24 +332,113 @@ Stage 6: Full-Stack OTel Monitoring & Lifecycle Management
 
 The platform embeds ML and AI capabilities directly into the Lakehouse ecosystem while enforcing strict isolation, security, and observability.
 
+### Dual-Render Architecture Specification: End-to-End Machine Learning & AI Architecture
+
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-ml" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect width="1000" height="600" fill="#F8FAFC" rx="10"/>
+
+  <rect x="20" y="15" width="960" height="35" fill="#0F172A" rx="6"/>
+  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="bold" fill="#F8FAFC">END-TO-END MACHINE LEARNING &amp; AI ARCHITECTURE</text>
+
+  <rect x="20" y="65" width="280" height="250" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="65" width="280" height="30" fill="#DCFCE7" rx="8"/>
+  <text x="30" y="85" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#166534">DATA TIER &amp; STORAGE QUARANTINE</text>
+
+  <rect x="35" y="105" width="250" height="50" fill="#F8FAFC" stroke="#A7F3D0" rx="6"/>
+  <text x="45" y="125" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#065F46">Tier 0: Golden Human SSoT</text>
+  <text x="45" y="142" font-family="Consolas, Monaco, monospace" font-size="10" fill="#047857">Ceph WORM / S3 Lock</text>
+
+  <rect x="35" y="165" width="250" height="50" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="45" y="185" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Tier 1: Machine Telemetry</text>
+
+  <rect x="35" y="225" width="250" height="70" fill="#F8FAFC" stroke="#FDE68A" rx="6"/>
+  <text x="45" y="245" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#92400E">Tier 2: AI Sandbox Workspace</text>
+  <text x="45" y="262" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">30-Day TTL Auto-Purge</text>
+
+  <rect x="320" y="65" width="340" height="250" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="320" y="65" width="340" height="30" fill="#EFF6FF" rx="8"/>
+  <text x="330" y="85" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#1E40AF">CATALOG &amp; MLOPS FEATURE TIER</text>
+
+  <rect x="335" y="105" width="310" height="50" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="345" y="125" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Apache Polaris &amp; OpenMetadata</text>
+
+  <rect x="335" y="165" width="310" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="345" y="185" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Local Vector Search</text>
+  <text x="345" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">pgvector + DuckDB vss</text>
+
+  <rect x="335" y="235" width="310" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="345" y="255" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">MLflow Model Registry &amp; Feast</text>
+
+  <rect x="680" y="65" width="300" height="250" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="680" y="65" width="300" height="30" fill="#FEF3C7" rx="8"/>
+  <text x="690" y="85" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">MCP DMZ &amp; INFERENCE TIER</text>
+
+  <rect x="695" y="105" width="270" height="80" fill="#F8FAFC" stroke="#FDE68A" rx="6"/>
+  <text x="705" y="125" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">FastMCP Isolated DMZ Servers</text>
+  <text x="705" y="142" font-family="Consolas, Monaco, monospace" font-size="10" fill="#92400E">JSON-RPC 2.0 / Read-Only</text>
+
+  <rect x="695" y="195" width="270" height="100" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="705" y="215" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">vLLM / Ollama Inference</text>
+  <text x="705" y="232" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">APISIX / Keycloak Gate</text>
+
+  <rect x="20" y="330" width="960" height="255" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="330" width="960" height="30" fill="#F1F5F9" rx="8"/>
+  <text x="30" y="350" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#334155">OPENTELEMETRY OBSERVABILITY &amp; GRAFANA BACKENDS</text>
+
+  <rect x="35" y="375" width="220" height="190" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="45" y="398" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">OTel Collector</text>
+  <text x="45" y="418" font-family="Consolas, Monaco, monospace" font-size="10" fill="#475569">Receiver: OTLP / StatsD</text>
+
+  <rect x="280" y="375" width="200" height="190" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="290" y="398" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Prometheus</text>
+  <text x="290" y="418" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Time-Series Metrics</text>
+
+  <rect x="500" y="375" width="200" height="190" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="510" y="398" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Grafana Tempo</text>
+  <text x="510" y="418" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">Distributed Traces</text>
+
+  <rect x="720" y="375" width="240" height="190" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
+  <text x="730" y="398" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Grafana Loki &amp; Unified UI</text>
+  <text x="730" y="418" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Logs &amp; Dashboards</text>
+
+  <line x1="300" y1="130" x2="335" y2="130" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ml)"/>
+  <line x1="645" y1="135" x2="695" y2="135" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ml)"/>
+  <line x1="645" y1="260" x2="695" y2="240" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ml)"/>
+  <line x1="255" y1="470" x2="280" y2="470" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ml)"/>
+  <line x1="480" y1="470" x2="500" y2="470" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ml)"/>
+  <line x1="700" y1="470" x2="720" y2="470" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ml)"/>
+</svg>
+```
+
+#### 2. Git-Native Mermaid Diagram (`.mmd`)
+
 ```mermaid
 flowchart TB
-    subgraph DataTier ["Data Tier & Storage Quarantine"]
+    subgraph DataTier ["Data Tier &amp; Storage Quarantine"]
         Tier0["Tier 0: Golden Human Truth<br/>(Ceph WORM / Compliance Lock)"]
         Tier1["Tier 1: Machine Telemetry<br/>(Governance Lock)"]
         Tier2["Tier 2: AI Sandbox<br/>(30-Day TTL Auto-Purge)"]
     end
 
-    subgraph CatalogTier ["Catalog & Governance Tier"]
-        Polaris["Apache Polaris REST Catalog"]
-        OpenMetadata["OpenMetadata Catalog & Contracts"]
+    subgraph CatalogTier ["Catalog &amp; Governance Tier"]
+        Polaris["Apache Polaris REST Catalog<br/>(Port 8181 / REST)"]
+        OpenMetadata["OpenMetadata Catalog &amp; Contracts<br/>(Port 8585 / HTTP)"]
     end
 
-    subgraph MLOpsTier ["MLOps & Feature Store Tier"]
-        MLflow["MLflow Model Registry & Feature Store"]
+    subgraph MLOpsTier ["MLOps &amp; Feature Store Tier"]
+        MLflow["MLflow Model Registry &amp; Feature Store"]
         LocalEmbed["Local Embedding Engine<br/>(Zero WAN Egress)"]
         DuckDBVSS["DuckDB vss Extension<br/>(Analytical HNSW ARRAY Index)"]
-        PgVector["PostgreSQL pgvector Extension<br/>(Operational API Search)"]
+        PgVector["PostgreSQL pgvector Extension<br/>(Port 5432 / mTLS Search)"]
     end
 
     subgraph MCPDMZTier ["Model Context Protocol (MCP) DMZ Tier"]
@@ -245,49 +448,60 @@ flowchart TB
         MCP4["mcp-contract-linter"]
     end
 
-    subgraph ExecutionTier ["Inference & Operational Serving Tier"]
+    subgraph ExecutionTier ["Inference &amp; Operational Serving Tier"]
         vLLM["Local LLM Inference<br/>(vLLM / Ollama on Local GPUs)"]
-        SparkSedona["Spark & Sedona ML Pipelines"]
+        SparkSedona["Spark &amp; Sedona ML Pipelines"]
         APISIX["Apache APISIX Gateway<br/>(Keycloak OIDC Authentication)"]
     end
 
     subgraph OTelTier ["OpenTelemetry Observability Tier"]
-        OTel["OTel Collector Pipeline"]
-        Prometheus["Prometheus Metrics"]
-        Tempo["Grafana Tempo Traces"]
-        Loki["Grafana Loki Logs"]
-        Grafana["Unified Grafana Dashboards"]
+        OTel["OTel Collector Pipeline<br/>(Port 4317 gRPC / 4318 HTTP)"]
+        Prometheus["Prometheus Metrics<br/>(Port 9090)"]
+        Tempo["Grafana Tempo Traces<br/>(Port 3200)"]
+        Loki["Grafana Loki Logs<br/>(Port 3100)"]
+        Grafana["Unified Grafana Dashboards<br/>(Port 3000)"]
     end
 
-    Tier0 --> Polaris
-    Tier1 --> Polaris
-    Polaris --> OpenMetadata
+    Polaris -->|"Catalog Commit &amp; S3 Token"| Tier0
+    Tier1 -->|"Telemetry Commit"| Polaris
+    Polaris -->|"Catalog Sync"| OpenMetadata
 
-    OpenMetadata --> LocalEmbed
-    LocalEmbed --> DuckDBVSS
-    LocalEmbed --> PgVector
+    OpenMetadata -->|"Metadata Extraction"| LocalEmbed
+    LocalEmbed -->|"In-Process Index"| DuckDBVSS
+    LocalEmbed -->|"Persistent HNSW"| PgVector
 
-    DuckDBVSS --> MLflow
-    PgVector --> MLflow
+    DuckDBVSS -->|"Feature Data"| MLflow
+    PgVector -->|"Vector Feature Index"| MLflow
 
-    MLflow --> MCPDMZTier
-    MCPDMZTier --> vLLM
-    vLLM --> APISIX
+    MLflow -->|"Model Artifacts"| MCPDMZTier
+    MCPDMZTier -->|"Stateless Context"| vLLM
+    vLLM -->|"HTTPS / OIDC"| APISIX
 
-    SparkSedona --> Tier2
-    Tier2 -.->|Human Cryptographic Sign-Off| Tier0
+    SparkSedona -->|"Scratch Data"| Tier2
+    Tier2 -.->|"Human Cryptographic Sign-Off"| Tier0
 
-    APISIX --> OTel
-    vLLM --> OTel
-    SparkSedona --> OTel
+    APISIX -->|"OTLP Traces &amp; Logs"| OTel
+    vLLM -->|"OTLP Metrics"| OTel
+    SparkSedona -->|"OTLP Traces"| OTel
 
-    OTel --> Prometheus
-    OTel --> Tempo
-    OTel --> Loki
+    OTel -->|"Export Metrics"| Prometheus
+    OTel -->|"Export Traces"| Tempo
+    OTel -->|"Export Logs"| Loki
     Prometheus --> Grafana
     Tempo --> Grafana
     Loki --> Grafana
 ```
+
+#### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Tier 0 Storage** | **Apache Polaris** | `TCP 9000` / S3 REST | Compliance Lock (Read-Only to AI) | Prevents AI models from overwriting certified human ground truth datasets. |
+| **Local Embedding Engine** | **DuckDB vss Extension** | In-Process Memory IPC | Local GPU Sandbox (Zero WAN Egress) | Generates and indexes analytical embeddings in-process over fixed-size ARRAY columns. |
+| **Local Embedding Engine** | **pgvector Store** | `TCP 5432` / PostgreSQL TLS | Local GPU -> Operational DB Boundary | Materializes persistent HNSW vector similarity tables in HA PostgreSQL cluster. |
+| **MLflow Model Registry** | **FastMCP DMZ Servers** | `TCP 8080` / JSON-RPC 2.0 | DMZ Isolated Container Boundary | Exposes read-only model context and SQL query generation to sandboxed AI agents. |
+| **vLLM / Ollama** | **APISIX Gateway** | `TCP 8000` / HTTP REST | Local GPU -> Keycloak OIDC Boundary | Serves grounded local LLM inferences secured by Keycloak JWT authentication. |
+| **APISIX / Spark / vLLM** | **OTel Collector** | `TCP 4317` gRPC / `4318` HTTP | Internal Management Network | Aggregates all distributed traces, metrics, and logs into Prometheus, Tempo, and Loki backends. |
 
 ### Core AI Infrastructure Components
 

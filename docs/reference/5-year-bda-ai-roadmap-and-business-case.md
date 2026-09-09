@@ -278,7 +278,7 @@ flowchart TD
 | **Apache Spark & Sedona** | **MLOps / MLflow** | `TCP 5000` / HTTP REST API | Compute Zone -> MLOps Registry | Registers spatial features, training datasets, and model artifacts in MLflow. |
 | **Apache Spark & Sedona** | **APISIX Alerts** | `TCP 443` / HTTPS REST API | Compute Zone -> Presentation Gate | Dispatches real-time hazard triggers and alert payloads to APISIX notification gateways. |
 | **Trino Engine** | **pgvector Search** | `TCP 5432` / PostgreSQL TLS | Trust Zone -> Operational DB | Executes sub-10ms semantic similarity queries joining spatial and relational predicates. |
-| **Trino Engine** | **Apache Superset** | `TCP 8088` / SQL REST API | Compute Zone -> BI Portal | Delivers high-performance interactive SQL query results to Apache Superset dashboards. |
+| **Apache Superset** | **Trino Engine** | `TCP 8080` / SQL REST API | Compute Zone -> BI Portal | Delivers high-performance interactive SQL query results to Apache Superset dashboards. |
 | **pgvector Search** | **Next.js Web Portal** | `TCP 443` / HTTPS OIDC | Operational DB -> Presentation Portal | Feeds grounded vector context chunks to Next.js portal RAG assistants. |
 | **MLOps / vLLM** | **APISIX Gateway** | `TCP 443` / HTTPS OIDC | Trust Zone -> Presentation Portal | Exposes sandboxed AI model inference and notification alerts behind Keycloak RBAC. |
 

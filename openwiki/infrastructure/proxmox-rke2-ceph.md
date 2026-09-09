@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Sovereign Infrastructure: Proxmox VE, RKE2, Ceph SDS & Automation"
-timestamp: "2026-09-09T13:33:03Z"
+timestamp: "2026-09-09T14:03:15Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -50,7 +50,7 @@ The infrastructure foundation delivers high availability, fault tolerance, and a
   <text x="485" y="250" font-family="Consolas, Monaco, monospace" font-size="11" fill="#D97706">FIPS 140-2 CIS Hardened / Ansible</text>
 
   <rect x="20" y="310" width="410" height="60" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <text x="35" y="345" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Ceph CSI Driver (TCP 6789)</text>
+  <text x="35" y="345" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Ceph CSI Driver (RBD &amp; CephFS)</text>
 
   <rect x="470" y="310" width="410" height="60" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
   <text x="485" y="345" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">MinIO / Ceph RADOS S3 Gateway (TCP 9000)</text>
@@ -58,8 +58,8 @@ The infrastructure foundation delivers high availability, fault tolerance, and a
   <line x1="450" y1="80" x2="450" y2="110" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
   <line x1="225" y1="170" x2="225" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
   <line x1="675" y1="170" x2="675" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
-  <line x1="225" y1="280" x2="450" y2="310" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
-  <line x1="675" y1="280" x2="450" y2="310" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
+  <line x1="225" y1="280" x2="225" y2="310" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
+  <line x1="675" y1="280" x2="675" y2="310" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
 </svg>
 ```
 

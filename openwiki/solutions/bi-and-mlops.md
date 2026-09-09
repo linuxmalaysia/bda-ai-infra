@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Business Intelligence & MLOps Solutions: Superset, MLflow & Ray"
-timestamp: "2026-09-09T13:33:03Z"
+timestamp: "2026-09-09T14:03:15Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -56,7 +56,7 @@ Analytical applications provide intuitive decision-support interfaces and scalab
   <text x="670" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">MLOPS REGISTRY &amp; INFERENCE</text>
   <rect x="675" y="80" width="240" height="80" fill="#F8FAFC" stroke="#FDE68A" rx="6"/>
   <text x="685" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">MLflow Model Registry</text>
-  <text x="685" y="125" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Port 5000 / Artifact Store</text>
+  <text x="685" y="125" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Port 5000 / Tracking / Registry API</text>
 
   <rect x="675" y="180" width="240" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
   <text x="685" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Model Serving APIs</text>

@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Quality Verification & Zero Vendor Lock-in Guardrails"
-timestamp: "2026-09-09T13:33:03Z"
+timestamp: "2026-09-09T14:03:15Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true

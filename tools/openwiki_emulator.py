@@ -558,7 +558,7 @@ The infrastructure foundation delivers high availability, fault tolerance, and a
   <text x="485" y="250" font-family="Consolas, Monaco, monospace" font-size="11" fill="#D97706">FIPS 140-2 CIS Hardened / Ansible</text>
 
   <rect x="20" y="310" width="410" height="60" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <text x="35" y="345" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Ceph CSI Driver (TCP 6789)</text>
+  <text x="35" y="345" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Ceph CSI Driver (RBD &amp; CephFS)</text>
 
   <rect x="470" y="310" width="410" height="60" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
   <text x="485" y="345" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">MinIO / Ceph RADOS S3 Gateway (TCP 9000)</text>
@@ -566,8 +566,8 @@ The infrastructure foundation delivers high availability, fault tolerance, and a
   <line x1="450" y1="80" x2="450" y2="110" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
   <line x1="225" y1="170" x2="225" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
   <line x1="675" y1="170" x2="675" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
-  <line x1="225" y1="280" x2="450" y2="310" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
-  <line x1="675" y1="280" x2="450" y2="310" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
+  <line x1="225" y1="280" x2="225" y2="310" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
+  <line x1="675" y1="280" x2="675" y2="310" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
 </svg>
 ```
 
@@ -1020,7 +1020,7 @@ Analytical applications provide intuitive decision-support interfaces and scalab
   <text x="670" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">MLOPS REGISTRY &amp; INFERENCE</text>
   <rect x="675" y="80" width="240" height="80" fill="#F8FAFC" stroke="#FDE68A" rx="6"/>
   <text x="685" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">MLflow Model Registry</text>
-  <text x="685" y="125" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Port 5000 / Artifact Store</text>
+  <text x="685" y="125" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Port 5000 / Tracking / Registry API</text>
 
   <rect x="675" y="180" width="240" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
   <text x="685" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Model Serving APIs</text>

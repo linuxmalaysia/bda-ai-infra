@@ -22,6 +22,16 @@ topics:
 
 # 📜 DSOM Execution Walkthrough & Mental Anchors
 
+## Session Anchor: 2026-09-09 — GitHub Pages 404 Link Resolution & Spatial Memory EOD Sync
+
+- **Context:** Identified and resolved 404 routing errors on GitHub Pages caused by relative documentation links using `.md` extensions in embedded/index pages (`README.md`, `START-HERE.md`, `AGENTS.md`, `docs/README.md`, `docs/reference/*.md`). Updated `tests/test_okf_and_links.py` so `.html` targets resolve to local `.md` source files during link decay checks.
+- **Actions Taken:**
+  1. Updated relative internal links across documentation index pages to `.html`.
+  2. Updated `tests/test_okf_and_links.py` link decay test to automatically map `.html` extensions to `.md` files on disk for existence and heading anchor checks.
+  3. Ran `tools/generate_summary.py` and confirmed `SUMMARY.md` and `_data/navigation.yml` are synchronized.
+  4. Ran full test suite (`uv run pytest tests/`) and linter checks (`uv run ruff check .`), passing with 100% success (173/173 tests).
+  5. Updated `.agents/brain/` spatial memory files (`task.md`, `walkthrough.md`, `checkpoint_summary.txt`) to reflect EOD Palace Sync.
+
 ## Session Anchor: 2026-09-09 — Dual-Render Architecture Diagram Specification (SVG + Mermaid) AI Skill & Refactor
 
 - **Context:** Added the **Dual-Render Architecture Diagram Specification (SVG + Mermaid)** as an AI skill (`.agents/skills/dual-render-architecture-diagram/SKILL.md`) and refactored all existing architecture, topology, sequence, and workflow diagrams across `docs/reference/`, `openwiki/`, and `tools/openwiki_emulator.py` to follow the two-tier deliverable standard (Raw SVG vector graphic + Git-Native Mermaid diagram + Summary Routing Table).

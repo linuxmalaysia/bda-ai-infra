@@ -246,7 +246,12 @@ def test_zero_link_decay(md_path: Path) -> None:
             if not target_link:
                 continue
 
-            target_path = (md_path.parent / target_link).resolve()
+            # Map .html link targets to source .md files for local test validation
+            if target_link.endswith(".html"):
+                md_target_link = target_link[:-5] + ".md"
+                target_path = (md_path.parent / md_target_link).resolve()
+            else:
+                target_path = (md_path.parent / target_link).resolve()
 
         rel_file: Path = md_path.relative_to(REPO_ROOT)
         assert target_path.exists(), (

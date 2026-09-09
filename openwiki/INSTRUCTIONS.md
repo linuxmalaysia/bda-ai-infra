@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "OpenWiki Instructions — BDA Lakehouse SSoT Edition"
-timestamp: "2026-09-09T07:02:13Z"
+timestamp: "2026-09-09T07:30:37Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true

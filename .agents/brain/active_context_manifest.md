@@ -32,6 +32,7 @@ The following assets are currently in active development or audit scope under th
 - `CLAUDE.md`
 - `.github/copilot-instructions.md`
 - `docs/AI-COGNITIVE-TWIN-PROTOCOL.md`
+- `docs/reference/postgresql-pgvector-enterprise-strategy.md`
 
 ## 🧠 Spatial Memory State (`.agents/brain/`)
 

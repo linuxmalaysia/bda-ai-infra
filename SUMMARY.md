@@ -55,6 +55,7 @@ topics:
 * [Data Governance, Subsystems, and Standards Matrix](docs/reference/governance-matrix.md)
 * [Legacy Big Data Analytics Environment Architectural Deconstruction](docs/reference/legacy-architecture.md)
 * [Next Technology Roadmap Stack Specification](docs/reference/next-technology-roadmap-stack.md)
+* [PostgreSQL & pgvector Enterprise Strategy Specification](docs/reference/postgresql-pgvector-enterprise-strategy.md)
 * [Solution 1 Reference Spec: AWS Native & Cloud Managed Infrastructure](docs/reference/solution-1-aws-native.md)
 * [Solution 2 Reference Spec: Hybrid Cloud Lakehouse & On-Premises GPU Infrastructure](docs/reference/solution-2-hybrid-ai.md)
 * [Solution 3 Reference Spec: 100% On-Premises Sovereign Architecture (Proxmox VE + RKE2 + Ceph SDS)](docs/reference/solution-3-onprem-proxmox-rke2.md)

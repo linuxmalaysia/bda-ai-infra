@@ -300,7 +300,7 @@ flowchart TB
    - Restricted to stateless operational utilities (`validate_sql`, `lint_contract`, `read_schema`) with zero write capabilities to ground truth.
 3. **Local Zero-Trust Vector Search & Hybrid RAG:**
    - **DuckDB `vss`:** Explicitly labeled as an experimental extension, evaluated during Stage 3 / Year 3 for embedded HNSW vector indexing over fixed-size `ARRAY` columns for fast batch analytical similarity search. Parquet data must first be materialized or loaded into a DuckDB table with fixed-size `ARRAY` columns before creating and querying the HNSW vector index. Due to its experimental status and in-memory, RAM-bound constraints, production adoption requires passing a formal qualification gate; PostgreSQL `pgvector` serves as the primary supported production fallback.
-   - **`pgvector`:** Powers sub-10ms operational API search and interactive portal lookups inside the HA PostgreSQL database.
+   - **`pgvector`:** Powers sub-10ms operational API search and interactive portal lookups inside the primary master HA PostgreSQL database. See [PostgreSQL & pgvector Enterprise Strategy Specification](postgresql-pgvector-enterprise-strategy.md).
    - **Zero WAN Egress:** Local sentence transformer embeddings ensure sensitive enterprise metadata never leaves on-premises infrastructure. Egress isolation is strictly enforced via deny-by-default network security policies, egress proxy allowlists, local DNS sinkholing, and automated CI/CD acceptance tests verifying zero WAN egress.
 4. **Full-Stack OpenTelemetry Observability:**
    - Unified OTel Collectors capture traces, metrics, and logs across Airflow, Spark, APISIX, and ML inference engines.

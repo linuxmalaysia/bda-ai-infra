@@ -27,18 +27,18 @@ Welcome to the Big Data Analytics (BDA) Lakehouse SSoT modernization project ope
 
 ### 🤖 AI Agent Entry Points
 
-1. **Root Gateway:** [AGENTS.md](AGENTS.md)
+1. **Root Gateway:** [AGENTS.html](AGENTS.html)
 2. **Sovereign Constitution:** [.agents/AGENTS.md](.agents/AGENTS.md)
 3. **Spatial Memory Engine:** [.agents/brain/](.agents/brain/)
-4. **AI Cognitive Twin Protocol:** [docs/AI-COGNITIVE-TWIN-PROTOCOL.md](docs/AI-COGNITIVE-TWIN-PROTOCOL.md)
+4. **AI Cognitive Twin Protocol:** [docs/AI-COGNITIVE-TWIN-PROTOCOL.html](docs/AI-COGNITIVE-TWIN-PROTOCOL.html)
 5. **OpenWiki SSoT Quickstart & Graph:** [openwiki/quickstart.md](openwiki/quickstart.md)
 
 ### 📚 Documentation Quadrants (Diátaxis)
 
-- **Tutorials:** [docs/tutorials/onboarding-and-setup.md](docs/tutorials/onboarding-and-setup.md)
-- **How-To Guides:** [docs/how-to-guides/phased-migration-strategy.md](docs/how-to-guides/phased-migration-strategy.md)
-- **Reference Material:** [docs/reference/lakehouse-architecture.md](docs/reference/lakehouse-architecture.md) | [docs/reference/postgresql-pgvector-enterprise-strategy.md](docs/reference/postgresql-pgvector-enterprise-strategy.md) | [docs/reference/next-technology-roadmap-stack.md](docs/reference/next-technology-roadmap-stack.md)
-- **Explanation:** [docs/explanation/governance-and-compliance.md](docs/explanation/governance-and-compliance.md)
+- **Tutorials:** [docs/tutorials/onboarding-and-setup.html](docs/tutorials/onboarding-and-setup.html)
+- **How-To Guides:** [docs/how-to-guides/phased-migration-strategy.html](docs/how-to-guides/phased-migration-strategy.html)
+- **Reference Material:** [docs/reference/lakehouse-architecture.html](docs/reference/lakehouse-architecture.html) | [docs/reference/postgresql-pgvector-enterprise-strategy.html](docs/reference/postgresql-pgvector-enterprise-strategy.html) | [docs/reference/next-technology-roadmap-stack.html](docs/reference/next-technology-roadmap-stack.html)
+- **Explanation:** [docs/explanation/governance-and-compliance.html](docs/explanation/governance-and-compliance.html)
 
 ### 🛠️ Workflows & Test Suites
 
@@ -50,7 +50,7 @@ Welcome to the Big Data Analytics (BDA) Lakehouse SSoT modernization project ope
 
 ### 📜 Sovereign Ledgers
 
-- **Summary Index:** [SUMMARY.md](SUMMARY.md)
+- **Summary Index:** [SUMMARY.html](SUMMARY.html)
 - **LLM AI Sitemap:** [llms.txt](llms.txt)
-- **Changelog Ledger:** [CHANGELOG.md](CHANGELOG.md)
-- **Execution History Ledger:** [HISTORY.md](HISTORY.md)
+- **Changelog Ledger:** [CHANGELOG.html](CHANGELOG.html)
+- **Execution History Ledger:** [HISTORY.html](HISTORY.html)

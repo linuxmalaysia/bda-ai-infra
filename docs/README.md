@@ -64,30 +64,30 @@ Following the **Diátaxis Documentation Framework**, this suite is organized int
 
 ### 🎓 1. Tutorials (Practical Learning for Onboarding)
 
-- **[Onboarding and Setup Guide](tutorials/onboarding-and-setup.md):** Getting started with the modernized BDA lakehouse baseline documentation.
+- **[Onboarding and Setup Guide](tutorials/onboarding-and-setup.html):** Getting started with the modernized BDA lakehouse baseline documentation.
 
 ### 🛠️ 2. How-To Guides (Practical Problem-Solving for Engineers)
 
-- **[Ingestion Pipeline Modernization](how-to-guides/ingestion-pipeline-modernization.md):** Implementing Apache NiFi, Apache Airflow, Next.js web application, and Apache Superset visual analytics.
-- **[Phased Migration Strategy & Roadmap](how-to-guides/phased-migration-strategy.md):** Detailed 4-phase implementation roadmap over 12 months with risk mitigation and fallback procedures.
-- [Onboarding and Scaling New AI/ML Business Cases](how-to-guides/onboarding-new-ai-business-cases.md)
+- **[Ingestion Pipeline Modernization](how-to-guides/ingestion-pipeline-modernization.html):** Implementing Apache NiFi, Apache Airflow, Next.js web application, and Apache Superset visual analytics.
+- **[Phased Migration Strategy & Roadmap](how-to-guides/phased-migration-strategy.html):** Detailed 4-phase implementation roadmap over 12 months with risk mitigation and fallback procedures.
+- [Onboarding and Scaling New AI/ML Business Cases](how-to-guides/onboarding-new-ai-business-cases.html)
 
 ### 📚 3. Reference Material (Factual Technical Specifications)
 
-- **[Legacy Architecture Deconstruction](reference/legacy-architecture.md):** Deconstruction of legacy BDA environments, structural bottlenecks, file/database silos, and failure modes.
-- **[Target Lakehouse Architecture Specifications](reference/lakehouse-architecture.md):** Specs for decoupled storage and compute (Ceph/MinIO, Apache Iceberg, Apache Polaris, Trino, Apache Spark + Sedona).
-- **[Business Domain Specifications](reference/business-applications.md):** Detailed specifications for 5 core analytical domains: Incident Management, Groundwater Potential, Active Fire Tracking, Climate Adaptation, and Geological Hazard Risk.
-- **[Data Governance & Subsystems Matrix](reference/governance-matrix.md):** Mapping governance subsystems, OpenLineage provenance, ODCS contract standards, and geospatial standards.
-- **[Solution 1 Reference Spec: AWS Native Infrastructure](reference/solution-1-aws-native.md):** Detailed reference specifications for All in Cloud deployment using AWS managed services (S3 Object Lock, Glue Catalog, EMR Serverless, Athena, Bedrock).
-- **[Solution 2 Reference Spec: Hybrid Cloud Lakehouse & On-Prem GPU](reference/solution-2-hybrid-ai.md):** Detailed reference specifications for Hybrid deployment retaining cloud lakehouse core while executing AI inference, local vector search, and MCP tools on-premises over AWS Direct Connect MACsec/IPsec.
-- **[Solution 3 Reference Spec: 100% On-Premises Sovereign Architecture](reference/solution-3-onprem-proxmox-rke2.md):** Detailed reference specifications for 100% sovereign deployment using Proxmox VE hypervisor, dual RKE2/K3s Kubernetes clusters, and Ceph SDS object/block storage.
+- **[Legacy Architecture Deconstruction](reference/legacy-architecture.html):** Deconstruction of legacy BDA environments, structural bottlenecks, file/database silos, and failure modes.
+- **[Target Lakehouse Architecture Specifications](reference/lakehouse-architecture.html):** Specs for decoupled storage and compute (Ceph/MinIO, Apache Iceberg, Apache Polaris, Trino, Apache Spark + Sedona).
+- **[Business Domain Specifications](reference/business-applications.html):** Detailed specifications for 5 core analytical domains: Incident Management, Groundwater Potential, Active Fire Tracking, Climate Adaptation, and Geological Hazard Risk.
+- **[Data Governance & Subsystems Matrix](reference/governance-matrix.html):** Mapping governance subsystems, OpenLineage provenance, ODCS contract standards, and geospatial standards.
+- **[Solution 1 Reference Spec: AWS Native Infrastructure](reference/solution-1-aws-native.html):** Detailed reference specifications for All in Cloud deployment using AWS managed services (S3 Object Lock, Glue Catalog, EMR Serverless, Athena, Bedrock).
+- **[Solution 2 Reference Spec: Hybrid Cloud Lakehouse & On-Prem GPU](reference/solution-2-hybrid-ai.html):** Detailed reference specifications for Hybrid deployment retaining cloud lakehouse core while executing AI inference, local vector search, and MCP tools on-premises over AWS Direct Connect MACsec/IPsec.
+- **[Solution 3 Reference Spec: 100% On-Premises Sovereign Architecture](reference/solution-3-onprem-proxmox-rke2.html):** Detailed reference specifications for 100% sovereign deployment using Proxmox VE hypervisor, dual RKE2/K3s Kubernetes clusters, and Ceph SDS object/block storage.
 - **[OpenWiki SSoT Quickstart & Knowledge Base](../openwiki/quickstart.md):** BDA Lakehouse SSoT open-source relationship matrix, infrastructure, software, and governance knowledge graph.
 
 ### 💡 4. Explanation (Theoretical Rationale and Architecture Principles)
 
-- **[The Human-to-AI Quarantine Model](explanation/human-ai-quarantine-model.md):** Conceptual explanation of the 3-tier data classification topology (Tier 0 Golden Truth, Tier 1 Telemetry, Tier 2 AI Sandbox) preserving human ground truth.
-- **[Model Context Protocol (MCP) & AI Sandboxing](explanation/mcp-and-ai-sandboxing.md):** Explanation of how MCP confines AI models to operational tooling while barring direct writes to ground-truth data.
-- **[Governance, Security, and Compliance Framework](explanation/governance-and-compliance.md):** Enterprise catalog selection (OpenMetadata), Keycloak IAM, APISIX gateway, and compliance standards.
+- **[The Human-to-AI Quarantine Model](explanation/human-ai-quarantine-model.html):** Conceptual explanation of the 3-tier data classification topology (Tier 0 Golden Truth, Tier 1 Telemetry, Tier 2 AI Sandbox) preserving human ground truth.
+- **[Model Context Protocol (MCP) & AI Sandboxing](explanation/mcp-and-ai-sandboxing.html):** Explanation of how MCP confines AI models to operational tooling while barring direct writes to ground-truth data.
+- **[Governance, Security, and Compliance Framework](explanation/governance-and-compliance.html):** Enterprise catalog selection (OpenMetadata), Keycloak IAM, APISIX gateway, and compliance standards.
 
 ---
 

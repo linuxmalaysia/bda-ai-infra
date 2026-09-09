@@ -45,6 +45,8 @@
   - title: "5-Year Strategic BDA & AI Roadmap & Master Business Case Specification\
       \ (2026\u20132030)"
     url: /docs/reference/5-year-bda-ai-roadmap-and-business-case.html
+  - title: Apache NiFi 2.0 Master Data Plane Architecture and Migration Guide
+    url: /docs/reference/apache-nifi-2-master-data-plane-and-migration.html
   - title: Big Data Domain Specifications and Analytical Workflows
     url: /docs/reference/business-applications.html
   - title: Data Governance, Subsystems, and Standards Matrix

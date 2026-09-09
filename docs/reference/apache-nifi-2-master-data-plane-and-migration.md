@@ -279,7 +279,7 @@ graph LR
 ### 5.3 Interface & Routing Matrix
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone | Operational Description |
-|---|---|---|---|---|
+| :--- | :--- | :--- | :--- | :--- |
 | Ingestion Endpoints | NiFi Ingestion Engine | `TCP 8443` / HTTPS REST API | Public / Partner Network -> Boundary DMZ | Streams unstructured documents, telemetry logs, and S3 objects into NiFi flow queues. |
 | Ingestion Processors | Native Python Worker | Internal IPC Process Pool | Ingest Boundary -> Isolation Runtime | Executes LangChain splitting, model embedding calls, and metadata spatial parsing. |
 | `UpdateRecord` Processor | `PutDatabaseRecord` | In-Memory FlowFile Record | Isolation Runtime -> JDBC Connection Pool | Formats metadata into JSON and updates FlowFile attributes with standard WKT geometry string representations. |
@@ -300,7 +300,7 @@ graph LR
 ### 7.1 Comprehensive Comparison Matrix
 
 | Architectural Pillar | Apache NiFi 1.x | Apache NiFi 2.0 (AI-Optimized Master Data Plane) |
-|---|---|---|
+| :--- | :--- | :--- |
 | **Extensibility Core** | Strictly Java-based (NAR deployment). Scripting required heavy abstractions like Jython or Groovy. | Native Python Processors. Allows direct execution of native C-extensions and modern AI/ML libraries. |
 | **Cluster Orchestration** | Dependent on external Apache ZooKeeper clusters for state management and primary node election. | Embedded Cluster Coordinator (ZooKeeper-free). Eliminates infrastructure overhead and deployment complexity. |
 | **Execution Paradigm** | Stateful, disk-bound queueing (FlowFile repository). High disk I/O dependency. | Stateless Engine Support. Memory-first, ephemeral execution ideal for serverless and event-driven containerization. |
@@ -372,7 +372,7 @@ When deployed on Kubernetes, NiFi 2.0 flows can be wrapped as ephemeral, auto-sc
 Engineers often evaluate lightweight workflow automation tools like n8n alongside Apache NiFi. While both offer visual DAG interfaces, their architectural focus differs significantly:
 
 | Feature | Apache NiFi 2.0 | n8n |
-|---|---|---|
+| :--- | :--- | :--- |
 | **Primary Core Use Case** | Enterprise-scale data logistics, high-throughput streaming ETL, and AI data plane orchestration. | SaaS API orchestration, webhooks, and light workflow automation (IPaaS). |
 | **Data Volume Capacity** | High-throughput streaming (Gigabytes to Terabytes/sec) with backpressure management. | Small to medium JSON payloads (API triggers, webhooks, notification alerts). |
 | **SaaS/App Integration** | Configured via HTTP/REST/JDBC generic processors or custom Python extensions. | Hundreds of pre-built app nodes for commercial SaaS tools (Slack, Jira, Salesforce). |
@@ -390,7 +390,7 @@ Engineers often evaluate lightweight workflow automation tools like n8n alongsid
 ## 10. Technical Operational Matrix
 
 | Layer | Technology | Primary System Role | Key Enterprise Feature |
-|---|---|---|---|
+| :--- | :--- | :--- | :--- |
 | **Ingestion & ETL** | Apache NiFi 2.0 | Orchestrates streaming, native Python text chunking, and metadata parsing. | Native Python Execution, Embedded Coordinator, Data Provenance. |
 | **Relational Core** | PostgreSQL 16/17 Master | Central system of record and relational metadata manager. | ACID Compliance, High Availability, Relational Integrity. |
 | **AI Vectors** | `pgvector` Extension | Stores and performs high-speed semantic searches on model outputs. | HNSW and IVFFlat vector distance similarity indexing. |

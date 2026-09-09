@@ -48,12 +48,14 @@ PostgreSQL is the world's most trusted open-source relational database engine. W
 
 ```
 +-----------------------------------------------------------------------------------+
-|                        UNIFIED POSTGRESQL ENTERPRISE AI BACKBONE                  |
+|               POSTGRESQL OPERATIONAL & SEMANTIC SERVING BACKBONE                 |
 +-----------------------------------------------------------------------------------+
 |  [ Structured OLTP Data ] + [ Spatial Geometries (PostGIS) ]                      |
-|  [ Metadata & Catalog ]   + [ High-Dimensional Vectors (pgvector) ]               |
+|  [ Operational Cache ]    + [ Operational Vector Search (pgvector) ]               |
 |                                                                                   |
-|  --> SINGLE DATABASE ENGINE, SINGLE ACID TRANSACTION, SINGLE BACKUP & RBAC SCHEMA  |
+|  * Iceberg REST Catalog Authority: Apache Polaris                                 |
+|  * Enterprise Metadata & Lineage: OpenMetadata (backed by PostgreSQL & OpenSearch)|
+|  * Embedded Analytical Vectors: DuckDB vss (In-process Parquet ARRAY HNSW)        |
 +-----------------------------------------------------------------------------------+
 ```
 
@@ -119,24 +121,43 @@ WITH (m = 16, ef_construction = 64);
 A major architectural advantage of PostgreSQL + `pgvector` over standalone vector databases is the ability to execute **Hybrid Search** (Relational SQL + Spatial PostGIS + Full-Text Search + Vector Distance) in a single unified, transactional query.
 
 ### Hybrid SQL Example
+To leverage the HNSW index efficiently, the query first performs vector distance ordering to pull an oversized candidate pool (e.g. `LIMIT 100`) before combining text search ranking (`websearch_to_tsquery` to avoid syntax errors on raw user strings) and spatial predicates (`ST_SetSRID` with SRID 4326 for WGS84 coordinates).
+
 ```sql
--- Retrieve top 5 semantically similar documents restricted by spatial buffer, role access, and keyword matching
+-- 2-Stage Hybrid Search: Stage 1 HNSW Candidate Selection -> Stage 2 Reciprocal / Combined Reranking
+WITH vector_candidates AS (
+    SELECT
+        d.id,
+        d.document_uri,
+        d.chunk_content,
+        d.geom_location,
+        d.classification_level,
+        d.text_search_vector,
+        d.embedding,
+        (1 - (d.embedding <=> :query_vector)) AS vector_similarity
+    FROM enterprise_knowledge_base d
+    ORDER BY d.embedding <=> :query_vector
+    LIMIT 100 -- Oversample candidate pool for HNSW graph traversal
+)
 SELECT
-    d.id,
-    d.title,
-    d.url,
-    1 - (d.embedding <=> :query_vector) AS cosine_similarity,
-    ts_rank(d.text_search_vector, to_tsquery('english', :keyword)) AS text_rank
-FROM enterprise_documents d
+    c.id,
+    c.document_uri,
+    c.chunk_content,
+    c.vector_similarity,
+    ts_rank(c.text_search_vector, websearch_to_tsquery('english', :keyword)) AS text_rank
+FROM vector_candidates c
 WHERE
-    d.classification_level <= :user_clearance_level
-    AND ST_DWithin(d.geom_location, ST_MakePoint(:longitude, :latitude)::geography, 50000) -- 50km spatial buffer
-    AND d.text_search_vector @@ to_tsquery('english', :keyword)
+    c.classification_level <= :user_clearance_level
+    AND ST_DWithin(c.geom_location, ST_SetSRID(ST_MakePoint(:longitude, :latitude), 4326)::geography, 50000) -- 50km spatial buffer
+    AND c.text_search_vector @@ websearch_to_tsquery('english', :keyword)
 ORDER BY
-    (1 - (d.embedding <=> :query_vector)) * 0.7 +
-    ts_rank(d.text_search_vector, to_tsquery('english', :keyword)) * 0.3 DESC
+    (c.vector_similarity * 0.7) +
+    (ts_rank(c.text_search_vector, websearch_to_tsquery('english', :keyword)) * 0.3) DESC
 LIMIT 5;
 ```
+
+> **Recall Validation & Index Plan Diagnostics:**
+> Production queries using HNSW with restrictive filters must be validated using `EXPLAIN (ANALYZE, BUFFERS)` to verify index scan usage and measure recall against an exact kNN baseline (`SET enable_indexscan = off;`). If selective filter predicates degrade recall, increase `SET hnsw.ef_search = 100;` or increase candidate oversampling in the initial CTE.
 
 ---
 
@@ -151,7 +172,7 @@ flowchart TD
     end
 
     subgraph EmbeddingPipeline ["2. Local Vector Embedding Pipeline"]
-        Splitter --> LocalEmbed["Local SentenceTransformer / HuggingFace Model<br/>('WhereIsAI/UAE-Large-V1' or 'bge-small-en-v1.5')"]
+        Splitter --> LocalEmbed["Local SentenceTransformer / HuggingFace Model<br/>('WhereIsAI/UAE-Large-V1' or 'bge-large-en-v1.5' - 1024-dim)"]
     end
 
     subgraph PgVectorStore ["3. Master Operational Database Store"]
@@ -209,7 +230,8 @@ CREATE TABLE enterprise_knowledge_base (
     chunk_content TEXT NOT NULL,
     metadata JSONB DEFAULT '{}'::jsonb,
     embedding vector(1024), -- UAE-Large-V1 1024-dimension embedding
-    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_doc_chunk UNIQUE (document_uri, chunk_index)
 );
 
 -- Construct HNSW Index over vector column
@@ -244,22 +266,32 @@ AS $$
 $$;
 ```
 
-#### Step 3: Python Chunking & Vector Insertion Script
+#### Step 3: Python Chunking & Idempotent Vector Insertion Script
 ```python
+import os
 import psycopg2
 from pgvector.psycopg2 import register_vector
 from sentence_transformers import SentenceTransformer
 from langchain_text_splitters import MarkdownTextSplitter
 
-# 1. Initialize local embedding model (Zero WAN Egress)
-model = SentenceTransformer('WhereIsAI/UAE-Large-V1', device='cuda')
+# 1. Initialize pre-staged local embedding model (Zero WAN Egress & Local Cache Only)
+LOCAL_MODEL_DIR = os.getenv("EMBEDDING_MODEL_PATH", "/opt/models/WhereIsAI/UAE-Large-V1")
+model = SentenceTransformer(LOCAL_MODEL_DIR, device='cuda', local_files_only=True, revision="v1.0")
 
-# 2. Connect to Master PostgreSQL DB
-conn = psycopg2.connect("host=bda-pgvector-master dbname=bdadb user=vector password=secret")
+# 2. Connect to Master PostgreSQL DB using verified TLS and Secret Manager credentials
+db_password = os.getenv("DB_PASSWORD") # Loaded from Kubernetes Secret
+conn = psycopg2.connect(
+    host=os.getenv("DB_HOST", "bda-pgvector-master"),
+    dbname=os.getenv("DB_NAME", "bdadb"),
+    user=os.getenv("DB_USER", "vector"),
+    password=db_password,
+    sslmode="verify-full",
+    sslrootcert="/etc/ssl/certs/pg-ca.crt"
+)
 register_vector(conn)
 cur = conn.cursor()
 
-# 3. Chunk Document & Generate Embeddings
+# 3. Chunk Document & Perform Idempotent Insertion
 text_splitter = MarkdownTextSplitter(chunk_size=1000, chunk_overlap=100)
 chunks = text_splitter.split_text(raw_document_markdown)
 
@@ -269,6 +301,10 @@ for idx, chunk in enumerate(chunks):
         INSERT INTO enterprise_knowledge_base
         (document_uri, chunk_index, chunk_content, embedding)
         VALUES (%s, %s, %s, %s)
+        ON CONFLICT (document_uri, chunk_index) DO UPDATE SET
+            chunk_content = EXCLUDED.chunk_content,
+            embedding = EXCLUDED.embedding,
+            created_at = CURRENT_TIMESTAMP
     """, ("s3://bda-docs/ref-01.md", idx, chunk, embedding))
 
 conn.commit()

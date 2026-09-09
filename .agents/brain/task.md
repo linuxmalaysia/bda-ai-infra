@@ -45,4 +45,6 @@ topics:
 - [x] Implement Master 5-Year Strategic BDA & AI Roadmap & Business Case Specification (2026–2030) (`docs/reference/5-year-bda-ai-roadmap-and-business-case.md`).
 - [x] Create How-To Guide for Onboarding and Scaling New AI/ML Business Cases (`docs/how-to-guides/onboarding-new-ai-business-cases.md`).
 - [x] Adopt PostgreSQL and pgvector as the primary master database and AI infrastructure foundation based on Percona research guidance (`docs/reference/postgresql-pgvector-enterprise-strategy.md`).
+- [x] Implement Dual-Render Architecture Diagram Specification (SVG + Mermaid) AI skill (`.agents/skills/dual-render-architecture-diagram/SKILL.md`).
+- [x] Refactor all existing architecture, topology, sequence, and workflow diagrams across `docs/reference/`, `openwiki/`, and `tools/openwiki_emulator.py` to Dual-Render standard.
 - [x] Execute EOD Palace Sync for DSOM Protocol spatial memory state.

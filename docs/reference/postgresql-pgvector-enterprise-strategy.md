@@ -158,7 +158,7 @@ LIMIT 5;
 ```
 
 > **Iterative Scans & Index Plan Diagnostics:**
-> Production queries using HNSW with selective filters should configure `SET hnsw.iterative_scan = 'relaxed_order';` (pgvector 0.7+) or `SET hnsw.ef_search = 100;` so the index scan dynamically fetches additional vector graph nodes until the candidate limit is satisfied. Use `relaxed_order` for optimal performance under filtered vector search, reserving `strict_order` when exact distance ordering must be preserved during graph traversal. Validate query plans with `EXPLAIN (ANALYZE, BUFFERS)` against an exact kNN baseline (`SET enable_indexscan = off;`) to measure recall.
+> Production queries using HNSW with selective filters require **pgvector 0.8.0 or later** to utilize `SET hnsw.iterative_scan = 'relaxed_order';` (or `strict_order` when exact distance ordering must be preserved during graph traversal). Note that `hnsw.iterative_scan` allows pgvector to dynamically continue scanning the index graph until the requested candidate `LIMIT` is fulfilled after predicate filtering. In contrast, `hnsw.ef_search` only expands the initial candidate list evaluated during graph exploration without continuing to scan after clearance, spatial, or text filters remove rows; highly selective queries relying solely on `hnsw.ef_search` may return fewer than five rows. Validate query plans with `EXPLAIN (ANALYZE, BUFFERS)` against an exact kNN baseline (`SET enable_indexscan = off;`) to measure recall.
 
 ---
 
@@ -219,7 +219,7 @@ Following the research patterns established in Percona's technical guidance (*Cr
 
   <rect x="275" y="180" width="190" height="110" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1" rx="6"/>
   <text x="285" y="202" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">SentenceTransformer</text>
-  <text x="285" y="222" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">/opt/models/UAE-Large-V1</text>
+  <text x="285" y="222" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">/opt/models/WhereIsAI/UAE-Large-V1</text>
   <text x="285" y="242" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">1024-dim Vector Output</text>
   <text x="285" y="262" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">local_files_only=True</text>
 
@@ -299,7 +299,7 @@ flowchart TD
     end
 
     subgraph PgVectorStore ["3. Master Operational Database Store"]
-        LocalEmbed -->|"TCP 5432 / mTLS (sslmode=verify-full)"| PgDB[("PostgreSQL 17 HA Cluster<br/>bda-pgvector-master:5432<br/>(Patroni + pgvector + PostGIS)")]
+        LocalEmbed -->|"TCP 5432 / TLS (sslmode=verify-full)"| PgDB[("PostgreSQL 17 HA Cluster<br/>bda-pgvector-master:5432<br/>(Patroni + pgvector + PostGIS)")]
         PgDB --> HNSWIdx["HNSW Index<br/>(m=16, ef_construction=64, cosine)"]
     end
 

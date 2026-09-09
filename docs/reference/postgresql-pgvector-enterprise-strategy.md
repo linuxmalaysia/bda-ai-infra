@@ -166,31 +166,163 @@ LIMIT 5;
 
 Following the research patterns established in Percona's technical guidance (*Create an AI Expert With Open Source Tools and pgvector*), the BDA platform implements an end-to-end, 100% open-source AI Expert RAG pipeline.
 
+#### Dual-Render Architecture Specification: Enterprise AI Expert & RAG Pipeline
+
+##### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 580" width="100%" height="100%">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+    </marker>
+    <filter id="shadow" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="1000" height="580" fill="#F8FAFC" rx="12"/>
+
+  <!-- Header Banner -->
+  <rect x="20" y="20" width="960" height="40" fill="#0F172A" rx="6"/>
+  <text x="35" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="15" font-weight="bold" fill="#F8FAFC">
+    POSTGRESQL &amp; PGVECTOR ENTERPRISE AI EXPERT RAG PIPELINE ARCHITECTURE
+  </text>
+  <text x="820" y="45" font-family="Consolas, Monaco, monospace" font-size="12" fill="#38BDF8">
+    ZONE: TRUSTED-DMZ
+  </text>
+
+  <!-- Zone 1: Document Ingestion & Chunking -->
+  <rect x="20" y="80" width="220" height="470" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8" filter="url(#shadow)"/>
+  <rect x="20" y="80" width="220" height="32" fill="#EFF6FF" rx="8"/>
+  <text x="30" y="101" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#1E40AF">
+    1. INGESTION &amp; CHUNKING
+  </text>
+
+  <rect x="35" y="130" width="190" height="90" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" rx="6"/>
+  <text x="45" y="150" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Enterprise Docs</text>
+  <text x="45" y="170" font-family="Consolas, Monaco, monospace" font-size="11" fill="#475569">s3://bda-docs/</text>
+  <text x="45" y="190" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748B">Markdown &amp; ODCS Contracts</text>
+
+  <rect x="35" y="250" width="190" height="90" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" rx="6"/>
+  <text x="45" y="270" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">MarkdownSplitter</text>
+  <text x="45" y="290" font-family="Consolas, Monaco, monospace" font-size="11" fill="#475569">chunk_size=1000</text>
+  <text x="45" y="310" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#64748B">Overlap: 100 tokens</text>
+
+  <!-- Zone 2: Local Vector Embedding -->
+  <rect x="260" y="80" width="220" height="470" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8" filter="url(#shadow)"/>
+  <rect x="260" y="80" width="220" height="32" fill="#F1F5F9" rx="8"/>
+  <text x="270" y="101" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#334155">
+    2. LOCAL EMBEDDING
+  </text>
+
+  <rect x="275" y="180" width="190" height="110" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1" rx="6"/>
+  <text x="285" y="202" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">SentenceTransformer</text>
+  <text x="285" y="222" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">/opt/models/UAE-Large-V1</text>
+  <text x="285" y="242" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">1024-dim Vector Output</text>
+  <text x="285" y="262" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">local_files_only=True</text>
+
+  <!-- Zone 3: Master PostgreSQL Store -->
+  <rect x="500" y="80" width="240" height="470" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8" filter="url(#shadow)"/>
+  <rect x="500" y="80" width="240" height="32" fill="#DCFCE7" rx="8"/>
+  <text x="510" y="101" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#166534">
+    3. MASTER POSTGRESQL STORE
+  </text>
+
+  <rect x="515" y="130" width="210" height="120" fill="#F8FAFC" stroke="#A7F3D0" stroke-width="1" rx="6"/>
+  <text x="525" y="152" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#065F46">PostgreSQL 17 Cluster</text>
+  <text x="525" y="172" font-family="Consolas, Monaco, monospace" font-size="10" fill="#111827">bda-pgvector-master:5432</text>
+  <text x="525" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#047857">Patroni HA + PostGIS + pgvector</text>
+  <text x="525" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#475569">sslmode=verify-full</text>
+
+  <rect x="515" y="270" width="210" height="100" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1" rx="6"/>
+  <text x="525" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">HNSW Vector Index</text>
+  <text x="525" y="312" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">m=16, ef_construction=64</text>
+  <text x="525" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">vector_cosine_ops</text>
+
+  <!-- Zone 4: Sandboxed RAG Inference -->
+  <rect x="760" y="80" width="220" height="470" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8" filter="url(#shadow)"/>
+  <rect x="760" y="80" width="220" height="32" fill="#FEF3C7" rx="8"/>
+  <text x="770" y="101" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">
+    4. SANDBOXED INFERENCE
+  </text>
+
+  <rect x="775" y="130" width="190" height="80" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" rx="6"/>
+  <text x="785" y="152" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">User / AI Agent</text>
+  <text x="785" y="172" font-family="Consolas, Monaco, monospace" font-size="10" fill="#475569">APISIX / Keycloak OIDC</text>
+
+  <rect x="775" y="230" width="190" height="90" fill="#F8FAFC" stroke="#E2E8F0" stroke-width="1" rx="6"/>
+  <text x="785" y="252" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">match_documents()</text>
+  <text x="785" y="272" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">2-Stage CTE Oversampling</text>
+  <text x="785" y="292" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">websearch_to_tsquery</text>
+
+  <rect x="775" y="340" width="190" height="100" fill="#F8FAFC" stroke="#FDE68A" stroke-width="1" rx="6"/>
+  <text x="785" y="362" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">vLLM / Ollama GPU</text>
+  <text x="785" y="382" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">http://localhost:8000</text>
+  <text x="785" y="402" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#059669">Grounded Output</text>
+
+  <!-- Connection Paths & Protocol Badges -->
+  <!-- Ingestion -> Embedding -->
+  <line x1="225" y1="295" x2="275" y2="235" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="230" y="250" width="45" height="18" fill="#DBEAFE" rx="3"/>
+  <text x="233" y="262" font-family="Consolas, Monaco, monospace" font-size="9" fill="#1E40AF">IPC</text>
+
+  <!-- Embedding -> Postgres Insert -->
+  <line x1="465" y1="235" x2="515" y2="190" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="460" y="195" width="60" height="18" fill="#DCFCE7" rx="3"/>
+  <text x="463" y="207" font-family="Consolas, Monaco, monospace" font-size="9" fill="#166534">TCP 5432</text>
+
+  <!-- User -> Match documents -->
+  <line x1="870" y1="210" x2="870" y2="230" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Match documents -> Postgres query -->
+  <line x1="775" y1="275" x2="725" y2="210" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Match documents -> Local LLM -->
+  <line x1="870" y1="320" x2="870" y2="340" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="880" y="322" width="60" height="18" fill="#FEF3C7" rx="3"/>
+  <text x="883" y="334" font-family="Consolas, Monaco, monospace" font-size="9" fill="#92400E">Context</text>
+</svg>
+```
+
+##### 2. Git-Native Mermaid Diagram (`.mmd`)
+
 ```mermaid
 flowchart TD
     subgraph DataIngestion ["1. Enterprise Ingestion & Chunking"]
-        Docs["Markdown, Docs, OpenMetadata Schemas"] --> Splitter["MarkdownTextSplitter / Chunking (500 tokens)"]
+        Docs["Enterprise Markdown &amp; ODCS Contracts<br/>s3://bda-docs/"] --> Splitter["MarkdownTextSplitter<br/>(chunk_size=1000, overlap=100)"]
     end
 
     subgraph EmbeddingPipeline ["2. Local Vector Embedding Pipeline"]
-        Splitter --> LocalEmbed["Local SentenceTransformer / HuggingFace Model<br/>('WhereIsAI/UAE-Large-V1' or 'bge-large-en-v1.5' - 1024-dim)"]
+        Splitter -->|"Local IPC / CUDA"| LocalEmbed["SentenceTransformer Model<br/>/opt/models/WhereIsAI/UAE-Large-V1<br/>(1024-dim, local_files_only=True)"]
     end
 
     subgraph PgVectorStore ["3. Master Operational Database Store"]
-        LocalEmbed -->|Insert embedding, content, url| PgDB[("PostgreSQL 17 Cluster<br/>(Patroni HA + pgvector + PostGIS)")]
-        PgDB --> HNSWIdx["HNSW Index (m=16, ef_construction=64)"]
+        LocalEmbed -->|"TCP 5432 / mTLS (sslmode=verify-full)"| PgDB[("PostgreSQL 17 HA Cluster<br/>bda-pgvector-master:5432<br/>(Patroni + pgvector + PostGIS)")]
+        PgDB --> HNSWIdx["HNSW Index<br/>(m=16, ef_construction=64, cosine)"]
     end
 
     subgraph RAGInference ["4. Zero-Trust Local RAG Inference"]
-        UserQ["User / AI Agent Question"] --> QEmbed["Convert Question to Vector"]
-        QEmbed --> MatchFunc["match_documents SQL Search (Cosine Distance)"]
-        MatchFunc --> PgDB
-        PgDB -->|Top K Relevant Context Chunks| PromptBuilder["Prompt Context Builder"]
+        UserQ["User / AI Agent Question<br/>(Keycloak OIDC / APISIX Gateway)"] --> QEmbed["Convert Question to Vector<br/>(Local SentenceTransformer)"]
+        QEmbed -->|"2-Stage CTE Match Query"| MatchFunc["match_documents() SQL Search<br/>(ST_DWithin + websearch_to_tsquery)"]
+        MatchFunc -->|"SQL Read Query"| PgDB
+        PgDB -->|"Top K Context Chunks"| PromptBuilder["Prompt Context Builder"]
         UserQ --> PromptBuilder
-        PromptBuilder -->|Context + Question Prompt| LocalLLM["Local Sandboxed Inference<br/>(vLLM / Ollama on Local GPU)"]
+        PromptBuilder -->|"Augmented Prompt"| LocalLLM["Local Sandboxed Inference<br/>(vLLM / Ollama on Local GPUs)"]
         LocalLLM --> GroundedAnswer["Grounded Hallucination-Free Answer"]
     end
 ```
+
+##### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **MarkdownTextSplitter** | **SentenceTransformer** | Local Memory IPC / CUDA | Zone 1 -> Zone 2 (Local Container Memory) | Transforms 1000-character document chunks into dense 1024-dimensional floating-point vectors. |
+| **SentenceTransformer** | **PostgreSQL Cluster (`bda-pgvector-master`)** | `TCP 5432` / PostgreSQL Protocol | Zone 2 -> Zone 3 (`sslmode=verify-full`, Secret Manager TLS Password) | Executes idempotent `INSERT INTO enterprise_knowledge_base ... ON CONFLICT DO UPDATE` storing embeddings. |
+| **APISIX Gateway** | **`match_documents()` Query Handler** | `TCP 443` (HTTPS / OIDC) | Public DMZ -> Zone 4 (Keycloak RBAC JWT Token) | Authenticates user request and delegates semantic similarity search. |
+| **`match_documents()` Handler** | **PostgreSQL Cluster** | `TCP 5432` / SQL Session | Zone 4 -> Zone 3 (`sslmode=verify-full`, Read-Only DB Role) | Executes 2-stage CTE oversampling vector scan combining PostGIS `ST_DWithin` and `websearch_to_tsquery`. |
+| **Prompt Context Builder** | **vLLM / Ollama Local Inference** | `TCP 8000` / HTTP REST API | Zone 4 Internal (Local Host GPU Passthrough) | Feeds grounded document context chunks and user prompt to local LLM for hallucination-free generation. |
 
 ### Production Implementation Steps
 

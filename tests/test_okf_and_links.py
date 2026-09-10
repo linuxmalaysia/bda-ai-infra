@@ -264,3 +264,46 @@ def test_zero_link_decay(md_path: Path) -> None:
             assert (
                 fragment in headings or fragment.lower() in headings
             ), f"Heading anchor '{fragment}' missing in {rel_target} from {rel_file}"
+
+
+@pytest.mark.parametrize(
+    "md_path",
+    get_all_markdown_files(),
+    ids=lambda p: str(p.relative_to(REPO_ROOT)),
+)
+def test_svg_graphics_embedded_raw_inline_without_code_fences(md_path: Path) -> None:
+    """Verify that SVG vector graphics are embedded directly as raw inline HTML/SVG.
+
+    Tracks active Markdown code fences (backticks or tildes) across all lines and asserts
+    no <svg tag occurs while a code fence is open, ensuring SVGs render visually.
+
+    Args:
+        md_path (Path): Path to the Markdown file being tested.
+
+    """
+    content: str = md_path.read_text(encoding="utf-8")
+    fence_char: Union[str, None] = None
+    fence_len: int = 0
+
+    for idx, line in enumerate(content.splitlines()):
+        indent_len: int = len(line) - len(line.lstrip(" "))
+        if indent_len <= 3:
+            stripped_line: str = line.strip()
+            if fence_char is None:
+                fence_match = re.match(r"^(`{3,}|~{3,})", stripped_line)
+                if fence_match:
+                    match_str: str = fence_match.group(1)
+                    fence_char = match_str[0]
+                    fence_len = len(match_str)
+                    continue
+            else:
+                closing_pattern = rf"^{re.escape(fence_char)}{{{fence_len},}}\s*$"
+                if re.match(closing_pattern, stripped_line):
+                    fence_char = None
+                    fence_len = 0
+                    continue
+
+        if "<svg" in line:
+            assert fence_char is None, (
+                f"Line {idx + 1} in {md_path.relative_to(REPO_ROOT)} has <svg inside an open code fence ({fence_char * fence_len})"
+            )

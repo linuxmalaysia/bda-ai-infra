@@ -22,6 +22,21 @@ topics:
 
 # 📜 DSOM Execution Walkthrough & Mental Anchors
 
+## Session Anchor: 2026-09-10 — Dual-Render Dark Slate Refactoring & DSOM EOD Palace Sync
+
+- **Context:** Updated Dual-Render Architecture Diagram Skill Specification (`.agents/skills/dual-render-architecture-diagram/SKILL.md`) to mandate Dark Slate Canvas (`#0F172A`). Refactored all raw SVG diagrams across `docs/` and `openwiki/` to Dark Slate design system, added port/protocol callout pill badges, refined MCP Streamable HTTP vs stdio IPC transport routing, corrected inbound SFTP ingestion (`ListSFTP -> FetchSFTP`), and implemented stateful code fence test scanner in `tests/test_okf_and_links.py`. Executed DSOM EOD Palace Sync.
+- **Actions Taken:**
+  1. Updated `.agents/skills/dual-render-architecture-diagram/SKILL.md` to specify Dark Slate Canvas (`#0F172A`) palette for raw inline SVG graphics.
+  2. Refactored all raw SVG diagrams in `docs/reference/`, `docs/explanation/`, `docs/how-to-guides/`, `openwiki/`, and `tools/openwiki_emulator.py` to Dark Slate (`#0F172A` canvas, `#1E293B` cards, `#334155` strokes, `#F8FAFC` typography).
+  3. Added port/protocol callout pill badges beside every SVG connector line (`JSON-RPC / mTLS`, `Gated Tool Exec`, `HTTP`, `S3`, `SQL`, `OIDC`, `REST`, `OpenLineage`, `Webhook`, `stdio IPC`).
+  4. Clarified MCP transport deployment modes in `docs/explanation/mcp-and-ai-sandboxing.md` (Streamable HTTP over APISIX/Keycloak HTTPS port 443 vs stdio local process IPC without network auth).
+  5. Corrected inbound SFTP ingestion in `docs/how-to-guides/ingestion-pipeline-modernization.md` to `ListSFTP -> FetchSFTP` polling over SSH Port 22.
+  6. Converted remaining ASCII tree diagrams to full 3-part Dual-Render deliverables.
+  7. Updated `tools/openwiki_emulator.py` and regenerated all 10 `openwiki/*.md` pages and `openwiki/graph.html`.
+  8. Created unit test `test_svg_graphics_embedded_raw_inline_without_code_fences` in `tests/test_okf_and_links.py` to track stateful Markdown code fences (backticks/tildes) and assert `<svg>` graphics are embedded directly as raw inline HTML/SVG without code fences.
+  9. Verified all 231 pytest unit/OKF tests and Ruff static linter pass cleanly with 0 errors.
+  10. Executed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory files (`task.md`, `walkthrough.md`, `active_context_manifest.md`, `checkpoint_summary.txt`).
+
 ## Session Anchor: 2026-09-10 — Consumption & Integration Layer Specification & PR Feedback Resolution
 
 - **Context:** Formulated and published `docs/reference/consumption-and-integration-layer.md` defining the gateway layer connecting AI Clients (MCP), Web/Mobile APIs (FastAPI), and File Transfer (Apache NiFi 2.0 PGP SFTP egress) over PostgreSQL Master (`pgvector` + `PostGIS` + `pgTDE`). Applied PR review updates and completed End of Day (EOD) Palace Sync.

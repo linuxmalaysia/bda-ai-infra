@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "BDA Lakehouse Architecture & 100% Open-Source Software Stack"
-timestamp: "2026-09-10T09:06:14Z"
+timestamp: "2026-09-10T20:36:54Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -23,74 +23,72 @@ The modern Big Data Analytics (BDA) Lakehouse platform establishes an authoritat
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="100%" height="100%">
   <defs>
     <marker id="arrow-ov" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
     </marker>
   </defs>
 
-  <rect width="1000" height="500" fill="#F8FAFC" rx="10"/>
+  <rect width="1000" height="500" fill="#0F172A" rx="10"/>
 
-  <rect x="20" y="20" width="170" height="460" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="20" y="20" width="170" height="30" fill="#F1F5F9" rx="8"/>
-  <text x="30" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#334155">1. INGESTION</text>
-  <rect x="30" y="60" width="150" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="40" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">APISIX Gateway</text>
-  <text x="40" y="98" font-family="Consolas, Monaco, monospace" font-size="9" fill="#2563EB">Port 443 / OIDC</text>
-  <rect x="30" y="140" width="150" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="40" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Apache NiFi</text>
-  <rect x="30" y="220" width="150" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="40" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Apache Kafka</text>
+  <rect x="20" y="20" width="170" height="460" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="170" height="30" fill="#0F172A" rx="8"/>
+  <text x="30" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#94A3B8">1. INGESTION</text>
+  <rect x="30" y="60" width="150" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="40" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">APISIX Gateway</text>
+  <text x="40" y="98" font-family="Consolas, Monaco, monospace" font-size="9" fill="#60A5FA">Port 443 / OIDC</text>
+  <rect x="30" y="140" width="150" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="40" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">Apache NiFi</text>
+  <rect x="30" y="220" width="150" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="40" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">Apache Kafka</text>
 
-  <rect x="210" y="20" width="180" height="460" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="210" y="20" width="180" height="30" fill="#EFF6FF" rx="8"/>
-  <text x="220" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#1E40AF">2. STORAGE &amp; CATALOG</text>
-  <rect x="225" y="60" width="150" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="235" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Ceph / MinIO S3</text>
-  <text x="235" y="98" font-family="Consolas, Monaco, monospace" font-size="9" fill="#475569">Port 9000 / Parquet</text>
-  <rect x="225" y="150" width="150" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="235" y="170" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Apache Iceberg</text>
-  <rect x="225" y="240" width="150" height="70" fill="#F8FAFC" stroke="#A7F3D0" rx="6"/>
-  <text x="235" y="260" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#065F46">Polaris REST Catalog</text>
-  <text x="235" y="278" font-family="Consolas, Monaco, monospace" font-size="9" fill="#047857">Port 8181 / REST</text>
+  <rect x="210" y="20" width="180" height="460" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="210" y="20" width="180" height="30" fill="#0F172A" rx="8"/>
+  <text x="220" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#60A5FA">2. STORAGE &amp; CATALOG</text>
+  <rect x="225" y="60" width="150" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="235" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">Ceph / MinIO S3</text>
+  <text x="235" y="98" font-family="Consolas, Monaco, monospace" font-size="9" fill="#94A3B8">Port 9000 / Parquet</text>
+  <rect x="225" y="150" width="150" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="235" y="170" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">Apache Iceberg</text>
+  <rect x="225" y="240" width="150" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="235" y="260" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#86EFAC">Polaris REST Catalog</text>
+  <text x="235" y="278" font-family="Consolas, Monaco, monospace" font-size="9" fill="#4ADE80">Port 8181 / REST</text>
 
-  <rect x="410" y="20" width="180" height="460" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="410" y="20" width="180" height="30" fill="#DCFCE7" rx="8"/>
-  <text x="420" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#166534">3. COMPUTE ENGINES</text>
-  <rect x="425" y="60" width="150" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="435" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Trino SQL Engine</text>
-  <rect x="425" y="140" width="150" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="435" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Apache Spark</text>
-  <rect x="425" y="220" width="150" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="435" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">DuckDB vss</text>
+  <rect x="410" y="20" width="180" height="460" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="410" y="20" width="180" height="30" fill="#0F172A" rx="8"/>
+  <text x="420" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#4ADE80">3. COMPUTE ENGINES</text>
+  <rect x="425" y="60" width="150" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="435" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">Trino SQL Engine</text>
+  <rect x="425" y="140" width="150" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="435" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">Apache Spark</text>
+  <rect x="425" y="220" width="150" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="435" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">DuckDB vss</text>
 
-  <rect x="610" y="20" width="180" height="460" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="610" y="20" width="180" height="30" fill="#F1F5F9" rx="8"/>
-  <text x="620" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#334155">4. GOVERNANCE</text>
-  <rect x="625" y="60" width="150" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="635" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">OpenMetadata</text>
-  <rect x="625" y="140" width="150" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="635" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">OpenLineage</text>
-  <rect x="625" y="220" width="150" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="635" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">OTel Collector</text>
-  <rect x="625" y="300" width="150" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="635" y="320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Keycloak IAM</text>
+  <rect x="610" y="20" width="180" height="460" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="610" y="20" width="180" height="30" fill="#0F172A" rx="8"/>
+  <text x="620" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#94A3B8">4. GOVERNANCE</text>
+  <rect x="625" y="60" width="150" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="635" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">OpenMetadata</text>
+  <rect x="625" y="140" width="150" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="635" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">OpenLineage</text>
+  <rect x="625" y="220" width="150" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="635" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">OTel Collector</text>
+  <rect x="625" y="300" width="150" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="635" y="320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">Keycloak IAM</text>
 
-  <rect x="810" y="20" width="170" height="460" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="810" y="20" width="170" height="30" fill="#FEF3C7" rx="8"/>
-  <text x="820" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#92400E">5. ANALYTICS &amp; ML</text>
-  <rect x="820" y="60" width="150" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="830" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Apache Superset</text>
-  <rect x="820" y="140" width="150" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="830" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">MLflow Registry</text>
+  <rect x="810" y="20" width="170" height="460" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="810" y="20" width="170" height="30" fill="#0F172A" rx="8"/>
+  <text x="820" y="40" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#FBBF24">5. ANALYTICS &amp; ML</text>
+  <rect x="820" y="60" width="150" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="830" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">Apache Superset</text>
+  <rect x="820" y="140" width="150" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="830" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">MLflow Registry</text>
 
-  <line x1="180" y1="250" x2="225" y2="95" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ov)"/>
-  <line x1="375" y1="275" x2="425" y2="90" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ov)"/>
-  <line x1="575" y1="90" x2="820" y2="90" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ov)"/>
+  <line x1="180" y1="250" x2="225" y2="95" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ov)"/>
+  <line x1="375" y1="275" x2="425" y2="90" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ov)"/>
+  <line x1="575" y1="90" x2="820" y2="90" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ov)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 

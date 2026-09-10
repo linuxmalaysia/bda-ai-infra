@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: documentation
 title: "OpenWiki Documentation Skeleton & BDA Subsystem Index"
-timestamp: "2026-09-10T09:06:14Z"
+timestamp: "2026-09-10T20:36:54Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true

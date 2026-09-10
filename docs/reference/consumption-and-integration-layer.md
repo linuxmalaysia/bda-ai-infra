@@ -45,90 +45,88 @@ The Consumption & Integration Layer provides three dedicated ingress/egress para
 
 ### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" height="100%">
   <defs>
     <marker id="arrow-ci" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
     </marker>
     <filter id="shadow-ci" x="-4%" y="-4%" width="108%" height="108%">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.06"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
     </filter>
   </defs>
 
   <!-- Background -->
-  <rect width="960" height="480" fill="#F8FAFC" rx="10"/>
+  <rect width="960" height="480" fill="#0F172A" rx="10"/>
 
   <!-- Tier 1: Client Applications -->
-  <rect x="20" y="20" width="920" height="70" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8" filter="url(#shadow-ci)"/>
-  <rect x="20" y="20" width="920" height="26" fill="#F1F5F9" rx="8"/>
-  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#334155">AI CLIENTS &amp; EXTERNAL APPLICATIONS TIER</text>
+  <rect x="20" y="20" width="920" height="70" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-ci)"/>
+  <rect x="20" y="20" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#94A3B8">AI CLIENTS &amp; EXTERNAL APPLICATIONS TIER</text>
 
-  <rect x="40" y="52" width="260" height="30" fill="#EFF6FF" stroke="#BFDBFE" rx="4"/>
-  <text x="50" y="71" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#1E40AF">Autonomous LLM / AI Agents</text>
+  <rect x="40" y="52" width="260" height="30" fill="#1E3A8A" stroke="#3B82F6" rx="4"/>
+  <text x="50" y="71" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#93C5FD">Autonomous LLM / AI Agents</text>
 
-  <rect x="350" y="52" width="260" height="30" fill="#F0FDF4" stroke="#BBF7D0" rx="4"/>
-  <text x="360" y="71" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#166534">Web &amp; Mobile Microservices</text>
+  <rect x="350" y="52" width="260" height="30" fill="#065F46" stroke="#22C55E" rx="4"/>
+  <text x="360" y="71" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#86EFAC">Web &amp; Mobile Microservices</text>
 
-  <rect x="660" y="52" width="260" height="30" fill="#FEF3C7" stroke="#FDE68A" rx="4"/>
-  <text x="670" y="71" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#92400E">B2B &amp; Legacy File Consumers</text>
+  <rect x="660" y="52" width="260" height="30" fill="#78350F" stroke="#F59E0B" rx="4"/>
+  <text x="670" y="71" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#FDE68A">B2B &amp; Legacy File Consumers</text>
 
   <!-- Tier 2: Consumption Gateway Layer -->
-  <rect x="20" y="125" width="920" height="190" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8" filter="url(#shadow-ci)"/>
-  <rect x="20" y="125" width="920" height="26" fill="#EFF6FF" rx="8"/>
-  <text x="35" y="143" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#1E40AF">CONSUMPTION &amp; INTEGRATION GATEWAY LAYER</text>
+  <rect x="20" y="125" width="920" height="190" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-ci)"/>
+  <rect x="20" y="125" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="143" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">CONSUMPTION &amp; INTEGRATION GATEWAY LAYER</text>
 
   <!-- Component 1: MCP Server -->
-  <rect x="40" y="160" width="260" height="140" fill="#F8FAFC" stroke="#93C5FD" stroke-width="1" rx="6"/>
-  <text x="50" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#1E40AF">1. Python MCP Server</text>
-  <text x="50" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Protocol: JSON-RPC 2.0 (std/mTLS)</text>
-  <text x="50" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">• Tool: spatial_semantic_search</text>
-  <text x="50" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">• Dynamic Context Retrieval</text>
-  <text x="50" y="258" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">• Keycloak OIDC Service Account</text>
+  <rect x="40" y="160" width="260" height="140" fill="#0F172A" stroke="#3B82F6" stroke-width="1" rx="6"/>
+  <text x="50" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#93C5FD">1. Python MCP Server</text>
+  <text x="50" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Protocol: JSON-RPC 2.0 (std/mTLS)</text>
+  <text x="50" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Tool: spatial_semantic_search</text>
+  <text x="50" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Dynamic Context Retrieval</text>
+  <text x="50" y="258" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Keycloak OIDC Service Account</text>
 
   <!-- Component 2: FastAPI -->
-  <rect x="350" y="160" width="260" height="140" fill="#F8FAFC" stroke="#86EFAC" stroke-width="1" rx="6"/>
-  <text x="360" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#166534">2. FastAPI REST/gRPC Gateway</text>
-  <text x="360" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#16A34A">Port 8000 / OpenAPI 3.1</text>
-  <text x="360" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">• Hybrid Search Endpoints</text>
-  <text x="360" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">• Data Ingestion Webhooks</text>
-  <text x="360" y="258" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">• JWT OAuth2 Security Perimeter</text>
+  <rect x="350" y="160" width="260" height="140" fill="#0F172A" stroke="#22C55E" stroke-width="1" rx="6"/>
+  <text x="360" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">2. FastAPI REST/gRPC Gateway</text>
+  <text x="360" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Port 8000 / OpenAPI 3.1</text>
+  <text x="360" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Hybrid Search Endpoints</text>
+  <text x="360" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Data Ingestion Webhooks</text>
+  <text x="360" y="258" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• JWT OAuth2 Security Perimeter</text>
 
   <!-- Component 3: File Transfer NiFi Egress -->
-  <rect x="660" y="160" width="260" height="140" fill="#F8FAFC" stroke="#FDE68A" stroke-width="1" rx="6"/>
-  <text x="670" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#92400E">3. NiFi 2.0 Egress &amp; SFTP</text>
-  <text x="670" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Port 22 (PutSFTP / EncryptContent)</text>
-  <text x="670" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">• Cron Extract DB Queries</text>
-  <text x="670" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">• PGP Cryptographic Packaging</text>
-  <text x="670" y="258" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">• S3 Egress &amp; SFTP Protocol</text>
+  <rect x="660" y="160" width="260" height="140" fill="#0F172A" stroke="#F59E0B" stroke-width="1" rx="6"/>
+  <text x="670" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#FDE68A">3. NiFi 2.0 Egress &amp; SFTP</text>
+  <text x="670" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">Port 22 (PutSFTP / EncryptContent)</text>
+  <text x="670" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Cron Extract DB Queries</text>
+  <text x="670" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• PGP Cryptographic Packaging</text>
+  <text x="670" y="258" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• S3 Egress &amp; SFTP Protocol</text>
 
   <!-- Tier 3: Core Database Hub -->
-  <rect x="20" y="345" width="920" height="115" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8" filter="url(#shadow-ci)"/>
-  <rect x="20" y="345" width="920" height="26" fill="#F3E8FF" rx="8"/>
-  <text x="35" y="363" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#6B21A8">POSTGRESQL UNIFIED AI MASTER HUB (PORT 5432 / TLS 1.3)</text>
+  <rect x="20" y="345" width="920" height="115" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-ci)"/>
+  <rect x="20" y="345" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="363" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#C084FC">POSTGRESQL UNIFIED AI MASTER HUB (PORT 5432 / TLS 1.3)</text>
 
-  <rect x="40" y="380" width="260" height="65" fill="#FAF5FF" stroke="#D8B4FE" rx="6"/>
-  <text x="50" y="400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#7E22CE">pgvector Extension</text>
-  <text x="50" y="418" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">HNSW Index (vector_cosine_ops)</text>
+  <rect x="40" y="380" width="260" height="65" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="50" y="400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">pgvector Extension</text>
+  <text x="50" y="418" font-family="Consolas, Monaco, monospace" font-size="10" fill="#C084FC">HNSW Index (vector_cosine_ops)</text>
 
-  <rect x="350" y="380" width="260" height="65" fill="#FAF5FF" stroke="#D8B4FE" rx="6"/>
-  <text x="360" y="400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#7E22CE">PostGIS Spatial Engine</text>
-  <text x="360" y="418" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">ST_DWithin Geography R-Tree</text>
+  <rect x="350" y="380" width="260" height="65" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="360" y="400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">PostGIS Spatial Engine</text>
+  <text x="360" y="418" font-family="Consolas, Monaco, monospace" font-size="10" fill="#C084FC">ST_DWithin Geography R-Tree</text>
 
-  <rect x="660" y="380" width="260" height="65" fill="#FAF5FF" stroke="#D8B4FE" rx="6"/>
-  <text x="670" y="400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#7E22CE">pgTDE &amp; Security Perimeter</text>
-  <text x="670" y="418" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">Transparent Encryption at Rest</text>
+  <rect x="660" y="380" width="260" height="65" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="670" y="400" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">pgTDE &amp; Security Perimeter</text>
+  <text x="670" y="418" font-family="Consolas, Monaco, monospace" font-size="10" fill="#C084FC">Transparent Encryption at Rest</text>
 
   <!-- Connectors -->
-  <line x1="170" y1="82" x2="170" y2="160" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
-  <line x1="480" y1="82" x2="480" y2="160" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
-  <line x1="790" y1="82" x2="790" y2="160" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
+  <line x1="170" y1="82" x2="170" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
+  <line x1="480" y1="82" x2="480" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
+  <line x1="790" y1="82" x2="790" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
 
-  <line x1="170" y1="300" x2="170" y2="380" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
-  <line x1="480" y1="300" x2="480" y2="380" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
-  <line x1="790" y1="300" x2="790" y2="380" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
+  <line x1="170" y1="300" x2="170" y2="380" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
+  <line x1="480" y1="300" x2="480" y2="380" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
+  <line x1="790" y1="300" x2="790" y2="380" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
 </svg>
-```
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)
 

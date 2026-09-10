@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Data Ingestion & Pipeline Orchestration: NiFi, Kafka, Airflow & ODCS"
-timestamp: "2026-09-10T09:06:14Z"
+timestamp: "2026-09-10T20:36:54Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -23,40 +23,38 @@ Data ingestion converts fragmented external data into structured, validated SSoT
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 380" width="100%" height="100%">
   <defs>
     <marker id="arrow-ing" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
     </marker>
   </defs>
 
-  <rect width="950" height="380" fill="#F8FAFC" rx="10"/>
+  <rect width="950" height="380" fill="#0F172A" rx="10"/>
 
-  <rect x="20" y="20" width="150" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <text x="30" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">External Systems</text>
+  <rect x="20" y="20" width="150" height="340" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <text x="30" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">External Systems</text>
 
-  <rect x="190" y="20" width="160" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <text x="200" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">APISIX Gateway</text>
-  <text x="200" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 443 / TLS Gate</text>
+  <rect x="190" y="20" width="160" height="340" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <text x="200" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">APISIX Gateway</text>
+  <text x="200" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Port 443 / TLS Gate</text>
 
-  <rect x="370" y="20" width="160" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <text x="380" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache NiFi</text>
-  <text x="380" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">Port 8443 / mTLS Flow</text>
+  <rect x="370" y="20" width="160" height="340" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <text x="380" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Apache NiFi</text>
+  <text x="380" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Port 8443 / mTLS Flow</text>
 
-  <rect x="550" y="20" width="160" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <text x="560" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">ODCS Gate</text>
-  <text x="560" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">v3.1.0 Validation</text>
+  <rect x="550" y="20" width="160" height="340" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <text x="560" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">ODCS Gate</text>
+  <text x="560" y="65" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">v3.1.0 Validation</text>
 
-  <rect x="730" y="20" width="200" height="340" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <text x="740" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Kafka &amp; Spark S3 Writer</text>
+  <rect x="730" y="20" width="200" height="340" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <text x="740" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Kafka &amp; Spark S3 Writer</text>
 
-  <line x1="170" y1="120" x2="190" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
-  <line x1="350" y1="120" x2="370" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
-  <line x1="530" y1="120" x2="550" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
-  <line x1="710" y1="120" x2="730" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
+  <line x1="170" y1="120" x2="190" y2="120" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
+  <line x1="350" y1="120" x2="370" y2="120" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
+  <line x1="530" y1="120" x2="550" y2="120" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
+  <line x1="710" y1="120" x2="730" y2="120" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 

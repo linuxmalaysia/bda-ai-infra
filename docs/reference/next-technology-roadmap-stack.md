@@ -52,59 +52,57 @@ Polaris implements the open Apache Iceberg REST Catalog specification, providing
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="100%" height="100%">
   <defs>
     <marker id="arrow-pol" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
     </marker>
   </defs>
 
-  <rect width="900" height="420" fill="#F8FAFC" rx="10"/>
+  <rect width="900" height="420" fill="#0F172A" rx="10"/>
 
   <!-- Compute Tier -->
-  <rect x="20" y="20" width="860" height="100" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="20" y="20" width="860" height="28" fill="#EFF6FF" rx="8"/>
-  <text x="30" y="39" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#1E40AF">DISTRIBUTED &amp; EMBEDDED COMPUTE ENGINES</text>
+  <rect x="20" y="20" width="860" height="100" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="860" height="28" fill="#0F172A" rx="8"/>
+  <text x="30" y="39" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">DISTRIBUTED &amp; EMBEDDED COMPUTE ENGINES</text>
 
-  <rect x="35" y="55" width="250" height="50" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="45" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Trino MPP Engine</text>
-  <text x="45" y="92" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 8080 / SQL</text>
+  <rect x="35" y="55" width="250" height="50" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Trino MPP Engine</text>
+  <text x="45" y="92" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Port 8080 / SQL</text>
 
-  <rect x="325" y="55" width="250" height="50" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="335" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache Spark Batch</text>
-  <text x="335" y="92" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Port 7077 / Batch ETL</text>
+  <rect x="325" y="55" width="250" height="50" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="335" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Apache Spark Batch</text>
+  <text x="335" y="92" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Port 7077 / Batch ETL</text>
 
-  <rect x="615" y="55" width="250" height="50" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="625" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">DuckDB OLAP &amp; vss</text>
-  <text x="625" y="92" font-family="Consolas, Monaco, monospace" font-size="10" fill="#92400E">In-Process Library</text>
+  <rect x="615" y="55" width="250" height="50" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="625" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">DuckDB OLAP &amp; vss</text>
+  <text x="625" y="92" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">In-Process Library</text>
 
   <!-- Catalog Tier -->
-  <rect x="20" y="150" width="860" height="110" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="20" y="150" width="860" height="28" fill="#DCFCE7" rx="8"/>
-  <text x="30" y="169" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#166534">OPEN ICEBERG REST CATALOG TIER</text>
+  <rect x="20" y="150" width="860" height="110" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="150" width="860" height="28" fill="#0F172A" rx="8"/>
+  <text x="30" y="169" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">OPEN ICEBERG REST CATALOG TIER</text>
 
-  <rect x="230" y="190" width="440" height="55" fill="#F8FAFC" stroke="#A7F3D0" rx="6"/>
-  <text x="240" y="212" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#065F46">Apache Polaris REST Catalog</text>
-  <text x="240" y="230" font-family="Consolas, Monaco, monospace" font-size="11" fill="#047857">Port 8181 / Iceberg REST API (RBAC &amp; Credential Vending)</text>
+  <rect x="230" y="190" width="440" height="55" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="240" y="212" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">Apache Polaris REST Catalog</text>
+  <text x="240" y="230" font-family="Consolas, Monaco, monospace" font-size="11" fill="#4ADE80">Port 8181 / Iceberg REST API (RBAC &amp; Credential Vending)</text>
 
   <!-- Storage Tier -->
-  <rect x="20" y="290" width="860" height="110" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="20" y="290" width="860" height="28" fill="#F1F5F9" rx="8"/>
-  <text x="30" y="309" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#334155">S3-COMPATIBLE OBJECT STORAGE</text>
+  <rect x="20" y="290" width="860" height="110" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="290" width="860" height="28" fill="#0F172A" rx="8"/>
+  <text x="30" y="309" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#94A3B8">S3-COMPATIBLE OBJECT STORAGE</text>
 
-  <rect x="230" y="330" width="440" height="55" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="240" y="352" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Ceph RADOS Gateway / MinIO</text>
-  <text x="240" y="370" font-family="Consolas, Monaco, monospace" font-size="11" fill="#475569">Port 9000 / S3 API (Parquet &amp; Iceberg Metadata)</text>
+  <rect x="230" y="330" width="440" height="55" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="240" y="352" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#F8FAFC">Ceph RADOS Gateway / MinIO</text>
+  <text x="240" y="370" font-family="Consolas, Monaco, monospace" font-size="11" fill="#94A3B8">Port 9000 / S3 API (Parquet &amp; Iceberg Metadata)</text>
 
   <!-- Arrows -->
-  <line x1="160" y1="105" x2="310" y2="190" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-pol)"/>
-  <line x1="450" y1="105" x2="450" y2="190" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-pol)"/>
-  <line x1="740" y1="105" x2="590" y2="190" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-pol)"/>
+  <line x1="160" y1="105" x2="310" y2="190" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pol)"/>
+  <line x1="450" y1="105" x2="450" y2="190" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pol)"/>
+  <line x1="740" y1="105" x2="590" y2="190" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pol)"/>
 
-  <line x1="450" y1="245" x2="450" y2="330" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-pol)"/>
+  <line x1="450" y1="245" x2="450" y2="330" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pol)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -172,72 +170,70 @@ To enable local, privacy-preserving semantic search and Retrieval-Augmented Gene
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 480" width="100%" height="100%">
   <defs>
     <marker id="arrow-rag" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
     </marker>
   </defs>
 
-  <rect width="950" height="480" fill="#F8FAFC" rx="10"/>
+  <rect width="950" height="480" fill="#0F172A" rx="10"/>
 
   <!-- Zone 1: OpenMetadata -->
-  <rect x="20" y="20" width="210" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="20" y="20" width="210" height="32" fill="#EFF6FF" rx="8"/>
-  <text x="30" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#1E40AF">1. OPENMETADATA CATALOG</text>
+  <rect x="20" y="20" width="210" height="440" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="210" height="32" fill="#0F172A" rx="8"/>
+  <text x="30" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">1. OPENMETADATA CATALOG</text>
 
-  <rect x="35" y="110" width="180" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="45" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">OpenMetadata Server</text>
-  <text x="45" y="152" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Schemas &amp; ODCS Contracts</text>
+  <rect x="35" y="110" width="180" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">OpenMetadata Server</text>
+  <text x="45" y="152" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Schemas &amp; ODCS Contracts</text>
 
   <!-- Zone 2: Embedding Pipeline -->
-  <rect x="250" y="20" width="210" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="250" y="20" width="210" height="32" fill="#F1F5F9" rx="8"/>
-  <text x="260" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#334155">2. LOCAL EMBEDDING</text>
+  <rect x="250" y="20" width="210" height="440" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="250" y="20" width="210" height="32" fill="#0F172A" rx="8"/>
+  <text x="260" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#94A3B8">2. LOCAL EMBEDDING</text>
 
-  <rect x="265" y="110" width="180" height="100" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="275" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">SentenceTransformer</text>
-  <text x="275" y="152" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">Local GPU Execution</text>
-  <text x="275" y="172" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#64748B">Zero WAN Egress</text>
+  <rect x="265" y="110" width="180" height="100" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="275" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">SentenceTransformer</text>
+  <text x="275" y="152" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Local GPU Execution</text>
+  <text x="275" y="172" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#94A3B8">Zero WAN Egress</text>
 
   <!-- Zone 3: Vector Stores -->
-  <rect x="480" y="20" width="220" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="480" y="20" width="220" height="32" fill="#DCFCE7" rx="8"/>
-  <text x="490" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#166534">3. DUAL VECTOR STORES</text>
+  <rect x="480" y="20" width="220" height="440" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="480" y="20" width="220" height="32" fill="#0F172A" rx="8"/>
+  <text x="490" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">3. DUAL VECTOR STORES</text>
 
-  <rect x="495" y="80" width="190" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="505" y="102" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">DuckDB vss</text>
-  <text x="505" y="122" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">ARRAY HNSW Index</text>
+  <rect x="495" y="80" width="190" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="505" y="102" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">DuckDB vss</text>
+  <text x="505" y="122" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">ARRAY HNSW Index</text>
 
-  <rect x="495" y="180" width="190" height="80" fill="#F8FAFC" stroke="#A7F3D0" rx="6"/>
-  <text x="505" y="202" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">pgvector Store</text>
-  <text x="505" y="222" font-family="Consolas, Monaco, monospace" font-size="10" fill="#047857">Port 5432 / Persistent HNSW</text>
+  <rect x="495" y="180" width="190" height="80" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="505" y="202" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">pgvector Store</text>
+  <text x="505" y="222" font-family="Consolas, Monaco, monospace" font-size="10" fill="#86EFAC">Port 5432 / Persistent HNSW</text>
 
   <!-- Zone 4: Hybrid RAG Agent -->
-  <rect x="720" y="20" width="210" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="720" y="20" width="210" height="32" fill="#FEF3C7" rx="8"/>
-  <text x="730" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">4. HYBRID RAG AGENT</text>
+  <rect x="720" y="20" width="210" height="440" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="720" y="20" width="210" height="32" fill="#0F172A" rx="8"/>
+  <text x="730" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FBBF24">4. HYBRID RAG AGENT</text>
 
-  <rect x="735" y="70" width="180" height="60" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="745" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">APISIX Gateway</text>
-  <text x="745" y="112" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Keycloak OIDC</text>
+  <rect x="735" y="70" width="180" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="745" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">APISIX Gateway</text>
+  <text x="745" y="112" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Keycloak OIDC</text>
 
-  <rect x="735" y="150" width="180" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="745" y="172" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Hybrid Controller</text>
-  <text x="745" y="192" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">BM25 + Vector Distance</text>
+  <rect x="735" y="150" width="180" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="745" y="172" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Hybrid Controller</text>
+  <text x="745" y="192" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">BM25 + Vector Distance</text>
 
-  <rect x="735" y="250" width="180" height="80" fill="#F8FAFC" stroke="#FDE68A" rx="6"/>
-  <text x="745" y="272" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Local vLLM / Ollama</text>
-  <text x="745" y="292" font-family="Consolas, Monaco, monospace" font-size="10" fill="#92400E">Grounded Answer Output</text>
+  <rect x="735" y="250" width="180" height="80" fill="#0F172A" stroke="#F59E0B" rx="6"/>
+  <text x="745" y="272" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Local vLLM / Ollama</text>
+  <text x="745" y="292" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">Grounded Answer Output</text>
 
   <!-- Connectors -->
-  <line x1="215" y1="150" x2="265" y2="150" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
-  <line x1="445" y1="140" x2="495" y2="120" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
-  <line x1="445" y1="180" x2="495" y2="210" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
-  <line x1="685" y1="220" x2="735" y2="190" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
+  <line x1="215" y1="150" x2="265" y2="150" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
+  <line x1="445" y1="140" x2="495" y2="120" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
+  <line x1="445" y1="180" x2="495" y2="210" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
+  <line x1="685" y1="220" x2="735" y2="190" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -304,77 +300,75 @@ The platform replaces fragmented logging and legacy monitoring agents with a uni
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 420" width="100%" height="100%">
   <defs>
     <marker id="arrow-otel" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
     </marker>
   </defs>
 
-  <rect width="950" height="420" fill="#F8FAFC" rx="10"/>
+  <rect width="950" height="420" fill="#0F172A" rx="10"/>
 
   <!-- Zone 1: Workloads -->
-  <rect x="20" y="20" width="220" height="380" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="20" y="20" width="220" height="32" fill="#F1F5F9" rx="8"/>
-  <text x="30" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#334155">1. WORKLOADS</text>
+  <rect x="20" y="20" width="220" height="380" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="220" height="32" fill="#0F172A" rx="8"/>
+  <text x="30" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#94A3B8">1. WORKLOADS</text>
 
-  <rect x="35" y="70" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="45" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache Airflow DAGs</text>
-  <text x="45" y="112" font-family="Consolas, Monaco, monospace" font-size="10" fill="#475569">OTel Listener &amp; StatsD</text>
+  <rect x="35" y="70" width="190" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Apache Airflow DAGs</text>
+  <text x="45" y="112" font-family="Consolas, Monaco, monospace" font-size="10" fill="#94A3B8">OTel Listener &amp; StatsD</text>
 
-  <rect x="35" y="160" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="45" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache Spark Jobs</text>
-  <text x="45" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Spark OTel Java Agent</text>
+  <rect x="35" y="160" width="190" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Apache Spark Jobs</text>
+  <text x="45" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Spark OTel Java Agent</text>
 
-  <rect x="35" y="250" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="45" y="272" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache APISIX</text>
-  <text x="45" y="292" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">APISIX OTel Plugin</text>
+  <rect x="35" y="250" width="190" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="272" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Apache APISIX</text>
+  <text x="45" y="292" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">APISIX OTel Plugin</text>
 
   <!-- Zone 2: OTel Collector -->
-  <rect x="260" y="20" width="210" height="380" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="260" y="20" width="210" height="32" fill="#EFF6FF" rx="8"/>
-  <text x="270" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#1E40AF">2. OTEL COLLECTOR</text>
+  <rect x="260" y="20" width="210" height="380" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="260" y="20" width="210" height="32" fill="#0F172A" rx="8"/>
+  <text x="270" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">2. OTEL COLLECTOR</text>
 
-  <rect x="275" y="140" width="180" height="120" fill="#F8FAFC" stroke="#CBD5E1" rx="6"/>
-  <text x="285" y="165" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">OTel Collector</text>
-  <text x="285" y="185" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 4317 gRPC / 4318</text>
-  <text x="285" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#475569">Traces, Metrics, Logs</text>
+  <rect x="275" y="140" width="180" height="120" fill="#0F172A" stroke="#3B82F6" rx="6"/>
+  <text x="285" y="165" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#F8FAFC">OTel Collector</text>
+  <text x="285" y="185" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Port 4317 gRPC / 4318</text>
+  <text x="285" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">Traces, Metrics, Logs</text>
 
   <!-- Zone 3: Storage Backends -->
-  <rect x="490" y="20" width="220" height="380" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="490" y="20" width="220" height="32" fill="#DCFCE7" rx="8"/>
-  <text x="500" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#166534">3. BACKEND STORES</text>
+  <rect x="490" y="20" width="220" height="380" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="490" y="20" width="220" height="32" fill="#0F172A" rx="8"/>
+  <text x="500" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">3. BACKEND STORES</text>
 
-  <rect x="505" y="70" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="515" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Prometheus</text>
-  <text x="515" y="112" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Port 9090 / Metrics</text>
+  <rect x="505" y="70" width="190" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="515" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Prometheus</text>
+  <text x="515" y="112" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Port 9090 / Metrics</text>
 
-  <rect x="505" y="160" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="515" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Grafana Tempo</text>
-  <text x="515" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">Port 3200 / Query API</text>
+  <rect x="505" y="160" width="190" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="515" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Grafana Tempo</text>
+  <text x="515" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Port 3200 / Query API</text>
 
-  <rect x="505" y="250" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="515" y="272" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Grafana Loki</text>
-  <text x="515" y="292" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Port 3100 / Logs</text>
+  <rect x="505" y="250" width="190" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="515" y="272" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Grafana Loki</text>
+  <text x="515" y="292" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">Port 3100 / Logs</text>
 
   <!-- Zone 4: Visualization -->
-  <rect x="730" y="20" width="200" height="380" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="730" y="20" width="200" height="32" fill="#FEF3C7" rx="8"/>
-  <text x="740" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">4. VISUALIZATION</text>
+  <rect x="730" y="20" width="200" height="380" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="730" y="20" width="200" height="32" fill="#0F172A" rx="8"/>
+  <text x="740" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FBBF24">4. VISUALIZATION</text>
 
-  <rect x="745" y="150" width="170" height="100" fill="#F8FAFC" stroke="#FDE68A" rx="6"/>
-  <text x="755" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Grafana</text>
-  <text x="755" y="195" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">Port 3000 / Dashboards</text>
+  <rect x="745" y="150" width="170" height="100" fill="#0F172A" stroke="#F59E0B" rx="6"/>
+  <text x="755" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#F8FAFC">Grafana</text>
+  <text x="755" y="195" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">Port 3000 / Dashboards</text>
 
   <!-- Connectors -->
-  <line x1="225" y1="200" x2="275" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
-  <line x1="455" y1="180" x2="505" y2="105" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
-  <line x1="455" y1="200" x2="505" y2="195" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
-  <line x1="455" y1="220" x2="505" y2="285" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
-  <line x1="695" y1="200" x2="745" y2="200" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
+  <line x1="225" y1="200" x2="275" y2="200" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
+  <line x1="455" y1="180" x2="505" y2="105" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
+  <line x1="455" y1="200" x2="505" y2="195" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
+  <line x1="455" y1="220" x2="505" y2="285" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
+  <line x1="695" y1="200" x2="745" y2="200" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 

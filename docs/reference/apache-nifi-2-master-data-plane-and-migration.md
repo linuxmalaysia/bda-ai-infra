@@ -69,7 +69,7 @@ The modern approach consolidates these capabilities into a single, high-availabi
 
 1. **Semantic Layer (`pgvector`):** By storing text fragments alongside their coordinate vectors natively in the same row, applications can query structured fields and compute cosine distances or inner products using standard, highly optimized SQL queries (`vector_cosine_ops`, HNSW, or IVFFlat indexing).
 2. **Geospatial Layer (`PostGIS`):** AI pipelines tracking physical asset movements, logistics fleets, or location-based environmental contexts run bounding-box, distance-based, and polygon intersection calculations directly alongside text and vector indices using R-Tree spatial indexing.
-3. **Cryptographic Layer (`pgTDE`):** Because embedding vectors map directly back to sensitive enterprise secrets and proprietary documents, `pgTDE` provides kernel-level, transparent hardware-accelerated encryption. This ensures data at rest (tablespaces, Write-Ahead Logs, temporary files) remains secure without modifying downstream application layers or SQL execution paths.
+3. **Cryptographic Layer (`pgTDE`):** Because embedding vectors map directly back to sensitive enterprise secrets and proprietary documents, `pgTDE` (deployed via Percona Distribution for PostgreSQL) provides transparent disk-level encryption. When configured with an external key provider (e.g., HashiCorp Vault or key file) and explicit WAL encryption, `pgTDE` encrypts underlying tablespace data files and Write-Ahead Logs at rest without modifying downstream application layers or SQL execution paths. (Note: temporary spill files are not automatically encrypted by current `pgTDE` versions and require strict `work_mem` RAM bounds).
 
 ---
 
@@ -207,7 +207,7 @@ The following diagrams illustrate the end-to-end dataflow between boundary inges
   <text x="375" y="360" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#334155">DBCPConnectionPool Controller</text>
   <text x="375" y="380" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Driver: org.postgresql.Driver</text>
   <text x="375" y="400" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">URL: jdbc:postgresql://postgres.master.internal:5432/enterprise_ai_db?sslmode=verify-full&amp;sslrootcert=/var/private/ssl/rootCA.crt</text>
-  <text x="375" y="420" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Security: TLS 1.3 mTLS Tunnel</text>
+  <text x="375" y="420" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Security: Server-Authenticated TLS 1.3</text>
   <text x="375" y="440" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Auto-Commit: Disabled (Batched)</text>
 
   <!-- Zone 3: PostgreSQL Master Hub -->
@@ -311,7 +311,7 @@ graph LR
 Migration from NiFi 1.x to 2.0 requires careful planning across process group configurations, custom extensions, and state management:
 
 #### Phase 1: Environment & Dependency Preparation
-1. **Configure Cluster State & ZooKeeper Management:** Configure cluster state management in `nifi.properties` by setting `nifi.state.management.provider.cluster=zk-provider`, `nifi.cluster.is.node=true`, `nifi.zookeeper.connect.string`, and `nifi.zookeeper.root.node`. If utilizing an embedded ZooKeeper ensemble, set `nifi.state.management.embedded.zookeeper.start=true`.
+1. **Configure Cluster State & ZooKeeper Management:** Configure cluster state management in `nifi.properties` by setting `nifi.state.management.provider.cluster=zk-provider`, `nifi.cluster.is.node=true`, `nifi.zookeeper.connect.string`, and `nifi.zookeeper.root.node`. Ensure `conf/state-management.xml` defines the matching `zk-provider` cluster-provider entry using `org.apache.nifi.controller.state.providers.zookeeper.ZooKeeperStateProvider`. For embedded ZooKeeper ensembles, set `nifi.state.management.embedded.zookeeper.start=true` in `nifi.properties`, specify `nifi.state.management.embedded.zookeeper.properties=./conf/zookeeper.properties`, and configure ensemble node parameters in `conf/zookeeper.properties`.
 2. **Prepare Python Environment:** Ensure Python (supported versions 3.9, 3.10, 3.11, or 3.12) is installed across all worker nodes. Configure `nifi.properties` with Python binary locations (`nifi.python.command=python3`).
 
 #### Phase 2: Flow Definition & Template Migration
@@ -324,25 +324,52 @@ Migration from NiFi 1.x to 2.0 requires careful planning across process group co
 
 ```python
 # Example: Custom Native Python Processor for Text Chunking in NiFi 2.0
+import json
 from nifiapi.flowfiletransform import FlowFileTransform, FlowFileTransformResult
 from nifiapi.processor import ProcessorDetails
 
 class ChunkAndEmbedText(FlowFileTransform):
+    class Java:
+        implements = ['org.apache.nifi.python.processor.FlowFileTransform']
+
     class ProcessorDetails:
         version = '2.0.0'
-        description = 'Splits raw FlowFile text using LangChain and prepares vector payload.'
+        description = 'Splits raw FlowFile text into chunks and emits JSON vector payload.'
+
+    MAX_SIZE_BYTES = 10 * 1024 * 1024  # Enforce 10MB memory safeguard threshold
+
+    def split_text(self, text: str, chunk_size: int = 500, overlap: int = 50) -> list[str]:
+        """Splits raw text into character chunks with designated overlap."""
+        chunks = []
+        start = 0
+        while start < len(text):
+            end = start + chunk_size
+            chunks.append(text[start:end])
+            if end >= len(text):
+                break
+            start += chunk_size - overlap
+        return chunks
 
     def transform(self, context, flowfile):
+        if flowfile.getSize() > self.MAX_SIZE_BYTES:
+            raise ValueError(f"FlowFile size exceeds maximum threshold of {self.MAX_SIZE_BYTES} bytes")
+
         raw_bytes = flowfile.getContentsAsBytes()
         text_content = raw_bytes.decode('utf-8')
 
-        # Apply text splitting logic
+        # Apply text splitting logic and emit structured payload
         chunks = self.split_text(text_content)
+        payload = {
+            "source": flowfile.getAttribute("filename") or "unknown",
+            "chunks": chunks,
+            "chunk_count": len(chunks)
+        }
 
-        # Store metadata in FlowFile attribute
+        output_bytes = json.dumps(payload).encode('utf-8')
         return FlowFileTransformResult(
             relationship='success',
-            attributes={'chunk.count': str(len(chunks))}
+            contents=output_bytes,
+            attributes={'chunk.count': str(len(chunks)), 'mime.type': 'application/json'}
         )
 ```
 
@@ -436,7 +463,7 @@ Dalam ekosistem ini, peranan dibahagikan secara strategik:
    CREATE EXTENSION IF NOT EXISTS postgis;
    CREATE EXTENSION IF NOT EXISTS postgis_topology;
    ```
-2. **Konfigurasi `pgTDE`:** Menjadualkan `shared_preload_libraries = 'pg_tde'` di dalam `postgresql.conf` untuk memastikan semua tablespace dan log WAL tersifrat secara automatik.
+2. **Konfigurasi `pgTDE` (Percona Distribution for PostgreSQL):** Append `pg_tde` kepada `shared_preload_libraries` di dalam `postgresql.conf`, muat semula/restart kluster, bina pelanjutan menerusi `CREATE EXTENSION IF NOT EXISTS pg_tde;` di dalam setiap pangkalan data sasaran, tetapkan penyedia kunci (key provider seperti Vault/keyfile), serta aktifkan penyifratan WAL (`pg_tde.enable_wal_encrypt = on`). Nota: fail tumpahan sementara (*temporary spill files*) tidak disifrat secara automatik oleh versi `pgTDE` semasa.
 3. **Penyediaan DBCPConnectionPool di NiFi 2.0:**
    - **Database Connection URL:** `jdbc:postgresql://postgres.master.internal:5432/enterprise_ai_db?sslmode=verify-full&sslrootcert=/var/private/ssl/rootCA.crt`
    - **Database Driver Class Name:** `org.postgresql.Driver`

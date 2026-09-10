@@ -48,4 +48,5 @@ topics:
 - [x] Implement Dual-Render Architecture Diagram Specification (SVG + Mermaid) AI skill (`.agents/skills/dual-render-architecture-diagram/SKILL.md`).
 - [x] Refactor all existing architecture, topology, sequence, and workflow diagrams across `docs/reference/`, `openwiki/`, and `tools/openwiki_emulator.py` to Dual-Render standard.
 - [x] Update relative Markdown links to `.html` across documentation entrypoints (`README.md`, `START-HERE.md`, `AGENTS.md`, `docs/README.md`, `docs/reference/*.md`) to eliminate 404 errors on GitHub Pages and update `tests/test_okf_and_links.py` link decay resolver.
+- [x] Create Apache NiFi 2.0 Master Data Plane and Migration Guide (`docs/reference/apache-nifi-2-master-data-plane-and-migration.md`) with PostgreSQL vector/spatial integration, dual-render diagrams, and NiFi 1.x -> 2.0 migration framework.
 - [x] Execute EOD Palace Sync for DSOM Protocol spatial memory state.

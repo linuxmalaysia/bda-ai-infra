@@ -247,8 +247,8 @@ To ensure complete business continuity, the 5 core legacy business cases are sys
 
   <!-- Connectors -->
   <line x1="225" y1="190" x2="275" y2="150" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
-  <rect x="230" y="162" width="36" height="16" fill="#1E3A8A" rx="3"/>
-  <text x="233" y="174" font-family="Consolas, Monaco, monospace" font-size="9" fill="#93C5FD">HTTP</text>
+  <rect x="215" y="162" width="75" height="16" fill="#1E3A8A" rx="3"/>
+  <text x="218" y="174" font-family="Consolas, Monaco, monospace" font-size="9" fill="#93C5FD">Mixed Ingress</text>
 
   <line x1="465" y1="150" x2="515" y2="115" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
   <rect x="470" y="125" width="36" height="16" fill="#065F46" rx="3"/>

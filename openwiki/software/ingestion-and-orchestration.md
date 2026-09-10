@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Data Ingestion & Pipeline Orchestration: NiFi, Kafka, Airflow & ODCS"
-timestamp: "2026-09-10T14:10:54Z"
+timestamp: "2026-09-10T15:17:42Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true

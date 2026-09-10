@@ -126,15 +126,7 @@ def generate_last_update_json(timestamp: str = None) -> str:
 
 
 def generate_instructions_md(timestamp: str = None) -> str:
-    """Build the OpenWiki operating guide with OKF metadata and diagram examples.
-
-    Args:
-        timestamp: Frontmatter timestamp to embed. Defaults to the current UTC time.
-
-    Returns:
-        The complete Markdown instructions document.
-
-    """
+    """Generate standard operational instructions for the OpenWiki emulator."""
     if timestamp is None:
         timestamp = get_timestamp()
     return f"""---
@@ -297,13 +289,7 @@ class OpenWikiState:
         self.timestamp = timestamp or get_timestamp()
 
     def get_planned_pages(self) -> dict:
-        """Return definitions for the OpenWiki pages generated during initialization.
-
-        Returns:
-            A mapping from relative Markdown paths to page titles, topics, descriptions,
-            and content templates.
-
-        """
+        """Return planned wiki pages for 100% OSS BDA Lakehouse SSoT architecture."""
         desc_qs = (
             "Master entrypoint containing BDA SSoT topology map, task-routing table, "
             "and validation commands."

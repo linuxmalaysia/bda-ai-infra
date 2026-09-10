@@ -274,20 +274,36 @@ def test_zero_link_decay(md_path: Path) -> None:
 def test_svg_graphics_embedded_raw_inline_without_code_fences(md_path: Path) -> None:
     """Verify that SVG vector graphics are embedded directly as raw inline HTML/SVG.
 
-    This ensures they render as visual vector graphics rather than source text code blocks
-    on GitHub Pages and Jekyll without ```xml or ``` code fences.
+    Tracks active Markdown code fences (backticks or tildes) across all lines and asserts
+    no <svg tag occurs while a code fence is open, ensuring SVGs render visually.
 
     Args:
         md_path (Path): Path to the Markdown file being tested.
 
     """
     content: str = md_path.read_text(encoding="utf-8")
-    lines: List[str] = content.splitlines()
+    fence_char: Union[str, None] = None
+    fence_len: int = 0
 
-    for idx, line in enumerate(lines):
-        if "<svg" in line and not line.strip().startswith("```"):
-            if idx > 0:
-                prev_line: str = lines[idx - 1].strip()
-                assert not prev_line.startswith("```"), (
-                    f"Line {idx + 1} in {md_path.relative_to(REPO_ROOT)} has <svg preceded by code fence '{prev_line}'"
-                )
+    for idx, line in enumerate(content.splitlines()):
+        indent_len: int = len(line) - len(line.lstrip(" "))
+        if indent_len <= 3:
+            stripped_line: str = line.strip()
+            if fence_char is None:
+                fence_match = re.match(r"^(`{3,}|~{3,})", stripped_line)
+                if fence_match:
+                    match_str: str = fence_match.group(1)
+                    fence_char = match_str[0]
+                    fence_len = len(match_str)
+                    continue
+            else:
+                closing_pattern = rf"^{re.escape(fence_char)}{{{fence_len},}}\s*$"
+                if re.match(closing_pattern, stripped_line):
+                    fence_char = None
+                    fence_len = 0
+                    continue
+
+        if "<svg" in line:
+            assert fence_char is None, (
+                f"Line {idx + 1} in {md_path.relative_to(REPO_ROOT)} has <svg inside an open code fence ({fence_char * fence_len})"
+            )

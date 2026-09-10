@@ -184,7 +184,7 @@ To ensure complete business continuity, the 5 core legacy business cases are sys
   <text x="45" y="177" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">CSVs &amp; Spreadsheets</text>
 
   <rect x="35" y="240" width="190" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
-  <text x="45" y="262" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Email Text Hotspots</text>
+  <text x="45" y="262" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Thermal Anomaly REST API</text>
 
   <rect x="35" y="325" width="190" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
   <text x="45" y="347" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Ad-Hoc SFTP Transfers</text>

@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "FastMCP Integration & Continuous Integration Workflows"
-timestamp: "2026-09-10T15:28:16Z"
+timestamp: "2026-09-10T20:19:47Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -57,8 +57,16 @@ Automated CI pipelines and Model Context Protocol (MCP) integrations expose SSoT
   <text x="625" y="165" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">Jules, Cursor, Claude Code</text>
 
   <line x1="225" y1="160" x2="295" y2="105" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp)"/>
+  <rect x="238" y="122" width="45" height="16" fill="#1E3A8A" rx="3"/>
+  <text x="241" y="134" font-family="Consolas, Monaco, monospace" font-size="9" fill="#93C5FD">Webhook</text>
+
   <line x1="225" y1="160" x2="295" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp)"/>
+  <rect x="238" y="180" width="45" height="16" fill="#065F46" rx="3"/>
+  <text x="241" y="192" font-family="Consolas, Monaco, monospace" font-size="9" fill="#86EFAC">stdio IPC</text>
+
   <line x1="545" y1="220" x2="615" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp)"/>
+  <rect x="558" y="182" width="45" height="16" fill="#065F46" rx="3"/>
+  <text x="561" y="194" font-family="Consolas, Monaco, monospace" font-size="9" fill="#86EFAC">JSON-RPC</text>
 </svg>
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)

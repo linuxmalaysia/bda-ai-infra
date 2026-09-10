@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Governance, Catalog & Lineage Matrix: OpenMetadata & OpenLineage"
-timestamp: "2026-09-10T15:28:16Z"
+timestamp: "2026-09-10T20:19:47Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -60,9 +60,20 @@ Data governance establishes automated metadata extraction, dataset discovery, an
   <text x="655" y="195" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#94A3B8">Column-Level Lineage &amp; ODCS</text>
 
   <line x1="255" y1="110" x2="325" y2="110" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+  <rect x="270" y="102" width="40" height="16" fill="#1E3A8A" rx="3"/>
+  <text x="273" y="114" font-family="Consolas, Monaco, monospace" font-size="9" fill="#93C5FD">REST</text>
+
   <line x1="255" y1="210" x2="325" y2="210" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+  <rect x="260" y="202" width="60" height="16" fill="#065F46" rx="3"/>
+  <text x="263" y="214" font-family="Consolas, Monaco, monospace" font-size="9" fill="#86EFAC">OpenLineage</text>
+
   <line x1="575" y1="110" x2="645" y2="180" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+  <rect x="590" y="132" width="40" height="16" fill="#1E3A8A" rx="3"/>
+  <text x="593" y="144" font-family="Consolas, Monaco, monospace" font-size="9" fill="#93C5FD">REST</text>
+
   <line x1="575" y1="210" x2="645" y2="180" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+  <rect x="590" y="188" width="40" height="16" fill="#1E3A8A" rx="3"/>
+  <text x="593" y="200" font-family="Consolas, Monaco, monospace" font-size="9" fill="#93C5FD">REST</text>
 </svg>
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)

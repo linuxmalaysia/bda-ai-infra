@@ -153,93 +153,93 @@ The following diagrams illustrate the end-to-end dataflow between boundary inges
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" width="100%" height="100%">
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
     </marker>
     <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
-      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#0F172A" flood-opacity="0.08" />
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25" />
     </filter>
   </defs>
 
   <!-- Canvas Background -->
-  <rect width="1000" height="520" fill="#F8FAFC" rx="12" />
+  <rect width="1000" height="520" fill="#0F172A" rx="12" />
 
   <!-- Zone 1: Ingestion Zone -->
-  <rect x="20" y="20" width="280" height="480" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="10" filter="url(#shadow)" />
-  <rect x="20" y="20" width="280" height="40" fill="#EFF6FF" rx="10" />
-  <text x="35" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="bold" fill="#1E40AF">1. INGESTION & BOUNDARY ZONE</text>
+  <rect x="20" y="20" width="280" height="480" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="10" filter="url(#shadow)" />
+  <rect x="20" y="20" width="280" height="40" fill="#0F172A" rx="10" />
+  <text x="35" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="bold" fill="#60A5FA">1. INGESTION &amp; BOUNDARY ZONE</text>
 
   <!-- Ingestion Nodes -->
-  <rect x="40" y="80" width="240" height="70" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1" rx="6" />
-  <text x="55" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">REST / Telemetry Stream</text>
-  <text x="55" y="125" font-family="Monaco, Consolas, monospace" font-size="11" fill="#475569">ListenHTTP (Port 8443)</text>
+  <rect x="40" y="80" width="240" height="70" fill="#0F172A" stroke="#334155" stroke-width="1" rx="6" />
+  <text x="55" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#F8FAFC">REST / Telemetry Stream</text>
+  <text x="55" y="125" font-family="Monaco, Consolas, monospace" font-size="11" fill="#60A5FA">ListenHTTP (Port 8443)</text>
 
-  <rect x="40" y="170" width="240" height="70" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1" rx="6" />
-  <text x="55" y="195" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Object Storage Feed</text>
-  <text x="55" y="215" font-family="Monaco, Consolas, monospace" font-size="11" fill="#475569">FetchS3Object (S3 API)</text>
+  <rect x="40" y="170" width="240" height="70" fill="#0F172A" stroke="#334155" stroke-width="1" rx="6" />
+  <text x="55" y="195" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#F8FAFC">Object Storage Feed</text>
+  <text x="55" y="215" font-family="Monaco, Consolas, monospace" font-size="11" fill="#38BDF8">FetchS3Object (S3 API)</text>
 
-  <rect x="40" y="260" width="240" height="70" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1" rx="6" />
-  <text x="55" y="285" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">Document Parsers</text>
-  <text x="55" y="305" font-family="Monaco, Consolas, monospace" font-size="11" fill="#475569">ParsePDF / Apache Tika</text>
+  <rect x="40" y="260" width="240" height="70" fill="#0F172A" stroke="#334155" stroke-width="1" rx="6" />
+  <text x="55" y="285" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#F8FAFC">Document Parsers</text>
+  <text x="55" y="305" font-family="Monaco, Consolas, monospace" font-size="11" fill="#94A3B8">ParsePDF / Apache Tika</text>
 
-  <rect x="40" y="350" width="240" height="130" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1" rx="6" />
-  <text x="55" y="375" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#92400E">NiFi Provenance Engine</text>
-  <text x="55" y="395" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#78350F">FlowFile Audit &amp; Lineage</text>
-  <text x="55" y="415" font-family="Monaco, Consolas, monospace" font-size="10" fill="#78350F">Cryptographic Chain of Trust</text>
-  <text x="55" y="435" font-family="Monaco, Consolas, monospace" font-size="10" fill="#78350F">Zero Data Loss Provenance</text>
+  <rect x="40" y="350" width="240" height="130" fill="#0F172A" stroke="#F59E0B" stroke-width="1" rx="6" />
+  <text x="55" y="375" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#FDE68A">NiFi Provenance Engine</text>
+  <text x="55" y="395" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">FlowFile Audit &amp; Lineage</text>
+  <text x="55" y="415" font-family="Monaco, Consolas, monospace" font-size="10" fill="#FBBF24">Cryptographic Chain of Trust</text>
+  <text x="55" y="435" font-family="Monaco, Consolas, monospace" font-size="10" fill="#FBBF24">Zero Data Loss Provenance</text>
 
   <!-- Zone 2: Apache NiFi 2.0 Engine -->
-  <rect x="340" y="20" width="320" height="480" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="10" filter="url(#shadow)" />
-  <rect x="340" y="20" width="320" height="40" fill="#F0FDF4" rx="10" />
-  <text x="355" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="bold" fill="#166534">2. APACHE NIFI 2.0 ETL PLANE</text>
+  <rect x="340" y="20" width="320" height="480" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="10" filter="url(#shadow)" />
+  <rect x="340" y="20" width="320" height="40" fill="#0F172A" rx="10" />
+  <text x="355" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="bold" fill="#4ADE80">2. APACHE NIFI 2.0 ETL PLANE</text>
 
-  <rect x="360" y="80" width="280" height="110" fill="#DCFCE7" stroke="#16A34A" stroke-width="1.5" rx="6" />
-  <text x="375" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#14532D">Native Python Process Pool</text>
-  <text x="375" y="125" font-family="Monaco, Consolas, monospace" font-size="11" fill="#166534">• LangChain Text Chunking</text>
-  <text x="375" y="145" font-family="Monaco, Consolas, monospace" font-size="11" fill="#166534">• OpenAI / Local Embeddings</text>
-  <text x="375" y="165" font-family="Monaco, Consolas, monospace" font-size="11" fill="#166534">• Metadata &amp; WKT Geo Extraction</text>
+  <rect x="360" y="80" width="280" height="110" fill="#0F172A" stroke="#22C55E" stroke-width="1.5" rx="6" />
+  <text x="375" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">Native Python Process Pool</text>
+  <text x="375" y="125" font-family="Monaco, Consolas, monospace" font-size="11" fill="#4ADE80">• LangChain Text Chunking</text>
+  <text x="375" y="145" font-family="Monaco, Consolas, monospace" font-size="11" fill="#4ADE80">• OpenAI / Local Embeddings</text>
+  <text x="375" y="165" font-family="Monaco, Consolas, monospace" font-size="11" fill="#4ADE80">• Metadata &amp; WKT Geo Extraction</text>
 
-  <rect x="360" y="210" width="280" height="80" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1" rx="6" />
-  <text x="375" y="235" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">UpdateRecord Formatter</text>
-  <text x="375" y="255" font-family="Monaco, Consolas, monospace" font-size="11" fill="#475569">JSON Struct &amp; WKT Formatting</text>
+  <rect x="360" y="210" width="280" height="80" fill="#0F172A" stroke="#334155" stroke-width="1" rx="6" />
+  <text x="375" y="235" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#F8FAFC">UpdateRecord Formatter</text>
+  <text x="375" y="255" font-family="Monaco, Consolas, monospace" font-size="11" fill="#94A3B8">JSON Struct &amp; WKT Formatting</text>
 
-  <rect x="360" y="310" width="280" height="170" fill="#F1F5F9" stroke="#94A3B8" stroke-width="1" rx="6" />
-  <text x="375" y="335" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">PutDatabaseRecord Processor</text>
-  <text x="375" y="360" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#334155">DBCPConnectionPool Controller</text>
-  <text x="375" y="380" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Driver: org.postgresql.Driver</text>
-  <text x="375" y="400" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">URL: jdbc:postgresql://postgres.master.internal:5432/enterprise_ai_db?sslmode=verify-full&amp;sslrootcert=/var/private/ssl/rootCA.crt</text>
-  <text x="375" y="420" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Security: Server-Authenticated TLS</text>
-  <text x="375" y="440" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Auto-Commit: Disabled (Batched)</text>
+  <rect x="360" y="310" width="280" height="170" fill="#0F172A" stroke="#334155" stroke-width="1" rx="6" />
+  <text x="375" y="335" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#F8FAFC">PutDatabaseRecord Processor</text>
+  <text x="375" y="360" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#E2E8F0">DBCPConnectionPool Controller</text>
+  <text x="375" y="380" font-family="Monaco, Consolas, monospace" font-size="10" fill="#94A3B8">Driver: org.postgresql.Driver</text>
+  <text x="375" y="400" font-family="Monaco, Consolas, monospace" font-size="10" fill="#94A3B8">URL: jdbc:postgresql://postgres.master.internal:5432/enterprise_ai_db?sslmode=verify-full&amp;sslrootcert=/var/private/ssl/rootCA.crt</text>
+  <text x="375" y="420" font-family="Monaco, Consolas, monospace" font-size="10" fill="#94A3B8">Security: Server-Authenticated TLS</text>
+  <text x="375" y="440" font-family="Monaco, Consolas, monospace" font-size="10" fill="#94A3B8">Auto-Commit: Disabled (Batched)</text>
 
   <!-- Zone 3: PostgreSQL Master Hub -->
-  <rect x="700" y="20" width="280" height="480" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="10" filter="url(#shadow)" />
-  <rect x="700" y="20" width="280" height="40" fill="#F3E8FF" rx="10" />
-  <text x="715" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="bold" fill="#6B21A8">3. POSTGRESQL MASTER DATA HUB</text>
+  <rect x="700" y="20" width="280" height="480" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="10" filter="url(#shadow)" />
+  <rect x="700" y="20" width="280" height="40" fill="#0F172A" rx="10" />
+  <text x="715" y="45" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="bold" fill="#C084FC">3. POSTGRESQL MASTER DATA HUB</text>
 
-  <rect x="720" y="80" width="240" height="80" fill="#FAF5FF" stroke="#A855F7" stroke-width="1.5" rx="6" />
-  <text x="735" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#581C87">pgTDE Cryptographic Layer</text>
-  <text x="735" y="125" font-family="Monaco, Consolas, monospace" font-size="11" fill="#6B21A8">Disk Encryption at Rest</text>
-  <text x="735" y="145" font-family="Monaco, Consolas, monospace" font-size="10" fill="#6B21A8">Tablespaces / WAL (RAM work_mem)</text>
+  <rect x="720" y="80" width="240" height="80" fill="#0F172A" stroke="#A855F7" stroke-width="1.5" rx="6" />
+  <text x="735" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#E9D5FF">pgTDE Cryptographic Layer</text>
+  <text x="735" y="125" font-family="Monaco, Consolas, monospace" font-size="11" fill="#C084FC">Disk Encryption at Rest</text>
+  <text x="735" y="145" font-family="Monaco, Consolas, monospace" font-size="10" fill="#C084FC">Tablespaces / WAL (RAM work_mem)</text>
 
-  <rect x="720" y="180" width="240" height="130" fill="#F3E8FF" stroke="#7E22CE" stroke-width="1.5" rx="6" />
-  <text x="735" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#581C87">pgvector Extension</text>
-  <text x="735" y="225" font-family="Monaco, Consolas, monospace" font-size="11" fill="#6B21A8">VECTOR(1536) Indexing</text>
-  <text x="735" y="245" font-family="Monaco, Consolas, monospace" font-size="10" fill="#6B21A8">HNSW Index (vector_cosine_ops)</text>
-  <text x="735" y="265" font-family="Monaco, Consolas, monospace" font-size="10" fill="#6B21A8">Sub-millisecond Cosine Search</text>
+  <rect x="720" y="180" width="240" height="130" fill="#0F172A" stroke="#A855F7" stroke-width="1.5" rx="6" />
+  <text x="735" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#E9D5FF">pgvector Extension</text>
+  <text x="735" y="225" font-family="Monaco, Consolas, monospace" font-size="11" fill="#C084FC">VECTOR(1536) Indexing</text>
+  <text x="735" y="245" font-family="Monaco, Consolas, monospace" font-size="10" fill="#C084FC">HNSW Index (vector_cosine_ops)</text>
+  <text x="735" y="265" font-family="Monaco, Consolas, monospace" font-size="10" fill="#C084FC">Sub-millisecond Cosine Search</text>
 
-  <rect x="720" y="330" width="240" height="150" fill="#F3E8FF" stroke="#7E22CE" stroke-width="1.5" rx="6" />
-  <text x="735" y="355" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#581C87">PostGIS Spatial Extension</text>
-  <text x="735" y="375" font-family="Monaco, Consolas, monospace" font-size="11" fill="#6B21A8">GEOMETRY(Point, 4326)</text>
-  <text x="735" y="395" font-family="Monaco, Consolas, monospace" font-size="10" fill="#6B21A8">GIST Spatial R-Tree Indexing</text>
-  <text x="735" y="415" font-family="Monaco, Consolas, monospace" font-size="10" fill="#6B21A8">Bounding Box &amp; Spatial Join</text>
+  <rect x="720" y="330" width="240" height="150" fill="#0F172A" stroke="#A855F7" stroke-width="1.5" rx="6" />
+  <text x="735" y="355" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#E9D5FF">PostGIS Spatial Extension</text>
+  <text x="735" y="375" font-family="Monaco, Consolas, monospace" font-size="11" fill="#C084FC">GEOMETRY(Point, 4326)</text>
+  <text x="735" y="395" font-family="Monaco, Consolas, monospace" font-size="10" fill="#C084FC">GIST Spatial R-Tree Indexing</text>
+  <text x="735" y="415" font-family="Monaco, Consolas, monospace" font-size="10" fill="#C084FC">Bounding Box &amp; Spatial Join</text>
 
   <!-- Connectors -->
-  <line x1="300" y1="115" x2="338" y2="115" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
-  <line x1="300" y1="205" x2="338" y2="205" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
-  <line x1="300" y1="295" x2="338" y2="295" stroke="#475569" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="300" y1="115" x2="338" y2="115" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="300" y1="205" x2="338" y2="205" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)" />
+  <line x1="300" y1="295" x2="338" y2="295" stroke="#64748B" stroke-width="2" marker-end="url(#arrow)" />
 
-  <line x1="640" y1="395" x2="698" y2="395" stroke="#16A34A" stroke-width="2.5" marker-end="url(#arrow)" />
-  <rect x="648" y="375" width="42" height="18" fill="#DCFCE7" rx="3" />
-  <text x="651" y="388" font-family="Monaco, Consolas, monospace" font-size="9" font-weight="bold" fill="#166534">TLS 1.3</text>
+  <line x1="640" y1="395" x2="698" y2="395" stroke="#22C55E" stroke-width="2.5" marker-end="url(#arrow)" />
+  <rect x="648" y="375" width="42" height="18" fill="#065F46" rx="3" />
+  <text x="651" y="388" font-family="Monaco, Consolas, monospace" font-size="9" font-weight="bold" fill="#86EFAC">TLS 1.3</text>
 </svg>
 ```
 

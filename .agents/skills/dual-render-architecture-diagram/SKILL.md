@@ -39,9 +39,9 @@ Generate the output strictly in the following sequence without introductory fluf
 Generate a self-contained, fully compliant raw SVG vector block inside a single ````xml ... ```` code fence matching these styling constraints:
 * **Canvas Hygiene:** Explicit `xmlns="http://www.w3.org/2000/svg"`, explicit `viewBox`, `width="100%"`, and `height="100%"`.
 * **Palette & Design System:**
-  * Background: Slate/Off-white canvas (`#F8FAFC` or `#FFFFFF`).
-  * Borders & Boxes: Crisp rounded container cards (`rx="8"` or `rx="10"`), subtle card strokes (`#CBD5E1`, `#94A3B8`, or `#E2E8F0`), and light container headers (`#EFF6FF`, `#F1F5F9`, or `#DCFCE7`).
-  * Typography: Modern sans-serif typography stack (`font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"`). Monospace font (`Consolas`, `Monaco`, or `'Courier New'`) for IP addresses, CIDRs, file paths, and network ports.
+  * Background: Dark Slate Canvas (`#0F172A` or `#0B0F19`). Never use white (`#FFFFFF`) or bright off-white canvas backgrounds so diagrams integrate seamlessly into dark mode site themes and code blocks without glaring white rectangular boxes.
+  * Borders & Boxes: Crisp rounded container cards (`rx="8"` or `rx="10"`), slate container card fills (`#1E293B`), subtle card strokes (`#334155`, `#475569`, or `#64748B`), and dark container headers (`#0F172A` or `#334155`).
+  * Typography & Contrast: High-contrast typography stack (`font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"`). Fills: `#F8FAFC` (white/slate titles), `#E2E8F0` (body text), and `#94A3B8` (subtext/metadata). Monospace font (`Consolas`, `Monaco`, or `'Courier New'`) for IP addresses, CIDRs, file paths, and network ports (`#60A5FA` or `#38BDF8` blue, `#4ADE80` green, `#FBBF24` amber, `#C084FC` purple).
 * **Structural Precision:**
   * Define explicit arrow markers (`<marker>`) inside `<defs>`.
   * Group logical subnets, tiers, or security boundaries into distinct container rectangles with uppercase section headers.

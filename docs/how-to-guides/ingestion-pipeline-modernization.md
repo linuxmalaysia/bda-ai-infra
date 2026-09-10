@@ -31,18 +31,95 @@ Modernizing data ingestion, web application delivery, and visual analytics repla
 
 Ingestion is overhauled by implementing a decoupled, event-driven framework using **Apache NiFi** and **Apache Airflow**:
 
+### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 400" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-ing" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="920" height="400" fill="#0F172A" rx="10"/>
+
+  <!-- Subnet 1: Perimeter Ingress (NiFi) -->
+  <rect x="20" y="20" width="420" height="360" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="420" height="32" fill="#0F172A" rx="8"/>
+  <text x="35" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">PERIMETER INGRESS: APACHE NIFI (STREAMING)</text>
+
+  <rect x="40" y="70" width="380" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="50" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#F8FAFC">Telemetry &amp; SFTP Ingestion</text>
+  <text x="50" y="112" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">PutSFTP / ListenHTTP (Port 8443)</text>
+  <text x="50" y="130" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94A3B8">• Continuous precipitation &amp; sensor polling</text>
+
+  <rect x="40" y="170" width="380" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="50" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#F8FAFC">REST API Polling Engine</text>
+  <text x="50" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#38BDF8">InvokeHTTP (Thermal Anomaly API)</text>
+  <text x="50" y="230" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94A3B8">• Replaces manual email ingestion flows</text>
+
+  <rect x="40" y="270" width="380" height="90" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="50" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">Backpressure &amp; Provenance</text>
+  <text x="50" y="312" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Format Normalization &amp; Audit Lineage</text>
+  <text x="50" y="330" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94A3B8">• Event-driven queue flow control</text>
+
+  <!-- Subnet 2: Batch Orchestration (Airflow) -->
+  <rect x="480" y="20" width="420" height="360" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="480" y="20" width="420" height="32" fill="#0F172A" rx="8"/>
+  <text x="495" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FBBF24">BATCH ORCHESTRATION: APACHE AIRFLOW (DAGS)</text>
+
+  <rect x="500" y="70" width="380" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="510" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#F8FAFC">Spark &amp; Trino Workflows</text>
+  <text x="510" y="112" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">Airflow DAGs (Scheduled / Event Triggers)</text>
+  <text x="510" y="130" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94A3B8">• Distributed transformations on Iceberg</text>
+
+  <rect x="500" y="170" width="380" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="510" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#F8FAFC">ODCS Contract Gates &amp; Lineage</text>
+  <text x="510" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Data Contract CLI &amp; OpenLineage</text>
+  <text x="510" y="230" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94A3B8">• Schema validation &amp; OpenMetadata sync</text>
+
+  <rect x="500" y="270" width="380" height="90" fill="#0F172A" stroke="#F59E0B" rx="6"/>
+  <text x="510" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#FDE68A">Iceberg Table Maintenance</text>
+  <text x="510" y="312" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">Compaction &amp; Snapshot Purging</text>
+  <text x="510" y="330" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94A3B8">• Automated table optimization DAGs</text>
+
+  <!-- Connector -->
+  <line x1="440" y1="200" x2="480" y2="200" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-ing)"/>
+</svg>
 ```
-Modernized Ingestion Architecture
-├── Perimeter Ingress: Apache NiFi
-│   ├── Continuous SFTP polling and precipitation telemetry streams
-│   ├── Thermal Anomaly REST API polling (replaces manual email ingestion)
-│   └── Backpressure management, format normalization, provenance tagging
-└── Batch Orchestration: Apache Airflow
-    ├── Scheduled Spark and Trino transformation workflows
-    ├── ODCS contract validation via Data Contract CLI gates
-    ├── OpenLineage event emission to OpenMetadata catalog
-    └── Automated Iceberg maintenance (compaction, snapshot purging)
+
+### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+flowchart LR
+    subgraph PerimeterIngress ["Perimeter Ingress: Apache NiFi"]
+        SFTP["Continuous SFTP &amp; Telemetry Polling<br/>(ListenHTTP Port 8443)"]
+        ThermalAPI["Thermal Anomaly REST API Polling<br/>(InvokeHTTP)"]
+        NiFiCore["Format Normalization, Backpressure,<br/>&amp; Provenance Tracking"]
+    end
+
+    subgraph BatchOrchestration ["Batch Orchestration: Apache Airflow"]
+        SparkTrino["Scheduled Spark &amp; Trino DAGs<br/>(Iceberg Transformations)"]
+        ODCSGate["ODCS Contract Validation<br/>(Data Contract CLI)"]
+        IcebergMaint["Automated Table Maintenance<br/>(Compaction &amp; Snapshot Expiration)"]
+    end
+
+    SFTP --> NiFiCore
+    ThermalAPI --> NiFiCore
+    NiFiCore -->|"Event Triggers / Normalized Records"| SparkTrino
+    SparkTrino --> ODCSGate
+    ODCSGate --> IcebergMaint
 ```
+
+### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Telemetry / SFTP Drop** | **Apache NiFi** | `TCP 8443` / `TCP 22` (SFTP) | Boundary Perimeter -> DMZ | Continuous polling of precipitation telemetry streams and departmental drop zones. |
+| **Thermal Anomaly REST API** | **Apache NiFi** | `TCP 443` / HTTPS REST | External API -> Ingestion Queue | Replaces manual email parsing with automated REST polling via `InvokeHTTP`. |
+| **Apache NiFi** | **Apache Airflow** | `TCP 8080` / REST Webhook | DMZ -> Batch Processing Tier | Triggers Airflow DAG execution upon buffer batch threshold or schedule completion. |
+| **Apache Airflow** | **Spark / Trino / Iceberg** | `TCP 7077` / `TCP 8080` | Batch Tier -> Core Lakehouse | Executes SQL transformations, enforces ODCS contract gates, and purges Iceberg snapshots. |
 
 ### Ingress & Protocol Translation (Apache NiFi)
 

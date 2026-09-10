@@ -30,20 +30,96 @@ The integration of artificial intelligence within the modernized BDA architectur
 
 To standardize AI interactions while enforcing security boundaries, the platform implements the **Model Context Protocol (MCP)**, an open standard donated by Anthropic to the Agentic AI Foundation under the Linux Foundation. Operating over JSON-RPC 2.0, MCP replaces fragile custom model integrations by separating AI applications (hosts) from data sources and tools (servers).
 
-```
-MCP Operational Host Plane (LLM Assistants, Workflow Orchestrators)
-└── Connects via JSON-RPC 2.0 over mTLS authenticated through Keycloak
+### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-MCP Primitive Restrictions
-├── Resources: Read-only access to schemas, metadata catalogs, and data dictionaries
-├── Tools: Stateless operational functions (SQL syntax linting, Airflow health checks)
-└── Prompts: Deterministic workflow templates enforcing domain governance rules
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 420" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-mcp" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+  </defs>
 
-Execution Guardrails
-├── Network Isolation: Docker/Kubernetes containers in dedicated DMZ
-├── Database Sandboxing: Dedicated read-only roles, transactional write locks
-└── Storage Partitioning: Zero access to Tier 0; writes confined to Tier 2 scratch buckets
+  <!-- Canvas Background -->
+  <rect width="920" height="420" fill="#0F172A" rx="10"/>
+
+  <!-- Host Plane -->
+  <rect x="20" y="20" width="880" height="80" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="880" height="28" fill="#0F172A" rx="8"/>
+  <text x="35" y="39" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">MCP OPERATIONAL HOST PLANE (LLM ASSISTANTS &amp; WORKFLOW ORCHESTRATORS)</text>
+  <text x="35" y="65" font-family="Consolas, Monaco, monospace" font-size="11" fill="#38BDF8">JSON-RPC 2.0 over mTLS / Keycloak OIDC Authentication</text>
+
+  <!-- Primitives Box -->
+  <rect x="20" y="120" width="420" height="270" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="120" width="420" height="28" fill="#0F172A" rx="8"/>
+  <text x="35" y="139" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">MCP PRIMITIVE RESTRICTIONS</text>
+
+  <rect x="35" y="160" width="390" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="180" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">Resources (Read-Only Interfaces)</text>
+  <text x="45" y="200" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94A3B8">• OpenMetadata schemas, catalogs &amp; data dictionaries</text>
+
+  <rect x="35" y="230" width="390" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="250" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">Tools (Stateless Operations)</text>
+  <text x="45" y="270" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94A3B8">• SQL syntax linting &amp; Airflow health checks</text>
+
+  <rect x="35" y="300" width="390" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">Prompts (Governance Templates)</text>
+  <text x="45" y="340" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94A3B8">• Deterministic templates enforcing domain rules</text>
+
+  <!-- Execution Guardrails Box -->
+  <rect x="480" y="120" width="420" height="270" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="480" y="120" width="420" height="28" fill="#0F172A" rx="8"/>
+  <text x="495" y="139" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FBBF24">EXECUTION GUARDRAILS &amp; DMZ</text>
+
+  <rect x="495" y="160" width="390" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="505" y="180" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">Network Isolation</text>
+  <text x="505" y="200" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94A3B8">• Docker/Kubernetes containers in dedicated DMZ</text>
+
+  <rect x="495" y="230" width="390" height="60" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="505" y="250" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">Database Sandboxing</text>
+  <text x="505" y="270" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94A3B8">• Read-only roles &amp; transactional write locks</text>
+
+  <rect x="495" y="300" width="390" height="70" fill="#0F172A" stroke="#F59E0B" rx="6"/>
+  <text x="505" y="320" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">Storage Partitioning</text>
+  <text x="505" y="340" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94A3B8">• Zero Tier 0 access; writes limited to Tier 2 scratch</text>
+
+  <!-- Connectors -->
+  <line x1="230" y1="100" x2="230" y2="120" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp)"/>
+  <line x1="690" y1="100" x2="690" y2="120" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp)"/>
+</svg>
 ```
+
+### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+flowchart TD
+    subgraph HostPlane ["MCP Operational Host Plane"]
+        LLMAssistants["LLM Assistants &amp; Workflow Orchestrators"]
+    end
+
+    subgraph Primitives ["MCP Primitive Restrictions"]
+        Resources["Resources: Read-Only Schemas &amp; Catalogs"]
+        Tools["Tools: Stateless Ops (SQL Linting, Health Checks)"]
+        Prompts["Prompts: Version-Controlled Governance Templates"]
+    end
+
+    subgraph Guardrails ["Execution Guardrails &amp; DMZ"]
+        NetIso["Network Isolation: Containers in DMZ"]
+        DBSandbox["Database Sandboxing: Read-Only Roles &amp; Write Locks"]
+        StorePart["Storage Partitioning: Tier 2 Scratch Buckets Only"]
+    end
+
+    LLMAssistants -->|"JSON-RPC 2.0 / mTLS (Keycloak OIDC)"| Primitives
+    LLMAssistants -->|"Gated Tool Execution"| Guardrails
+```
+
+### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **LLM Host / AI Client** | **MCP Server** | Stdio / `TCP 8080` (JSON-RPC 2.0) | Keycloak OIDC Service Account / mTLS | Exposes read-only resources, stateless tools, and governed prompts. |
+| **MCP Tool Execution** | **Trino / PostgreSQL** | `TCP 8080` / `TCP 5432` | DMZ -> Database Read-Only Role | Executes read-only schema introspection and query syntax validation. |
+| **MCP Server Output** | **Object Storage** | `TCP 9000` (S3 REST API) | DMZ -> Tier 2 Scratch Bucket | Confines all temporary model outputs and derived scratch data to Tier 2 storage. |
 
 ---
 

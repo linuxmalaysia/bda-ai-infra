@@ -37,16 +37,53 @@ This master document outlines the **5-Year Strategic Plan (2026–2030)** for mo
 ### Executive Summary & Vision
 The primary objective of the Big Data Analytics (BDA) platform modernization is to transform fragmented legacy data stores into a high-performance, open-source S3-compatible Lakehouse ecosystem. By integrating advanced Machine Learning (ML) and Artificial Intelligence (AI) natively into the data pipeline, the platform transitions enterprise analytics from reactive reporting to proactive, predictive, and autonomous operational decision-making.
 
+### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 240" width="100%" height="100%">
+  <rect width="900" height="240" fill="#0F172A" rx="10"/>
+  <rect x="20" y="20" width="860" height="200" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="860" height="32" fill="#0F172A" rx="8"/>
+  <text x="35" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#60A5FA">THE BDA &amp; AI BIG PICTURE BUSINESS CASE STRATEGIC GOALS</text>
+
+  <rect x="35" y="65" width="400" height="65" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="85" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#4ADE80">GOAL 1: SSoT Lakehouse Modernization</text>
+  <text x="45" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#94A3B8">100% Open-Source Lakehouse (Iceberg, Ceph, Polaris)</text>
+
+  <rect x="455" y="65" width="410" height="65" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="465" y="85" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#FBBF24">GOAL 2: Business Continuity &amp; Dual-Run</text>
+  <text x="465" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#94A3B8">Zero downtime migration for 5 core domain business cases</text>
+
+  <rect x="35" y="140" width="400" height="65" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#38BDF8">GOAL 3: Local Zero-Trust AI Sandboxing</text>
+  <text x="45" y="180" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#94A3B8">MCP protocol, pgvector, DuckDB vss &amp; zero WAN egress</text>
+
+  <rect x="455" y="140" width="410" height="65" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="465" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#C084FC">GOAL 4: Scalable AI Case Onboarding</text>
+  <text x="465" y="180" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#94A3B8">Standardized 6-stage lifecycle framework for new AI cases</text>
+</svg>
 ```
-+-----------------------------------------------------------------------------------+
-|                        THE BDA & AI BIG PICTURE BUSINESS CASE                      |
-+-----------------------------------------------------------------------------------+
-|  GOAL 1: Modernize Legacy Infrastructure into 100% Open-Source SSoT Lakehouse     |
-|  GOAL 2: Ensure 100% Continuity & Zero Downtime Migration for Existing Cases    |
-|  GOAL 3: Embed Zero-Trust Local AI/ML & Autonomous Agents via Sandboxing & MCP    |
-|  GOAL 4: Provide Rapid Framework to Onboard & Scale New AI/ML Business Cases     |
-+-----------------------------------------------------------------------------------+
+
+### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+flowchart TD
+    subgraph MasterGoals ["BDA &amp; AI Big Picture Business Case Goals"]
+        G1["Goal 1: Modernize Legacy Infrastructure into 100% Open-Source SSoT Lakehouse"]
+        G2["Goal 2: Ensure 100% Continuity &amp; Zero Downtime Migration for Existing Cases"]
+        G3["Goal 3: Embed Zero-Trust Local AI/ML &amp; Autonomous Agents via Sandboxing &amp; MCP"]
+        G4["Goal 4: Provide Rapid Framework to Onboard &amp; Scale New AI/ML Business Cases"]
+    end
 ```
+
+### 3. Summary Interface & Routing Table
+
+| Strategic Goal | Modern Architecture Pillar | Target Platform Engine | Operational Business Impact |
+| :--- | :--- | :--- | :--- |
+| **Goal 1: SSoT Modernization** | Open-Source Lakehouse | Apache Iceberg, Ceph, Apache Polaris | 60%–70% TCO reduction, zero vendor lock-in. |
+| **Goal 2: Zero Downtime** | Dual-Run Boundary Ingestion | Apache NiFi, ODCS v3.1.0 Contract Gates | 100% operational continuity across 5 core business cases. |
+| **Goal 3: Local AI Sandboxing** | Zero-Trust Local Vectors | Model Context Protocol, `pgvector`, DuckDB `vss` | Zero WAN egress, total data sovereignty. |
+| **Goal 4: Rapid Case Onboarding** | Standardized AI Lifecycle | Feast, MLflow, vLLM, APISIX | Accelerated onboarding of new predictive AI business cases. |
 
 ### Strategic Value Drivers & Return on Investment (ROI)
 
@@ -132,87 +169,87 @@ To ensure complete business continuity, the 5 core legacy business cases are sys
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="100%" height="100%">
   <defs>
     <marker id="arrow-mig" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569" />
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
     </marker>
   </defs>
 
-  <rect width="1000" height="480" fill="#F8FAFC" rx="10"/>
+  <rect width="1000" height="480" fill="#0F172A" rx="10"/>
 
   <!-- Zone 1: Legacy Ingest -->
-  <rect x="20" y="20" width="220" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="20" y="20" width="220" height="32" fill="#F1F5F9" rx="8"/>
-  <text x="30" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#334155">LEGACY INGESTION PATHS</text>
+  <rect x="20" y="20" width="220" height="440" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="20" width="220" height="32" fill="#0F172A" rx="8"/>
+  <text x="30" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#94A3B8">LEGACY INGESTION PATHS</text>
 
-  <rect x="35" y="70" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="45" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Unvalidated Forms</text>
+  <rect x="35" y="70" width="190" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Unvalidated Forms</text>
 
-  <rect x="35" y="155" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="45" y="177" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">CSVs &amp; Spreadsheets</text>
+  <rect x="35" y="155" width="190" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="177" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">CSVs &amp; Spreadsheets</text>
 
-  <rect x="35" y="240" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="45" y="262" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Email Text Hotspots</text>
+  <rect x="35" y="240" width="190" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="262" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Email Text Hotspots</text>
 
-  <rect x="35" y="325" width="190" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="45" y="347" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Ad-Hoc SFTP Transfers</text>
+  <rect x="35" y="325" width="190" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="45" y="347" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Ad-Hoc SFTP Transfers</text>
 
   <!-- Zone 2: Dual Run Pipeline -->
-  <rect x="260" y="20" width="220" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="260" y="20" width="220" height="32" fill="#EFF6FF" rx="8"/>
-  <text x="270" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#1E40AF">DUAL-RUN PIPELINE</text>
+  <rect x="260" y="20" width="220" height="440" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="260" y="20" width="220" height="32" fill="#0F172A" rx="8"/>
+  <text x="270" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">DUAL-RUN PIPELINE</text>
 
-  <rect x="275" y="110" width="190" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="285" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache NiFi</text>
-  <text x="285" y="152" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Boundary Mirroring</text>
+  <rect x="275" y="110" width="190" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="285" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Apache NiFi</text>
+  <text x="285" y="152" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Boundary Mirroring</text>
 
-  <rect x="275" y="210" width="190" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="285" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">ODCS v3.1.0 Gate</text>
-  <text x="285" y="252" font-family="Consolas, Monaco, monospace" font-size="10" fill="#059669">Contract Validation</text>
+  <rect x="275" y="210" width="190" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="285" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">ODCS v3.1.0 Gate</text>
+  <text x="285" y="252" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Contract Validation</text>
 
-  <rect x="275" y="310" width="190" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="285" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache Iceberg</text>
-  <text x="285" y="352" font-family="Consolas, Monaco, monospace" font-size="10" fill="#475569">Parquet S3 Tables</text>
+  <rect x="275" y="310" width="190" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="285" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Apache Iceberg</text>
+  <text x="285" y="352" font-family="Consolas, Monaco, monospace" font-size="10" fill="#94A3B8">Parquet S3 Tables</text>
 
   <!-- Zone 3: Modern Compute AI -->
-  <rect x="500" y="20" width="230" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="500" y="20" width="230" height="32" fill="#DCFCE7" rx="8"/>
-  <text x="510" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#166534">COMPUTE &amp; AI LAYER</text>
+  <rect x="500" y="20" width="230" height="440" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="500" y="20" width="230" height="32" fill="#0F172A" rx="8"/>
+  <text x="510" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">COMPUTE &amp; AI LAYER</text>
 
-  <rect x="515" y="80" width="200" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="525" y="102" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Spark &amp; Sedona</text>
-  <text x="525" y="122" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Spatial Vector Processing</text>
+  <rect x="515" y="80" width="200" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="525" y="102" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Spark &amp; Sedona</text>
+  <text x="525" y="122" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Spatial Vector Processing</text>
 
-  <rect x="515" y="170" width="200" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="525" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Trino Engine</text>
-  <text x="525" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">MPP SQL Queries</text>
+  <rect x="515" y="170" width="200" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="525" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Trino Engine</text>
+  <text x="525" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">MPP SQL Queries</text>
 
-  <rect x="515" y="260" width="200" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="525" y="282" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">MLflow &amp; vLLM</text>
+  <rect x="515" y="260" width="200" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="525" y="282" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">MLflow &amp; vLLM</text>
 
-  <rect x="515" y="350" width="200" height="70" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="525" y="372" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">pgvector &amp; DuckDB vss</text>
+  <rect x="515" y="350" width="200" height="70" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="525" y="372" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">pgvector &amp; DuckDB vss</text>
 
   <!-- Zone 4: Presentation -->
-  <rect x="750" y="20" width="230" height="440" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
-  <rect x="750" y="20" width="230" height="32" fill="#FEF3C7" rx="8"/>
-  <text x="760" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#92400E">PRESENTATION LAYER</text>
+  <rect x="750" y="20" width="230" height="440" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="750" y="20" width="230" height="32" fill="#0F172A" rx="8"/>
+  <text x="760" y="41" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FBBF24">PRESENTATION LAYER</text>
 
-  <rect x="765" y="110" width="200" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="775" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache Superset</text>
-  <text x="775" y="152" font-family="Consolas, Monaco, monospace" font-size="10" fill="#D97706">deck.gl Spatial Maps</text>
+  <rect x="765" y="110" width="200" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="775" y="132" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Apache Superset</text>
+  <text x="775" y="152" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">deck.gl Spatial Maps</text>
 
-  <rect x="765" y="210" width="200" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="775" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Next.js Portal</text>
-  <text x="775" y="252" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Keycloak OIDC / APISIX</text>
+  <rect x="765" y="210" width="200" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
+  <text x="775" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Next.js Portal</text>
+  <text x="775" y="252" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Keycloak OIDC / APISIX</text>
 
-  <rect x="765" y="310" width="200" height="80" fill="#F8FAFC" stroke="#E2E8F0" rx="6"/>
-  <text x="775" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">APISIX Alerts</text>
-  <text x="775" y="352" font-family="Consolas, Monaco, monospace" font-size="10" fill="#DC2626">Push Dispatch APIs</text>
+  <rect x="765" y="310" width="200" height="80" fill="#0F172A" stroke="#F59E0B" rx="6"/>
+  <text x="775" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">APISIX Alerts</text>
+  <text x="775" y="352" font-family="Consolas, Monaco, monospace" font-size="10" fill="#F87171">Push Dispatch APIs</text>
 
   <!-- Connectors -->
-  <line x1="225" y1="190" x2="275" y2="150" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
-  <line x1="465" y1="150" x2="515" y2="115" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
-  <line x1="715" y1="115" x2="765" y2="150" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
-  <line x1="715" y1="385" x2="765" y2="250" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
+  <line x1="225" y1="190" x2="275" y2="150" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
+  <line x1="465" y1="150" x2="515" y2="115" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
+  <line x1="715" y1="115" x2="765" y2="150" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
+  <line x1="715" y1="385" x2="765" y2="250" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mig)"/>
 </svg>
 ```
 

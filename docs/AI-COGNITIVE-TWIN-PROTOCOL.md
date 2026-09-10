@@ -106,7 +106,6 @@ flowchart TD
 | **Dev Bridge (T2)** | **Staging Host (T3)** | `TCP 22` / SSH Key | SSH Certificate / Molecule | Runs automated container integration tests prior to production rollout. |
 | **Staging Host (T3)** | **Production Fabric (T4)** | `TCP 8443` / HTTPS OTLP | Keycloak OAuth2 JWT | Deploys containerized services and streams OpenTelemetry traces to Prometheus/Grafana. |
 
-
 ### Tier Descriptions & Boundaries
 
 1. **Tier 1 — Command Centre (Local Workstation):** Operator entry point executing agent commands, maintaining workspace gateways, and managing local spatial memory.

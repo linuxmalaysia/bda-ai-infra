@@ -109,7 +109,6 @@ flowchart TD
 | **Reference** | Technical Auditors & Engineers | Authoritative facts & specs | `docs/reference/solution-1-aws-native.md` |
 | **Explanation** | Security & Data Stewards | Concepts, rationale & governance | `docs/explanation/human-ai-quarantine-model.md` |
 
-
 This documentation suite establishes a 100% open-source, S3-compatible data lakehouse architecture designed to serve as an authoritative **Single Source of Truth (SSoT)** for natural resources, environmental data, geological analytics, and climate risk modeling.
 
 ---

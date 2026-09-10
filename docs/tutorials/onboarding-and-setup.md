@@ -135,7 +135,6 @@ flowchart TD
 | **NiFi Ingestion** | **PostgreSQL Master** | `TCP 5432` / TLS 1.3 PostgreSQL | Local DB Credentials | Tests native Python processors and vector transformation pipelines locally. |
 | **FastMCP Server** | **PostgreSQL Master** | Stdio / `TCP 8080` (JSON-RPC 2.0) | Read-Only Session / Local Key | Executes spatial-semantic search tools against local `pgvector` index. |
 
-
 This tutorial guides new engineers, data stewards, and system administrators through setting up their environment and navigating the platform architecture documentation.
 
 ---

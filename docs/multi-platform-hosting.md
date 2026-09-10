@@ -152,7 +152,6 @@ flowchart TD
 | **generate_summary.py** | **SUMMARY.md & navigation.yml** | Local Python Script | File System Write | Re-indexes all markdown files into unified table of contents. |
 | **Jekyll / MkDocs** | **GitHub / GitLab Pages** | `TCP 443` / HTTPS TLS 1.3 | Public Web Domain | Renders responsive HTML site with adaptive light/dark mode CSS styling. |
 
-
 ## Supported Platforms
 
 ### 1. GitLab Pages (`.gitlab-ci.yml`)

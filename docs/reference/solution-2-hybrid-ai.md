@@ -94,7 +94,7 @@ The diagram below details Solution 2's hybrid architecture, linking the AWS Clou
 
   <!-- Middle Interconnect Pill -->
   <line x1="430" y1="210" x2="510" y2="210" stroke="#F59E0B" stroke-width="3" marker-end="url(#arrow-hyb)"/>
-  <rect x="440" y="180" x2="60" y30="30" fill="#0F172A" stroke="#F59E0B" rx="4"/>
+  <rect x="440" y="180" width="60" height="30" fill="#0F172A" stroke="#F59E0B" rx="4"/>
   <text x="445" y="198" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#FBBF24">DirectConnect MACsec</text>
 </svg>
 
@@ -135,7 +135,6 @@ flowchart LR
 | **On-Prem GPU Cluster** | **AWS Direct Connect** | `10G/100G` / IEEE 802.1AE MACsec | `GCM-AES-XPN-256` Keys | Dedicated physical link providing encrypted high-throughput data transit. |
 | **Containerized MCP Server** | **AWS Aurora Postgres** | `TCP 5432` / TLS 1.3 PostgreSQL | Read-Only Session / APISIX Verb Block | Executes controlled SQL spatial queries without write permissions to cloud tables. |
 | **On-Prem MCP Server** | **vLLM / Ollama Engine** | `TCP 11434` / HTTP Local REST | Local Container Network | Prompts local open-source LLMs using context retrieved from vector cache and cloud DB. |
-
 
 ---
 

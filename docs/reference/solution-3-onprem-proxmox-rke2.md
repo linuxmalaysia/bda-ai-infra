@@ -142,7 +142,6 @@ flowchart TD
 | **RKE2 Worker Node** | **Ceph RADOS Gateway** | `TCP 8080` / S3 API (mTLS) | S3 Access & Secret Keys | Serves Iceberg table snapshots under software-enforced WORM compliance lock. |
 | **K3s Worker Node** | **RKE2 Production API** | `TCP 6443` / Kubernetes API | ServiceAccount Bearer Token | Collects OTLP metrics, logs, and traces from RKE2 application workloads. |
 
-
 ---
 
 ## 1. Hypervisor & Compute Infrastructure (Proxmox VE)

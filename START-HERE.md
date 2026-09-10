@@ -129,7 +129,6 @@ flowchart TD
 | **Developer / Agent** | **uv run pytest** | Local CLI Exec | Local Environment | Audits frontmatter metadata, link decay, and raw SVG inline tags. |
 | **OpenWiki Emulator** | **OpenWiki SSoT Index** | Local Python Script | Local File System Write | Re-generates knowledge graph and interactive navigation metadata. |
 
-
 ## 🧭 Navigation Gateway
 
 ### 🤖 AI Agent Entry Points

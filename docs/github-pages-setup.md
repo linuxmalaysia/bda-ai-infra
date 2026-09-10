@@ -116,7 +116,6 @@ flowchart TD
 | **Git Push** | **GitHub Actions Runner** | HTTPS Webhook | GITHUB_TOKEN Secret | Automatically starts Jekyll site build on push to main branch. |
 | **Jekyll Builder** | **GitHub Pages Environment** | Internal Artifact Upload | GitHub OIDC Deployment Token | Compiles Markdown documents, Liquid templates, and SASS stylesheets into static HTML. |
 
-
 ## Overview
 
 GitHub Pages is configured using the official GitHub Actions workflow `.github/workflows/jekyll-gh-pages.yml`. On every push to the `main` branch, GitHub Actions builds the static site using Jekyll and deploys it to the `github-pages` environment.

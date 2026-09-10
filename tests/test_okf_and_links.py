@@ -264,3 +264,30 @@ def test_zero_link_decay(md_path: Path) -> None:
             assert (
                 fragment in headings or fragment.lower() in headings
             ), f"Heading anchor '{fragment}' missing in {rel_target} from {rel_file}"
+
+
+@pytest.mark.parametrize(
+    "md_path",
+    get_all_markdown_files(),
+    ids=lambda p: str(p.relative_to(REPO_ROOT)),
+)
+def test_svg_graphics_embedded_raw_inline_without_code_fences(md_path: Path) -> None:
+    """Verify that SVG vector graphics are embedded directly as raw inline HTML/SVG.
+
+    This ensures they render as visual vector graphics rather than source text code blocks
+    on GitHub Pages and Jekyll without ```xml or ``` code fences.
+
+    Args:
+        md_path (Path): Path to the Markdown file being tested.
+
+    """
+    content: str = md_path.read_text(encoding="utf-8")
+    lines: List[str] = content.splitlines()
+
+    for idx, line in enumerate(lines):
+        if "<svg" in line and not line.strip().startswith("```"):
+            if idx > 0:
+                prev_line: str = lines[idx - 1].strip()
+                assert not prev_line.startswith("```"), (
+                    f"Line {idx + 1} in {md_path.relative_to(REPO_ROOT)} has <svg preceded by code fence '{prev_line}'"
+                )

@@ -31,20 +31,119 @@ This reference specification details **Solution 1: All in Cloud (AWS Native & Cl
 
 Solution 1 leverages open-source data formats (**Apache Iceberg** tables and **Apache Parquet** columnar files) alongside containerized open-source utilities (**Keycloak**, **Apache APISIX**, **OpenMetadata**, **Apache Superset**), while replacing self-hosted distributed state engines with managed AWS cloud services (**AWS Glue Data Catalog**, **Amazon EMR Serverless**, **Amazon Athena**, **AWS MWAA**, and **Amazon Bedrock**).
 
+## 🏛️ AWS Native Architecture & Multi-Tier Topology
+
+The diagram below details Solution 1's AWS Native deployment architecture, illustrating perimeter ingress, serverless lakehouse compute, and managed Bedrock AI inference.
+
+### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-aws" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+    <filter id="shadow-aws" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="420" fill="#0F172A" rx="10"/>
+
+  <!-- Ingress Tier -->
+  <rect x="20" y="20" width="920" height="80" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-aws)"/>
+  <rect x="20" y="20" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F59E0B">PERIMETER INGRESS &amp; SECURITY (AWS AP-SOUTHEAST-5)</text>
+
+  <rect x="40" y="52" width="270" height="38" fill="#78350F" stroke="#F59E0B" rx="4"/>
+  <text x="50" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">AWS WAFv2 + CloudFront / ALB</text>
+
+  <rect x="345" y="52" width="270" height="38" fill="#1E3A8A" stroke="#3B82F6" rx="4"/>
+  <text x="355" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">APISIX Gateway &amp; Keycloak (ECS)</text>
+
+  <rect x="650" y="52" width="270" height="38" fill="#065F46" stroke="#22C55E" rx="4"/>
+  <text x="660" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">AWS MWAA &amp; OpenMetadata (EKS)</text>
+
+  <!-- Compute Tier -->
+  <rect x="20" y="135" width="920" height="150" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-aws)"/>
+  <rect x="20" y="135" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="153" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">SERVERLESS COMPUTE &amp; ICEBERG LAKEHOUSE ENGINE</text>
+
+  <rect x="40" y="170" width="270" height="100" fill="#0F172A" stroke="#3B82F6" rx="6"/>
+  <text x="50" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#93C5FD">EMR Serverless Spark</text>
+  <text x="50" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Apache Sedona Spatial Engine</text>
+  <text x="50" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• GeoParquet &amp; CDC Pipeline</text>
+
+  <rect x="345" y="170" width="270" height="100" fill="#0F172A" stroke="#3B82F6" rx="6"/>
+  <text x="355" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#93C5FD">Amazon S3 Object Lock</text>
+  <text x="355" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">AWS Glue Data Catalog / Iceberg</text>
+  <text x="355" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Compliance &amp; Governance WORM</text>
+
+  <rect x="650" y="170" width="270" height="100" fill="#0F172A" stroke="#3B82F6" rx="6"/>
+  <text x="660" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#93C5FD">Amazon Athena &amp; Aurora</text>
+  <text x="660" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">PostgreSQL Multi-AZ PostGIS</text>
+  <text x="660" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Low-latency Spatial Cache</text>
+
+  <!-- AI Tier -->
+  <rect x="20" y="315" width="920" height="85" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-aws)"/>
+  <rect x="20" y="315" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="333" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#C084FC">CLOUD MANAGED AI &amp; CONTAINERIZED MCP SERVICES</text>
+
+  <rect x="40" y="348" width="880" height="42" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="50" y="374" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">Amazon Bedrock + SageMaker Endpoints + Fargate MCP Servers (Private Subnet &amp; Least-Privilege IAM)</text>
+
+  <!-- Connectors -->
+  <line x1="175" y1="90" x2="175" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-aws)"/>
+  <line x1="480" y1="90" x2="480" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-aws)"/>
+  <line x1="785" y1="90" x2="785" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-aws)"/>
+
+  <line x1="175" y1="270" x2="480" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-aws)"/>
+  <line x1="480" y1="270" x2="480" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-aws)"/>
+  <line x1="785" y1="270" x2="480" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-aws)"/>
+</svg>
+
+### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+flowchart TD
+    subgraph Ingress ["AWS Ingress & Perimeter Security"]
+        WAF["AWS WAFv2 + CloudFront / ALB"]
+        APISIX["APISIX Gateway & Keycloak (ECS)"]
+        MWAA["AWS MWAA Orchestrator"]
+    end
+
+    subgraph Lakehouse ["AWS Managed Serverless Lakehouse"]
+        EMR["EMR Serverless Spark (Apache Sedona)"]
+        S3["Amazon S3 Object Lock (Glue Catalog)"]
+        Athena["Amazon Athena & Aurora PostGIS"]
+    end
+
+    subgraph AI ["AWS Bedrock & Containerized MCP Tier"]
+        Bedrock["Amazon Bedrock Model Endpoints"]
+        FargateMCP["Containerized MCP Servers on AWS Fargate"]
+    end
+
+    WAF -->|"HTTPS Perimeter"| APISIX
+    APISIX -->|"OIDC Auth & Rate Limit"| MWAA
+    MWAA -->|"Trigger Spark Jobs"| EMR
+
+    EMR -->|"Read / Write Iceberg"| S3
+    Athena -->|"Massively Parallel SQL"| S3
+    Athena -->|"Operational Sync"| Athena
+
+    FargateMCP -->|"Controlled Spatial SQL"| Athena
+    FargateMCP -->|"Foundation Inference"| Bedrock
 ```
-+-----------------------------------------------------------------------------------------------+
-|                               SOLUTION 1: ALL IN CLOUD (AWS NATIVE)                           |
-|                                                                                               |
-|  +--------------------------------+  +--------------------------------+  +-----------------+  |
-|  |     INGRESS & GOVERNANCE       |  |      LAKEHOUSE & COMPUTE       |  | CLOUD AI & MCP  |  |
-|  | - AWS WAFv2 + CloudFront / ALB |  | - AWS S3 Object Lock (Compliance)|  | - Amazon        |  |
-|  | - AWS Cognito / Keycloak (ECS) |  | - AWS Glue / Polaris Catalog   |  |   Bedrock       |  |
-|  | - AWS Step Functions / MWAA    |  | - Amazon EMR Serverless Spark  |  | - SageMaker     |  |
-|  | - OpenMetadata on Amazon EKS   |  | - Amazon Athena / Trino        |  | - MCP Servers   |  |
-|  | - Apache APISIX Gateway (ECS)  |  | - Amazon Aurora Postgres      |  |   on ECS/EKS    |  |
-|  +--------------------------------+  +--------------------------------+  +-----------------+  |
-+-----------------------------------------------------------------------------------------------+
-```
+
+### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **User / API Client** | **AWS WAFv2 / CloudFront** | `TCP 443` / HTTPS TLS 1.3 | WAF OWASP Rulesets / TLS Cert | Filters malicious traffic and routes verified HTTPS calls to ALB. |
+| **MWAA Orchestrator** | **EMR Serverless** | AWS SDK / EMR API | IAM Role / VPC Endpoint | Triggers auto-scaling Spark batch jobs for GeoParquet and CDC transformations. |
+| **EMR Serverless** | **Amazon S3 Object Lock** | S3 API / `s3a://` | S3 IAM Policy / KMS Key | Commits Iceberg data files under S3 Object Lock Compliance WORM retention. |
+| **Fargate MCP Server** | **Amazon Bedrock / Athena** | AWS SDK / Bedrock API | Task IAM Policy / DB Read-Only | Invokes LLM foundation models and executes scoped spatial query tools over Athena. |
+
 
 ---
 

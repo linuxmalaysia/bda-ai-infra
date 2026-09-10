@@ -29,6 +29,112 @@ This guide provides data engineers, AI practitioners, and domain managers with a
 
 ---
 
+## 🏛️ 6-Stage AI/ML Onboarding Pipeline Topology
+
+The diagram below details the 6-stage operational pipeline for onboarding new AI business cases, maintaining strict zero-trust quarantine and human sign-off.
+
+### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-onb" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+    <filter id="shadow-onb" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="420" fill="#0F172A" rx="10"/>
+
+  <!-- Stage 1 Box -->
+  <rect x="20" y="20" width="280" height="110" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5" rx="8" filter="url(#shadow-onb)"/>
+  <rect x="20" y="20" width="280" height="26" fill="#0369A1" rx="8"/>
+  <text x="30" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#E0F2FE">STAGE 1: CONTRACT FORMULATION</text>
+  <text x="30" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">Bitol ODCS v3.1.0 Contract</text>
+  <text x="30" y="82" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7DD3FC">YAML Schema &amp; Quality Rules</text>
+  <text x="30" y="100" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Local Contract CLI Validation</text>
+
+  <!-- Stage 2 Box -->
+  <rect x="340" y="20" width="280" height="110" fill="#1E293B" stroke="#3B82F6" stroke-width="1.5" rx="8" filter="url(#shadow-onb)"/>
+  <rect x="340" y="20" width="280" height="26" fill="#1E3A8A" rx="8"/>
+  <text x="350" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#93C5FD">STAGE 2: CATALOG &amp; INGESTION</text>
+  <text x="350" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">Apache NiFi &amp; OpenMetadata</text>
+  <text x="350" y="82" font-family="Consolas, Monaco, monospace" font-size="10" fill="#93C5FD">Polaris REST Namespace Provisioning</text>
+  <text x="350" y="100" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Ingress Validation &amp; Classification</text>
+
+  <!-- Stage 3 Box -->
+  <rect x="660" y="20" width="280" height="110" fill="#1E293B" stroke="#A855F7" stroke-width="1.5" rx="8" filter="url(#shadow-onb)"/>
+  <rect x="660" y="20" width="280" height="26" fill="#581C87" rx="8"/>
+  <text x="670" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#E9D5FF">STAGE 3: TIER 2 AI SANDBOXING</text>
+  <text x="670" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#C084FC">Feature Store &amp; Local Embeddings</text>
+  <text x="670" y="82" font-family="Consolas, Monaco, monospace" font-size="10" fill="#E9D5FF">DuckDB vss / MLflow Tracking</text>
+  <text x="670" y="100" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• 30-Day Auto-Purge TTL</text>
+
+  <!-- Stage 4 Box -->
+  <rect x="660" y="155" width="280" height="110" fill="#1E293B" stroke="#22C55E" stroke-width="1.5" rx="8" filter="url(#shadow-onb)"/>
+  <rect x="660" y="155" width="280" height="26" fill="#065F46" rx="8"/>
+  <text x="670" y="173" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#86EFAC">STAGE 4: VERIFICATION &amp; SIGN-OFF</text>
+  <text x="670" y="197" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">Human Domain Expert Audit</text>
+  <text x="670" y="217" font-family="Consolas, Monaco, monospace" font-size="10" fill="#86EFAC">OpenLineage nres_provenance Facet</text>
+  <text x="670" y="235" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Cryptographic Signing to Tier 0</text>
+
+  <!-- Stage 5 Box -->
+  <rect x="340" y="155" width="280" height="110" fill="#1E293B" stroke="#F59E0B" stroke-width="1.5" rx="8" filter="url(#shadow-onb)"/>
+  <rect x="340" y="155" width="280" height="26" fill="#78350F" rx="8"/>
+  <text x="350" y="173" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#FDE68A">STAGE 5: PRODUCTION DEPLOYMENT</text>
+  <text x="350" y="197" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FBBF24">vLLM / Ollama Container &amp; APISIX</text>
+  <text x="350" y="217" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FDE68A">Keycloak OIDC &amp; Rate Limiting</text>
+  <text x="350" y="235" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Apache Superset Spatial Map</text>
+
+  <!-- Stage 6 Box -->
+  <rect x="20" y="155" width="280" height="110" fill="#1E293B" stroke="#EC4899" stroke-width="1.5" rx="8" filter="url(#shadow-onb)"/>
+  <rect x="20" y="155" width="280" height="26" fill="#831843" rx="8"/>
+  <text x="30" y="173" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#FBCFE8">STAGE 6: OTEL LIFECYCLE MONITORING</text>
+  <text x="30" y="197" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F472B6">OpenTelemetry Collector &amp; Grafana</text>
+  <text x="30" y="217" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBCFE8">Inference Latency &amp; Concept Drift</text>
+  <text x="30" y="235" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• SLA Alerts &amp; Continuous Retraining</text>
+
+  <!-- Connectors -->
+  <line x1="300" y1="75" x2="340" y2="75" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-onb)"/>
+  <line x1="620" y1="75" x2="660" y2="75" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-onb)"/>
+  <line x1="800" y1="130" x2="800" y2="155" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-onb)"/>
+  <line x1="660" y1="210" x2="620" y2="210" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-onb)"/>
+  <line x1="340" y1="210" x2="300" y2="210" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-onb)"/>
+</svg>
+
+### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+flowchart LR
+    subgraph Flow ["6-Stage AI / ML Onboarding Lifecycle"]
+        S1["Stage 1: Bitol ODCS v3.1.0 Contract"]
+        S2["Stage 2: NiFi Ingestion & Polaris Namespace"]
+        S3["Stage 3: Tier 2 Feature Sandbox & MLflow"]
+        S4["Stage 4: Human Verification & Tier 0 Signing"]
+        S5["Stage 5: Container REST Service & APISIX"]
+        S6["Stage 6: OTel Monitoring & Drift Tracking"]
+    end
+
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+    S5 --> S6
+```
+
+### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Contract Linter** | **Apache NiFi Ingestion** | Local CLI / `TCP 8443` | ODCS Contract Spec | Ensures incoming training telemetry matches schema bounds before pipeline entry. |
+| **Feature Extractor** | **Tier 2 AI Sandbox** | S3 API / `s3://bda-tier2-ai-sandbox` | S3 IAM Vended Token | Stores intermediate feature matrices in ephemeral storage with 30-day auto-purge TTL. |
+| **Inference Container** | **APISIX Gateway** | `TCP 8000` / HTTPS REST | Keycloak OAuth2 JWT | Exposes model predictions securely behind rate-limiting and OTel tracing filters. |
+
+
+---
+
 ## The 6-Stage Lifecycle Blueprint
 
 To maintain zero-trust security and data sovereignty while encouraging rapid AI innovation, every new AI business case follows a mandatory 6-stage operational pipeline:

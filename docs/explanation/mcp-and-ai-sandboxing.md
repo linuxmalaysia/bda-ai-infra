@@ -127,6 +127,100 @@ flowchart TD
 
 ---
 
+### Dual-Render Diagram 2: Zero-Trust MCP Agent Isolation & Keycloak OIDC Authentication Sequence
+
+The diagram below details the second dual-render architecture spec for MCP Sandboxing: the zero-trust authentication, APISIX mTLS gateway route filtering, and read-only database execution sequence.
+
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-mcp-seq" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+    <filter id="shadow-mcp-seq" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="400" fill="#0F172A" rx="10"/>
+
+  <!-- Keycloak IAM Box -->
+  <rect x="20" y="20" width="280" height="100" fill="#1E293B" stroke="#3B82F6" stroke-width="1.5" rx="8" filter="url(#shadow-mcp-seq)"/>
+  <rect x="20" y="20" width="280" height="26" fill="#1E3A8A" rx="8"/>
+  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">1. KEYCLOAK OIDC FEDERATION</text>
+  <text x="35" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">Service Account JWT Authentication</text>
+  <text x="35" y="82" font-family="Consolas, Monaco, monospace" font-size="10" fill="#93C5FD">Client Credentials &amp; Read-Only Scopes</text>
+
+  <!-- APISIX Gateway Box -->
+  <rect x="340" y="20" width="280" height="100" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5" rx="8" filter="url(#shadow-mcp-seq)"/>
+  <rect x="340" y="20" width="280" height="26" fill="#0369A1" rx="8"/>
+  <text x="350" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E0F2FE">2. APISIX MTLS GATEWAY PERIMETER</text>
+  <text x="350" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">mTLS Client Cert Verification</text>
+  <text x="350" y="82" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7DD3FC">HTTP Write Verb Blocking (POST/PUT/DELETE)</text>
+
+  <!-- FastMCP Container Box -->
+  <rect x="660" y="20" width="280" height="100" fill="#1E293B" stroke="#4ADE80" stroke-width="1.5" rx="8" filter="url(#shadow-mcp-seq)"/>
+  <rect x="660" y="20" width="280" height="26" fill="#065F46" rx="8"/>
+  <text x="670" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">3. FASTMCP DMZ CONTAINER</text>
+  <text x="670" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">Isolated Podman / K8s Container</text>
+  <text x="670" y="82" font-family="Consolas, Monaco, monospace" font-size="10" fill="#86EFAC">Read-Only SQL Session &amp; Tier 2 Write Only</text>
+
+  <!-- Database Storage Target -->
+  <rect x="20" y="260" width="920" height="110" fill="#1E293B" stroke="#C084FC" stroke-width="1.5" rx="8" filter="url(#shadow-mcp-seq)"/>
+  <rect x="20" y="260" width="920" height="26" fill="#581C87" rx="8"/>
+  <text x="35" y="278" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">PROTECTED LAKEHOUSE &amp; OPERATIONAL DB (SET TRANSACTION READ ONLY)</text>
+
+  <rect x="40" y="295" width="430" height="60" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="50" y="317" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">PostgreSQL Master Hub (pgvector / PostGIS)</text>
+  <text x="50" y="337" font-family="Consolas, Monaco, monospace" font-size="10" fill="#C084FC">Strict Read-Only SQL Roles &amp; Transaction Lock</text>
+
+  <rect x="490" y="295" width="430" height="60" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="500" y="317" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">Tier 2 Ephemeral AI Scratch Storage</text>
+  <text x="500" y="337" font-family="Consolas, Monaco, monospace" font-size="10" fill="#C084FC">S3 Bucket s3://bda-tier2-scratch (30-Day TTL Purge)</text>
+
+  <!-- Flow Lines -->
+  <line x1="300" y1="70" x2="340" y2="70" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-mcp-seq)"/>
+  <line x1="620" y1="70" x2="660" y2="70" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-mcp-seq)"/>
+
+  <line x1="800" y1="120" x2="255" y2="295" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp-seq)"/>
+  <line x1="800" y1="120" x2="705" y2="295" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp-seq)"/>
+</svg>
+
+#### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Keycloak as Keycloak OIDC IAM
+    participant Agent as Autonomous LLM Agent
+    participant APISIX as APISIX Gateway Perimeter
+    participant MCP as FastMCP Container (DMZ)
+    participant DB as PostgreSQL Master (pgvector)
+    participant Tier2 as Tier 2 Scratch Storage
+
+    Agent->>Keycloak: 1. Authenticate Service Account (Client Credentials)
+    Keycloak-->>Agent: 2. Vend Scoped Bearer JWT Token
+    Agent->>APISIX: 3. Invoke MCP Tool (mTLS + JWT Token)
+    APISIX->>APISIX: 4. Validate Cert DN & Filter Write Verbs
+    APISIX->>MCP: 5. Forward Authorized JSON-RPC Tool Request
+    MCP->>DB: 6. Execute Read-Only SQL (SET TRANSACTION READ ONLY)
+    DB-->>MCP: 7. Return Semantic & Spatial Context Records
+    MCP->>Tier2: 8. Write Intermediate Scratch Artifacts (30-Day TTL)
+    MCP-->>Agent: 9. Return Structured Tool Result Payload
+```
+
+#### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **LLM Agent** | **Keycloak IAM** | `TCP 8443` / OIDC HTTPS | Service Account Credentials | Authenticates agent and issues short-lived JWT token with read-only scopes. |
+| **LLM Agent** | **APISIX Gateway** | `TCP 8443` / mTLS HTTPS | mTLS Client Certificate + JWT | Terminates mTLS, validates client DN, and blocks all write HTTP methods. |
+| **MCP Container** | **PostgreSQL Hub** | `TCP 5432` / TLS 1.3 PostgreSQL | Read-Only Session Role | Executes controlled vector search queries; write transactions are aborted. |
+
+---
+
 ## MCP Primitive Restrictions
 
 The MCP specification articulates three server primitives: Resources, Tools, and Prompts. Strict constraints are enforced across each primitive:

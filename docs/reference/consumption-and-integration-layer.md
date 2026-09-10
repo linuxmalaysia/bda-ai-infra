@@ -210,10 +210,9 @@ db_pool = None
 embedding_model = None
 
 LOCAL_MODEL_PATH = os.getenv("EMBEDDING_MODEL_PATH", "/opt/models/WhereIsAI/UAE-Large-V1")
-DB_DSN = os.getenv(
-    "DATABASE_URL",
-    "postgresql://mcp_user:SecurePassword123@postgres.master.internal:5432/enterprise_ai_db?sslmode=verify-full"
-)
+DB_DSN = os.getenv("DATABASE_URL")
+if not DB_DSN:
+    raise RuntimeError("DATABASE_URL environment variable must be set in deployment secret store.")
 
 @mcp.on_startup()
 async def startup():
@@ -262,17 +261,17 @@ async def semantic_spatial_search(
     embedding_vector = embedding_model.encode(query_text).tolist()
     embedding_str = f"[{','.join(map(str, embedding_vector))}]"
 
-    # 2. Query PostgreSQL Master
+    # 2. Query PostgreSQL Master with SRID 4326 geography casting
     sql_query = """
         SELECT
             uuid,
             source_origin,
             payload_content,
             ST_AsText(spatial_coordinates) AS location_wkt,
-            ST_Distance(spatial_coordinates, ST_MakePoint($1, $2)::geography) AS distance_meters,
+            ST_Distance(spatial_coordinates, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography) AS distance_meters,
             1 - (semantic_embedding <=> $3::vector) AS cosine_similarity
         FROM secure_ai_lakehouse
-        WHERE ST_DWithin(spatial_coordinates, ST_MakePoint($1, $2)::geography, $4)
+        WHERE ST_DWithin(spatial_coordinates, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography, $4)
         ORDER BY semantic_embedding <=> $3::vector
         LIMIT $5;
     """
@@ -314,7 +313,8 @@ License: Apache-2.0
 
 import os
 import requests
-from typing import List, Optional
+import jwt
+from typing import List, Optional, Dict, Any
 from fastapi import FastAPI, Depends, HTTPException, status, Security
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel, Field
@@ -336,30 +336,52 @@ MODEL_PATH = os.getenv("EMBEDDING_MODEL_PATH", "/opt/models/WhereIsAI/UAE-Large-
 model = SentenceTransformer(MODEL_PATH, local_files_only=True)
 
 NIFI_WEBHOOK_URL = os.getenv("NIFI_WEBHOOK_URL", "https://nifi.master.internal:8443/content-ingest")
+KEYCLOAK_PUBLIC_KEY = os.getenv("KEYCLOAK_PUBLIC_KEY")  # PEM-encoded RSA public key from Keycloak realm
+OIDC_ISSUER = os.getenv("OIDC_ISSUER", "https://idp.master.internal/realms/bda-realm")
+OIDC_AUDIENCE = os.getenv("OIDC_AUDIENCE", "bda-api-service")
 
 def get_db_connection():
     """Connects to PostgreSQL Master with TLS verification."""
+    db_password = os.getenv("DB_PASSWORD")
+    if not db_password:
+        raise RuntimeError("DB_PASSWORD environment variable must be set in deployment secret store.")
+
     conn = psycopg2.connect(
         host=os.getenv("DB_HOST", "postgres.master.internal"),
         dbname=os.getenv("DB_NAME", "enterprise_ai_db"),
         user=os.getenv("DB_USER", "api_gateway"),
-        password=os.getenv("DB_PASSWORD", "ApiPassword123"),
+        password=db_password,
         sslmode="verify-full",
         sslrootcert="/etc/ssl/certs/pg-ca.crt"
     )
     register_vector(conn)
     return conn
 
-def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Security(security)):
-    """Verifies OAuth2 / Keycloak JWT Bearer token header."""
+def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Security(security)) -> Dict[str, Any]:
+    """Validates Keycloak OIDC JWT Bearer token signature, issuer, audience, and expiry."""
     token = credentials.credentials
-    if not token or token != "valid-master-bearer-token":  # Replace with Keycloak JWT decode logic
+    if not token or not KEYCLOAK_PUBLIC_KEY:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid authentication credentials",
+            detail="Authentication token or Keycloak key configuration missing",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    return token
+
+    try:
+        payload = jwt.decode(
+            token,
+            KEYCLOAK_PUBLIC_KEY,
+            algorithms=["RS256"],
+            audience=OIDC_AUDIENCE,
+            issuer=OIDC_ISSUER
+        )
+        return payload
+    except jwt.PyJWTError as err:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=f"Invalid JWT Token: {str(err)}",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
 
 class SearchRequest(BaseModel):
     query_text: str = Field(..., example="Cyberjaya safety incident report")
@@ -376,7 +398,7 @@ class IngestionPayload(BaseModel):
 
 @app.post("/api/v1/search/hybrid", summary="Execute Hybrid Spatial + Vector Search", dependencies=[Depends(verify_jwt_token)])
 def hybrid_search(req: SearchRequest):
-    """Converts user query text into vector embedding and executes unified PostGIS + pgvector query."""
+    """Converts user query text into vector embedding and executes unified PostGIS + pgvector query with SRID 4326."""
     query_vector = model.encode(req.query_text).tolist()
 
     conn = get_db_connection()
@@ -388,10 +410,10 @@ def hybrid_search(req: SearchRequest):
                     source_origin,
                     payload_content,
                     ST_AsText(spatial_coordinates) AS location_wkt,
-                    ST_Distance(spatial_coordinates, ST_MakePoint(%s, %s)::geography) AS distance_meters,
+                    ST_Distance(spatial_coordinates, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography) AS distance_meters,
                     1 - (semantic_embedding <=> %s::vector) AS cosine_similarity
                 FROM secure_ai_lakehouse
-                WHERE ST_DWithin(spatial_coordinates, ST_MakePoint(%s, %s)::geography, %s)
+                WHERE ST_DWithin(spatial_coordinates, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography, %s)
                 ORDER BY semantic_embedding <=> %s::vector
                 LIMIT %s;
             """

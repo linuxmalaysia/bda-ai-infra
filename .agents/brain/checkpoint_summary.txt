@@ -1,19 +1,21 @@
 DSOM EOD Palace Sync Checkpoint Summary
 =======================================
-Timestamp: 2026-09-10T14:15:00Z
+Timestamp: 2026-09-10T21:15:00Z
 Author: Jules (Sovereign AI Engineer)
 
-1. Dual-Render Architecture Diagram Skill Refactoring:
-   - Updated .agents/skills/dual-render-architecture-diagram/SKILL.md to mandate Dark Slate Canvas (#0F172A).
-   - Refactored raw SVG diagrams in docs/ and openwiki/ to Dark Slate design system with connector callout badges.
-   - Added ListSFTP -> FetchSFTP inbound SFTP flow corrections in docs/how-to-guides/ingestion-pipeline-modernization.md.
-   - Refined MCP Streamable HTTP vs stdio IPC transport routing in docs/explanation/mcp-and-ai-sandboxing.md.
-   - Converted ASCII tree diagrams to full 3-part Dual-Render deliverables (Dark Slate SVG + Mermaid + Summary Routing Table) in 5-year-bda-ai-roadmap-and-business-case.md.
+1. Light Mode & Print Mode White Background Theme Optimization:
+   - Added @mixin light-mode-svg-rules in assets/css/style.scss to dynamically adapt raw inline SVG vector graphics, Mermaid diagrams, code blocks, and page content to a clean white background in Light Mode and @media print.
+   - Enforced crisp dark typography (#0F172A) and print-friendly colored labels (#1D4ED8, #15803D, #B45309, #6B21A8) to maximize legibility and save ink when printing or exporting to PDF.
+   - Preserved dark slate canvas (#0F172A / #0B0F19) and vibrant colors in Dark Mode.
+   - Updated .agents/skills/dual-render-architecture-diagram/SKILL.md to specify adaptive Light/Dark/Print rendering.
 
-2. Code Health & Compliance Verification:
-   - Executed `uv run ruff check .` -> Passed with 0 errors.
-   - Executed `uv run pytest` -> 179/179 unit, link integrity, and OpenWiki generator tests passed with exit code 0.
-   - Re-synced OpenWiki knowledge base via `tools/openwiki_emulator.py`.
+2. Code Review Feedback Resolution:
+   - Deleted committed assets/css/style.css and assets/css/style.css.map so Jekyll dynamically compiles Sass at site build time.
+   - Restored .hero-callout's left accent border color (border-left: 4px solid var(--accent-color)).
+   - Scoped inline code selector to .markdown-body :not(pre) > code in standard SCSS and @media print rules.
+   - Refined light theme selector to [data-theme="light"], :root:not([data-theme]).
 
-3. Spatial Memory Palace Sync:
-   - Updated .agents/brain/ walkthrough, task list, active context, and checkpoint summary.
+3. Verification & DSOM Palace Sync:
+   - Executed `uv run pytest` -> 231/231 unit, OKF, and link decay tests passed with 0 errors.
+   - Visually verified Light Mode and Dark Mode page rendering using Playwright screenshots.
+   - Executed End of Day (EOD) Palace Sync across .agents/brain/ spatial memory files.

@@ -3,19 +3,20 @@
 ---
 
 :root {
-  --bg-color: #f8fafc;
+  --bg-color: #ffffff;
   --panel-bg: #ffffff;
   --text-primary: #0f172a;
-  --text-muted: #475569;
-  --border-color: #e2e8f0;
+  --text-muted: #334155;
+  --border-color: #cbd5e1;
   --accent-color: #2563eb;
   --accent-hover: #1d4ed8;
-  --card-bg: #f1f5f9;
+  --card-bg: #f8fafc;
   --sidebar-bg: #1e293b;
   --sidebar-text: #f8fafc;
   --sidebar-muted: #94a3b8;
-  --code-bg: #0f172a;
-  --code-text: #f1f5f9;
+  --code-bg: #f8fafc;
+  --code-text: #0f172a;
+  --code-border: #cbd5e1;
 }
 
 [data-theme="dark"] {
@@ -32,6 +33,7 @@
   --sidebar-muted: #6b7280;
   --code-bg: #111827;
   --code-text: #f3f4f6;
+  --code-border: #1f2937;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -49,6 +51,7 @@
     --sidebar-muted: #6b7280;
     --code-bg: #111827;
     --code-text: #f3f4f6;
+    --code-border: #1f2937;
   }
 }
 
@@ -212,6 +215,7 @@ body {
 
 .hero-callout {
   background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-left: 4px solid var(--accent-color);
   padding: 1.5rem;
   border-radius: 6px;
@@ -256,7 +260,7 @@ body {
 }
 
 /* Markdown typography */
-.markdown-body h1, .markdown-body h2, .markdown-body h3 {
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
   color: var(--text-primary);
@@ -270,6 +274,7 @@ body {
 .markdown-body pre {
   background-color: var(--code-bg);
   color: var(--code-text);
+  border: 1px solid var(--code-border);
   padding: 1rem;
   border-radius: 6px;
   overflow-x: auto;
@@ -278,12 +283,31 @@ body {
   margin-bottom: 1rem;
 }
 
-.markdown-body code {
+.markdown-body :not(pre) > code {
   background-color: var(--card-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
   font-family: ui-monospace, SFMono-Regular, monospace;
   font-size: 0.88rem;
+}
+
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.markdown-body th, .markdown-body td {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border-color);
+}
+
+.markdown-body th {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 /* Footer */
@@ -301,15 +325,220 @@ body {
   text-decoration: none;
 }
 
+/* Light Mode / White Background Rules for SVG Vector Diagrams & Mermaid Code Blocks */
+@mixin light-mode-svg-rules {
+  svg {
+    background-color: #ffffff !important;
+    border-radius: 8px;
+  }
+
+  /* Outer Canvas Rect */
+  svg > rect:first-of-type,
+  svg rect[fill="#0F172A"]:first-of-type,
+  svg rect[fill="#0b0f19"]:first-of-type {
+    fill: #ffffff !important;
+    stroke: #cbd5e1 !important;
+    stroke-width: 1.5px !important;
+  }
+
+  /* Container Cards */
+  svg rect[fill="#1E293B"] {
+    fill: #f8fafc !important;
+    stroke: #cbd5e1 !important;
+  }
+
+  /* Sub-card headers or inner rects */
+  svg rect[fill="#0F172A"]:not(:first-of-type) {
+    fill: #e2e8f0 !important;
+    stroke: #cbd5e1 !important;
+  }
+
+  /* Accent inner rects */
+  svg rect[fill="#0F172A"][stroke="#22C55E"],
+  svg rect[fill="#0F172A"][stroke="#4ADE80"] {
+    fill: #f0fdf4 !important;
+    stroke: #16a34a !important;
+  }
+
+  svg rect[fill="#1E3A8A"] {
+    fill: #eff6ff !important;
+    stroke: #2563eb !important;
+  }
+
+  /* SVG Text Elements - Primary dark text for white background readability */
+  svg text[fill="#F8FAFC"],
+  svg text[fill="#ffffff"],
+  svg text[fill="#FFFFFF"],
+  svg text[fill="#E2E8F0"],
+  svg text[fill="#f1f5f9"] {
+    fill: #0f172a !important;
+  }
+
+  /* SVG Text Elements - Muted secondary text */
+  svg text[fill="#94A3B8"],
+  svg text[fill="#64748B"],
+  svg text[fill="#9ca3af"] {
+    fill: #334155 !important;
+  }
+
+  /* SVG Accent Title Text - Deep contrast tones for printing */
+  svg text[fill="#60A5FA"],
+  svg text[fill="#38BDF8"],
+  svg text[fill="#3B82F6"] {
+    fill: #1d4ed8 !important;
+    font-weight: 700;
+  }
+
+  svg text[fill="#4ADE80"],
+  svg text[fill="#86EFAC"],
+  svg text[fill="#22C55E"] {
+    fill: #15803d !important;
+    font-weight: 700;
+  }
+
+  svg text[fill="#FBBF24"],
+  svg text[fill="#F59E0B"] {
+    fill: #b45309 !important;
+    font-weight: 700;
+  }
+
+  svg text[fill="#C084FC"],
+  svg text[fill="#E879F9"],
+  svg text[fill="#A855F7"] {
+    fill: #6b21a8 !important;
+    font-weight: 700;
+  }
+
+  svg text[fill="#F43F5E"],
+  svg text[fill="#EF4444"] {
+    fill: #be123c !important;
+    font-weight: 700;
+  }
+
+  /* SVG Paths, Lines & Markers */
+  svg path[stroke="#64748B"],
+  svg path[stroke="#334155"],
+  svg line[stroke="#64748B"],
+  svg line[stroke="#334155"] {
+    stroke: #475569 !important;
+  }
+
+  svg marker path[fill="#64748B"],
+  svg marker path[fill="#334155"] {
+    fill: #475569 !important;
+  }
+
+  /* Mermaid Diagram Elements in Light Mode */
+  .mermaid svg {
+    background-color: #ffffff !important;
+  }
+
+  .mermaid .node rect,
+  .mermaid .node circle,
+  .mermaid .node polygon {
+    fill: #f8fafc !important;
+    stroke: #475569 !important;
+  }
+
+  .mermaid .node .label,
+  .mermaid .node text {
+    color: #0f172a !important;
+    fill: #0f172a !important;
+  }
+
+  .mermaid .edgePath .path,
+  .mermaid .flowchart-link {
+    stroke: #475569 !important;
+  }
+
+  .mermaid .marker {
+    fill: #475569 !important;
+    stroke: #475569 !important;
+  }
+
+  .mermaid .cluster rect {
+    fill: #f1f5f9 !important;
+    stroke: #94a3b8 !important;
+  }
+
+  .mermaid .cluster text,
+  .mermaid .cluster span {
+    fill: #0f172a !important;
+    color: #0f172a !important;
+  }
+}
+
+/* Apply light mode rules when data-theme="light" or no data-theme attribute exists (excluding data-theme="auto") */
+[data-theme="light"],
+:root:not([data-theme]) {
+  @include light-mode-svg-rules;
+}
+
+/* Apply light mode rules when data-theme="auto" and system preference is light */
+@media (prefers-color-scheme: light) {
+  [data-theme="auto"] {
+    @include light-mode-svg-rules;
+  }
+}
+
+/* Print Specific Styles - Saving Ink with Pure White Canvas & High Contrast Black Text */
 @media print {
-  .top-header, .sidebar-nav, .theme-switcher, .print-btn {
+  body, .site-body, .main-content, .content-wrapper, .markdown-body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .top-header, .sidebar-nav, .theme-switcher, .print-btn, .site-footer {
     display: none !important;
   }
+
   .site-container {
-    display: block;
+    display: block !important;
   }
+
   .main-content {
-    max-width: 100%;
-    padding: 0;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .hero-callout {
+    background: #ffffff !important;
+    border: 1px solid #000000 !important;
+    border-left: 6px solid #000000 !important;
+    padding: 1rem !important;
+  }
+
+  .page-title {
+    color: #000000 !important;
+  }
+
+  .markdown-body pre {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+    white-space: pre-wrap !important;
+  }
+
+  .markdown-body :not(pre) > code {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #666666 !important;
+  }
+
+  .markdown-body table, .markdown-body th, .markdown-body td {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+  }
+
+  @include light-mode-svg-rules;
+
+  svg > rect:first-of-type {
+    stroke: #000000 !important;
+  }
+
+  svg text {
+    fill: #000000 !important;
   }
 }

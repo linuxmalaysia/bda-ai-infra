@@ -4,7 +4,7 @@ type: spatial_memory
 title: "DSOM Task List & Implementation Progress"
 description: "Active task checklist for Deep State of Mind protocol setup and spatial memory tracking."
 status: active
-timestamp: "2026-09-08T00:00:00Z"
+timestamp: "2026-09-10T00:00:00Z"
 stale_after: "2027-09-08T00:00:00Z"
 generated: false
 verified: true
@@ -50,5 +50,6 @@ topics:
 - [x] Update relative Markdown links to `.html` across documentation entrypoints (`README.md`, `START-HERE.md`, `AGENTS.md`, `docs/README.md`, `docs/reference/*.md`) to eliminate 404 errors on GitHub Pages and update `tests/test_okf_and_links.py` link decay resolver.
 - [x] Create Apache NiFi 2.0 Master Data Plane and Migration Guide (`docs/reference/apache-nifi-2-master-data-plane-and-migration.md`) with PostgreSQL vector/spatial integration, dual-render diagrams, and NiFi 1.x -> 2.0 migration framework.
 - [x] Implement Consumption & Integration Layer Specification (`docs/reference/consumption-and-integration-layer.md`) with Python FastMCP server, FastAPI REST/gRPC gateway, and Apache NiFi 2.0 PGP SFTP egress blueprints over PostgreSQL Master (`pgvector` + `PostGIS` + `pgTDE`).
-- [x] Address PR comments for SRID 4326 geography casting, secret manager password enforcement, and Keycloak RS256 JWT validation.
+- [x] Implement Light Mode & Print Mode White Background SCSS styling mixins and responsive Mermaid diagram CSS overrides (`assets/css/style.scss`).
+- [x] Address PR review feedback (remove committed CSS binaries, restore callout accent borders, scope inline code selectors, refine un-themed root selectors).
 - [x] Execute End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory.

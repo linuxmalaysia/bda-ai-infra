@@ -51,7 +51,7 @@ Ingestion is overhauled by implementing a decoupled, event-driven framework usin
 
   <rect x="40" y="70" width="380" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
   <text x="50" y="92" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#F8FAFC">Telemetry &amp; SFTP Ingestion</text>
-  <text x="50" y="112" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">PutSFTP / ListenHTTP (Port 8443)</text>
+  <text x="50" y="112" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">ListSFTP -> FetchSFTP / ListenHTTP (Port 8443)</text>
   <text x="50" y="130" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#94A3B8">• Continuous precipitation &amp; sensor polling</text>
 
   <rect x="40" y="170" width="380" height="80" fill="#0F172A" stroke="#334155" rx="6"/>
@@ -86,6 +86,8 @@ Ingestion is overhauled by implementing a decoupled, event-driven framework usin
 
   <!-- Connector -->
   <line x1="440" y1="200" x2="480" y2="200" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-ing)"/>
+  <rect x="442" y="192" width="36" height="16" fill="#065F46" rx="3"/>
+  <text x="445" y="204" font-family="Consolas, Monaco, monospace" font-size="9" fill="#86EFAC">REST</text>
 </svg>
 ```
 
@@ -94,7 +96,8 @@ Ingestion is overhauled by implementing a decoupled, event-driven framework usin
 ```mermaid
 flowchart LR
     subgraph PerimeterIngress ["Perimeter Ingress: Apache NiFi"]
-        SFTP["Continuous SFTP &amp; Telemetry Polling<br/>(ListenHTTP Port 8443)"]
+        SFTP["Inbound SFTP Ingestion<br/>(ListSFTP -> FetchSFTP)"]
+        ListenHTTP["Streaming Telemetry Ingress<br/>(ListenHTTP Port 8443)"]
         ThermalAPI["Thermal Anomaly REST API Polling<br/>(InvokeHTTP)"]
         NiFiCore["Format Normalization, Backpressure,<br/>&amp; Provenance Tracking"]
     end
@@ -106,6 +109,7 @@ flowchart LR
     end
 
     SFTP --> NiFiCore
+    ListenHTTP --> NiFiCore
     ThermalAPI --> NiFiCore
     NiFiCore -->|"Event Triggers / Normalized Records"| SparkTrino
     SparkTrino --> ODCSGate
@@ -116,7 +120,8 @@ flowchart LR
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Telemetry / SFTP Drop** | **Apache NiFi** | `TCP 8443` / `TCP 22` (SFTP) | Boundary Perimeter -> DMZ | Continuous polling of precipitation telemetry streams and departmental drop zones. |
+| **Departmental SFTP Server** | **Apache NiFi** | `ListSFTP -> FetchSFTP` (`TCP 22`) | Partner Network -> DMZ Ingestion | Inbound SFTP polling using ListSFTP and FetchSFTP processors. |
+| **Telemetry Ingress Stream** | **Apache NiFi** | `ListenHTTP` (`TCP 8443` / HTTPS) | Boundary Perimeter -> DMZ Ingestion | Continuous streaming ingestion of precipitation telemetry payloads. |
 | **Thermal Anomaly REST API** | **Apache NiFi** | `TCP 443` / HTTPS REST | External API -> Ingestion Queue | Replaces manual email parsing with automated REST polling via `InvokeHTTP`. |
 | **Apache NiFi** | **Apache Airflow** | `TCP 8080` / REST Webhook | DMZ -> Batch Processing Tier | Triggers Airflow DAG execution upon buffer batch threshold or schedule completion. |
 | **Apache Airflow** | **Spark / Trino / Iceberg** | `TCP 7077` / `TCP 8080` | Batch Tier -> Core Lakehouse | Executes SQL transformations, enforces ODCS contract gates, and purges Iceberg snapshots. |

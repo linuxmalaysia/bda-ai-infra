@@ -85,7 +85,12 @@ To standardize AI interactions while enforcing security boundaries, the platform
 
   <!-- Connectors -->
   <line x1="230" y1="100" x2="230" y2="120" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp)"/>
+  <rect x="180" y="102" width="100" height="16" fill="#1E3A8A" rx="3"/>
+  <text x="185" y="114" font-family="Consolas, Monaco, monospace" font-size="9" fill="#93C5FD">JSON-RPC / mTLS</text>
+
   <line x1="690" y1="100" x2="690" y2="120" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp)"/>
+  <rect x="635" y="102" width="110" height="16" fill="#065F46" rx="3"/>
+  <text x="640" y="114" font-family="Consolas, Monaco, monospace" font-size="9" fill="#86EFAC">Gated Tool Exec</text>
 </svg>
 ```
 
@@ -109,7 +114,7 @@ flowchart TD
         StorePart["Storage Partitioning: Tier 2 Scratch Buckets Only"]
     end
 
-    LLMAssistants -->|"JSON-RPC 2.0 / mTLS (Keycloak OIDC)"| Primitives
+    LLMAssistants -->|"Streamable HTTP / stdio IPC"| Primitives
     LLMAssistants -->|"Gated Tool Execution"| Guardrails
 ```
 
@@ -117,8 +122,9 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **LLM Host / AI Client** | **MCP Server** | Stdio / `TCP 8080` (JSON-RPC 2.0) | Keycloak OIDC Service Account / mTLS | Exposes read-only resources, stateless tools, and governed prompts. |
-| **MCP Tool Execution** | **Trino / PostgreSQL** | `TCP 8080` / `TCP 5432` | DMZ -> Database Read-Only Role | Executes read-only schema introspection and query syntax validation. |
+| **Remote AI Client / Host** | **Remote MCP Server** | `HTTPS / Streamable HTTP` (`TCP 443`) | APISIX Gateway / Keycloak OIDC JWT | Remote agent tool invocation over encrypted Streamable HTTP / SSE endpoints. |
+| **Local Coding Agent** | **Local MCP Server** | `stdio` (Process IPC / stdin/stdout) | OS Process Isolation / Read-Only Subprocess | Local AI agent subprocess execution without network listener or network auth overhead. |
+| **MCP Tool Execution** | **Trino / PostgreSQL** | `TCP 8080` / `TCP 5432` (mTLS) | DMZ -> Database Read-Only Role | Executes read-only schema introspection and query syntax validation. |
 | **MCP Server Output** | **Object Storage** | `TCP 9000` (S3 REST API) | DMZ -> Tier 2 Scratch Bucket | Confines all temporary model outputs and derived scratch data to Tier 2 storage. |
 
 ---

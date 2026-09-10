@@ -28,6 +28,8 @@ and this project adheres to Semantic Versioning.
 
 ### Added
 
+- Published `docs/reference/consumption-and-integration-layer.md` detailing the Consumption & Integration Layer blueprint (Python MCP Server, FastAPI Hybrid API, and Apache NiFi 2.0 PGP SFTP Egress pipeline) operating over PostgreSQL Master (`pgvector` + `PostGIS` + `pgTDE`).
+- Published `docs/reference/apache-nifi-2-master-data-plane-and-migration.md` establishing Apache NiFi 2.0 as the master data plane, ETL process engine, and migration framework from NiFi 1.x.
 - Published `docs/reference/postgresql-pgvector-enterprise-strategy.md` establishing PostgreSQL and `pgvector` as the core primary/master database foundation for BDA and Enterprise AI infrastructure, adopting technical research from Percona enterprise guidance.
 - Adopted Next Technology Roadmap Stack (`docs/reference/next-technology-roadmap-stack.md`) detailing Apache Polaris multi-engine Iceberg REST catalog adoption (with Polaris vs Gravitino comparison), DuckDB `vss` / `pgvector` with OpenMetadata for zero-trust local semantic search & Hybrid RAG, and OpenTelemetry observability across Airflow DAGs, Spark jobs, and APISIX routes feeding Prometheus and Grafana.
 - Adopted OpenWiki architecture and native Python emulator (`tools/openwiki_emulator.py`) establishing BDA Lakehouse Single Source of Truth (SSoT) open-source software relationship graph.

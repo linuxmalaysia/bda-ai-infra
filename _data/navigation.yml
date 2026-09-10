@@ -49,6 +49,8 @@
     url: /docs/reference/apache-nifi-2-master-data-plane-and-migration.html
   - title: Big Data Domain Specifications and Analytical Workflows
     url: /docs/reference/business-applications.html
+  - title: Consumption & Integration Layer Specification
+    url: /docs/reference/consumption-and-integration-layer.html
   - title: Data Governance, Subsystems, and Standards Matrix
     url: /docs/reference/governance-matrix.html
   - title: Legacy Big Data Analytics Environment Architectural Deconstruction

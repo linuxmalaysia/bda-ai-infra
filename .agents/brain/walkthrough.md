@@ -4,8 +4,8 @@ type: spatial_memory
 title: "DSOM Execution Walkthrough & Session Logs"
 description: "Historical session log and mental anchors for project bootstrap, setup, governance adoption, and LLM-WIKI integration."
 status: active
-timestamp: "2026-09-07T11:20:00Z"
-stale_after: "2027-09-07T11:20:00Z"
+timestamp: "2026-09-08T00:00:00Z"
+stale_after: "2027-09-08T00:00:00Z"
 generated: false
 verified: true
 sources:
@@ -21,6 +21,21 @@ topics:
 ---
 
 # 📜 DSOM Execution Walkthrough & Mental Anchors
+
+## Session Anchor: 2026-09-10 — Consumption & Integration Layer Specification & PR Feedback Resolution
+
+- **Context:** Formulated and published `docs/reference/consumption-and-integration-layer.md` defining the gateway layer connecting AI Clients (MCP), Web/Mobile APIs (FastAPI), and File Transfer (Apache NiFi 2.0 PGP SFTP egress) over PostgreSQL Master (`pgvector` + `PostGIS` + `pgTDE`). Applied PR review updates and completed End of Day (EOD) Palace Sync.
+- **Actions Taken:**
+  1. Created `docs/reference/consumption-and-integration-layer.md` adhering strictly to the Dual-Render Specification (SVG vector diagram, Mermaid topology, Summary Routing Table, and production python blueprints for MCP Server, FastAPI, and NiFi 2.0 PGP SFTP egress).
+  2. Resolved PR review feedback:
+     - Wrapped query points with `ST_SetSRID(ST_MakePoint(...), 4326)` prior to geography casting in spatial queries.
+     - Enforced deployment secret store credential retrieval (`DATABASE_URL` / `DB_PASSWORD`) with zero hardcoded default fallback passwords.
+     - Upgraded `verify_jwt_token` in FastAPI to execute full RS256 Keycloak OIDC JWT signature, issuer, and audience validation.
+  3. Published `docs/reference/apache-nifi-2-master-data-plane-and-migration.md` establishing Apache NiFi 2.0 as the master data plane and ETL engine.
+  4. Updated omni-documentation indexes and ledgers (`README.md`, `START-HERE.md`, `SUMMARY.md`, `_data/navigation.yml`, `CHANGELOG.md`, `HISTORY.md`).
+  5. Updated OpenWiki SSoT structure and regenerated offline visualizer (`openwiki/graph.html`).
+  6. Verified all 179 pytest unit tests and ruff linter checks pass cleanly with 0 errors.
+  7. Executed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory files (`task.md`, `walkthrough.md`, `checkpoint_summary.txt`).
 
 ## Session Anchor: 2026-09-09 — GitHub Pages 404 Link Resolution & Spatial Memory EOD Sync
 
@@ -54,7 +69,7 @@ topics:
 
 ## Session Anchor: 2026-09-08 — 5-Year Strategic BDA & AI Roadmap, Business Case, & Onboarding Framework
 
-- **Context:** Formulated the master 5-Year Strategic BDA & AI Roadmap (2026–2030), big-picture business case, zero-downtime migration strategy for existing domain cases, and 6-stage operational framework for onboarding new AI/ML business cases onto the BDA SSoT Lakehouse.
+- **Context:** Formulated the master 5-Year Strategic BDA & AI Roadmap (2026–2030), big-picture business case, zero-downtime migration strategy for existing domain cases, and 6-stage operational framework for onboarding new AI/ML Business Cases onto the BDA SSoT Lakehouse.
 - **Actions Taken:**
   1. Created `docs/reference/5-year-bda-ai-roadmap-and-business-case.md` detailing Year 1–5 milestones, big picture business case ROI, migration matrix for the 5 core legacy domains (HWC, GroW, Forest Fire, MAIN, GeoSlide), MLOps feature store architecture (Feast + MLflow), experimental DuckDB vss qualification gate with pgvector fallback, and zero-WAN-egress security controls.
   2. Created `docs/how-to-guides/onboarding-new-ai-business-cases.md` detailing the 6-stage lifecycle for onboarding new AI business cases with valid ODCS v3.1.0 contract YAML syntax, HTTPS/mTLS Polaris REST catalog commands, Tier 2 AI sandboxing, human cryptographic verification, and APISIX/OTel deployment.
@@ -97,5 +112,5 @@ topics:
   4. Implemented `tests/test_okf_and_links.py` and `.github/workflows/dsom-audit.yml` for automated CI/CD OKF and zero link decay checks.
   5. Configured Python project dependencies and linters (`ruff`, `markdownlint-cli`, `.pre-commit-config.yaml`).
   6. Added Ansible & Molecule testing scaffolding (`.ansible-lint`, `molecule/default/molecule.yml`, `molecule/default/converge.yml`).
-  7. Added Playwright E2E testing scaffolding (`playwright.config.ts`, `tests/e2e/docs_search.spec.ts`).
+  7. Added Playwright E2E testing scaffolding (`package.json`, `playwright.config.ts`, `tests/e2e/docs_search.spec.ts`).
   8. Synchronised sovereign ledgers (`README.md`, `START-HERE.md`, `SUMMARY.md`, `llms.txt`, `CHANGELOG.md`, `HISTORY.md`).

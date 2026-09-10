@@ -207,7 +207,7 @@ The following diagrams illustrate the end-to-end dataflow between boundary inges
   <text x="375" y="360" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#334155">DBCPConnectionPool Controller</text>
   <text x="375" y="380" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Driver: org.postgresql.Driver</text>
   <text x="375" y="400" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">URL: jdbc:postgresql://postgres.master.internal:5432/enterprise_ai_db?sslmode=verify-full&amp;sslrootcert=/var/private/ssl/rootCA.crt</text>
-  <text x="375" y="420" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Security: Server-Authenticated TLS 1.3</text>
+  <text x="375" y="420" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Security: Server-Authenticated TLS</text>
   <text x="375" y="440" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Auto-Commit: Disabled (Batched)</text>
 
   <!-- Zone 3: PostgreSQL Master Hub -->
@@ -217,8 +217,8 @@ The following diagrams illustrate the end-to-end dataflow between boundary inges
 
   <rect x="720" y="80" width="240" height="80" fill="#FAF5FF" stroke="#A855F7" stroke-width="1.5" rx="6" />
   <text x="735" y="105" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#581C87">pgTDE Cryptographic Layer</text>
-  <text x="735" y="125" font-family="Monaco, Consolas, monospace" font-size="11" fill="#6B21A8">Hardware Encryption at Rest</text>
-  <text x="735" y="145" font-family="Monaco, Consolas, monospace" font-size="10" fill="#6B21A8">Tablespaces / WAL / Temp Logs</text>
+  <text x="735" y="125" font-family="Monaco, Consolas, monospace" font-size="11" fill="#6B21A8">Disk Encryption at Rest</text>
+  <text x="735" y="145" font-family="Monaco, Consolas, monospace" font-size="10" fill="#6B21A8">Tablespaces / WAL (RAM work_mem)</text>
 
   <rect x="720" y="180" width="240" height="130" fill="#F3E8FF" stroke="#7E22CE" stroke-width="1.5" rx="6" />
   <text x="735" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#581C87">pgvector Extension</text>
@@ -312,7 +312,7 @@ Migration from NiFi 1.x to 2.0 requires careful planning across process group co
 
 #### Phase 1: Environment & Dependency Preparation
 1. **Configure Cluster State & ZooKeeper Management:** Configure cluster state management in `nifi.properties` by setting `nifi.state.management.provider.cluster=zk-provider`, `nifi.cluster.is.node=true`, `nifi.zookeeper.connect.string`, and `nifi.zookeeper.root.node`. Ensure `conf/state-management.xml` defines the matching `zk-provider` cluster-provider entry using `org.apache.nifi.controller.state.providers.zookeeper.ZooKeeperStateProvider`. For embedded ZooKeeper ensembles, set `nifi.state.management.embedded.zookeeper.start=true` in `nifi.properties`, specify `nifi.state.management.embedded.zookeeper.properties=./conf/zookeeper.properties`, and configure ensemble node parameters in `conf/zookeeper.properties`.
-2. **Prepare Python Environment:** Ensure Python (supported versions 3.9, 3.10, 3.11, or 3.12) is installed across all worker nodes. Configure `nifi.properties` with Python binary locations (`nifi.python.command=python3`).
+2. **Prepare Python Environment:** Ensure Python (supported versions 3.10, 3.11, or 3.12 for NiFi 2.0.0) is installed across all worker nodes. Configure `nifi.properties` with Python binary locations (`nifi.python.command=python3`).
 
 #### Phase 2: Flow Definition & Template Migration
 1. **Convert XML Templates to Flow Definition JSON:** NiFi 1.x XML flow templates are deprecated in NiFi 2.0. Export all process groups as Flow Definition JSON files or register them in Apache NiFi Registry 2.0.
@@ -463,7 +463,7 @@ Dalam ekosistem ini, peranan dibahagikan secara strategik:
    CREATE EXTENSION IF NOT EXISTS postgis;
    CREATE EXTENSION IF NOT EXISTS postgis_topology;
    ```
-2. **Konfigurasi `pgTDE` (Percona Distribution for PostgreSQL):** Append `pg_tde` kepada `shared_preload_libraries` di dalam `postgresql.conf`, muat semula/restart kluster, bina pelanjutan menerusi `CREATE EXTENSION IF NOT EXISTS pg_tde;` di dalam setiap pangkalan data sasaran, tetapkan penyedia kunci (key provider seperti Vault/keyfile), serta aktifkan penyifratan WAL (`pg_tde.enable_wal_encrypt = on`). Nota: fail tumpahan sementara (*temporary spill files*) tidak disifrat secara automatik oleh versi `pgTDE` semasa.
+2. **Konfigurasi `pgTDE` (Percona Distribution for PostgreSQL):** Append `pg_tde` kepada `shared_preload_libraries` di dalam `postgresql.conf`, lakukan restart penuh kluster PostgreSQL (kerana perubahan `shared_preload_libraries` dan `pg_tde.wal_encrypt = on` memerlukan restart), bina pelanjutan menerusi `CREATE EXTENSION IF NOT EXISTS pg_tde;` di dalam setiap pangkalan data sasaran, tetapkan penyedia kunci (key provider seperti Vault/keyfile), serta aktifkan penyifratan WAL (`pg_tde.wal_encrypt = on`). Nota: fail tumpahan sementara (*temporary spill files*) tidak disifrat secara automatik oleh versi `pgTDE` semasa.
 3. **Penyediaan DBCPConnectionPool di NiFi 2.0:**
    - **Database Connection URL:** `jdbc:postgresql://postgres.master.internal:5432/enterprise_ai_db?sslmode=verify-full&sslrootcert=/var/private/ssl/rootCA.crt`
    - **Database Driver Class Name:** `org.postgresql.Driver`

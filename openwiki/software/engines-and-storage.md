@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Query Engines & Lakehouse Storage: Trino, Spark, DuckDB & Iceberg"
-timestamp: "2026-09-10T15:17:42Z"
+timestamp: "2026-09-10T15:28:16Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -23,7 +23,6 @@ The analytics core relies on high-performance compute and query engines decouple
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 360" width="100%" height="100%">
   <defs>
     <marker id="arrow-eng" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -73,7 +72,6 @@ The analytics core relies on high-performance compute and query engines decouple
   <line x1="445" y1="210" x2="495" y2="230" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-eng)"/>
   <line x1="685" y1="230" x2="735" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-eng)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 

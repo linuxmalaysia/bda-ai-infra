@@ -45,7 +45,6 @@ The Consumption & Integration Layer provides three dedicated ingress/egress para
 
 ### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" height="100%">
   <defs>
     <marker id="arrow-ci" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -128,7 +127,6 @@ The Consumption & Integration Layer provides three dedicated ingress/egress para
   <line x1="480" y1="300" x2="480" y2="380" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
   <line x1="790" y1="300" x2="790" y2="380" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ci)"/>
 </svg>
-```
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)
 

@@ -33,7 +33,6 @@ Ingestion is overhauled by implementing a decoupled, event-driven framework usin
 
 ### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 400" width="100%" height="100%">
   <defs>
     <marker id="arrow-ing" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -89,7 +88,6 @@ Ingestion is overhauled by implementing a decoupled, event-driven framework usin
   <rect x="442" y="192" width="36" height="16" fill="#065F46" rx="3"/>
   <text x="445" y="204" font-family="Consolas, Monaco, monospace" font-size="9" fill="#86EFAC">REST</text>
 </svg>
-```
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)
 

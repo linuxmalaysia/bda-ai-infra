@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "OpenWiki Instructions — BDA Lakehouse SSoT Edition"
-timestamp: "2026-09-10T15:17:42Z"
+timestamp: "2026-09-10T15:28:16Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -65,7 +65,6 @@ The emulator incorporates a zero-dependency Mermaid diagram compiler with self-h
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" width="100%" height="100%">
   <defs>
     <marker id="arrow-inst" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -95,7 +94,6 @@ The emulator incorporates a zero-dependency Mermaid diagram compiler with self-h
   <line x1="500" y1="65" x2="550" y2="65" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-inst)"/>
   <line x1="390" y1="110" x2="390" y2="200" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-inst)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 

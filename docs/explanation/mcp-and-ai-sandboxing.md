@@ -32,7 +32,6 @@ To standardize AI interactions while enforcing security boundaries, the platform
 
 ### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 420" width="100%" height="100%">
   <defs>
     <marker id="arrow-mcp" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -92,7 +91,6 @@ To standardize AI interactions while enforcing security boundaries, the platform
   <rect x="635" y="102" width="110" height="16" fill="#065F46" rx="3"/>
   <text x="640" y="114" font-family="Consolas, Monaco, monospace" font-size="9" fill="#86EFAC">Gated Tool Exec</text>
 </svg>
-```
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)
 

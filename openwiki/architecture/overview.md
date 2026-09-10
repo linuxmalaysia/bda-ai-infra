@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "BDA Lakehouse Architecture & 100% Open-Source Software Stack"
-timestamp: "2026-09-10T15:17:42Z"
+timestamp: "2026-09-10T15:28:16Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -23,7 +23,6 @@ The modern Big Data Analytics (BDA) Lakehouse platform establishes an authoritat
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="100%" height="100%">
   <defs>
     <marker id="arrow-ov" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -90,7 +89,6 @@ The modern Big Data Analytics (BDA) Lakehouse platform establishes an authoritat
   <line x1="375" y1="275" x2="425" y2="90" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ov)"/>
   <line x1="575" y1="90" x2="820" y2="90" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ov)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 

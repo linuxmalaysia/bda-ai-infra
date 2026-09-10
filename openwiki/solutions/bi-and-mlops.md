@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Business Intelligence & MLOps Solutions: Superset, MLflow & Ray"
-timestamp: "2026-09-10T15:17:42Z"
+timestamp: "2026-09-10T15:28:16Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -23,7 +23,6 @@ Analytical applications provide intuitive decision-support interfaces and scalab
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 360" width="100%" height="100%">
   <defs>
     <marker id="arrow-sol" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -67,7 +66,6 @@ Analytical applications provide intuitive decision-support interfaces and scalab
   <line x1="605" y1="220" x2="675" y2="120" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sol)"/>
   <line x1="795" y1="160" x2="795" y2="180" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sol)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 

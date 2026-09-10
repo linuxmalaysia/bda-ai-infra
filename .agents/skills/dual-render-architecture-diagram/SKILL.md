@@ -36,7 +36,7 @@ Generate the output strictly in the following sequence without introductory fluf
 ---
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
-Generate a self-contained, fully compliant raw SVG vector block inside a single ````xml ... ```` code fence matching these styling constraints:
+Generate a self-contained, fully compliant raw inline SVG vector block (`<svg ...> ... </svg>`) directly without ````xml` code fences so browsers and site builders (Jekyll/GitHub Pages) render the visual graphic image inline instead of showing raw XML text code blocks, matching these styling constraints:
 * **Canvas Hygiene:** Explicit `xmlns="http://www.w3.org/2000/svg"`, explicit `viewBox`, `width="100%"`, and `height="100%"`.
 * **Palette & Design System:**
   * Background: Dark Slate Canvas (`#0F172A` or `#0B0F19`). Never use white (`#FFFFFF`) or bright off-white canvas backgrounds so diagrams integrate seamlessly into dark mode site themes and code blocks without glaring white rectangular boxes.

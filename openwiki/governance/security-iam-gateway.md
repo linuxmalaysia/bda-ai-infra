@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "Security, Identity & API Perimeter: Keycloak & Apache APISIX"
-timestamp: "2026-09-10T15:17:42Z"
+timestamp: "2026-09-10T15:28:16Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -23,7 +23,6 @@ Perimeter security and identity management guarantee zero-trust access control a
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 360" width="100%" height="100%">
   <defs>
     <marker id="arrow-sec" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -65,7 +64,6 @@ Perimeter security and identity management guarantee zero-trust access control a
   <line x1="435" y1="110" x2="495" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
   <line x1="435" y1="110" x2="495" y2="230" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 

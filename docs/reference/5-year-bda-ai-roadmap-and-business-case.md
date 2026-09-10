@@ -39,7 +39,6 @@ The primary objective of the Big Data Analytics (BDA) platform modernization is 
 
 ### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 240" width="100%" height="100%">
   <rect width="900" height="240" fill="#0F172A" rx="10"/>
   <rect x="20" y="20" width="860" height="200" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
@@ -62,7 +61,6 @@ The primary objective of the Big Data Analytics (BDA) platform modernization is 
   <text x="465" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#C084FC">GOAL 4: Scalable AI Case Onboarding</text>
   <text x="465" y="180" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#94A3B8">Standardized 6-stage lifecycle framework for new AI cases</text>
 </svg>
-```
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)
 
@@ -165,7 +163,6 @@ To ensure complete business continuity, the 5 core legacy business cases are sys
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" width="100%" height="100%">
   <defs>
     <marker id="arrow-mig" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -262,7 +259,6 @@ To ensure complete business continuity, the 5 core legacy business cases are sys
   <rect x="720" y="305" width="36" height="16" fill="#1E3A8A" rx="3"/>
   <text x="723" y="317" font-family="Consolas, Monaco, monospace" font-size="9" fill="#93C5FD">OIDC</text>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -384,7 +380,6 @@ The platform embeds ML and AI capabilities directly into the Lakehouse ecosystem
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" width="100%" height="100%">
   <defs>
     <marker id="arrow-ml" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -465,7 +460,6 @@ The platform embeds ML and AI capabilities directly into the Lakehouse ecosystem
   <line x1="480" y1="470" x2="500" y2="470" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ml)"/>
   <line x1="700" y1="470" x2="720" y2="470" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow-ml)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 

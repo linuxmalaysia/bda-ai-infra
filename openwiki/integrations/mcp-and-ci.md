@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: "documentation"
 title: "FastMCP Integration & Continuous Integration Workflows"
-timestamp: "2026-09-10T15:17:42Z"
+timestamp: "2026-09-10T15:28:16Z"
 status: active
 stale_after: "2027-09-08T00:00:00Z"
 generated: true
@@ -23,7 +23,6 @@ Automated CI pipelines and Model Context Protocol (MCP) integrations expose SSoT
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="100%" height="100%">
   <defs>
     <marker id="arrow-mcp" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -61,7 +60,6 @@ Automated CI pipelines and Model Context Protocol (MCP) integrations expose SSoT
   <line x1="225" y1="160" x2="295" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp)"/>
   <line x1="545" y1="220" x2="615" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 

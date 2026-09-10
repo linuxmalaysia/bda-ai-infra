@@ -149,7 +149,6 @@ The following diagrams illustrate the end-to-end dataflow between boundary inges
 
 ### 5.1 Standalone Production Vector Diagram (SVG)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" width="100%" height="100%">
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -241,7 +240,6 @@ The following diagrams illustrate the end-to-end dataflow between boundary inges
   <rect x="648" y="375" width="42" height="18" fill="#065F46" rx="3" />
   <text x="651" y="388" font-family="Monaco, Consolas, monospace" font-size="9" font-weight="bold" fill="#86EFAC">TLS 1.3</text>
 </svg>
-```
 
 ### 5.2 Git-Native Mermaid Topology
 

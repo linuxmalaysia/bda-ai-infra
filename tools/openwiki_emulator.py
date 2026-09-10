@@ -196,7 +196,6 @@ The emulator incorporates a zero-dependency Mermaid diagram compiler with self-h
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350" width="100%" height="100%">
   <defs>
     <marker id="arrow-inst" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -226,7 +225,6 @@ The emulator incorporates a zero-dependency Mermaid diagram compiler with self-h
   <line x1="500" y1="65" x2="550" y2="65" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-inst)"/>
   <line x1="390" y1="110" x2="390" y2="200" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-inst)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -389,7 +387,6 @@ The modern Big Data Analytics (BDA) Lakehouse platform establishes an authoritat
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" width="100%" height="100%">
   <defs>
     <marker id="arrow-ov" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -456,7 +453,6 @@ The modern Big Data Analytics (BDA) Lakehouse platform establishes an authoritat
   <line x1="375" y1="275" x2="425" y2="90" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ov)"/>
   <line x1="575" y1="90" x2="820" y2="90" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ov)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -537,7 +533,6 @@ The infrastructure foundation delivers high availability, fault tolerance, and a
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 400" width="100%" height="100%">
   <defs>
     <marker id="arrow-inf" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -575,7 +570,6 @@ The infrastructure foundation delivers high availability, fault tolerance, and a
   <line x1="225" y1="280" x2="225" y2="310" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
   <line x1="675" y1="280" x2="675" y2="310" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-inf)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -625,7 +619,6 @@ The analytics core relies on high-performance compute and query engines decouple
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 360" width="100%" height="100%">
   <defs>
     <marker id="arrow-eng" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -675,7 +668,6 @@ The analytics core relies on high-performance compute and query engines decouple
   <line x1="445" y1="210" x2="495" y2="230" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-eng)"/>
   <line x1="685" y1="230" x2="735" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-eng)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -722,7 +714,6 @@ Data ingestion converts fragmented external data into structured, validated SSoT
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 380" width="100%" height="100%">
   <defs>
     <marker id="arrow-ing" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -755,7 +746,6 @@ Data ingestion converts fragmented external data into structured, validated SSoT
   <line x1="530" y1="120" x2="550" y2="120" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
   <line x1="710" y1="120" x2="730" y2="120" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ing)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -819,7 +809,6 @@ Data governance establishes automated metadata extraction, dataset discovery, an
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="100%" height="100%">
   <defs>
     <marker id="arrow-gov" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -861,7 +850,6 @@ Data governance establishes automated metadata extraction, dataset discovery, an
   <line x1="575" y1="110" x2="645" y2="180" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
   <line x1="575" y1="210" x2="645" y2="180" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -909,7 +897,6 @@ Perimeter security and identity management guarantee zero-trust access control a
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 360" width="100%" height="100%">
   <defs>
     <marker id="arrow-sec" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -951,7 +938,6 @@ Perimeter security and identity management guarantee zero-trust access control a
   <line x1="435" y1="110" x2="495" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
   <line x1="435" y1="110" x2="495" y2="230" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -994,7 +980,6 @@ Analytical applications provide intuitive decision-support interfaces and scalab
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 360" width="100%" height="100%">
   <defs>
     <marker id="arrow-sol" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1038,7 +1023,6 @@ Analytical applications provide intuitive decision-support interfaces and scalab
   <line x1="605" y1="220" x2="675" y2="120" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sol)"/>
   <line x1="795" y1="160" x2="795" y2="180" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sol)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -1080,7 +1064,6 @@ Automated CI pipelines and Model Context Protocol (MCP) integrations expose SSoT
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="100%" height="100%">
   <defs>
     <marker id="arrow-mcp" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -1118,7 +1101,6 @@ Automated CI pipelines and Model Context Protocol (MCP) integrations expose SSoT
   <line x1="225" y1="160" x2="295" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp)"/>
   <line x1="545" y1="220" x2="615" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 

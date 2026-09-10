@@ -85,7 +85,6 @@ Without an index, vector search executes an exact k-Nearest Neighbors (kNN) sequ
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="100%" height="100%">
   <defs>
     <marker id="arrow-pg" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -139,7 +138,6 @@ Without an index, vector search executes an exact k-Nearest Neighbors (kNN) sequ
   <text x="760" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">Cluster C</text>
   <text x="760" y="223" font-family="Consolas, Monaco, monospace" font-size="10" fill="#94A3B8">Inverted List</text>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -238,7 +236,6 @@ Following the research patterns established in Percona's technical guidance (*Cr
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 580" width="100%" height="100%">
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -352,7 +349,6 @@ Following the research patterns established in Percona's technical guidance (*Cr
   <rect x="880" y="322" width="60" height="18" fill="#78350F" rx="3"/>
   <text x="883" y="334" font-family="Consolas, Monaco, monospace" font-size="9" fill="#FDE68A">Context</text>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 

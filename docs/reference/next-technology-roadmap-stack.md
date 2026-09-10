@@ -52,7 +52,6 @@ Polaris implements the open Apache Iceberg REST Catalog specification, providing
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" width="100%" height="100%">
   <defs>
     <marker id="arrow-pol" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -104,7 +103,6 @@ Polaris implements the open Apache Iceberg REST Catalog specification, providing
 
   <line x1="450" y1="245" x2="450" y2="330" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pol)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -172,7 +170,6 @@ To enable local, privacy-preserving semantic search and Retrieval-Augmented Gene
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 480" width="100%" height="100%">
   <defs>
     <marker id="arrow-rag" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -237,7 +234,6 @@ To enable local, privacy-preserving semantic search and Retrieval-Augmented Gene
   <line x1="445" y1="180" x2="495" y2="210" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
   <line x1="685" y1="220" x2="735" y2="190" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rag)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 
@@ -304,7 +300,6 @@ The platform replaces fragmented logging and legacy monitoring agents with a uni
 
 #### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-```xml
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 420" width="100%" height="100%">
   <defs>
     <marker id="arrow-otel" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
@@ -374,7 +369,6 @@ The platform replaces fragmented logging and legacy monitoring agents with a uni
   <line x1="455" y1="220" x2="505" y2="285" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
   <line x1="695" y1="200" x2="745" y2="200" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-otel)"/>
 </svg>
-```
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
 

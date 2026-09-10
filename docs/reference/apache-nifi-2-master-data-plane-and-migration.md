@@ -206,7 +206,7 @@ The following diagrams illustrate the end-to-end dataflow between boundary inges
   <text x="375" y="335" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#0F172A">PutDatabaseRecord Processor</text>
   <text x="375" y="360" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#334155">DBCPConnectionPool Controller</text>
   <text x="375" y="380" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Driver: org.postgresql.Driver</text>
-  <text x="375" y="400" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">URL: jdbc:postgresql://master:5432</text>
+  <text x="375" y="400" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">URL: jdbc:postgresql://postgres.master.internal:5432/enterprise_ai_db?sslmode=verify-full&amp;sslrootcert=/var/private/ssl/rootCA.crt</text>
   <text x="375" y="420" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Security: TLS 1.3 mTLS Tunnel</text>
   <text x="375" y="440" font-family="Monaco, Consolas, monospace" font-size="10" fill="#475569">Auto-Commit: Disabled (Batched)</text>
 
@@ -311,8 +311,8 @@ graph LR
 Migration from NiFi 1.x to 2.0 requires careful planning across process group configurations, custom extensions, and state management:
 
 #### Phase 1: Environment & Dependency Preparation
-1. **Remove ZooKeeper Dependencies:** Decommission external Apache ZooKeeper clusters. Update `nifi.properties` to configure the embedded cluster coordinator (`nifi.cluster.flow.election.max.wait.time`, `nifi.cluster.is.coordinator=true`).
-2. **Prepare Python Environment:** Ensure Python 3.10+ is installed across all worker nodes. Configure `nifi.properties` with Python binary locations (`nifi.python.command=python3`).
+1. **Configure Cluster State & ZooKeeper Management:** Configure cluster state management in `nifi.properties` by setting `nifi.state.management.provider.cluster=zk-provider`, `nifi.cluster.is.node=true`, `nifi.zookeeper.connect.string`, and `nifi.zookeeper.root.node`. If utilizing an embedded ZooKeeper ensemble, set `nifi.state.management.embedded.zookeeper.start=true`.
+2. **Prepare Python Environment:** Ensure Python (supported versions 3.9, 3.10, 3.11, or 3.12) is installed across all worker nodes. Configure `nifi.properties` with Python binary locations (`nifi.python.command=python3`).
 
 #### Phase 2: Flow Definition & Template Migration
 1. **Convert XML Templates to Flow Definition JSON:** NiFi 1.x XML flow templates are deprecated in NiFi 2.0. Export all process groups as Flow Definition JSON files or register them in Apache NiFi Registry 2.0.
@@ -324,25 +324,26 @@ Migration from NiFi 1.x to 2.0 requires careful planning across process group co
 
 ```python
 # Example: Custom Native Python Processor for Text Chunking in NiFi 2.0
-from nifiapi.processor import Processor, ProcessorDetails
-from nifiapi.properties import PropertyDescriptor, StandardValidators
+from nifiapi.flowfiletransform import FlowFileTransform, FlowFileTransformResult
+from nifiapi.processor import ProcessorDetails
 
-class ChunkAndEmbedText(Processor):
-    class Java:
-        implements = ['org.apache.nifi.python.processor.FlowFileTransform']
-
+class ChunkAndEmbedText(FlowFileTransform):
     class ProcessorDetails:
         version = '2.0.0'
         description = 'Splits raw FlowFile text using LangChain and prepares vector payload.'
 
     def transform(self, context, flowfile):
-        text_content = flowfile.read().decode('utf-8')
+        raw_bytes = flowfile.getContentsAsBytes()
+        text_content = raw_bytes.decode('utf-8')
 
         # Apply text splitting logic
         chunks = self.split_text(text_content)
 
         # Store metadata in FlowFile attribute
-        return TransformResult(relationship='success', attributes={'chunk.count': str(len(chunks))})
+        return FlowFileTransformResult(
+            relationship='success',
+            attributes={'chunk.count': str(len(chunks))}
+        )
 ```
 
 #### Phase 4: Validation & Cutover
@@ -437,7 +438,7 @@ Dalam ekosistem ini, peranan dibahagikan secara strategik:
    ```
 2. **Konfigurasi `pgTDE`:** Menjadualkan `shared_preload_libraries = 'pg_tde'` di dalam `postgresql.conf` untuk memastikan semua tablespace dan log WAL tersifrat secara automatik.
 3. **Penyediaan DBCPConnectionPool di NiFi 2.0:**
-   - **Database Connection URL:** `jdbc:postgresql://<MASTER_POSTGRES_IP>:5432/your_db`
+   - **Database Connection URL:** `jdbc:postgresql://postgres.master.internal:5432/enterprise_ai_db?sslmode=verify-full&sslrootcert=/var/private/ssl/rootCA.crt`
    - **Database Driver Class Name:** `org.postgresql.Driver`
    - **Database Driver Location:** `/opt/nifi/current/lib/postgresql-42.x.x.jar`
 4. **Implementasi Saluran Data AI:**

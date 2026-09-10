@@ -71,3 +71,13 @@ This document maintains a chronological record of execution milestones, governan
   - Integrated PostgreSQL + `pgvector` as master anchor across `docs/reference/lakehouse-architecture.md`, `docs/reference/next-technology-roadmap-stack.md`, `docs/reference/5-year-bda-ai-roadmap-and-business-case.md`, `README.md`, and `START-HERE.md`.
   - Updated OpenWiki knowledge base files and regenerated `SUMMARY.md`, `_data/navigation.yml`, and `openwiki/graph.html`.
   - Synchronized spatial memory (`.agents/brain/`) and triple-ledger (`CHANGELOG.md`, `HISTORY.md`).
+
+### 2026-09-08 — Consumption & Integration Layer Specification Adoption
+
+- **Author:** Cognitive Twin (Jules / LinuxMalaysia)
+- **Scope:** Adoption of the Consumption & Integration Layer connecting AI Clients (MCP), Web APIs (FastAPI), and File Transfer (NiFi 2.0 PGP SFTP) over PostgreSQL Master (`pgvector` + `PostGIS` + `pgTDE`).
+- **Deliverables:**
+  - Published `docs/reference/consumption-and-integration-layer.md` with operational Python FastMCP server, FastAPI REST/gRPC gateway, and Apache NiFi 2.0 PGP SFTP egress pipeline blueprints.
+  - Published `docs/reference/apache-nifi-2-master-data-plane-and-migration.md` establishing Apache NiFi 2.0 as the master data plane and ETL engine.
+  - Synchronized omni-documentation indexes and ledgers (`README.md`, `START-HERE.md`, `SUMMARY.md`, `_data/navigation.yml`, `CHANGELOG.md`, `HISTORY.md`).
+  - Updated OpenWiki knowledge base and standalone graph visualizer (`openwiki/graph.html`).

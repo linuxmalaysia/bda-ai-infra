@@ -53,6 +53,7 @@ topics:
 * [5-Year Strategic BDA & AI Roadmap & Master Business Case Specification (2026–2030)](docs/reference/5-year-bda-ai-roadmap-and-business-case.md)
 * [Apache NiFi 2.0 Master Data Plane Architecture and Migration Guide](docs/reference/apache-nifi-2-master-data-plane-and-migration.md)
 * [Big Data Domain Specifications and Analytical Workflows](docs/reference/business-applications.md)
+* [Consumption & Integration Layer Specification](docs/reference/consumption-and-integration-layer.md)
 * [Data Governance, Subsystems, and Standards Matrix](docs/reference/governance-matrix.md)
 * [Legacy Big Data Analytics Environment Architectural Deconstruction](docs/reference/legacy-architecture.md)
 * [Next Technology Roadmap Stack Specification](docs/reference/next-technology-roadmap-stack.md)

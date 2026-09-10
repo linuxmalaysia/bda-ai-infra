@@ -1,0 +1,920 @@
+:root {
+  --bg-color: #ffffff;
+  --panel-bg: #ffffff;
+  --text-primary: #0f172a;
+  --text-muted: #334155;
+  --border-color: #cbd5e1;
+  --accent-color: #2563eb;
+  --accent-hover: #1d4ed8;
+  --card-bg: #f8fafc;
+  --sidebar-bg: #1e293b;
+  --sidebar-text: #f8fafc;
+  --sidebar-muted: #94a3b8;
+  --code-bg: #f8fafc;
+  --code-text: #0f172a;
+  --code-border: #cbd5e1;
+}
+
+[data-theme=dark] {
+  --bg-color: #0b0f19;
+  --panel-bg: #111827;
+  --text-primary: #f9fafb;
+  --text-muted: #9ca3af;
+  --border-color: #1f2937;
+  --accent-color: #3b82f6;
+  --accent-hover: #60a5fa;
+  --card-bg: #1f2937;
+  --sidebar-bg: #030712;
+  --sidebar-text: #f9fafb;
+  --sidebar-muted: #6b7280;
+  --code-bg: #111827;
+  --code-text: #f3f4f6;
+  --code-border: #1f2937;
+}
+
+@media (prefers-color-scheme: dark) {
+  [data-theme=auto] {
+    --bg-color: #0b0f19;
+    --panel-bg: #111827;
+    --text-primary: #f9fafb;
+    --text-muted: #9ca3af;
+    --border-color: #1f2937;
+    --accent-color: #3b82f6;
+    --accent-hover: #60a5fa;
+    --card-bg: #1f2937;
+    --sidebar-bg: #030712;
+    --sidebar-text: #f9fafb;
+    --sidebar-muted: #6b7280;
+    --code-bg: #111827;
+    --code-text: #f3f4f6;
+    --code-border: #1f2937;
+  }
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.font-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* Header */
+.top-header {
+  background-color: #0f172a;
+  color: #ffffff;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--accent-color);
+}
+
+.top-header-brand .brand-title {
+  color: #ffffff;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-sub {
+  font-size: 0.75rem;
+  color: #38bdf8;
+  letter-spacing: 0.05em;
+}
+
+.brand-main {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.theme-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.theme-label {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  margin-right: 0.25rem;
+}
+
+.theme-btn {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #e2e8f0;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-btn:hover, .theme-btn.active {
+  background: var(--accent-color);
+  border-color: var(--accent-hover);
+  color: #ffffff;
+}
+
+/* Layout Container */
+.site-container {
+  display: flex;
+  min-height: calc(100vh - 120px);
+}
+
+/* Sidebar Navigation */
+.sidebar-nav {
+  width: 280px;
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  padding: 1.5rem 1rem;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-color);
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .site-container {
+    flex-direction: column;
+  }
+  .sidebar-nav {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+}
+.sidebar-header h2 {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--sidebar-muted);
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 0.5rem;
+}
+
+.nav-section {
+  margin-bottom: 1.25rem;
+}
+
+.nav-section-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: #38bdf8;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.03em;
+}
+
+.nav-list {
+  list-style: none;
+}
+
+.nav-item {
+  margin-bottom: 0.25rem;
+}
+
+.nav-link {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.88rem;
+  display: block;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+  background: #334155;
+  color: #ffffff;
+}
+
+/* Main Content */
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.hero-callout {
+  background: var(--card-bg);
+  border-left: 4px solid var(--accent-color);
+  padding: 1.5rem;
+  border-radius: 6px;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-color);
+  border-left-width: 4px;
+}
+
+.page-title {
+  font-size: 1.8rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.page-description {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pill-badge {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 12px;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+}
+
+.pill-primary {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.pill-info {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.pill-success {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.pill-action {
+  background: var(--accent-color);
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
+
+/* Markdown typography */
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+
+.markdown-body p, .markdown-body ul, .markdown-body ol {
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.markdown-body pre {
+  background-color: var(--code-bg);
+  color: var(--code-text);
+  border: 1px solid var(--code-border);
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-body code {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, monospace;
+  font-size: 0.88rem;
+}
+
+.markdown-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+
+.markdown-body th, .markdown-body td {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--border-color);
+}
+
+.markdown-body th {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Footer */
+.site-footer {
+  background: #0f172a;
+  color: #94a3b8;
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+  border-top: 1px solid #1e293b;
+}
+
+.site-footer a {
+  color: #38bdf8;
+  text-decoration: none;
+}
+
+/* Light Mode / White Background Rules for SVG Vector Diagrams & Mermaid Code Blocks */
+/* Apply light mode rules when data-theme="light" */
+[data-theme=light] svg {
+  background-color: #ffffff !important;
+  border-radius: 8px;
+}
+[data-theme=light] {
+  /* Outer Canvas Rect */
+}
+[data-theme=light] svg > rect:first-of-type,
+[data-theme=light] svg rect[fill="#0F172A"]:first-of-type,
+[data-theme=light] svg rect[fill="#0b0f19"]:first-of-type {
+  fill: #ffffff !important;
+  stroke: #cbd5e1 !important;
+  stroke-width: 1.5px !important;
+}
+[data-theme=light] {
+  /* Container Cards */
+}
+[data-theme=light] svg rect[fill="#1E293B"] {
+  fill: #f8fafc !important;
+  stroke: #cbd5e1 !important;
+}
+[data-theme=light] {
+  /* Sub-card headers or inner rects */
+}
+[data-theme=light] svg rect[fill="#0F172A"]:not(:first-of-type) {
+  fill: #e2e8f0 !important;
+  stroke: #cbd5e1 !important;
+}
+[data-theme=light] {
+  /* Accent inner rects */
+}
+[data-theme=light] svg rect[fill="#0F172A"][stroke="#22C55E"],
+[data-theme=light] svg rect[fill="#0F172A"][stroke="#4ADE80"] {
+  fill: #f0fdf4 !important;
+  stroke: #16a34a !important;
+}
+[data-theme=light] svg rect[fill="#1E3A8A"] {
+  fill: #eff6ff !important;
+  stroke: #2563eb !important;
+}
+[data-theme=light] {
+  /* SVG Text Elements - Primary dark text for white background readability */
+}
+[data-theme=light] svg text[fill="#F8FAFC"],
+[data-theme=light] svg text[fill="#ffffff"],
+[data-theme=light] svg text[fill="#FFFFFF"],
+[data-theme=light] svg text[fill="#E2E8F0"],
+[data-theme=light] svg text[fill="#f1f5f9"] {
+  fill: #0f172a !important;
+}
+[data-theme=light] {
+  /* SVG Text Elements - Muted secondary text */
+}
+[data-theme=light] svg text[fill="#94A3B8"],
+[data-theme=light] svg text[fill="#64748B"],
+[data-theme=light] svg text[fill="#9ca3af"] {
+  fill: #334155 !important;
+}
+[data-theme=light] {
+  /* SVG Accent Title Text - Deep contrast tones for printing */
+}
+[data-theme=light] svg text[fill="#60A5FA"],
+[data-theme=light] svg text[fill="#38BDF8"],
+[data-theme=light] svg text[fill="#3B82F6"] {
+  fill: #1d4ed8 !important;
+  font-weight: 700;
+}
+[data-theme=light] svg text[fill="#4ADE80"],
+[data-theme=light] svg text[fill="#86EFAC"],
+[data-theme=light] svg text[fill="#22C55E"] {
+  fill: #15803d !important;
+  font-weight: 700;
+}
+[data-theme=light] svg text[fill="#FBBF24"],
+[data-theme=light] svg text[fill="#F59E0B"] {
+  fill: #b45309 !important;
+  font-weight: 700;
+}
+[data-theme=light] svg text[fill="#C084FC"],
+[data-theme=light] svg text[fill="#E879F9"],
+[data-theme=light] svg text[fill="#A855F7"] {
+  fill: #6b21a8 !important;
+  font-weight: 700;
+}
+[data-theme=light] svg text[fill="#F43F5E"],
+[data-theme=light] svg text[fill="#EF4444"] {
+  fill: #be123c !important;
+  font-weight: 700;
+}
+[data-theme=light] {
+  /* SVG Paths, Lines & Markers */
+}
+[data-theme=light] svg path[stroke="#64748B"],
+[data-theme=light] svg path[stroke="#334155"],
+[data-theme=light] svg line[stroke="#64748B"],
+[data-theme=light] svg line[stroke="#334155"] {
+  stroke: #475569 !important;
+}
+[data-theme=light] svg marker path[fill="#64748B"],
+[data-theme=light] svg marker path[fill="#334155"] {
+  fill: #475569 !important;
+}
+[data-theme=light] {
+  /* Mermaid Diagram Elements in Light Mode */
+}
+[data-theme=light] .mermaid svg {
+  background-color: #ffffff !important;
+}
+[data-theme=light] .mermaid .node rect,
+[data-theme=light] .mermaid .node circle,
+[data-theme=light] .mermaid .node polygon {
+  fill: #f8fafc !important;
+  stroke: #475569 !important;
+}
+[data-theme=light] .mermaid .node .label,
+[data-theme=light] .mermaid .node text {
+  color: #0f172a !important;
+  fill: #0f172a !important;
+}
+[data-theme=light] .mermaid .edgePath .path,
+[data-theme=light] .mermaid .flowchart-link {
+  stroke: #475569 !important;
+}
+[data-theme=light] .mermaid .marker {
+  fill: #475569 !important;
+  stroke: #475569 !important;
+}
+[data-theme=light] .mermaid .cluster rect {
+  fill: #f1f5f9 !important;
+  stroke: #94a3b8 !important;
+}
+[data-theme=light] .mermaid .cluster text,
+[data-theme=light] .mermaid .cluster span {
+  fill: #0f172a !important;
+  color: #0f172a !important;
+}
+
+/* Apply light mode rules when data-theme="auto" and system preference is light */
+@media (prefers-color-scheme: light) {
+  [data-theme=auto] svg {
+    background-color: #ffffff !important;
+    border-radius: 8px;
+  }
+  [data-theme=auto] {
+    /* Outer Canvas Rect */
+  }
+  [data-theme=auto] svg > rect:first-of-type,
+  [data-theme=auto] svg rect[fill="#0F172A"]:first-of-type,
+  [data-theme=auto] svg rect[fill="#0b0f19"]:first-of-type {
+    fill: #ffffff !important;
+    stroke: #cbd5e1 !important;
+    stroke-width: 1.5px !important;
+  }
+  [data-theme=auto] {
+    /* Container Cards */
+  }
+  [data-theme=auto] svg rect[fill="#1E293B"] {
+    fill: #f8fafc !important;
+    stroke: #cbd5e1 !important;
+  }
+  [data-theme=auto] {
+    /* Sub-card headers or inner rects */
+  }
+  [data-theme=auto] svg rect[fill="#0F172A"]:not(:first-of-type) {
+    fill: #e2e8f0 !important;
+    stroke: #cbd5e1 !important;
+  }
+  [data-theme=auto] {
+    /* Accent inner rects */
+  }
+  [data-theme=auto] svg rect[fill="#0F172A"][stroke="#22C55E"],
+  [data-theme=auto] svg rect[fill="#0F172A"][stroke="#4ADE80"] {
+    fill: #f0fdf4 !important;
+    stroke: #16a34a !important;
+  }
+  [data-theme=auto] svg rect[fill="#1E3A8A"] {
+    fill: #eff6ff !important;
+    stroke: #2563eb !important;
+  }
+  [data-theme=auto] {
+    /* SVG Text Elements - Primary dark text for white background readability */
+  }
+  [data-theme=auto] svg text[fill="#F8FAFC"],
+  [data-theme=auto] svg text[fill="#ffffff"],
+  [data-theme=auto] svg text[fill="#FFFFFF"],
+  [data-theme=auto] svg text[fill="#E2E8F0"],
+  [data-theme=auto] svg text[fill="#f1f5f9"] {
+    fill: #0f172a !important;
+  }
+  [data-theme=auto] {
+    /* SVG Text Elements - Muted secondary text */
+  }
+  [data-theme=auto] svg text[fill="#94A3B8"],
+  [data-theme=auto] svg text[fill="#64748B"],
+  [data-theme=auto] svg text[fill="#9ca3af"] {
+    fill: #334155 !important;
+  }
+  [data-theme=auto] {
+    /* SVG Accent Title Text - Deep contrast tones for printing */
+  }
+  [data-theme=auto] svg text[fill="#60A5FA"],
+  [data-theme=auto] svg text[fill="#38BDF8"],
+  [data-theme=auto] svg text[fill="#3B82F6"] {
+    fill: #1d4ed8 !important;
+    font-weight: 700;
+  }
+  [data-theme=auto] svg text[fill="#4ADE80"],
+  [data-theme=auto] svg text[fill="#86EFAC"],
+  [data-theme=auto] svg text[fill="#22C55E"] {
+    fill: #15803d !important;
+    font-weight: 700;
+  }
+  [data-theme=auto] svg text[fill="#FBBF24"],
+  [data-theme=auto] svg text[fill="#F59E0B"] {
+    fill: #b45309 !important;
+    font-weight: 700;
+  }
+  [data-theme=auto] svg text[fill="#C084FC"],
+  [data-theme=auto] svg text[fill="#E879F9"],
+  [data-theme=auto] svg text[fill="#A855F7"] {
+    fill: #6b21a8 !important;
+    font-weight: 700;
+  }
+  [data-theme=auto] svg text[fill="#F43F5E"],
+  [data-theme=auto] svg text[fill="#EF4444"] {
+    fill: #be123c !important;
+    font-weight: 700;
+  }
+  [data-theme=auto] {
+    /* SVG Paths, Lines & Markers */
+  }
+  [data-theme=auto] svg path[stroke="#64748B"],
+  [data-theme=auto] svg path[stroke="#334155"],
+  [data-theme=auto] svg line[stroke="#64748B"],
+  [data-theme=auto] svg line[stroke="#334155"] {
+    stroke: #475569 !important;
+  }
+  [data-theme=auto] svg marker path[fill="#64748B"],
+  [data-theme=auto] svg marker path[fill="#334155"] {
+    fill: #475569 !important;
+  }
+  [data-theme=auto] {
+    /* Mermaid Diagram Elements in Light Mode */
+  }
+  [data-theme=auto] .mermaid svg {
+    background-color: #ffffff !important;
+  }
+  [data-theme=auto] .mermaid .node rect,
+  [data-theme=auto] .mermaid .node circle,
+  [data-theme=auto] .mermaid .node polygon {
+    fill: #f8fafc !important;
+    stroke: #475569 !important;
+  }
+  [data-theme=auto] .mermaid .node .label,
+  [data-theme=auto] .mermaid .node text {
+    color: #0f172a !important;
+    fill: #0f172a !important;
+  }
+  [data-theme=auto] .mermaid .edgePath .path,
+  [data-theme=auto] .mermaid .flowchart-link {
+    stroke: #475569 !important;
+  }
+  [data-theme=auto] .mermaid .marker {
+    fill: #475569 !important;
+    stroke: #475569 !important;
+  }
+  [data-theme=auto] .mermaid .cluster rect {
+    fill: #f1f5f9 !important;
+    stroke: #94a3b8 !important;
+  }
+  [data-theme=auto] .mermaid .cluster text,
+  [data-theme=auto] .mermaid .cluster span {
+    fill: #0f172a !important;
+    color: #0f172a !important;
+  }
+}
+/* Default root without dark theme explicitly set (fallback to light mode) */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme=dark]) svg {
+    background-color: #ffffff !important;
+    border-radius: 8px;
+  }
+  :root:not([data-theme=dark]) {
+    /* Outer Canvas Rect */
+  }
+  :root:not([data-theme=dark]) svg > rect:first-of-type,
+  :root:not([data-theme=dark]) svg rect[fill="#0F172A"]:first-of-type,
+  :root:not([data-theme=dark]) svg rect[fill="#0b0f19"]:first-of-type {
+    fill: #ffffff !important;
+    stroke: #cbd5e1 !important;
+    stroke-width: 1.5px !important;
+  }
+  :root:not([data-theme=dark]) {
+    /* Container Cards */
+  }
+  :root:not([data-theme=dark]) svg rect[fill="#1E293B"] {
+    fill: #f8fafc !important;
+    stroke: #cbd5e1 !important;
+  }
+  :root:not([data-theme=dark]) {
+    /* Sub-card headers or inner rects */
+  }
+  :root:not([data-theme=dark]) svg rect[fill="#0F172A"]:not(:first-of-type) {
+    fill: #e2e8f0 !important;
+    stroke: #cbd5e1 !important;
+  }
+  :root:not([data-theme=dark]) {
+    /* Accent inner rects */
+  }
+  :root:not([data-theme=dark]) svg rect[fill="#0F172A"][stroke="#22C55E"],
+  :root:not([data-theme=dark]) svg rect[fill="#0F172A"][stroke="#4ADE80"] {
+    fill: #f0fdf4 !important;
+    stroke: #16a34a !important;
+  }
+  :root:not([data-theme=dark]) svg rect[fill="#1E3A8A"] {
+    fill: #eff6ff !important;
+    stroke: #2563eb !important;
+  }
+  :root:not([data-theme=dark]) {
+    /* SVG Text Elements - Primary dark text for white background readability */
+  }
+  :root:not([data-theme=dark]) svg text[fill="#F8FAFC"],
+  :root:not([data-theme=dark]) svg text[fill="#ffffff"],
+  :root:not([data-theme=dark]) svg text[fill="#FFFFFF"],
+  :root:not([data-theme=dark]) svg text[fill="#E2E8F0"],
+  :root:not([data-theme=dark]) svg text[fill="#f1f5f9"] {
+    fill: #0f172a !important;
+  }
+  :root:not([data-theme=dark]) {
+    /* SVG Text Elements - Muted secondary text */
+  }
+  :root:not([data-theme=dark]) svg text[fill="#94A3B8"],
+  :root:not([data-theme=dark]) svg text[fill="#64748B"],
+  :root:not([data-theme=dark]) svg text[fill="#9ca3af"] {
+    fill: #334155 !important;
+  }
+  :root:not([data-theme=dark]) {
+    /* SVG Accent Title Text - Deep contrast tones for printing */
+  }
+  :root:not([data-theme=dark]) svg text[fill="#60A5FA"],
+  :root:not([data-theme=dark]) svg text[fill="#38BDF8"],
+  :root:not([data-theme=dark]) svg text[fill="#3B82F6"] {
+    fill: #1d4ed8 !important;
+    font-weight: 700;
+  }
+  :root:not([data-theme=dark]) svg text[fill="#4ADE80"],
+  :root:not([data-theme=dark]) svg text[fill="#86EFAC"],
+  :root:not([data-theme=dark]) svg text[fill="#22C55E"] {
+    fill: #15803d !important;
+    font-weight: 700;
+  }
+  :root:not([data-theme=dark]) svg text[fill="#FBBF24"],
+  :root:not([data-theme=dark]) svg text[fill="#F59E0B"] {
+    fill: #b45309 !important;
+    font-weight: 700;
+  }
+  :root:not([data-theme=dark]) svg text[fill="#C084FC"],
+  :root:not([data-theme=dark]) svg text[fill="#E879F9"],
+  :root:not([data-theme=dark]) svg text[fill="#A855F7"] {
+    fill: #6b21a8 !important;
+    font-weight: 700;
+  }
+  :root:not([data-theme=dark]) svg text[fill="#F43F5E"],
+  :root:not([data-theme=dark]) svg text[fill="#EF4444"] {
+    fill: #be123c !important;
+    font-weight: 700;
+  }
+  :root:not([data-theme=dark]) {
+    /* SVG Paths, Lines & Markers */
+  }
+  :root:not([data-theme=dark]) svg path[stroke="#64748B"],
+  :root:not([data-theme=dark]) svg path[stroke="#334155"],
+  :root:not([data-theme=dark]) svg line[stroke="#64748B"],
+  :root:not([data-theme=dark]) svg line[stroke="#334155"] {
+    stroke: #475569 !important;
+  }
+  :root:not([data-theme=dark]) svg marker path[fill="#64748B"],
+  :root:not([data-theme=dark]) svg marker path[fill="#334155"] {
+    fill: #475569 !important;
+  }
+  :root:not([data-theme=dark]) {
+    /* Mermaid Diagram Elements in Light Mode */
+  }
+  :root:not([data-theme=dark]) .mermaid svg {
+    background-color: #ffffff !important;
+  }
+  :root:not([data-theme=dark]) .mermaid .node rect,
+  :root:not([data-theme=dark]) .mermaid .node circle,
+  :root:not([data-theme=dark]) .mermaid .node polygon {
+    fill: #f8fafc !important;
+    stroke: #475569 !important;
+  }
+  :root:not([data-theme=dark]) .mermaid .node .label,
+  :root:not([data-theme=dark]) .mermaid .node text {
+    color: #0f172a !important;
+    fill: #0f172a !important;
+  }
+  :root:not([data-theme=dark]) .mermaid .edgePath .path,
+  :root:not([data-theme=dark]) .mermaid .flowchart-link {
+    stroke: #475569 !important;
+  }
+  :root:not([data-theme=dark]) .mermaid .marker {
+    fill: #475569 !important;
+    stroke: #475569 !important;
+  }
+  :root:not([data-theme=dark]) .mermaid .cluster rect {
+    fill: #f1f5f9 !important;
+    stroke: #94a3b8 !important;
+  }
+  :root:not([data-theme=dark]) .mermaid .cluster text,
+  :root:not([data-theme=dark]) .mermaid .cluster span {
+    fill: #0f172a !important;
+    color: #0f172a !important;
+  }
+}
+
+/* Print Specific Styles - Saving Ink with Pure White Canvas & High Contrast Black Text */
+@media print {
+  body, .site-body, .main-content, .content-wrapper, .markdown-body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  .top-header, .sidebar-nav, .theme-switcher, .print-btn, .site-footer {
+    display: none !important;
+  }
+  .site-container {
+    display: block !important;
+  }
+  .main-content {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .hero-callout {
+    background: #ffffff !important;
+    border: 1px solid #000000 !important;
+    border-left: 6px solid #000000 !important;
+    padding: 1rem !important;
+  }
+  .page-title {
+    color: #000000 !important;
+  }
+  .markdown-body pre {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+    white-space: pre-wrap !important;
+  }
+  .markdown-body code {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #666666 !important;
+  }
+  .markdown-body table, .markdown-body th, .markdown-body td {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+  }
+  svg {
+    background-color: #ffffff !important;
+    border-radius: 8px;
+  }
+  /* Outer Canvas Rect */
+  svg > rect:first-of-type,
+  svg rect[fill="#0F172A"]:first-of-type,
+  svg rect[fill="#0b0f19"]:first-of-type {
+    fill: #ffffff !important;
+    stroke: #cbd5e1 !important;
+    stroke-width: 1.5px !important;
+  }
+  /* Container Cards */
+  svg rect[fill="#1E293B"] {
+    fill: #f8fafc !important;
+    stroke: #cbd5e1 !important;
+  }
+  /* Sub-card headers or inner rects */
+  svg rect[fill="#0F172A"]:not(:first-of-type) {
+    fill: #e2e8f0 !important;
+    stroke: #cbd5e1 !important;
+  }
+  /* Accent inner rects */
+  svg rect[fill="#0F172A"][stroke="#22C55E"],
+  svg rect[fill="#0F172A"][stroke="#4ADE80"] {
+    fill: #f0fdf4 !important;
+    stroke: #16a34a !important;
+  }
+  svg rect[fill="#1E3A8A"] {
+    fill: #eff6ff !important;
+    stroke: #2563eb !important;
+  }
+  /* SVG Text Elements - Primary dark text for white background readability */
+  svg text[fill="#F8FAFC"],
+  svg text[fill="#ffffff"],
+  svg text[fill="#FFFFFF"],
+  svg text[fill="#E2E8F0"],
+  svg text[fill="#f1f5f9"] {
+    fill: #0f172a !important;
+  }
+  /* SVG Text Elements - Muted secondary text */
+  svg text[fill="#94A3B8"],
+  svg text[fill="#64748B"],
+  svg text[fill="#9ca3af"] {
+    fill: #334155 !important;
+  }
+  /* SVG Accent Title Text - Deep contrast tones for printing */
+  svg text[fill="#60A5FA"],
+  svg text[fill="#38BDF8"],
+  svg text[fill="#3B82F6"] {
+    fill: #1d4ed8 !important;
+    font-weight: 700;
+  }
+  svg text[fill="#4ADE80"],
+  svg text[fill="#86EFAC"],
+  svg text[fill="#22C55E"] {
+    fill: #15803d !important;
+    font-weight: 700;
+  }
+  svg text[fill="#FBBF24"],
+  svg text[fill="#F59E0B"] {
+    fill: #b45309 !important;
+    font-weight: 700;
+  }
+  svg text[fill="#C084FC"],
+  svg text[fill="#E879F9"],
+  svg text[fill="#A855F7"] {
+    fill: #6b21a8 !important;
+    font-weight: 700;
+  }
+  svg text[fill="#F43F5E"],
+  svg text[fill="#EF4444"] {
+    fill: #be123c !important;
+    font-weight: 700;
+  }
+  /* SVG Paths, Lines & Markers */
+  svg path[stroke="#64748B"],
+  svg path[stroke="#334155"],
+  svg line[stroke="#64748B"],
+  svg line[stroke="#334155"] {
+    stroke: #475569 !important;
+  }
+  svg marker path[fill="#64748B"],
+  svg marker path[fill="#334155"] {
+    fill: #475569 !important;
+  }
+  /* Mermaid Diagram Elements in Light Mode */
+  .mermaid svg {
+    background-color: #ffffff !important;
+  }
+  .mermaid .node rect,
+  .mermaid .node circle,
+  .mermaid .node polygon {
+    fill: #f8fafc !important;
+    stroke: #475569 !important;
+  }
+  .mermaid .node .label,
+  .mermaid .node text {
+    color: #0f172a !important;
+    fill: #0f172a !important;
+  }
+  .mermaid .edgePath .path,
+  .mermaid .flowchart-link {
+    stroke: #475569 !important;
+  }
+  .mermaid .marker {
+    fill: #475569 !important;
+    stroke: #475569 !important;
+  }
+  .mermaid .cluster rect {
+    fill: #f1f5f9 !important;
+    stroke: #94a3b8 !important;
+  }
+  .mermaid .cluster text,
+  .mermaid .cluster span {
+    fill: #0f172a !important;
+    color: #0f172a !important;
+  }
+  svg > rect:first-of-type {
+    stroke: #000000 !important;
+  }
+  svg text {
+    fill: #000000 !important;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */

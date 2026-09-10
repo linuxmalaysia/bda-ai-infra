@@ -215,12 +215,11 @@ body {
 
 .hero-callout {
   background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-left: 4px solid var(--accent-color);
   padding: 1.5rem;
   border-radius: 6px;
   margin-bottom: 2rem;
-  border: 1px solid var(--border-color);
-  border-left-width: 4px;
 }
 
 .page-title {
@@ -284,7 +283,7 @@ body {
   margin-bottom: 1rem;
 }
 
-.markdown-body code {
+.markdown-body :not(pre) > code {
   background-color: var(--card-bg);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
@@ -469,21 +468,15 @@ body {
   }
 }
 
-/* Apply light mode rules when data-theme="light" */
-[data-theme="light"] {
+/* Apply light mode rules when data-theme="light" or no data-theme attribute exists (excluding data-theme="auto") */
+[data-theme="light"],
+:root:not([data-theme]) {
   @include light-mode-svg-rules;
 }
 
 /* Apply light mode rules when data-theme="auto" and system preference is light */
 @media (prefers-color-scheme: light) {
   [data-theme="auto"] {
-    @include light-mode-svg-rules;
-  }
-}
-
-/* Default root without dark theme explicitly set (fallback to light mode) */
-:root:not([data-theme="dark"]) {
-  @media (prefers-color-scheme: light) {
     @include light-mode-svg-rules;
   }
 }
@@ -527,7 +520,7 @@ body {
     white-space: pre-wrap !important;
   }
 
-  .markdown-body code {
+  .markdown-body :not(pre) > code {
     background-color: #ffffff !important;
     color: #000000 !important;
     border: 1px solid #666666 !important;

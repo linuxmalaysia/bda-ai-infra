@@ -144,7 +144,7 @@ The end-to-end AI pipeline operates as a continuous, resilient loop spanning ing
 
   <rect x="525" y="265" width="200" height="120" fill="#0F172A" stroke="#A855F7" stroke-width="1" rx="6"/>
   <text x="535" y="285" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">Row-Level Security (RLS)</text>
-  <text x="535" y="303" font-family="Consolas, Monaco, monospace" font-size="10" fill="#C084FC">tenant_id, access_level</text>
+  <text x="535" y="303" font-family="Consolas, Monaco, monospace" font-size="10" fill="#C084FC">tenant_id, access_classification</text>
   <text x="535" y="321" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">internal_staff_policy</text>
   <text x="535" y="339" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">external_client_policy</text>
 
@@ -168,8 +168,8 @@ The end-to-end AI pipeline operates as a continuous, resilient loop spanning ing
 
   <rect x="775" y="255" width="190" height="120" fill="#0F172A" stroke="#F59E0B" stroke-width="1" rx="6"/>
   <text x="785" y="275" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">Context Injection</text>
-  <text x="785" y="293" font-family="Consolas, Monaco, monospace" font-size="10" fill="#38BDF8">SET LOCAL app.current_role</text>
-  <text x="785" y="311" font-family="Consolas, Monaco, monospace" font-size="10" fill="#38BDF8">SET LOCAL app.current_tenant</text>
+  <text x="785" y="293" font-family="Consolas, Monaco, monospace" font-size="10" fill="#38BDF8">set_config app.current_user_role</text>
+  <text x="785" y="311" font-family="Consolas, Monaco, monospace" font-size="10" fill="#38BDF8">set_config app.current_tenant_id</text>
   <text x="785" y="329" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">Enforces DB-Level Firewall</text>
 
   <rect x="775" y="390" width="190" height="140" fill="#0F172A" stroke="#22C55E" stroke-width="1" rx="6"/>
@@ -314,12 +314,22 @@ REINDEX INDEX CONCURRENTLY idx_knowledge_embedding_hnsw;
 
 ---
 
-### Gap 3: Continuous Sync Loop (CDC / Delta Load)
+### Gap 3: Continuous Sync Loop (CDC / Delta Load & Deletion Tombstones)
 
 If an existing enterprise document is edited or deleted on an upstream SFTP server, blindly pushing every file through the pipeline generates massive duplicate vector embeddings, inflating database storage costs and distorting vector distance ranking.
 
 #### Technical Solution
-Utilise Apache NiFi's **Stateful Processors** to maintain an in-memory and persistent key-value store of cryptographic hashes (**SHA-256**) for all ingested payloads:
+Utilise Apache NiFi's **Stateful Processors** to maintain an in-memory and persistent key-value store of cryptographic hashes (**SHA-256**) for all ingested payloads, combined with an authoritative inventory scan and deletion-tombstone workflow to manage removed documents:
+
+1. **Payload Modification Tracking:** When incoming files match existing SHA-256 hashes in state storage, NiFi terminates the flow early, avoiding unnecessary embedding model API calls.
+2. **Deletion & Tombstone Engine:** To handle deleted source files, a scheduled NiFi inventory processor compares active source listings against the state cache. When a previously indexed file is no longer present in the source manifest, NiFi emits a deletion event and executes a tenant-scoped SQL deletion query using the document's stable identity (`document_source_url` and `tenant_id`), purging its associated vector chunks from PostgreSQL:
+
+```sql
+-- Purge vector chunks for deleted source documents scoped to tenant
+DELETE FROM secure_ai_lakehouse
+WHERE source_origin = :document_source_url
+  AND tenant_id = :tenant_id;
+```
 
 ```
 [Inbound File Payload] ──► [Calculate SHA-256 Hash]
@@ -449,24 +459,32 @@ When an AI agent or external client queries the infrastructure, the **MCP Server
 @mcp.tool()
 async def secure_tenant_vector_search(
     query_text: str,
-    user_role: str,
-    tenant_id: str,
     longitude: float,
     latitude: float,
     radius_meters: float = 5000.0
 ) -> str:
     """Executes multi-tenant hybrid search with strict session context binding."""
+    # Derive identity parameters from authenticated server context rather than caller inputs
+    ctx = mcp.get_context()
+    user_role = getattr(ctx, "user_role", None) or os.getenv("MCP_CLIENT_ROLE")
+    tenant_id = getattr(ctx, "tenant_id", None) or os.getenv("MCP_CLIENT_TENANT_ID")
+
+    if not user_role or user_role not in ALLOWED_ROLES:
+        raise ValueError("Unauthorised or missing user_role in MCP session context")
+    if not tenant_id:
+        raise ValueError("Missing tenant_id in MCP session context")
+
     embedding_vector = model.encode(query_text).tolist()
 
     async with db_pool.acquire() as conn:
         async with conn.transaction():
-            # 1. Inject security session context into PostgreSQL transaction
-            await conn.execute("SET LOCAL app.current_user_role = $1;", user_role)
-            await conn.execute("SET LOCAL app.current_tenant_id = $1;", tenant_id)
+            # 1. Inject security session context into PostgreSQL transaction using set_config
+            await conn.execute("SELECT set_config('app.current_user_role', $1, true);", user_role)
+            await conn.execute("SELECT set_config('app.current_tenant_id', $1, true);", tenant_id)
 
             # 2. Execute SQL query. PostgreSQL RLS automatically filters unauthorized rows!
             sql = """
-                SELECT document_name, payload_content, access_classification
+                SELECT source_origin, payload_content, access_classification
                 FROM secure_ai_lakehouse
                 WHERE ST_DWithin(spatial_coordinates, ST_SetSRID(ST_MakePoint($1, $2), 4326)::geography, $3)
                 ORDER BY semantic_embedding <=> $4::vector

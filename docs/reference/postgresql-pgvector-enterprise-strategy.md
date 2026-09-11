@@ -428,7 +428,7 @@ CREATE TABLE enterprise_knowledge_base (
     metadata JSONB DEFAULT '{}'::jsonb,
     embedding vector(1024), -- UAE-Large-V1 1024-dimension embedding
     tenant_id VARCHAR(50) NOT NULL DEFAULT 'INTERNAL',
-    access_classification VARCHAR(20) NOT NULL DEFAULT 'RESTRICTED', -- 'PUBLIC', 'RESTRICTED', 'INTERNAL_ONLY'
+    access_classification VARCHAR(20) NOT NULL DEFAULT 'RESTRICTED' CHECK (access_classification IN ('PUBLIC', 'RESTRICTED', 'INTERNAL_ONLY')),
     organizational_unit VARCHAR(50) DEFAULT 'GENERAL',
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT uq_doc_chunk UNIQUE (document_uri, chunk_index)

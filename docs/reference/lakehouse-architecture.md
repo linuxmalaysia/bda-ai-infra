@@ -142,7 +142,7 @@ flowchart TD
 | :--- | :--- | :--- | :--- | :--- |
 | **Trino / Spark Engine** | **Apache Polaris REST** | `TCP 8181` / Iceberg REST API | Keycloak Client Credentials | Discovers tables, manages ACID snapshot commits, and obtains S3 tokens. |
 | **Polaris Catalog** | **Ceph / MinIO Storage** | `TCP 8080` / `TCP 9000` S3 API | S3 IAM Vended Credentials | Accesses underlying Parquet data files under S3 Object Lock protection. |
-| **DuckDB / PostGIS** | **OpenMetadata Catalog** | `TCP 5432` / PostgreSQL TLS 1.3 | mTLS Certificate / DB Key | Provides low-latency operational vector retrieval for local RAG pipelines. |
+| **DuckDB / PostGIS** | **PostgreSQL PostGIS &amp; pgvector** | `TCP 5432` / PostgreSQL TLS 1.3 | mTLS Certificate / DB Key | Provides low-latency operational vector retrieval for local RAG pipelines. |
 
 ---
 

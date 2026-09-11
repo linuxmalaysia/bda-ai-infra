@@ -84,12 +84,11 @@ The diagram below details the integrated security perimeter, connecting APISIX, 
   <text x="500" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">Ceph / MinIO Iceberg Parquet SSoT (WORM Lock)</text>
 
   <!-- Connectors -->
+  <line x1="470" y1="71" x2="490" y2="71" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
   <line x1="255" y1="90" x2="175" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
-  <line x1="705" y1="90" x2="480" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
-
   <line x1="175" y1="240" x2="255" y2="320" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
   <line x1="480" y1="240" x2="705" y2="320" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
-  <line x1="785" y1="240" x2="705" y2="320" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
+  <line x1="650" y1="205" x2="315" y2="205" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-sec)"/>
 </svg>
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)

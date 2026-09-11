@@ -96,14 +96,15 @@ Each analytical domain module routes raw telemetry and spatial feeds through Apa
 
   <!-- Connectors -->
   <line x1="115" y1="82" x2="175" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
-  <line x1="295" y1="82" x2="200" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
-  <line x1="475" y1="82" x2="480" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
+  <line x1="295" y1="82" x2="175" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
+  <line x1="475" y1="82" x2="175" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
   <line x1="655" y1="82" x2="785" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
-  <line x1="835" y1="82" x2="800" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
+  <line x1="835" y1="82" x2="480" y2="160" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
 
-  <line x1="175" y1="260" x2="245" y2="340" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
-  <line x1="480" y1="260" x2="245" y2="340" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
-  <line x1="785" y1="260" x2="715" y2="340" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
+  <line x1="310" y1="210" x2="345" y2="210" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
+  <line x1="615" y1="210" x2="650" y2="210" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
+  <line x1="785" y1="260" x2="245" y2="340" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
+  <line x1="480" y1="260" x2="715" y2="340" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ba)"/>
 </svg>
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)

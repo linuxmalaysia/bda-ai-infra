@@ -103,6 +103,7 @@ flowchart TD
         UV["uv CLI / Python 3.12+"]
         Pytest["pytest Test Runner"]
         OpenWiki["OpenWiki Emulator CLI"]
+        ODCS["Bitol ODCS Data Contract CLI"]
     end
 
     subgraph Sandbox ["Local Containerized Sandbox Environment"]
@@ -123,6 +124,7 @@ flowchart TD
     Pytest --> SVGCheck
 
     OpenWiki --> Sandbox
+    ODCS --> NiFi
     NiFi --> Postgres
     MCP --> Postgres
 ```

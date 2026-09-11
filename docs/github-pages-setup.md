@@ -56,17 +56,21 @@ The diagram below outlines the GitHub Actions Jekyll deployment pipeline publish
   <rect x="20" y="135" width="920" height="26" fill="#0F172A" rx="8"/>
   <text x="35" y="153" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">GITHUB ACTIONS BUILD &amp; BUNDLE RUNNER</text>
 
-  <rect x="40" y="170" width="270" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
-  <text x="50" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">actions/checkout@v4</text>
-  <text x="50" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Pull Repository Master Branch</text>
+  <rect x="35" y="170" width="205" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="45" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">actions/checkout@v4</text>
+  <text x="45" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Pull Master Branch</text>
 
-  <rect x="345" y="170" width="270" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
-  <text x="355" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">jekyll-build-pages@v1</text>
-  <text x="355" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Compile _config.yml &amp; SASS CSS</text>
+  <rect x="260" y="170" width="205" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="270" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">configure-pages@v5</text>
+  <text x="270" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Setup Pages Meta</text>
 
-  <rect x="650" y="170" width="270" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
-  <text x="660" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">actions/deploy-pages@v5</text>
-  <text x="660" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Upload HTML Static Artifacts</text>
+  <rect x="485" y="170" width="205" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="495" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">jekyll-build-pages@v1</text>
+  <text x="495" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Compile Jekyll Site</text>
+
+  <rect x="710" y="170" width="205" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="720" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">deploy-pages@v5</text>
+  <text x="720" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Publish Artifacts</text>
 
   <!-- Step 3: Published Site -->
   <rect x="20" y="285" width="920" height="85" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-ghp)"/>
@@ -77,10 +81,11 @@ The diagram below outlines the GitHub Actions Jekyll deployment pipeline publish
   <text x="50" y="344" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">GitHub Pages HTTPS Endpoint (https://linuxmalaysia.github.io/bda-ai-infra/)</text>
 
   <!-- Connectors -->
-  <line x1="480" y1="90" x2="175" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ghp)"/>
-  <line x1="175" y1="240" x2="480" y2="318" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ghp)"/>
-  <line x1="480" y1="240" x2="480" y2="318" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ghp)"/>
-  <line x1="785" y1="240" x2="480" y2="318" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ghp)"/>
+  <line x1="480" y1="90" x2="137" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ghp)"/>
+  <line x1="240" y1="205" x2="260" y2="205" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ghp)"/>
+  <line x1="465" y1="205" x2="485" y2="205" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ghp)"/>
+  <line x1="690" y1="205" x2="710" y2="205" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ghp)"/>
+  <line x1="812" y1="240" x2="480" y2="318" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-ghp)"/>
 </svg>
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)

@@ -361,10 +361,8 @@ The diagram below details the second dual-render architecture spec for Apache Ni
 
   <!-- Connectors -->
   <line x1="255" y1="90" x2="175" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-nifi2)"/>
-  <line x1="705" y1="90" x2="480" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-nifi2)"/>
-
-  <line x1="175" y1="240" x2="480" y2="320" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-nifi2)"/>
-  <line x1="480" y1="240" x2="480" y2="320" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-nifi2)"/>
+  <line x1="310" y1="205" x2="345" y2="205" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-nifi2)"/>
+  <line x1="615" y1="205" x2="650" y2="205" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-nifi2)"/>
   <line x1="785" y1="240" x2="480" y2="320" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-nifi2)"/>
 </svg>
 
@@ -401,7 +399,7 @@ flowchart TD
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **NiFi Core Engine** | **Python Worker Pool** | Internal IPC Memory Bridge | Isolated Process Boundary | Executes Python text chunking and vector transformations natively without Jython wrappers. |
-| **Python Worker** | **PutDatabaseRecord** | Internal FlowFile Attribute Pass | Memory Record Buffer | Passes structured JSON payload containing 1536-dim vector array and WKT coordinates. |
+| **Python Worker** | **PutDatabaseRecord** | FlowFile Content Stream &amp; RecordReader | Memory Record Buffer | Streams transformed JSON record payload (vector array and WKT coordinates) via FlowFile content, using FlowFile attributes as routing metadata. |
 | **PutDatabaseRecord** | **PostgreSQL Master** | `TCP 5432` / JDBC TLS 1.3 | DB Service Credentials / pgTDE | Commits batched records directly to `pgvector` HNSW and `PostGIS` spatial indexes. |
 
 ---

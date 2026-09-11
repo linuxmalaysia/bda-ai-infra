@@ -90,13 +90,11 @@ The diagram below presents the high-level architecture of the modernized BDA Lak
   <text x="500" y="374" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">Containerized FastMCP &amp; pgvector (Read-Only AI Sandbox)</text>
 
   <!-- Connectors -->
-  <line x1="175" y1="90" x2="175" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
-  <line x1="480" y1="90" x2="480" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
-  <line x1="785" y1="90" x2="785" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
-
-  <line x1="175" y1="270" x2="255" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
-  <line x1="480" y1="270" x2="255" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
-  <line x1="785" y1="270" x2="705" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="310" y1="71" x2="345" y2="71" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="785" y1="90" x2="175" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="310" y1="220" x2="345" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="785" y1="270" x2="255" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="480" y1="270" x2="705" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
 </svg>
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)
@@ -137,9 +135,12 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **API / Ingestion Client** | **APISIX Gateway** | `TCP 8443` / HTTPS TLS 1.3 | Keycloak JWT / mTLS Cert | Enforces perimeter access control and rate-limiting. |
-| **NiFi 2.0 Pipeline** | **Apache Polaris / S3 Store** | `TCP 8181` / S3 API | S3 Access Key / Contract Gate | Ingests telemetry into versioned Iceberg Parquet tables under Compliance WORM. |
-| **Trino / Superset** | **End User Browser** | `TCP 8088` / HTTPS REST | OAuth2 JWT / RBAC Roles | Renders interactive spatial maps and analytical dashboards. |
+| **API Client** | **APISIX Gateway** | `TCP 8443` / HTTPS TLS 1.3 | Keycloak JWT / mTLS Cert | Enforces perimeter access control and rate-limiting. |
+| **APISIX Gateway** | **Keycloak OIDC IAM** | `TCP 8443` / HTTPS OIDC | OAuth2 Realm Keys | Validates client bearer tokens and verifies user roles. |
+| **ODCS Contract Gate** | **NiFi 2.0 Ingestion** | `TCP 8443` / HTTPS Stream | ODCS Contract Spec | Streams validated telemetry into NiFi flow queues. |
+| **NiFi 2.0 Pipeline** | **Apache Polaris Catalog** | `TCP 8181` / REST API | Polaris OAuth2 Token | Commits validated records as versioned Iceberg Parquet tables. |
+| **Trino Query Engine** | **Apache Superset** | `TCP 8088` / Trino JDBC | OAuth2 RLS Scopes | Serves federated spatial queries for interactive deck.gl map rendering. |
+| **Ceph WORM Storage** | **FastMCP Agent** | `TCP 5432` / TLS 1.3 PostgreSQL | Read-Only Session Scope | Exposes master context to AI models without allowing write access to Tier 0 datasets. |
 
 ---
 

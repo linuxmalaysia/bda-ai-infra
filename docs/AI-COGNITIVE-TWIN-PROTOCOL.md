@@ -104,7 +104,8 @@ flowchart TD
 | :--- | :--- | :--- | :--- | :--- |
 | **Command Centre (T1)** | **Dev Bridge (T2)** | Stdio / Local Subprocess | IDE Agent Ruleset | Enforces non-destructive pre-flight checks and DSOM protocol rules. |
 | **Dev Bridge (T2)** | **Staging Host (T3)** | `TCP 22` / SSH Key | SSH Certificate / Molecule | Runs automated container integration tests prior to production rollout. |
-| **Staging Host (T3)** | **Production Fabric (T4)** | `TCP 8443` / HTTPS OTLP | Keycloak OAuth2 JWT | Deploys containerized services and streams OpenTelemetry traces to Prometheus/Grafana. |
+| **Staging Host (T3)** | **Production Fabric (T4)** | `TCP 22` / SSH | SSH Private Key / Certificate | Deploys and manages Podman Quadlet container services in production. |
+| **Production Fabric (T4)** | **OpenTelemetry Collector** | `TCP 8443` / HTTPS OTLP | Keycloak OAuth2 JWT | Streams operational metrics, logs, and trace telemetry to Prometheus and Grafana. |
 
 ### Tier Descriptions & Boundaries
 

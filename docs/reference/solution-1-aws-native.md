@@ -128,8 +128,9 @@ flowchart TD
     MWAA -->|"Trigger Spark Jobs"| EMR
 
     EMR -->|"Read / Write Iceberg"| S3
+    Aurora["Amazon Aurora PostgreSQL Multi-AZ"]
     Athena -->|"Massively Parallel SQL"| S3
-    Athena -->|"Operational Sync"| Athena
+    Athena -->|"Operational Sync"| Aurora
 
     FargateMCP -->|"Controlled Spatial SQL"| Athena
     FargateMCP -->|"Foundation Inference"| Bedrock

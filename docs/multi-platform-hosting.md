@@ -97,8 +97,10 @@ The diagram below details the continuous integration and multi-host deployment p
   <text x="740" y="342" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">ReadTheDocs Site</text>
 
   <!-- Connectors -->
-  <line x1="255" y1="90" x2="255" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-host)"/>
-  <line x1="705" y1="90" x2="705" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-host)"/>
+  <line x1="255" y1="90" x2="140" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-host)"/>
+  <line x1="255" y1="90" x2="370" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-host)"/>
+  <line x1="705" y1="90" x2="600" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-host)"/>
+  <line x1="705" y1="90" x2="825" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-host)"/>
 
   <line x1="140" y1="230" x2="140" y2="315" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-host)"/>
   <line x1="370" y1="230" x2="370" y2="315" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-host)"/>
@@ -151,6 +153,8 @@ flowchart TD
 | **Git Push Event** | **GitHub Actions / GitLab CI** | HTTPS Webhook / Git Push | Repository Deployment Key | Triggers automated site build workflows and tests on commit. |
 | **generate_summary.py** | **SUMMARY.md & navigation.yml** | Local Python Script | File System Write | Re-indexes all markdown files into unified table of contents. |
 | **Jekyll / MkDocs** | **GitHub / GitLab Pages** | `TCP 443` / HTTPS TLS 1.3 | Public Web Domain | Renders responsive HTML site with adaptive light/dark mode CSS styling. |
+| **GitBook Sync** | **GitBook Portal** | Git Integration / HTTPS | GitBook Access Token | Synchronizes SUMMARY.md navigation tree directly to GitBook cloud platform. |
+| **ReadTheDocs Builder** | **ReadTheDocs Site** | Webhook / MkDocs Python 3.12 | RTD Project Key | Builds MkDocs documentation suite and publishes to readthedocs.io domain. |
 
 ## Supported Platforms
 

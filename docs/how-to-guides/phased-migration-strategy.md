@@ -114,7 +114,7 @@ flowchart LR
         P4_Decom["Legacy Decommissioning"]
     end
 
-    P1_Ceph --> P1_NiFi
+    P1_NiFi --> P1_Ceph
     P1_NiFi --> P2_Iceberg
     P2_Iceberg --> P2_Trino
     P2_Trino --> P3_MCP
@@ -127,7 +127,7 @@ flowchart LR
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Apache NiFi (Phase 1)** | **Ceph / MinIO Store** | `TCP 8443` / S3 API | NiFi mTLS Cert / S3 Key | Mirrors production data streams without interrupting legacy workflows. |
+| **Apache NiFi (Phase 1)** | **Ceph / MinIO Store** | `TCP 8080` (Ceph RGW) / `TCP 9000` (MinIO) S3 API | NiFi mTLS Cert / S3 Access Key | Mirrors production data streams without interrupting legacy workflows into S3 WORM storage. |
 | **Spark Sedona (Phase 2)** | **Apache Iceberg Table** | AWS Glue / Polaris REST | Spark IAM Role | Converts raw HDFS/GlusterFS files into versioned Iceberg Parquet snapshots. |
 | **APISIX / Superset (Phase 4)** | **User Web Browser** | `TCP 443` / HTTPS TLS 1.3 | Keycloak OAuth2 JWT | Replaces proprietary BI and legacy CMS with open-source dashboards. |
 

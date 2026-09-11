@@ -108,8 +108,8 @@ The diagram below illustrates the fragmented, siloed structure of the legacy BDA
   <line x1="600" y1="82" x2="480" y2="160" stroke="#EF4444" stroke-width="1.5" marker-end="url(#arrow-leg)"/>
   <line x1="825" y1="82" x2="790" y2="160" stroke="#EF4444" stroke-width="1.5" marker-end="url(#arrow-leg)"/>
 
-  <line x1="170" y1="280" x2="245" y2="360" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-leg)"/>
   <line x1="480" y1="280" x2="245" y2="360" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-leg)"/>
+  <line x1="480" y1="280" x2="715" y2="360" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-leg)"/>
   <line x1="790" y1="280" x2="715" y2="360" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-leg)"/>
 </svg>
 

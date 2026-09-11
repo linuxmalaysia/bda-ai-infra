@@ -120,6 +120,7 @@ flowchart TD
     Tier0 -->|"Read-Only Context Query"| AIContainer
     AIContainer --> ScratchStorage
     ScratchStorage -.-x|"STRICTLY BLOCKED: No Write Permissions"| Tier0
+    ScratchStorage -.-x|"STRICTLY BLOCKED: No Write Permissions"| Tier1
 ```
 
 ### 3. Summary Interface & Routing Table

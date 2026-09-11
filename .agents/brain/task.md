@@ -1,55 +1,37 @@
 ---
 okf_version: "0.2"
 type: spatial_memory
-title: "DSOM Task List & Implementation Progress"
-description: "Active task checklist for Deep State of Mind protocol setup and spatial memory tracking."
+title: "Task Registry - Dual-Render SVG Diagram Skill & Print Theme Upgrade"
+description: "EOD Palace Sync task registry documenting the upgrade of dual-render SVG architecture diagram skill and CSS printer-friendly styles."
 status: active
-timestamp: "2026-09-10T00:00:00Z"
-stale_after: "2027-09-08T00:00:00Z"
+timestamp: "2026-09-07T11:45:00Z"
+stale_after: "2027-09-07T11:45:00Z"
 generated: false
 verified: true
 sources:
-  - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/START-HERE/"
-    description: "DSOM protocol START-HERE entry point specification."
-  - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/governance/LLM-WIKI-ADOPTION/"
-    description: "LLM-WIKI adoption governance specification."
+  - id: "dual_render_skill"
+    path: ".agents/skills/dual-render-architecture-diagram/SKILL.md"
 topics:
-  - dsom
-  - task
-  - spatial-memory
-  - llm-wiki
+  - dual-render-diagrams
+  - printer-friendly
+  - light-theme
+  - dark-theme
+  - eod-sync
 ---
 
-# 🧠 DSOM Task List & Spatial Memory
+# 📋 Task Registry
 
-- [x] Initialise `.agents/brain/` spatial memory structure.
-- [x] Establish root `AGENTS.md` and `.agents/AGENTS.md` constitution.
-- [x] Provision Universal Gateway files (`.cursorrules`, `CLAUDE.md`, `.github/copilot-instructions.md`).
-- [x] Scaffold root `README.md`, `START-HERE.md`, `SUMMARY.md`, and `llms.txt`.
-- [x] Scaffold Triple-Ledger files (`CHANGELOG.md`, `HISTORY.md`).
-- [x] Upgrade existing documentation in `docs/` to OKF v0.2 frontmatter standard.
-- [x] Create `.agents/brain/active_context_manifest.md` for live scope tracking.
-- [x] Provision `docs/AI-COGNITIVE-TWIN-PROTOCOL.md` defining 4-tier infrastructure topology.
-- [x] Implement `.github/workflows/dsom-audit.yml` and `tests/test_okf_and_links.py` for CI/CD OKF and zero link decay checks.
-- [x] Configure code health linters (`ruff`, `markdownlint-cli`, `.pre-commit-config.yaml`).
-- [x] Integrate Ansible & Molecule testing scaffolding (`.ansible-lint`, `molecule/default/molecule.yml`).
-- [x] Implement Playwright E2E testing scaffolding (`playwright.config.ts`, `tests/e2e/docs_search.spec.ts`).
-- [x] Add GitHub Pages official workflow `.github/workflows/jekyll-gh-pages.yml` and `_config.yml`.
-- [x] Implement cmsfornerd2 Laboratory layout (`_layouts/`, `_includes/`, `assets/css/style.scss`, `assets/js/theme-toggle.js`).
-- [x] Create auto-discovery summary indexer `tools/generate_summary.py` and pre-commit guardrail installer `tools/install_git_guardrails.py`.
-- [x] Configure multi-platform hosting support (`.gitlab-ci.yml`, `.gitbook.yaml`, `.readthedocs.yaml`, `mkdocs.yml`).
-- [x] Create 3 Diátaxis Reference documents for Three (3) Infrastructure Deployment Solutions (`solution-1-aws-native.md`, `solution-2-hybrid-ai.md`, `solution-3-onprem-proxmox-rke2.md`).
-- [x] Adopt OpenWiki architecture & emulator tool (`tools/openwiki_emulator.py`) establishing BDA Lakehouse Single Source of Truth (SSoT) open-source software relationship graph.
-- [x] Address PR review feedback across APISIX mTLS security, Ceph CSI storage separation, Trino performance qualifications, Lakehouse Writer ingestion step, Superset tested concurrency, test output isolation, canvas graph scaling/fallback, file permissions preservation, and lock retention.
-- [x] Adopt Next Technology Roadmap Stack (Apache Polaris Iceberg REST catalog, DuckDB vss / pgvector zero-trust local RAG with OpenMetadata, OpenTelemetry observability) into project specs, OpenWiki, and triple-ledger.
-- [x] Implement Master 5-Year Strategic BDA & AI Roadmap & Business Case Specification (2026–2030) (`docs/reference/5-year-bda-ai-roadmap-and-business-case.md`).
-- [x] Create How-To Guide for Onboarding and Scaling New AI/ML Business Cases (`docs/how-to-guides/onboarding-new-ai-business-cases.md`).
-- [x] Adopt PostgreSQL and pgvector as the primary master database and AI infrastructure foundation based on Percona research guidance (`docs/reference/postgresql-pgvector-enterprise-strategy.md`).
-- [x] Implement Dual-Render Architecture Diagram Specification (SVG + Mermaid) AI skill (`.agents/skills/dual-render-architecture-diagram/SKILL.md`).
-- [x] Refactor all existing architecture, topology, sequence, and workflow diagrams across `docs/reference/`, `openwiki/`, and `tools/openwiki_emulator.py` to Dual-Render standard.
-- [x] Update relative Markdown links to `.html` across documentation entrypoints (`README.md`, `START-HERE.md`, `AGENTS.md`, `docs/README.md`, `docs/reference/*.md`) to eliminate 404 errors on GitHub Pages and update `tests/test_okf_and_links.py` link decay resolver.
-- [x] Create Apache NiFi 2.0 Master Data Plane and Migration Guide (`docs/reference/apache-nifi-2-master-data-plane-and-migration.md`) with PostgreSQL vector/spatial integration, dual-render diagrams, and NiFi 1.x -> 2.0 migration framework.
-- [x] Implement Consumption & Integration Layer Specification (`docs/reference/consumption-and-integration-layer.md`) with Python FastMCP server, FastAPI REST/gRPC gateway, and Apache NiFi 2.0 PGP SFTP egress blueprints over PostgreSQL Master (`pgvector` + `PostGIS` + `pgTDE`).
-- [x] Implement Light Mode & Print Mode White Background SCSS styling mixins and responsive Mermaid diagram CSS overrides (`assets/css/style.scss`).
-- [x] Address PR review feedback (remove committed CSS binaries, restore callout accent borders, scope inline code selectors, refine un-themed root selectors).
-- [x] Execute End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory.
+## 🟢 Completed Objectives
+
+1. **Dual-Render Architecture Diagram Skill Upgrade**:
+   - Updated `.agents/skills/dual-render-architecture-diagram/SKILL.md` to incorporate the Dual-Mode Terminal & Cloud Design System and Physical Print / PDF Handbook Mode (Zero Ink Waste & Print-Safe).
+   - Enforced light pastel card backgrounds (`#EFF6FF`, `#F0FDF4`, `#FEF2F2`, `#FAF5FF`, `#FFFBEB`, `#F8FAFC`), crisp boundary borders (`1px solid #CBD5E1`), 4px left color accent strips, explicit arrow markers, and high-contrast dark slate typography (`#0F172A`).
+   - Added Mermaid Multi-Diagram Isolation Protocol (diagram-scoped node prefixes and sequential DOM replacement).
+
+2. **Stylesheet Dual-Mode & Print Adaptation**:
+   - Enhanced `assets/css/style.scss` (`@mixin light-mode-svg-rules` and `@media print`) to dynamically override dark slate fills into high-contrast light pastel card fills with colored stroke boundaries in Light and Print modes.
+
+3. **Code Quality, Verification & EOD Protocol**:
+   - Ran `uv run pytest` (274/274 tests passed).
+   - Ran `uv run ruff check .` (100% clean).
+   - Generated dynamic navigation indexes (`tools/generate_summary.py`).

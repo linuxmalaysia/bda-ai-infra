@@ -27,6 +27,127 @@ This reference document outlines the modern governance subsystems, metadata engi
 
 ---
 
+## 🏛️ Enterprise Governance Enforcement Topology
+
+The diagram below illustrates the end-to-end zero-trust governance perimeter, combining API security via APISIX, Keycloak OIDC, OpenMetadata discovery, and OpenTelemetry observability.
+
+### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-gov" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+    <filter id="shadow-gov" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="960" height="420" fill="#0F172A" rx="10"/>
+
+  <!-- Perimeter Tier -->
+  <rect x="20" y="20" width="920" height="80" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-gov)"/>
+  <rect x="20" y="20" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">PERIMETER ACCESS &amp; IDENTITY FEDERATION TIER</text>
+
+  <rect x="40" y="52" width="270" height="38" fill="#0369A1" stroke="#38BDF8" rx="4"/>
+  <text x="50" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E0F2FE">APISIX Cloud-Native Gateway</text>
+
+  <rect x="345" y="52" width="270" height="38" fill="#1E3A8A" stroke="#3B82F6" rx="4"/>
+  <text x="355" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">Keycloak OIDC / OAuth2 IAM</text>
+
+  <rect x="650" y="52" width="270" height="38" fill="#581C87" stroke="#A855F7" rx="4"/>
+  <text x="660" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">ODCS v3.1.0 Contract Gate</text>
+
+  <!-- Governance Core Tier -->
+  <rect x="20" y="135" width="920" height="150" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-gov)"/>
+  <rect x="20" y="135" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="153" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">ENTERPRISE METADATA, PROVENANCE &amp; DISCOVERY CORE</text>
+
+  <rect x="40" y="170" width="270" height="100" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="50" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">OpenMetadata Catalog</text>
+  <text x="50" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">PostgreSQL + OpenSearch Store</text>
+  <text x="50" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• DuckDB vss / Local RAG Index</text>
+
+  <rect x="345" y="170" width="270" height="100" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="355" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">OpenLineage Standard</text>
+  <text x="355" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Facet: nres_provenance</text>
+  <text x="355" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Runtime Pipeline Tracking</text>
+
+  <rect x="650" y="170" width="270" height="100" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="660" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">Apache Polaris REST</text>
+  <text x="660" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Iceberg REST Catalog</text>
+  <text x="660" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Temp S3 Credential Vending</text>
+
+  <!-- Observability Tier -->
+  <rect x="20" y="315" width="920" height="85" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-gov)"/>
+  <rect x="20" y="315" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="333" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FBBF24">FULL-STACK OPENTELEMETRY OBSERVABILITY TIER</text>
+
+  <rect x="40" y="348" width="880" height="42" fill="#0F172A" stroke="#F59E0B" rx="6"/>
+  <text x="50" y="374" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">OpenTelemetry Collector → Prometheus (Metrics) | Grafana Tempo (Traces) | Grafana Loki (Logs)</text>
+
+  <!-- Lines -->
+  <line x1="310" y1="71" x2="345" y2="71" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+  <line x1="310" y1="71" x2="650" y2="71" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+  <line x1="785" y1="90" x2="480" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+  <line x1="345" y1="220" x2="310" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+  <line x1="480" y1="90" x2="785" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+  <line x1="175" y1="90" x2="175" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+  <line x1="175" y1="270" x2="480" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+  <line x1="785" y1="270" x2="480" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+</svg>
+
+### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+flowchart TD
+    subgraph Perimeter ["Perimeter & Identity Boundary"]
+        APISIX["Apache APISIX Gateway"]
+        Keycloak["Keycloak OIDC IAM"]
+        ODCS["Bitol ODCS Data Contracts"]
+    end
+
+    subgraph CoreGovernance ["Enterprise Governance & Metadata Engine"]
+        OpenMetadata["OpenMetadata Catalog"]
+        OpenLineage["OpenLineage Spec"]
+        Polaris["Apache Polaris REST Catalog"]
+    end
+
+    subgraph Observability ["Full-Stack Observability"]
+        OTel["OpenTelemetry Collector"]
+        Grafana["Prometheus / Tempo / Loki / Grafana"]
+    end
+
+    APISIX -->|"JWT Validation"| Keycloak
+    APISIX -->|"Schema Ingress Check"| ODCS
+    ODCS -->|"Emit Audit Events"| OpenLineage
+
+    OpenLineage -->|"Catalog Synchronization"| OpenMetadata
+    Keycloak -->|"RBAC Scopes"| Polaris
+
+    APISIX -->|"OTLP Traces"| OTel
+    OpenMetadata -->|"Metadata Metrics"| OTel
+    Polaris -->|"Catalog Logs"| OTel
+
+    OTel --> Grafana
+```
+
+### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **API Ingress Client** | **APISIX Gateway** | `TCP 8443` / HTTPS | Keycloak OAuth2 JWT | Enforces perimeter TLS, rate limiting, and route filtering. |
+| **APISIX Gateway** | **ODCS Data Contracts** | `TCP 8443` / HTTPS Ingress | Contract Schema Spec | Validates incoming payload schemas against contract definitions at the perimeter. |
+| **APISIX Gateway** | **OpenTelemetry Collector** | `TCP 4317` gRPC / OTLP over TLS / mTLS | Internal Trace Token (OTLP over TLS/mTLS) | Exports distributed trace context and API request metrics to OTel Collector over encrypted OTLP/TLS. |
+| **OpenTelemetry Collector** | **Grafana Platform** | `TCP 9090` / `TCP 3100` / `TCP 4317` | Internal Operations Network | Exports metrics to Prometheus, traces to Tempo, and logs to Loki for Grafana display. |
+| **Data Ingestion Job** | **Bitol ODCS CLI** | Local Subprocess Execution | Schema Contract Spec | Validates incoming payloads against contract schema before committing to Iceberg. |
+| **Spark / Airflow** | **OpenLineage Endpoint** | `TCP 5000` / HTTP Lineage REST | Service Token | Captures runtime execution lineage graph including source and target table facets. |
+| **Iceberg Client** | **Apache Polaris REST** | `TCP 8181` / HTTPS Iceberg REST | Keycloak Client Credentials | Vends temporary scoped S3 credentials for direct object storage reading. |
+
+---
+
 ## 1. Enterprise Governance Subsystem Comparison
 
 | Governance Subsystem | Legacy BDA Stack | Open-Source Replacement | Enterprise Capabilities & Operational Advantages |

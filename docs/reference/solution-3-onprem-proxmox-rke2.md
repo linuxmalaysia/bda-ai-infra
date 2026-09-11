@@ -32,35 +32,117 @@ This reference specification details **Solution 3: Everything On-Premises using 
 
 Solution 3 hosts the entire software-defined data lakehouse, Kubernetes orchestration, relational serving layer, AI inferencing stack, and presentation web applications on a physical enterprise hypervisor cluster managed by **Proxmox Virtual Environment (VE)**, **Rancher Kubernetes Engine 2 (RKE2)**, **K3s**, and **Ceph Software-Defined Storage (SDS)**.
 
+## 🏛️ Sovereign On-Premises Hypervisor & Kubernetes Topology
+
+The diagram below details Solution 3's 100% sovereign architecture, illustrating the PVE hardware layer, Ceph SDS, and dual RKE2/K3s Kubernetes clusters.
+
+### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-pve" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+    <filter id="shadow-pve" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="440" fill="#0F172A" rx="10"/>
+
+  <!-- Proxmox VE Hardware Layer -->
+  <rect x="20" y="20" width="920" height="110" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-pve)"/>
+  <rect x="20" y="20" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F59E0B">PROXMOX VE PHYSICAL HYPERVISOR CLUSTER (11 HARDWARE HOSTS)</text>
+
+  <rect x="40" y="55" width="270" height="60" fill="#0F172A" stroke="#F59E0B" rx="6"/>
+  <text x="50" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">4x AI / GPU Hosts</text>
+  <text x="50" y="95" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">2x H100/A100 PCIe Passthrough</text>
+
+  <rect x="345" y="55" width="270" height="60" fill="#0F172A" stroke="#F59E0B" rx="6"/>
+  <text x="355" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">4x Application Hosts</text>
+  <text x="355" y="95" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">Dual 24-core CPUs / 256GB RAM</text>
+
+  <rect x="650" y="55" width="270" height="60" fill="#0F172A" stroke="#F59E0B" rx="6"/>
+  <text x="660" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">3x Database / State Hosts</text>
+  <text x="660" y="95" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">Patroni Postgres &amp; Ceph OSDs</text>
+
+  <!-- Distributed Storage Tier -->
+  <rect x="20" y="150" width="920" height="70" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-pve)"/>
+  <rect x="20" y="150" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="168" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">CEPH SOFTWARE-DEFINED STORAGE (CEPH SDS)</text>
+
+  <rect x="40" y="182" width="270" height="30" fill="#0369A1" stroke="#38BDF8" rx="4"/>
+  <text x="50" y="201" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#E0F2FE">Ceph RBD (Block Storage)</text>
+
+  <rect x="345" y="182" width="270" height="30" fill="#0369A1" stroke="#38BDF8" rx="4"/>
+  <text x="355" y="201" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#E0F2FE">CephFS (Shared Filesystem)</text>
+
+  <rect x="650" y="182" width="270" height="30" fill="#0369A1" stroke="#38BDF8" rx="4"/>
+  <text x="660" y="201" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#E0F2FE">RADOS GW (S3 WORM Buckets)</text>
+
+  <!-- Kubernetes Clusters Tier -->
+  <rect x="20" y="240" width="920" height="180" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-pve)"/>
+  <rect x="20" y="240" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="258" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">DUAL KUBERNETES CLUSTER ARCHITECTURE (RKE2 + K3S)</text>
+
+  <rect x="40" y="275" width="430" height="130" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="50" y="297" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">RKE2 Main Production Cluster (14 VM Nodes)</text>
+  <text x="50" y="317" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">rke2 v1.30.x / FIPS / Canal / Cilium</text>
+  <text x="50" y="337" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• 3x Control Plane | 4x AI GPU | 4x App | 3x DB</text>
+  <text x="50" y="355" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• NiFi, Airflow, Superset, Trino, vLLM, Patroni</text>
+
+  <rect x="490" y="275" width="430" height="130" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="500" y="297" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">K3s Supporting Services Cluster (5 VM Nodes)</text>
+  <text x="500" y="317" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">k3s v1.30.x / Management &amp; Observability</text>
+  <text x="500" y="337" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• 3x Control Plane | 2x Worker Agent Nodes</text>
+  <text x="500" y="355" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Prometheus, Grafana, Loki, Vault, CI/CD</text>
+
+  <!-- Connectors -->
+  <line x1="175" y1="115" x2="175" y2="150" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
+  <line x1="480" y1="115" x2="480" y2="150" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
+  <line x1="785" y1="115" x2="785" y2="150" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
+
+  <line x1="255" y1="212" x2="255" y2="275" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
+  <line x1="255" y1="212" x2="705" y2="275" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
+  <line x1="255" y1="275" x2="785" y2="212" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
+  <line x1="705" y1="340" x2="470" y2="340" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
+</svg>
+
+### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+flowchart TD
+    subgraph PVE ["Proxmox VE Physical Hypervisor Cluster (11 Hosts)"]
+        GPUHosts["4x AI/GPU Compute Hosts<br/>(PCIe GPU Passthrough)"]
+        AppHosts["4x Application Compute Hosts<br/>(Dual 24-core / 256GB RAM)"]
+        DBHosts["3x Database / Stateful Hosts<br/>(Patroni & Ceph OSDs)"]
+    end
+
+    subgraph Ceph ["Ceph Software-Defined Storage (Ceph SDS)"]
+        RBD["Ceph RBD (Block Storage)"]
+        CephFS["CephFS (Shared Storage)"]
+        RGW["RADOS Gateway (S3 WORM Buckets)"]
+    end
+
+    subgraph Kubernetes ["Dual Open-Source Kubernetes Architecture"]
+        RKE2["RKE2 Main Cluster (14 VM Nodes)<br/>Ollama, vLLM, NiFi, Airflow, Patroni"]
+        K3s["K3s Supporting Cluster (5 VM Nodes)<br/>Prometheus, Grafana, Loki, Vault"]
+    end
+
+    PVE --> Ceph
+    Ceph --> RKE2
+    Ceph --> K3s
 ```
-+-----------------------------------------------------------------------------------------------+
-|               SOLUTION 3: EVERYTHING ON-PREM (PROXMOX VE + RKE2 + CEPH SDS)                   |
-|                                                                                               |
-|  +-----------------------------------------------------------------------------------------+  |
-|  |                          PROXMOX VE HYPERVISOR CLUSTER (PVE)                            |  |
-|  |  +-----------------------+   +-----------------------+   +---------------------------+  |  |
-|  |  | 4x AI / GPU Nodes     |   | 4x Application Nodes  |   | 3x Database / State Nodes |  |  |
-|  |  | (PCIe GPU Passthrough)|   | (RKE2 Worker Nodes)   |   | (Postgres Patroni / OSDs) |  |  |
-|  |  +-----------┬-----------+   +-----------┬-----------+   +-------------┬-------------+  |  |
-|  +--------------│---------------------------│-----------------------------│----------------+  |
-|                 │                           │                             │                   |
-|                 v                           v                             v                   |
-|  +-----------------------------------------------------------------------------------------+  |
-|  |                       DISTRIBUTED SOFTWARE-DEFINED STORAGE (CEPH SDS)                   |  |
-|  |  - Ceph RBD (Block Storage)    - CephFS (Shared Storage)   - RADOS GW (S3 WORM Buckets)   |  |
-|  +-----------------------------------------------------------------------------------------+  |
-|                                             |                                                 |
-|                 +---------------------------+---------------------------+                     |
-|                 v                                                       v                     |
-|  +----------------------------------------+           +------------------------------------+  |
-|  | RKE2 MAIN CLUSTER (14 VM NODES)        |           | K3S SUPPORTING CLUSTER (5 VM NODES)|  |
-|  | - 3x Control Plane (HA etcd)           |           | - 3x Control Plane                 |  |
-|  | - 4x AI GPU Nodes (Ollama/RAGFlow)     |           | - 2x Worker Nodes                  |  |
-|  | - 4x App Nodes (NiFi/Airflow/Superset)  |           | - Prometheus, Grafana, Loki        |  |
-|  | - 3x DB Nodes (Patroni Postgres)       |           | - HashiCorp Vault, CI/CD Runners   |  |
-|  +----------------------------------------+           +------------------------------------+  |
-+-----------------------------------------------------------------------------------------------+
-```
+
+### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **PVE Hypervisor** | **Ceph Storage Cluster** | Dual 100GbE / Ceph Protocol | Internal Storage VLAN | Provides block, filesystem, and S3 Object Lock storage across physical hosts. |
+| **RKE2 Worker Node** | **Ceph RADOS Gateway / MinIO** | `TCP 8080` (Ceph RGW) / `TCP 9000` (MinIO) | S3 Access & Secret Keys (HTTPS/TLS with Certificate Validation) | Serves Iceberg table snapshots over HTTPS/TLS with certificate validation under software-enforced WORM compliance lock. |
+| **K3s Worker Node** | **RKE2 Production API** | `TCP 6443` / Kubernetes API | ServiceAccount Bearer Token | Collects OTLP metrics, logs, and traces from RKE2 application workloads. |
 
 ---
 

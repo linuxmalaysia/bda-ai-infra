@@ -33,20 +33,117 @@ This reference specification details **Solution 2: Hybrid - AI On-Premises (Clou
 
 Solution 2 retains the core data lakehouse, primary S3 Object Lock storage, and batch compute processing within AWS Cloud, while placing AI inferencing engines (**Ollama**, **vLLM**, **RAGFlow**), vector databases (**Valkey**, **Qdrant**), and containerized **Model Context Protocol (MCP)** servers on-premises on local bare-metal GPU servers connected via **AWS Direct Connect**.
 
+## 🏛️ Hybrid Cloud-OnPrem Architecture Topology
+
+The diagram below details Solution 2's hybrid architecture, linking the AWS Cloud Lakehouse Core to On-Premises GPU inference nodes over an encrypted AWS Direct Connect link.
+
+### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-hyb" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+    <filter id="shadow-hyb" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="420" fill="#0F172A" rx="10"/>
+
+  <!-- Left Container: AWS Cloud -->
+  <rect x="20" y="20" width="430" height="380" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-hyb)"/>
+  <rect x="20" y="20" width="430" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">AWS CLOUD LAKEHOUSE CORE (AP-SOUTHEAST-5)</text>
+
+  <rect x="40" y="60" width="390" height="85" fill="#0F172A" stroke="#0284C7" rx="6"/>
+  <text x="50" y="82" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#38BDF8">AWS S3 Object Lock &amp; Glue Catalog</text>
+  <text x="50" y="102" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7DD3FC">Tier 0 SSoT WORM Compliance Mode</text>
+  <text x="50" y="122" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Iceberg Table Catalog &amp; Metadata</text>
+
+  <rect x="40" y="165" width="390" height="85" fill="#0F172A" stroke="#0284C7" rx="6"/>
+  <text x="50" y="187" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#38BDF8">Amazon EMR Serverless &amp; Athena</text>
+  <text x="50" y="207" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7DD3FC">Apache Spark + Apache Sedona Spatial</text>
+  <text x="50" y="227" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• GeoParquet Processing &amp; SQL Query</text>
+
+  <rect x="40" y="270" width="190" height="110" fill="#0F172A" stroke="#0284C7" rx="6"/>
+  <text x="50" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">Aurora Postgres</text>
+  <text x="50" y="312" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7DD3FC">PostGIS / MWAA</text>
+  <text x="50" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Spatial Cache</text>
+
+  <rect x="240" y="270" width="190" height="110" fill="#0F172A" stroke="#0284C7" rx="6"/>
+  <text x="250" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">APISIX Gateway</text>
+  <text x="250" y="312" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7DD3FC">Catalog Routes</text>
+  <text x="250" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Write Verb Filter</text>
+
+  <!-- Right Container: On-Premises GPU Centre -->
+  <rect x="510" y="20" width="430" height="380" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-hyb)"/>
+  <rect x="510" y="20" width="430" height="26" fill="#0F172A" rx="8"/>
+  <text x="525" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">ON-PREMISES DATA CENTRE (CYBERJAYA GPU)</text>
+
+  <rect x="530" y="60" width="390" height="85" fill="#0F172A" stroke="#16A34A" rx="6"/>
+  <text x="540" y="82" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">Bare-Metal GPU Inference Nodes</text>
+  <text x="540" y="102" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">NVIDIA H100 / A100 / Ollama / vLLM</text>
+  <text x="540" y="122" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Local Qwen / Llama 3 Inference</text>
+
+  <rect x="530" y="165" width="390" height="85" fill="#0F172A" stroke="#16A34A" rx="6"/>
+  <text x="540" y="187" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">Local Vector Cache &amp; RAGFlow</text>
+  <text x="540" y="207" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Valkey / Qdrant High-Speed Store</text>
+  <text x="540" y="227" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Sub-millisecond Local Embeddings</text>
+
+  <rect x="530" y="270" width="390" height="110" fill="#0F172A" stroke="#16A34A" rx="6"/>
+  <text x="540" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">Containerized MCP Servers</text>
+  <text x="540" y="312" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Podman / K8s Zero-Trust Agent</text>
+  <text x="540" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Read-Only DB Session &amp; Tier 2 Scratch</text>
+
+  <!-- Middle Interconnect Pill -->
+  <line x1="430" y1="210" x2="510" y2="210" stroke="#F59E0B" stroke-width="3" marker-start="url(#arrow-hyb)" marker-end="url(#arrow-hyb)"/>
+  <rect x="405" y="180" width="150" height="30" fill="#0F172A" stroke="#F59E0B" rx="4"/>
+  <text x="415" y="198" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#FBBF24">DirectConnect MACsec</text>
+</svg>
+
+### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+flowchart LR
+    subgraph Cloud ["AWS Cloud Lakehouse Core"]
+        S3["Amazon S3 Object Lock<br/>(Glue Catalog)"]
+        EMR["EMR Serverless Spark<br/>(Apache Sedona)"]
+        Aurora["Aurora Postgres + PostGIS"]
+        APISIX["APISIX Catalog &amp; Query Gateway"]
+    end
+
+    subgraph DirectConnect ["Encrypted Network Link"]
+        DX["AWS Direct Connect<br/>(MACsec AES-256 / IPsec VPN)"]
+    end
+
+    subgraph OnPrem ["On-Premises Cyberjaya GPU Centre"]
+        GPU["Bare-Metal GPU Nodes<br/>(vLLM / Ollama)"]
+        VectorDB["Local Vector Cache<br/>(Valkey / Qdrant)"]
+        MCP["On-Prem MCP Servers<br/>(Read-Only Scope)"]
+    end
+
+    S3 <--> EMR
+    EMR <--> Aurora
+    APISIX <--> S3
+
+    Aurora <-->|"Controlled SQL over DX"| DX
+    APISIX <-->|"Streamable HTTP over DX"| DX
+    DX <-->|"MACsec Encrypted Transit"| MCP
+
+    MCP <--> GPU
+    MCP <--> VectorDB
 ```
-+-----------------------------------------------------------------------------------------------+
-|                       SOLUTION 2: HYBRID - AI ON-PREMISES ARCHITECTURE                        |
-|                                                                                               |
-|   +---------------------------------------+       +---------------------------------------+   |
-|   |             AWS CLOUD                 |       |         ON-PREMISES DATA CENTRE       |   |
-|   | - AWS S3 Object Lock (Tier 0 SSoT)    |       | - Bare-Metal GPU Servers (H100/A100)  |   |
-|   | - AWS Glue / Polaris Catalog          |<=====>| - Local Ollama / vLLM / RAGFlow       |   |
-|   | - Amazon EMR / Athena / Trino         |  mTLS | - Local Vector DB (Valkey / Qdrant)   |   |
-|   | - Managed Airflow (MWAA) / OpenMetadata| Direct| - On-Prem MCP Servers (Podman/K8s)    |   |
-|   | - Aurora Postgres + PostGIS           |Connect| - Local Tier 2 Scratch Storage        |   |
-|   +---------------------------------------+       +---------------------------------------+   |
-+-----------------------------------------------------------------------------------------------+
-```
+
+### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **On-Prem GPU Cluster** | **AWS Direct Connect** | `10G/100G` / IEEE 802.1AE MACsec | `GCM-AES-XPN-256` Keys | Dedicated physical link providing encrypted high-throughput data transit. |
+| **Containerized MCP Server** | **AWS Aurora Postgres** | `TCP 5432` / TLS 1.3 PostgreSQL | Read-Only Session / PostgreSQL RBAC | Executes controlled SQL spatial queries over encrypted Direct Connect using read-only database session roles. |
+| **Containerized MCP Server** | **APISIX Catalog &amp; Query Routes** | `TCP 8443` / Streamable HTTP | APISIX Write Verb Filtering | Proxies HTTP catalog requests; APISIX route rules allow POST only for Streamable HTTP tool calls while blocking PUT, DELETE, and PATCH write verbs. |
+| **On-Prem MCP Server** | **vLLM / Ollama Engine** | `TCP 11434` / HTTP Local REST | Local Container Network | Prompts local open-source LLMs using context retrieved from vector cache and cloud DB. |
 
 ---
 

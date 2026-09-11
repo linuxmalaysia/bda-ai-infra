@@ -134,6 +134,112 @@ Apache Airflow acts as the centralized batch orchestrator, managing complex, sch
 
 ---
 
+### Dual-Render Diagram 2: Web Portal & Apache Superset Visualization Architecture
+
+The diagram below details the presentation and access tier modernization, replacing proprietary BI servers with Next.js, APISIX, Keycloak IAM, and Apache Superset with native `deck.gl` geospatial rendering.
+
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-viz2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+    <filter id="shadow-viz2" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="400" fill="#0F172A" rx="10"/>
+
+  <!-- Client Browser Tier -->
+  <rect x="20" y="20" width="920" height="80" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-viz2)"/>
+  <rect x="20" y="20" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">CLIENT PRESENTATION &amp; GEOSPATIAL MAP BROWSER TIER</text>
+
+  <rect x="40" y="52" width="430" height="38" fill="#0369A1" stroke="#38BDF8" rx="4"/>
+  <text x="50" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E0F2FE">Next.js Modern Web Portal &amp; React UI</text>
+
+  <rect x="490" y="52" width="430" height="38" fill="#1E3A8A" stroke="#3B82F6" rx="4"/>
+  <text x="500" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">Apache Superset deck.gl Spatial Maps (WebGL)</text>
+
+  <!-- Security Perimeter Tier -->
+  <rect x="20" y="135" width="920" height="120" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-viz2)"/>
+  <rect x="20" y="135" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="153" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">PERIMETER ACCESS &amp; IDENTITY FEDERATION CORE</text>
+
+  <rect x="40" y="170" width="270" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="50" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">Apache APISIX Gateway</text>
+  <text x="50" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">JWT Validation &amp; Rate Limit</text>
+
+  <rect x="345" y="170" width="270" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="355" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">Keycloak OIDC IAM</text>
+  <text x="355" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Row-Level Security (RLS) Scopes</text>
+
+  <rect x="650" y="170" width="270" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="660" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">Trino Distributed SQL</text>
+  <text x="660" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">SQLAlchemy Trino Connection</text>
+
+  <!-- Core Storage Tier -->
+  <rect x="20" y="285" width="920" height="90" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-viz2)"/>
+  <rect x="20" y="285" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="303" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#C084FC">PERSISTENT ICEBERG LAKEHOUSE &amp; POSTGIS CORE</text>
+
+  <rect x="40" y="320" width="430" height="42" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="50" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">Apache Iceberg Tables (Ceph WORM Storage)</text>
+
+  <rect x="490" y="320" width="430" height="42" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="500" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">PostgreSQL Master Core (PostGIS / pgvector)</text>
+
+  <!-- Connectors -->
+  <line x1="255" y1="90" x2="175" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-viz2)"/>
+  <line x1="705" y1="90" x2="785" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-viz2)"/>
+  <line x1="310" y1="205" x2="345" y2="205" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-viz2)"/>
+  <line x1="785" y1="240" x2="255" y2="320" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-viz2)"/>
+  <line x1="785" y1="240" x2="705" y2="320" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-viz2)"/>
+</svg>
+
+#### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+flowchart TD
+    subgraph Client ["Client Browser Tier"]
+        NextJS["Next.js Web Portal"]
+        Superset["Apache Superset (deck.gl Spatial Maps)"]
+    end
+
+    subgraph Perimeter ["Security Perimeter & Query Gateway"]
+        APISIX["Apache APISIX Gateway"]
+        Keycloak["Keycloak OIDC (RLS Rules)"]
+        Trino["Trino MPP SQL Engine"]
+    end
+
+    subgraph DataHub ["Unified Lakehouse Storage"]
+        Iceberg["Apache Iceberg Tables (Ceph WORM)"]
+        Postgres["PostgreSQL Master (PostGIS / pgvector)"]
+    end
+
+    NextJS -->|"HTTPS REST / GraphQL"| APISIX
+    Superset -->|"Trino SQLAlchemy / SQL REST API"| Trino
+
+    APISIX -->|"OIDC JWT Check"| Keycloak
+    Trino -->|"Parallel SQL Scan"| Iceberg
+    Trino -->|"Operational Sync"| Postgres
+```
+
+#### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Next.js Web Portal** | **APISIX Gateway** | `TCP 443` / HTTPS REST | Keycloak Bearer JWT Token | Routes authenticated user requests to microservices and PostGIS endpoints. |
+| **APISIX Gateway** | **Keycloak OIDC IAM** | `TCP 8443` / HTTPS OIDC | OAuth2 Realm Keys | Validates client bearer tokens and checks user roles before forwarding web requests. |
+| **Apache Superset** | **Trino MPP Engine** | `TCP 8080` / SQL REST API (HTTPS/TLS with Certificate Validation) | OAuth2 RLS Scopes | Executes federated SQL spatial queries over HTTPS/TLS with certificate validation and renders hardware-accelerated `deck.gl` maps. |
+| **Trino MPP Engine** | **Apache Iceberg Tables** | `TCP 8181` / Iceberg REST API | Keycloak Client Credentials | Queries and scans versioned Parquet table snapshots managed by Apache Polaris. |
+| **Trino MPP Engine** | **PostgreSQL Master** | `TCP 5432` / PostgreSQL TLS 1.3 | mTLS Certificate / DB Service Key | Synchronizes operational spatial and vector metadata with PostgreSQL PostGIS/pgvector. |
+
+---
+
 ## 2. Web Portal & Visualization Tier Modernization
 
 ### Web Portal Architecture (Next.js & APISIX)

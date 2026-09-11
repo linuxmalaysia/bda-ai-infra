@@ -179,6 +179,105 @@ flowchart TD
 
 The **Model Context Protocol (MCP)** is an open standard designed to connect Large Language Models to local data infrastructure. By exposing pre-defined database tools, LLMs execute controlled SQL operations rather than raw, arbitrary queries.
 
+### Dual-Render Diagram 2: Model Context Protocol (MCP) Tool Invocation & Spatial-Vector Query Execution
+
+The diagram below details the second dual-render architecture spec for the Consumption Layer: the end-to-end MCP JSON-RPC 2.0 tool invocation lifecycle over PostgreSQL `PostGIS` and `pgvector`.
+
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-mcp2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+    <filter id="shadow-mcp2" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="400" fill="#0F172A" rx="10"/>
+
+  <!-- LLM Prompt Invocation -->
+  <rect x="20" y="20" width="920" height="80" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-mcp2)"/>
+  <rect x="20" y="20" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">AUTONOMOUS LLM CLIENT / TOOL INVOCATION TIER</text>
+
+  <rect x="40" y="52" width="430" height="38" fill="#0369A1" stroke="#38BDF8" rx="4"/>
+  <text x="50" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E0F2FE">LLM Agent (Claude / OpenAI / Local vLLM)</text>
+
+  <rect x="490" y="52" width="430" height="38" fill="#1E3A8A" stroke="#3B82F6" rx="4"/>
+  <text x="500" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">JSON-RPC 2.0 tool_call: semantic_spatial_search</text>
+
+  <!-- MCP Execution Server -->
+  <rect x="20" y="135" width="920" height="120" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-mcp2)"/>
+  <rect x="20" y="135" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="153" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">FASTMCP SERVER EXECUTION &amp; EMBEDDING GENERATION</text>
+
+  <rect x="40" y="170" width="270" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="50" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">1. Parameter Parsing</text>
+  <text x="50" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">query_text, lon, lat, radius</text>
+
+  <rect x="345" y="170" width="270" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="355" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">2. Vector Embedding</text>
+  <text x="355" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">SentenceTransformer Model</text>
+
+  <rect x="650" y="170" width="270" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="660" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">3. Controlled SQL Query</text>
+  <text x="660" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">ST_DWithin &amp; &lt;=&gt; Operator</text>
+
+  <!-- Database Core Tier -->
+  <rect x="20" y="285" width="920" height="90" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-mcp2)"/>
+  <rect x="20" y="285" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="303" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#C084FC">POSTGRESQL UNIFIED AI MASTER HUB (PORT 5432 / READ-ONLY SESSION)</text>
+
+  <rect x="40" y="320" width="880" height="42" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="50" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">Hybrid SQL Execution: PostGIS ST_DWithin (Geography Buffer) + pgvector HNSW Cosine Matcher</text>
+
+  <!-- Connectors -->
+  <line x1="255" y1="90" x2="175" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp2)"/>
+  <line x1="310" y1="205" x2="345" y2="205" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp2)"/>
+  <line x1="615" y1="205" x2="650" y2="205" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp2)"/>
+  <line x1="785" y1="240" x2="480" y2="320" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-mcp2)"/>
+</svg>
+
+#### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+flowchart TD
+    subgraph Client ["LLM Client"]
+        Agent["Autonomous LLM Prompt"]
+        JSONRPC["JSON-RPC 2.0 tool_call"]
+    end
+
+    subgraph FastMCP ["Python FastMCP Server"]
+        Parser["Extract query_text & coordinates"]
+        Embedder["Local SentenceTransformer Embedding"]
+        SQLGen["Construct Parametric SQL Statement"]
+    end
+
+    subgraph Postgres ["PostgreSQL Unified Hub"]
+        PostGIS["PostGIS ST_DWithin Spatial Buffer"]
+        vector["pgvector HNSW Cosine Distance"]
+    end
+
+    Agent --> JSONRPC
+    JSONRPC --> Parser
+    Parser --> Embedder
+    Embedder --> SQLGen
+    SQLGen -->|"Read-Only SQL Transaction"| PostGIS
+    PostGIS <--> vector
+```
+
+#### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **LLM Agent** | **Python MCP Server** | Stdio / `TCP 8080` (JSON-RPC 2.0) | Keycloak OIDC Service Account | Intercepts agent prompt and executes pre-defined `semantic_spatial_search` tool. |
+| **MCP Server** | **PostgreSQL Hub** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only Session Transaction | Evaluates spatial buffer `ST_DWithin` and cosine vector distance `<=>` in unified SQL pass. |
+
+---
+
 ### Production Python MCP Server Code (`mcp_postgres_server.py`)
 
 ```python

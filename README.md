@@ -23,6 +23,137 @@ verified: true
 
 Welcome to the authoritative baseline platform documentation for modernizing the **Big Data Analytics (BDA)** architecture into a 100% open-source, S3-compatible data lakehouse serving as a Single Source of Truth (SSoT).
 
+---
+
+## 🏛️ Master Platform Topology & Open-Source Stack Overview
+
+The diagram below presents the high-level architecture of the modernized BDA Lakehouse, highlighting perimeter security, lakehouse core engines, and AI containment.
+
+### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-rm" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+    <filter id="shadow-rm" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="420" fill="#0F172A" rx="10"/>
+
+  <!-- Tier 1: Ingress Gateway -->
+  <rect x="20" y="20" width="920" height="80" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-rm)"/>
+  <rect x="20" y="20" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">INGRESS &amp; PERIMETER SECURITY GATEWAY</text>
+
+  <rect x="40" y="52" width="270" height="38" fill="#0369A1" stroke="#38BDF8" rx="4"/>
+  <text x="50" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E0F2FE">Apache APISIX Cloud-Native Gateway</text>
+
+  <rect x="345" y="52" width="270" height="38" fill="#1E3A8A" stroke="#3B82F6" rx="4"/>
+  <text x="355" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">Keycloak OIDC &amp; OAuth2 Identity</text>
+
+  <rect x="650" y="52" width="270" height="38" fill="#581C87" stroke="#A855F7" rx="4"/>
+  <text x="660" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">ODCS v3.1.0 Contract Gate</text>
+
+  <!-- Tier 2: Lakehouse Core -->
+  <rect x="20" y="135" width="920" height="150" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-rm)"/>
+  <rect x="20" y="135" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="153" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">BDA LAKEHOUSE CORE ENGINE &amp; S3 STORAGE</text>
+
+  <rect x="35" y="170" width="205" height="100" fill="#0F172A" stroke="#3B82F6" rx="6"/>
+  <text x="45" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">NiFi 2.0 &amp; Airflow</text>
+  <text x="45" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Master Data Plane</text>
+  <text x="45" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Python Ingestion</text>
+
+  <rect x="260" y="170" width="205" height="100" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="270" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">Polaris REST Catalog</text>
+  <text x="270" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Iceberg REST API</text>
+  <text x="270" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Commit Control</text>
+
+  <rect x="485" y="170" width="205" height="100" fill="#0F172A" stroke="#F59E0B" rx="6"/>
+  <text x="495" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">Ceph / MinIO S3</text>
+  <text x="495" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">WORM S3 Object Lock</text>
+  <text x="495" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Parquet Compliance</text>
+
+  <rect x="710" y="170" width="205" height="100" fill="#0F172A" stroke="#3B82F6" rx="6"/>
+  <text x="720" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">Trino &amp; Spark</text>
+  <text x="720" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Distributed SQL</text>
+  <text x="720" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Spatial Processing</text>
+
+  <!-- Tier 3: Consumption & AI -->
+  <rect x="20" y="315" width="920" height="85" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-rm)"/>
+  <rect x="20" y="315" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="333" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">CONSUMPTION, VISUALIZATION &amp; ZERO-TRUST AI CONTAINMENT</text>
+
+  <rect x="40" y="348" width="430" height="42" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="50" y="374" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">Apache Superset &amp; Next.js (deck.gl Spatial Views)</text>
+
+  <rect x="490" y="348" width="430" height="42" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="500" y="374" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">Containerized FastMCP &amp; pgvector (Read-Only AI Sandbox)</text>
+
+  <!-- Connectors -->
+  <line x1="310" y1="71" x2="345" y2="71" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <path d="M 310 52 Q 480 25 650 52" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="785" y1="90" x2="137" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="240" y1="220" x2="260" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="465" y1="220" x2="485" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="812" y1="220" x2="587" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="812" y1="270" x2="255" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="587" y1="270" x2="705" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+</svg>
+
+### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+flowchart TD
+    subgraph Ingress ["Perimeter Access & Governance"]
+        APISIX["APISIX Gateway"]
+        Keycloak["Keycloak OIDC"]
+        ODCS["ODCS Data Contracts"]
+    end
+
+    subgraph Core ["BDA Open-Source Lakehouse Core"]
+        NiFi["Apache NiFi 2.0 Ingestion"]
+        Polaris["Apache Polaris REST Catalog"]
+        Ceph["Ceph / MinIO (S3 WORM)"]
+        Trino["Trino & Spark Sedona"]
+    end
+
+    subgraph Delivery ["Presentation & AI Containment"]
+        Superset["Apache Superset & Next.js"]
+        MCP["FastMCP Agent (pgvector Local Search)"]
+    end
+
+    APISIX --> Keycloak
+    APISIX --> ODCS
+    ODCS --> NiFi
+
+    NiFi --> Polaris
+    Polaris --> Ceph
+    Trino --> Ceph
+
+    Trino --> Superset
+    Ceph -->|"Read-Only Context"| MCP
+```
+
+### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **API Client** | **APISIX Gateway** | `TCP 8443` / HTTPS TLS 1.3 | Keycloak JWT / mTLS Cert | Enforces perimeter access control and rate-limiting. |
+| **APISIX Gateway** | **Keycloak OIDC IAM** | `TCP 8443` / HTTPS OIDC | OAuth2 Realm Keys | Validates client bearer tokens and verifies user roles. |
+| **ODCS Contract Gate** | **NiFi 2.0 Ingestion** | `TCP 8443` / HTTPS Stream | ODCS Contract Spec | Streams validated telemetry into NiFi flow queues. |
+| **NiFi 2.0 Pipeline** | **Apache Polaris Catalog** | `TCP 8181` / REST API | Polaris OAuth2 Token | Commits validated records as versioned Iceberg Parquet tables. |
+| **Apache Superset** | **Trino Query Engine** | `TCP 8080` / SQL REST API | OAuth2 RLS Scopes | Connects to Trino query gateway to execute interactive analytical spatial queries. |
+| **Trino / Polaris** | **Ceph RADOS Gateway** | `TCP 8080` (Ceph RGW) / S3 REST | S3 Access Key | Scans and commits Parquet data files under S3 Object Lock protection. |
+| **FastMCP Agent** | **PostgreSQL Master Core** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only Session Scope | Exposes master context from PostgreSQL PostGIS/pgvector to AI models via read-only session roles. |
+| **Trino / Polaris / FastMCP** | **Ceph RADOS Gateway / MinIO** | `TCP 8080` (Ceph RGW) / `TCP 9000` (MinIO) S3 REST | S3 Access Key / WORM Compliance Lock | Queries, scans, and retrieves versioned Parquet table snapshots under S3 Object Lock. |
+
+---
+
 ## 🤖 AI Gateway & Sovereign Protocols
 
 - **Root AI Gateway:** [AGENTS.html](AGENTS.html)

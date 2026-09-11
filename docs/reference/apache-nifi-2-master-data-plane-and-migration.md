@@ -304,7 +304,107 @@ graph LR
 | **Execution Paradigm** | Stateful, disk-bound queueing (FlowFile repository). High disk I/O dependency. | Stateless Engine Support. Memory-first, ephemeral execution ideal for serverless and event-driven containerization. |
 | **Cloud-Native Fit** | Monolithic scaling characteristics; cumbersome to scale dynamically in response to erratic workloads. | Kubernetes-Native Architecture. Designed for micro-scaling alongside AI compute workloads (GPUs/TPUs). |
 
-### 7.2 Step-by-Step Migration Strategy (NiFi 1.x -> NiFi 2.0)
+### 7.2 Native Python Processor Ingestion & Vector Transformation Pipeline (Diagram 2)
+
+The diagram below details the second dual-render architecture spec for Apache NiFi 2.0: the isolated native Python execution worker pool performing Chunking, Embedding, and PostGIS WKT formatting before committing to PostgreSQL.
+
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-nifi2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+    <filter id="shadow-nifi2" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="400" fill="#0F172A" rx="10"/>
+
+  <!-- Inbound Stream -->
+  <rect x="20" y="20" width="920" height="80" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-nifi2)"/>
+  <rect x="20" y="20" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">INBOUND RAW STREAM &amp; NIFI FLOWFILE QUEUE</text>
+
+  <rect x="40" y="52" width="430" height="38" fill="#0369A1" stroke="#38BDF8" rx="4"/>
+  <text x="50" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E0F2FE">Unstructured Telemetry / Documents (ListenHTTP / FetchS3)</text>
+
+  <rect x="490" y="52" width="430" height="38" fill="#1E3A8A" stroke="#3B82F6" rx="4"/>
+  <text x="500" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">FlowFile Metadata &amp; Content Stream Buffer</text>
+
+  <!-- Python Process Pool -->
+  <rect x="20" y="135" width="920" height="120" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-nifi2)"/>
+  <rect x="20" y="135" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="153" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">NIFI 2.0 ISOLATED NATIVE PYTHON PROCESS POOL</text>
+
+  <rect x="40" y="170" width="270" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="50" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">1. Text Chunking</text>
+  <text x="50" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Recursive Character Splitter</text>
+
+  <rect x="345" y="170" width="270" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="355" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">2. Vector Embeddings</text>
+  <text x="355" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">1536-dim Float Array Gen</text>
+
+  <rect x="650" y="170" width="270" height="70" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="660" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">3. WKT Formatting</text>
+  <text x="660" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">POINT(lon lat) PostGIS Prep</text>
+
+  <!-- Database Load Tier -->
+  <rect x="20" y="285" width="920" height="90" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-nifi2)"/>
+  <rect x="20" y="285" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="303" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#C084FC">POSTGRESQL MASTER DATABASE LOAD (PUTDATABASERECORD)</text>
+
+  <rect x="40" y="320" width="880" height="42" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="50" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">Batched JDBC Insert into secure_ai_lakehouse (pgvector HNSW + PostGIS R-Tree + pgTDE Encrypted)</text>
+
+  <!-- Connectors -->
+  <line x1="255" y1="90" x2="175" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-nifi2)"/>
+  <line x1="310" y1="205" x2="345" y2="205" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-nifi2)"/>
+  <line x1="615" y1="205" x2="650" y2="205" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-nifi2)"/>
+  <line x1="785" y1="240" x2="480" y2="320" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-nifi2)"/>
+</svg>
+
+#### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+flowchart TD
+    subgraph Ingest ["Inbound Stream"]
+        RawStream["Raw Document / Telemetry Stream"]
+        FetchS3["ListenHTTP / FetchS3 Processor"]
+    end
+
+    subgraph PythonPool ["NiFi 2.0 Native Python Worker Pool"]
+        Chunker["LangChain Text Chunking"]
+        Embedder["Local Transformer Vector Embedding"]
+        WKT["WKT Geometry Formatter POINT(lon lat)"]
+    end
+
+    subgraph Load ["PostgreSQL Master Load"]
+        PutDB["PutDatabaseRecord Processor"]
+        PostgresDB["PostgreSQL Master (pgvector + PostGIS + pgTDE)"]
+    end
+
+    RawStream --> FetchS3
+    FetchS3 --> Chunker
+    Chunker --> Embedder
+    Embedder --> WKT
+    WKT --> PutDB
+    PutDB -->|"Batched JDBC TLS 1.3"| PostgresDB
+```
+
+#### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **NiFi Core Engine** | **Python Worker Pool** | Internal IPC Memory Bridge | Isolated Process Boundary | Executes Python text chunking and vector transformations natively without Jython wrappers. |
+| **Python Worker** | **PutDatabaseRecord** | FlowFile Content Stream &amp; RecordReader | Memory Record Buffer | Streams transformed JSON record payload (vector array and WKT coordinates) via FlowFile content, using FlowFile attributes as routing metadata. |
+| **PutDatabaseRecord** | **PostgreSQL Master** | `TCP 5432` / JDBC TLS 1.3 | DB Service Credentials / pgTDE | Commits batched records directly to `pgvector` HNSW and `PostGIS` spatial indexes. |
+
+---
+
+### 7.3 Step-by-Step Migration Strategy (NiFi 1.x -> NiFi 2.0)
 
 Migration from NiFi 1.x to 2.0 requires careful planning across process group configurations, custom extensions, and state management:
 

@@ -67,10 +67,15 @@ The diagram below details Solution 2's hybrid architecture, linking the AWS Clou
   <text x="50" y="207" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7DD3FC">Apache Spark + Apache Sedona Spatial</text>
   <text x="50" y="227" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• GeoParquet Processing &amp; SQL Query</text>
 
-  <rect x="40" y="270" width="390" height="110" fill="#0F172A" stroke="#0284C7" rx="6"/>
-  <text x="50" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#38BDF8">Aurora Postgres + MWAA Airflow</text>
-  <text x="50" y="312" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7DD3FC">PostGIS / OpenMetadata Orchestration</text>
-  <text x="50" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Spatial Cache &amp; Pipeline Control</text>
+  <rect x="40" y="270" width="190" height="110" fill="#0F172A" stroke="#0284C7" rx="6"/>
+  <text x="50" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">Aurora Postgres</text>
+  <text x="50" y="312" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7DD3FC">PostGIS / MWAA</text>
+  <text x="50" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Spatial Cache</text>
+
+  <rect x="240" y="270" width="190" height="110" fill="#0F172A" stroke="#0284C7" rx="6"/>
+  <text x="250" y="292" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">APISIX Gateway</text>
+  <text x="250" y="312" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7DD3FC">Catalog Routes</text>
+  <text x="250" y="332" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Write Verb Filter</text>
 
   <!-- Right Container: On-Premises GPU Centre -->
   <rect x="510" y="20" width="430" height="380" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-hyb)"/>
@@ -137,7 +142,7 @@ flowchart LR
 | :--- | :--- | :--- | :--- | :--- |
 | **On-Prem GPU Cluster** | **AWS Direct Connect** | `10G/100G` / IEEE 802.1AE MACsec | `GCM-AES-XPN-256` Keys | Dedicated physical link providing encrypted high-throughput data transit. |
 | **Containerized MCP Server** | **AWS Aurora Postgres** | `TCP 5432` / TLS 1.3 PostgreSQL | Read-Only Session / PostgreSQL RBAC | Executes controlled SQL spatial queries over encrypted Direct Connect using read-only database session roles. |
-| **Containerized MCP Server** | **APISIX Catalog &amp; Query Routes** | `TCP 8443` / Streamable HTTP | APISIX Write Verb Filtering | Proxies HTTP catalog requests; APISIX route rules allow POST exclusively for the Streamable HTTP MCP endpoint while blocking PUT, DELETE, and PATCH write verbs. |
+| **Containerized MCP Server** | **APISIX Catalog &amp; Query Routes** | `TCP 8443` / Streamable HTTP | APISIX Write Verb Filtering | Proxies HTTP catalog requests; APISIX route rules allow POST only for Streamable HTTP tool calls while blocking PUT, DELETE, and PATCH write verbs. |
 | **On-Prem MCP Server** | **vLLM / Ollama Engine** | `TCP 11434` / HTTP Local REST | Local Container Network | Prompts local open-source LLMs using context retrieved from vector cache and cloud DB. |
 
 ---

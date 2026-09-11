@@ -69,10 +69,15 @@ def extract_routing_tables(content: str) -> List[List[Dict[str, str]]]:
     """
     tables: List[List[Dict[str, str]]] = []
     table_pattern = re.compile(
-        r"\|[^\n]+\|\n\|[ :\-|]+\|\n((?:\|[^\n]+\|\n?)+)", re.MULTILINE
+        r"(\|[^\n]+\|\n\|[ :\-|]+\|\n(?:\|[^\n]+\|\n?)+)", re.MULTILINE
     )
     for match in table_pattern.finditer(content):
-        rows_str = match.group(1).strip()
+        full_table = match.group(1).strip()
+        header_line = full_table.splitlines()[0].lower()
+        if not any(kw in header_line for kw in ["source", "target", "ingress", "boundary", "operational"]):
+            continue
+
+        rows_str = "\n".join(full_table.splitlines()[2:]).strip()
         table_records = []
         for line in rows_str.splitlines():
             cols = [c.strip() for c in line.strip().strip("|").split("|")]

@@ -104,9 +104,10 @@ The diagram below details Solution 3's 100% sovereign architecture, illustrating
   <line x1="480" y1="115" x2="480" y2="150" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
   <line x1="785" y1="115" x2="785" y2="150" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
 
-  <line x1="255" y1="275" x2="255" y2="212" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
-  <line x1="705" y1="275" x2="705" y2="212" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
-  <line x1="490" y1="340" x2="470" y2="340" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
+  <line x1="255" y1="212" x2="255" y2="275" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
+  <line x1="255" y1="212" x2="705" y2="275" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
+  <line x1="255" y1="275" x2="785" y2="212" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
+  <line x1="705" y1="340" x2="470" y2="340" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-pve)"/>
 </svg>
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)

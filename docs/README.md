@@ -102,7 +102,7 @@ flowchart TD
 
 ### 3. Summary Interface & Routing Table
 
-| Source Quadrant | Target Audience | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Representative Specs |
+| Source Quadrant | Target Audience | Representative Platform Ingress &amp; Protocols | Security Boundary / Access Key | Operational Significance / Representative Specs |
 | :--- | :--- | :--- | :--- | :--- |
 | **Tutorials** | Onboarding Engineers | Local Interactive CLI | Developer Environment Sandbox | Hands-on guided onboarding and local developer environment setup (`docs/tutorials/onboarding-and-setup.md`). |
 | **How-To Guides** | System Architects &amp; Developers | REST / OTLP / mTLS | Ingestion &amp; Migration DMZ | Operational problem-solving procedures and 12-month migration strategy (`docs/how-to-guides/phased-migration-strategy.md`). |

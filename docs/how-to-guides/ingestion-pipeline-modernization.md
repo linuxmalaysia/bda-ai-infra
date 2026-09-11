@@ -186,14 +186,18 @@ The diagram below details the presentation and access tier modernization, replac
   <rect x="20" y="285" width="920" height="26" fill="#0F172A" rx="8"/>
   <text x="35" y="303" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#C084FC">PERSISTENT ICEBERG LAKEHOUSE &amp; POSTGIS CORE</text>
 
-  <rect x="40" y="320" width="880" height="42" fill="#0F172A" stroke="#A855F7" rx="6"/>
-  <text x="50" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">Apache Iceberg Tables (Ceph WORM) + PostgreSQL PostGIS / pgvector Master Hub</text>
+  <rect x="40" y="320" width="430" height="42" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="50" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">Apache Iceberg Tables (Ceph WORM Storage)</text>
+
+  <rect x="490" y="320" width="430" height="42" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="500" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">PostgreSQL Master Core (PostGIS / pgvector)</text>
 
   <!-- Connectors -->
   <line x1="255" y1="90" x2="175" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-viz2)"/>
   <line x1="705" y1="90" x2="785" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-viz2)"/>
   <line x1="310" y1="205" x2="345" y2="205" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-viz2)"/>
-  <line x1="785" y1="240" x2="480" y2="320" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-viz2)"/>
+  <line x1="785" y1="240" x2="255" y2="320" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-viz2)"/>
+  <line x1="785" y1="240" x2="705" y2="320" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-viz2)"/>
 </svg>
 
 #### 2. Git-Native Mermaid Topology (`.mmd`)

@@ -120,7 +120,7 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Remote AI Client / Host** | **Remote MCP Server** | `HTTPS / Streamable HTTP` (`TCP 443`) | APISIX Gateway / Keycloak OIDC JWT | Remote agent tool invocation over encrypted Streamable HTTP / SSE endpoints (filters write HTTP methods: allows POST for tool calls, blocks PUT/DELETE/PATCH). |
+| **Remote AI Client / Host** | **Remote MCP Server** | `HTTPS / Streamable HTTP` (`TCP 443`) | APISIX Gateway / Keycloak OIDC JWT | Remote agent tool invocation over encrypted Streamable HTTP / SSE endpoints (allows POST for tool calls; blocks PUT, DELETE, and PATCH). |
 | **Local Coding Agent** | **Local MCP Server** | `stdio` (Process IPC / stdin/stdout) | OS Process Isolation / Read-Only Subprocess | Local AI agent subprocess execution without network listener or network auth overhead. |
 | **MCP Tool Execution** | **Trino / PostgreSQL** | `TCP 8080` / `TCP 5432` (mTLS) | DMZ -> Database Read-Only Role | Executes read-only schema introspection and query syntax validation. |
 | **MCP Server Output** | **Object Storage** | `TCP 9000` (S3 REST API) | DMZ -> Tier 2 Scratch Bucket | Confines all temporary model outputs and derived scratch data to Tier 2 storage. |
@@ -158,7 +158,7 @@ The diagram below details the second dual-render architecture spec for MCP Sandb
   <rect x="340" y="20" width="280" height="26" fill="#0369A1" rx="8"/>
   <text x="350" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E0F2FE">2. APISIX MTLS GATEWAY PERIMETER</text>
   <text x="350" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">mTLS Client Cert Verification</text>
-  <text x="350" y="82" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7DD3FC">HTTP Write Verb Filtering (PUT/DELETE/PATCH; POST for MCP Tool Invocation)</text>
+  <text x="350" y="82" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7DD3FC">HTTP Write Verb Filtering (allows POST for tool calls; blocks PUT, DELETE, PATCH)</text>
 
   <!-- FastMCP Container Box -->
   <rect x="660" y="20" width="280" height="100" fill="#1E293B" stroke="#4ADE80" stroke-width="1.5" rx="8" filter="url(#shadow-mcp-seq)"/>
@@ -203,7 +203,7 @@ sequenceDiagram
     Agent->>Keycloak: 1. Authenticate Service Account (Client Credentials)
     Keycloak-->>Agent: 2. Vend Scoped Bearer JWT Token
     Agent->>APISIX: 3. Invoke MCP Tool (mTLS + JWT Token)
-    APISIX->>APISIX: 4. Validate Cert DN & Filter Write Verbs
+    APISIX->>APISIX: 4. Validate Cert DN & Filter Write Verbs (allow POST for tool calls; block PUT/DELETE/PATCH)
     APISIX->>MCP: 5. Forward Authorized JSON-RPC Tool Request
     MCP->>DB: 6. Execute Read-Only SQL (SET TRANSACTION READ ONLY)
     DB-->>MCP: 7. Return Semantic & Spatial Context Records

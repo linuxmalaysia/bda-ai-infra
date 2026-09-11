@@ -140,7 +140,7 @@ flowchart TD
 | :--- | :--- | :--- | :--- | :--- |
 | **API Ingress Client** | **APISIX Gateway** | `TCP 8443` / HTTPS | Keycloak OAuth2 JWT | Enforces perimeter TLS, rate limiting, and route filtering. |
 | **APISIX Gateway** | **ODCS Data Contracts** | `TCP 8443` / HTTPS Ingress | Contract Schema Spec | Validates incoming payload schemas against contract definitions at the perimeter. |
-| **APISIX Gateway** | **OpenTelemetry Collector** | `TCP 4317` gRPC / OTLP | Internal Trace Token | Exports distributed trace context and API request metrics to OTel Collector. |
+| **APISIX Gateway** | **OpenTelemetry Collector** | `TCP 4317` gRPC / OTLP over TLS / mTLS | Internal Trace Token (OTLP over TLS/mTLS) | Exports distributed trace context and API request metrics to OTel Collector over encrypted OTLP/TLS. |
 | **OpenTelemetry Collector** | **Grafana Platform** | `TCP 9090` / `TCP 3100` / `TCP 4317` | Internal Operations Network | Exports metrics to Prometheus, traces to Tempo, and logs to Loki for Grafana display. |
 | **Data Ingestion Job** | **Bitol ODCS CLI** | Local Subprocess Execution | Schema Contract Spec | Validates incoming payloads against contract schema before committing to Iceberg. |
 | **Spark / Airflow** | **OpenLineage Endpoint** | `TCP 5000` / HTTP Lineage REST | Service Token | Captures runtime execution lineage graph including source and target table facets. |

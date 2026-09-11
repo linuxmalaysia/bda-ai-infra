@@ -96,7 +96,7 @@ The diagram below presents the high-level architecture of the modernized BDA Lak
 
   <!-- Connectors -->
   <line x1="310" y1="71" x2="345" y2="71" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
-  <line x1="310" y1="71" x2="650" y2="71" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <path d="M 310 52 Q 480 25 650 52" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
   <line x1="785" y1="90" x2="137" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
   <line x1="240" y1="220" x2="260" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
   <line x1="465" y1="220" x2="485" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
@@ -149,7 +149,7 @@ flowchart TD
 | **NiFi 2.0 Pipeline** | **Apache Polaris Catalog** | `TCP 8181` / REST API | Polaris OAuth2 Token | Commits validated records as versioned Iceberg Parquet tables. |
 | **Apache Superset** | **Trino Query Engine** | `TCP 8080` / SQL REST API | OAuth2 RLS Scopes | Connects to Trino query gateway to execute interactive analytical spatial queries. |
 | **Trino / Polaris** | **Ceph RADOS Gateway** | `TCP 8080` (Ceph RGW) / S3 REST | S3 Access Key | Scans and commits Parquet data files under S3 Object Lock protection. |
-| **FastMCP Agent** | **PostgreSQL Master** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only Session Scope | Exposes master context to AI models via read-only PostgreSQL session roles. |
+| **FastMCP Agent** | **PostgreSQL Master Hub &amp; Ceph S3** | `TCP 5432` / TLS 1.3 PostgreSQL | Read-Only Session Scope | Exposes master context from PostgreSQL PostGIS/pgvector and Ceph S3 WORM storage to AI models via read-only session roles. |
 
 ---
 

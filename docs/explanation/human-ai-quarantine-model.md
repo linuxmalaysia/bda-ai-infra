@@ -132,7 +132,7 @@ flowchart TD
 | :--- | :--- | :--- | :--- | :--- |
 | **Telemetry Sensor** | **Tier 1 Storage** | `TCP 8443` / HTTPS Data Contract | Ingress Token / Contract Schema | Streamed telemetry is validated against Bitol ODCS v3.1.0 contracts. |
 | **Human Specialist** | **Tier 0 Storage** | HTTPS Web Portal / Keycloak | Cryptographic X.509 Signature | Promoted data receives official human sign-off and is locked under Compliance WORM. |
-| **AI Agent / MCP Tool** | **Tier 0 SSoT** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only DB Session Scope | AI models query Tier 0 context via read-only tools without write access to master tables. |
+| **AI Agent / MCP Tool** | **Tier 0 Ceph/MinIO S3 &amp; PostgreSQL Master** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only DB Session Scope | AI models query Tier 0 context via read-only PostgreSQL session roles and S3 read APIs without write access to master tables. |
 
 ---
 

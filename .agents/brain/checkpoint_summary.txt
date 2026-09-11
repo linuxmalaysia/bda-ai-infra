@@ -12,5 +12,5 @@ Author: Jules (Senior AI Systems Engineer & Technical Documentation Architect)
    - Resolved markdownlint MD012 multiple blank line errors and verified with ruff and markdownlint-cli.
 
 3. Verification & DSOM Palace Sync:
-   - Executed `uv run pytest` -> 231/231 unit, OKF, and link decay tests passed with 0 errors (100% exit code 0).
+   - Executed `uv run pytest` -> 231/231 tests passed with exit code 0.
    - Executed End of Day (EOD) Palace Sync across .agents/brain/ spatial memory files under DSOM Protocol and LLM-WIKI framework.

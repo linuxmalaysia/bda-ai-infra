@@ -55,6 +55,7 @@ topics:
 * [Big Data Domain Specifications and Analytical Workflows](docs/reference/business-applications.md)
 * [Consumption & Integration Layer Specification](docs/reference/consumption-and-integration-layer.md)
 * [Data Governance, Subsystems, and Standards Matrix](docs/reference/governance-matrix.md)
+* [Enterprise AI ETL Lifecycle, Dynamic Multi-Modal Parsing, & Multi-Tenant RLS Specification](docs/reference/enterprise-ai-etl-lifecycle-and-multi-tenancy.md)
 * [Legacy Big Data Analytics Environment Architectural Deconstruction](docs/reference/legacy-architecture.md)
 * [Next Technology Roadmap Stack Specification](docs/reference/next-technology-roadmap-stack.md)
 * [PostgreSQL & pgvector Enterprise Strategy Specification](docs/reference/postgresql-pgvector-enterprise-strategy.md)

@@ -427,6 +427,9 @@ CREATE TABLE enterprise_knowledge_base (
     chunk_content TEXT NOT NULL,
     metadata JSONB DEFAULT '{}'::jsonb,
     embedding vector(1024), -- UAE-Large-V1 1024-dimension embedding
+    tenant_id VARCHAR(50) NOT NULL DEFAULT 'INTERNAL',
+    access_classification VARCHAR(20) NOT NULL DEFAULT 'RESTRICTED', -- 'PUBLIC', 'RESTRICTED', 'INTERNAL_ONLY'
+    organizational_unit VARCHAR(50) DEFAULT 'GENERAL',
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT uq_doc_chunk UNIQUE (document_uri, chunk_index)
 );
@@ -436,6 +439,25 @@ CREATE INDEX idx_knowledge_embedding_hnsw
 ON enterprise_knowledge_base
 USING hnsw (embedding vector_cosine_ops)
 WITH (m = 16, ef_construction = 64);
+
+-- Configure Multi-Tenant Row-Level Security (RLS)
+ALTER TABLE enterprise_knowledge_base ENABLE ROW LEVEL SECURITY;
+
+-- Internal Staff Policy: Can read all internal and public tenant data
+CREATE POLICY internal_staff_policy ON enterprise_knowledge_base
+    FOR SELECT
+    USING (
+        current_setting('app.current_user_role', true) = 'INTERNAL_STAFF'
+    );
+
+-- External Client Policy: Hard-locked to their specific tenant ID and public classification
+CREATE POLICY external_client_policy ON enterprise_knowledge_base
+    FOR SELECT
+    USING (
+        current_setting('app.current_user_role', true) = 'EXTERNAL_CLIENT'
+        AND tenant_id = current_setting('app.current_tenant_id', true)
+        AND access_classification = 'PUBLIC'
+    );
 
 -- Similarity Match Function
 CREATE OR REPLACE FUNCTION match_documents(

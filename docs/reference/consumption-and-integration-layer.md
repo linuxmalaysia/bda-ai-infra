@@ -335,15 +335,19 @@ async def semantic_spatial_search(
     query_text: str,
     longitude: float,
     latitude: float,
+    user_role: str = "INTERNAL_STAFF",
+    tenant_id: str = "INTERNAL",
     radius_meters: float = 5000.0,
     limit: int = 5
 ) -> str:
-    """Executes a hybrid spatial (PostGIS) and semantic vector (pgvector) query over the PostgreSQL Lakehouse.
+    """Executes a hybrid spatial (PostGIS) and semantic vector (pgvector) query with strict session context injection.
 
     Args:
         query_text: Plain text search prompt from user.
         longitude: WGS84 Longitude (e.g. 101.6868 for Cyberjaya).
         latitude: WGS84 Latitude (e.g. 2.9213 for Cyberjaya).
+        user_role: Authenticated user role ('INTERNAL_STAFF' or 'EXTERNAL_CLIENT').
+        tenant_id: Authenticated client tenant identifier.
         radius_meters: Spatial bounding radius in meters (default: 5000m).
         limit: Maximum record count to return.
 
@@ -358,7 +362,7 @@ async def semantic_spatial_search(
     embedding_vector = embedding_model.encode(query_text).tolist()
     embedding_str = f"[{','.join(map(str, embedding_vector))}]"
 
-    # 2. Query PostgreSQL Master with SRID 4326 geography casting
+    # 2. Query PostgreSQL Master with transactional session context parameter binding
     sql_query = """
         SELECT
             uuid,
@@ -374,7 +378,12 @@ async def semantic_spatial_search(
     """
 
     async with db_pool.acquire() as conn:
-        records = await conn.fetch(sql_query, longitude, latitude, embedding_str, radius_meters, limit)
+        async with conn.transaction():
+            # Inject authenticated session security parameters for PostgreSQL Row-Level Security (RLS)
+            await conn.execute("SET LOCAL app.current_user_role = $1;", user_role)
+            await conn.execute("SET LOCAL app.current_tenant_id = $1;", tenant_id)
+
+            records = await conn.fetch(sql_query, longitude, latitude, embedding_str, radius_meters, limit)
 
         results = []
         for r in records:
@@ -494,29 +503,36 @@ class IngestionPayload(BaseModel):
     latitude: float = Field(..., example=2.9213)
 
 @app.post("/api/v1/search/hybrid", summary="Execute Hybrid Spatial + Vector Search", dependencies=[Depends(verify_jwt_token)])
-def hybrid_search(req: SearchRequest):
-    """Converts user query text into vector embedding and executes unified PostGIS + pgvector query with SRID 4326."""
+def hybrid_search(req: SearchRequest, token_payload: Dict[str, Any] = Depends(verify_jwt_token)):
+    """Converts user query text into vector embedding and executes unified PostGIS + pgvector query with RLS context injection."""
     query_vector = model.encode(req.query_text).tolist()
+    user_role = token_payload.get("user_role", "INTERNAL_STAFF")
+    tenant_id = token_payload.get("tenant_id", "INTERNAL")
 
     conn = get_db_connection()
     try:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            sql = """
-                SELECT
-                    uuid,
-                    source_origin,
-                    payload_content,
-                    ST_AsText(spatial_coordinates) AS location_wkt,
-                    ST_Distance(spatial_coordinates, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography) AS distance_meters,
-                    1 - (semantic_embedding <=> %s::vector) AS cosine_similarity
-                FROM secure_ai_lakehouse
-                WHERE ST_DWithin(spatial_coordinates, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography, %s)
-                ORDER BY semantic_embedding <=> %s::vector
-                LIMIT %s;
-            """
-            cur.execute(sql, (req.longitude, req.latitude, query_vector, req.longitude, req.latitude, req.radius_meters, query_vector, req.limit))
-            results = cur.fetchall()
-            return {"status": "success", "count": len(results), "data": results}
+        with conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                # Inject authenticated user context parameters for PostgreSQL Row-Level Security (RLS)
+                cur.execute("SET LOCAL app.current_user_role = %s;", (user_role,))
+                cur.execute("SET LOCAL app.current_tenant_id = %s;", (tenant_id,))
+
+                sql = """
+                    SELECT
+                        uuid,
+                        source_origin,
+                        payload_content,
+                        ST_AsText(spatial_coordinates) AS location_wkt,
+                        ST_Distance(spatial_coordinates, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography) AS distance_meters,
+                        1 - (semantic_embedding <=> %s::vector) AS cosine_similarity
+                    FROM secure_ai_lakehouse
+                    WHERE ST_DWithin(spatial_coordinates, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography, %s)
+                    ORDER BY semantic_embedding <=> %s::vector
+                    LIMIT %s;
+                """
+                cur.execute(sql, (req.longitude, req.latitude, query_vector, req.longitude, req.latitude, req.radius_meters, query_vector, req.limit))
+                results = cur.fetchall()
+                return {"status": "success", "count": len(results), "data": results}
     finally:
         conn.close()
 

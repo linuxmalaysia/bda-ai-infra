@@ -88,7 +88,7 @@ The diagram below details the local sandbox setup and developer environment tool
   <!-- Connectors -->
   <line x1="175" y1="90" x2="175" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-dev)"/>
   <line x1="480" y1="90" x2="480" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-dev)"/>
-  <line x1="785" y1="90" x2="785" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-dev)"/>
+  <line x1="785" y1="90" x2="480" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-dev)"/>
 
   <line x1="175" y1="250" x2="480" y2="328" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-dev)"/>
   <line x1="480" y1="250" x2="480" y2="328" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-dev)"/>
@@ -134,6 +134,7 @@ flowchart TD
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **Developer Terminal** | **uv run pytest** | Local Subprocess Execution | Non-Root User | Runs 230+ automated tests verifying OKF frontmatter, trust signals, and link integrity. |
+| **Bitol ODCS Contract CLI** | **Apache NiFi 2.0 Ingestion** | Local CLI Exec / Contract Hook | Schema Contract Spec | Validates incoming telemetry payload schemas against data contracts at NiFi ingestion gates. |
 | **NiFi Ingestion** | **PostgreSQL Master** | `TCP 5432` / TLS 1.3 PostgreSQL | Local DB Credentials | Tests native Python processors and vector transformation pipelines locally. |
 | **FastMCP Server** | **PostgreSQL Master** | Stdio / `TCP 8080` (JSON-RPC 2.0) | Read-Only Session / Local Key | Executes spatial-semantic search tools against local `pgvector` index. |
 

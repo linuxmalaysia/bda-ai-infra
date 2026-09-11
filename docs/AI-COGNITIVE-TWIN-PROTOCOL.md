@@ -61,16 +61,24 @@ This protocol governs the operational behavior, execution boundaries, and infras
   <text x="35" y="295" font-family="Consolas, Monaco, monospace" font-size="10" fill="#E9D5FF">Isolated Container Testing &amp; Playbook Audit</text>
 
   <!-- Tier 4 -->
-  <rect x="20" y="335" width="920" height="85" fill="#1E293B" stroke="#22C55E" stroke-width="1.5" rx="8" filter="url(#shadow-twin)"/>
-  <rect x="20" y="335" width="920" height="26" fill="#065F46" rx="8"/>
-  <text x="35" y="353" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">TIER 4: PRODUCTION NODE FABRIC (OPEN LAKEHOUSE &amp; OTEL)</text>
-  <text x="35" y="380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">Polaris REST Catalog, Ceph/MinIO WORM, DuckDB vss, pgvector, OpenTelemetry</text>
-  <text x="35" y="400" font-family="Consolas, Monaco, monospace" font-size="10" fill="#86EFAC">Sovereign Data Lakehouse &amp; Quadlet Container Services</text>
+  <rect x="20" y="335" width="620" height="85" fill="#1E293B" stroke="#22C55E" stroke-width="1.5" rx="8" filter="url(#shadow-twin)"/>
+  <rect x="20" y="335" width="620" height="26" fill="#065F46" rx="8"/>
+  <text x="35" y="353" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">TIER 4: PRODUCTION NODE FABRIC</text>
+  <text x="35" y="380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">Polaris REST Catalog, Ceph/MinIO WORM, pgvector</text>
+  <text x="35" y="400" font-family="Consolas, Monaco, monospace" font-size="10" fill="#86EFAC">Sovereign Data Lakehouse &amp; Quadlet Services</text>
+
+  <!-- OTel Collector Box -->
+  <rect x="660" y="335" width="280" height="85" fill="#1E293B" stroke="#F59E0B" stroke-width="1.5" rx="8" filter="url(#shadow-twin)"/>
+  <rect x="660" y="335" width="280" height="26" fill="#78350F" rx="8"/>
+  <text x="675" y="353" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">OPENTELEMETRY COLLECTOR</text>
+  <text x="675" y="380" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FBBF24">Prometheus, Tempo &amp; Loki</text>
+  <text x="675" y="400" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FDE68A">TCP 8443 / Keycloak OAuth2 JWT</text>
 
   <!-- Flow Arrows -->
   <line x1="480" y1="100" x2="480" y2="125" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-twin)"/>
   <line x1="480" y1="205" x2="480" y2="230" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-twin)"/>
-  <line x1="480" y1="310" x2="480" y2="335" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-twin)"/>
+  <line x1="480" y1="310" x2="330" y2="335" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-twin)"/>
+  <line x1="640" y1="377" x2="660" y2="377" stroke="#F59E0B" stroke-width="2" marker-end="url(#arrow-twin)"/>
 </svg>
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)
@@ -91,11 +99,13 @@ flowchart TD
 
     subgraph T4 ["Tier 4: Production Node Fabric"]
         Production["Production Lakehouse (Polaris REST, Ceph WORM, OTel)"]
+        OTel["OpenTelemetry Collector"]
     end
 
     IDE -->|"Agent Command Ingress"| Sandbox
     Sandbox -->|"Staging Playbook Push"| Staging
-    Staging -->|"Production Quadlet Deployment"| Production
+    Staging -->|"Production Quadlet Deployment (TCP 22 / SSH)"| Production
+    Production -->|"OTLP Traces (TCP 8443 / OAuth2 JWT)"| OTel
 ```
 
 ### 3. Summary Interface & Routing Table

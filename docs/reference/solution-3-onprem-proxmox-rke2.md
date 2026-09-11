@@ -139,7 +139,7 @@ flowchart TD
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **PVE Hypervisor** | **Ceph Storage Cluster** | Dual 100GbE / Ceph Protocol | Internal Storage VLAN | Provides block, filesystem, and S3 Object Lock storage across physical hosts. |
-| **RKE2 Worker Node** | **Ceph RADOS Gateway** | `TCP 8080` (Ceph RGW) / S3 API (mTLS) | S3 Access & Secret Keys | Serves Iceberg table snapshots under software-enforced WORM compliance lock. |
+| **RKE2 Worker Node** | **Ceph RADOS Gateway / MinIO** | `TCP 8080` (Ceph RGW) / `TCP 9000` (MinIO) | S3 Access & Secret Keys | Serves Iceberg table snapshots under software-enforced WORM compliance lock. |
 | **K3s Worker Node** | **RKE2 Production API** | `TCP 6443` / Kubernetes API | ServiceAccount Bearer Token | Collects OTLP metrics, logs, and traces from RKE2 application workloads. |
 
 ---

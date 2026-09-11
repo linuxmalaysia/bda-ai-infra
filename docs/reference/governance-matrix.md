@@ -90,9 +90,11 @@ The diagram below illustrates the end-to-end zero-trust governance perimeter, co
 
   <!-- Lines -->
   <line x1="310" y1="71" x2="345" y2="71" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+  <line x1="310" y1="71" x2="650" y2="71" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
   <line x1="785" y1="90" x2="480" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
   <line x1="345" y1="220" x2="310" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
   <line x1="480" y1="90" x2="785" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
+  <line x1="175" y1="90" x2="175" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
   <line x1="175" y1="270" x2="480" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
   <line x1="785" y1="270" x2="480" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-gov)"/>
 </svg>
@@ -136,7 +138,10 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **API Ingress Client** | **APISIX Gateway** | `TCP 8443` / HTTPS OTLP | Keycloak OAuth2 JWT | Enforces perimeter TLS, rate limiting, and trace token propagation. |
+| **API Ingress Client** | **APISIX Gateway** | `TCP 8443` / HTTPS | Keycloak OAuth2 JWT | Enforces perimeter TLS, rate limiting, and route filtering. |
+| **APISIX Gateway** | **ODCS Data Contracts** | `TCP 8443` / HTTPS Ingress | Contract Schema Spec | Validates incoming payload schemas against contract definitions at the perimeter. |
+| **APISIX Gateway** | **OpenTelemetry Collector** | `TCP 4317` gRPC / OTLP | Internal Trace Token | Exports distributed trace context and API request metrics to OTel Collector. |
+| **OpenTelemetry Collector** | **Grafana Platform** | `TCP 9090` / `TCP 3100` / `TCP 4317` | Internal Operations Network | Exports metrics to Prometheus, traces to Tempo, and logs to Loki for Grafana display. |
 | **Data Ingestion Job** | **Bitol ODCS CLI** | Local Subprocess Execution | Schema Contract Spec | Validates incoming payloads against contract schema before committing to Iceberg. |
 | **Spark / Airflow** | **OpenLineage Endpoint** | `TCP 5000` / HTTP Lineage REST | Service Token | Captures runtime execution lineage graph including source and target table facets. |
 | **Iceberg Client** | **Apache Polaris REST** | `TCP 8181` / HTTPS Iceberg REST | Keycloak Client Credentials | Vends temporary scoped S3 credentials for direct object storage reading. |

@@ -217,7 +217,7 @@ flowchart TD
     end
 
     NextJS -->|"HTTPS REST / GraphQL"| APISIX
-    Superset -->|"Trino SQLAlchemy JDBC"| Trino
+    Superset -->|"Trino SQLAlchemy / SQL REST API"| Trino
 
     APISIX -->|"OIDC JWT Check"| Keycloak
     Trino -->|"Parallel SQL Scan"| Iceberg
@@ -229,7 +229,7 @@ flowchart TD
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **Next.js Web Portal** | **APISIX Gateway** | `TCP 443` / HTTPS REST | Keycloak Bearer JWT Token | Routes authenticated user requests to microservices and PostGIS endpoints. |
-| **Apache Superset** | **Trino MPP Engine** | `TCP 8088` / Trino JDBC | OAuth2 RLS Scopes | Executes federated SQL spatial queries and renders hardware-accelerated `deck.gl` maps. |
+| **Apache Superset** | **Trino MPP Engine** | `TCP 8080` / SQL REST API | OAuth2 RLS Scopes | Executes federated SQL spatial queries and renders hardware-accelerated `deck.gl` maps. |
 
 ---
 

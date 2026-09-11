@@ -106,6 +106,7 @@ flowchart LR
         S3["Amazon S3 Object Lock<br/>(Glue Catalog)"]
         EMR["EMR Serverless Spark<br/>(Apache Sedona)"]
         Aurora["Aurora Postgres + PostGIS"]
+        APISIX["APISIX Catalog &amp; Query Gateway"]
     end
 
     subgraph DirectConnect ["Encrypted Network Link"]
@@ -120,8 +121,10 @@ flowchart LR
 
     S3 <--> EMR
     EMR <--> Aurora
+    APISIX <--> S3
 
     Aurora <-->|"Controlled SQL over DX"| DX
+    APISIX <-->|"Streamable HTTP over DX"| DX
     DX <-->|"MACsec Encrypted Transit"| MCP
 
     MCP <--> GPU

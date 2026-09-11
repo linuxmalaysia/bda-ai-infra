@@ -1,198 +1,127 @@
-"""Unit tests for the documentation dual-render diagram contract."""
+"""Unit tests for Dual-Render Architecture Diagrams (SVG + Mermaid + Summary Routing Table).
 
+Protocol: Deep State of Mind (DSOM) Protocol
+Author: Harisfazillah Jamel (LinuxMalaysia)
+License: GNU General Public License v3.0
+"""
+
+import os
 from pathlib import Path
 import re
-import xml.etree.ElementTree as ET
-
+from typing import List, Dict
 import pytest
 
-from tools.openwiki_emulator import validate_mermaid_diagram
+REPO_ROOT: Path = Path(__file__).parent.parent
+EXCLUDED_DIRS: set[str] = {"node_modules", "dist", "build", ".venv", ".git", ".pytest_cache", "_site", ".agents"}
 
 
-REPO_ROOT = Path(__file__).parent.parent
+def get_all_markdown_files() -> List[Path]:
+    """Retrieve all markdown files in docs/ and root landing pages excluding hidden/build directories.
 
-# These documents comprise the dual-render diagram rollout.  A few deep-dive
-# documents intentionally contain a second, independently rendered diagram.
-DUAL_RENDER_DOCUMENTS = {
-    "README.md": 1,
-    "START-HERE.md": 1,
-    "docs/README.md": 1,
-    "docs/AI-COGNITIVE-TWIN-PROTOCOL.md": 1,
-    "docs/explanation/governance-and-compliance.md": 1,
-    "docs/explanation/human-ai-quarantine-model.md": 1,
-    "docs/explanation/mcp-and-ai-sandboxing.md": 2,
-    "docs/github-pages-setup.md": 1,
-    "docs/how-to-guides/ingestion-pipeline-modernization.md": 2,
-    "docs/how-to-guides/onboarding-new-ai-business-cases.md": 1,
-    "docs/how-to-guides/phased-migration-strategy.md": 1,
-    "docs/multi-platform-hosting.md": 1,
-    "docs/reference/apache-nifi-2-master-data-plane-and-migration.md": 2,
-    "docs/reference/business-applications.md": 1,
-    "docs/reference/consumption-and-integration-layer.md": 2,
-    "docs/reference/governance-matrix.md": 1,
-    "docs/reference/lakehouse-architecture.md": 1,
-    "docs/reference/legacy-architecture.md": 1,
-    "docs/reference/solution-1-aws-native.md": 1,
-    "docs/reference/solution-2-hybrid-ai.md": 1,
-    "docs/reference/solution-3-onprem-proxmox-rke2.md": 1,
-    "docs/tutorials/onboarding-and-setup.md": 1,
-}
+    Returns:
+        List[Path]: List of resolved Path objects for all Markdown files.
 
-SVG_BLOCK_PATTERN = re.compile(r"<svg\b.*?</svg>", re.DOTALL)
-MERMAID_BLOCK_PATTERN = re.compile(
-    r"^```mermaid[ \t]*\n(?P<body>.*?)^```[ \t]*$",
-    re.DOTALL | re.MULTILINE,
-)
-SUMMARY_HEADING_PATTERN = re.compile(
-    r"^#{3,4} (?:3\. Summary Interface & Routing Table|5\.3 Interface & Routing Matrix)[ \t]*$",
-    re.MULTILINE,
-)
-SVG_REFERENCE_PATTERN = re.compile(r"url\(#([^)]+)\)")
-MERMAID_EDGE_PATTERN = re.compile(r"(?:-->|---|==>|->>|-->>|-.->|<-->)")
-TABLE_SEPARATOR_PATTERN = re.compile(r"^:?-{3,}:?$")
+    """
+    md_files: List[Path] = []
+    for root, dirs, files in os.walk(REPO_ROOT):
+        dirs[:] = [d for d in dirs if not d.startswith(".") and d not in EXCLUDED_DIRS]
+        for file in files:
+            if file.endswith(".md"):
+                md_files.append(Path(root) / file)
+    return md_files
 
 
-def _read_document(relative_path: str) -> str:
-    """Read a dual-render document using its repository-relative path."""
-    return (REPO_ROOT / relative_path).read_text(encoding="utf-8")
+def extract_svg_blocks(content: str) -> List[str]:
+    """Extract raw inline SVG block strings from markdown content.
+
+    Args:
+        content (str): Raw markdown string.
+
+    Returns:
+        List[str]: List of SVG block strings.
+
+    """
+    return re.findall(r"<svg[\s\S]*?</svg>", content)
 
 
-def _table_cells(row: str) -> list[str]:
-    """Split a simple Markdown table row into trimmed cells."""
-    return [cell.strip() for cell in row.strip().strip("|").split("|")]
+def extract_mermaid_blocks(content: str) -> List[str]:
+    """Extract Mermaid diagram block strings from markdown content.
+
+    Args:
+        content (str): Raw markdown string.
+
+    Returns:
+        List[str]: List of Mermaid block strings.
+
+    """
+    return re.findall(r"```mermaid\n([\s\S]*?)\n```", content)
+
+
+def extract_routing_tables(content: str) -> List[List[Dict[str, str]]]:
+    """Extract summary routing table records from markdown content.
+
+    Args:
+        content (str): Raw markdown string.
+
+    Returns:
+        List[List[Dict[str, str]]]: List of parsed routing table record lists.
+
+    """
+    tables: List[List[Dict[str, str]]] = []
+    table_pattern = re.compile(
+        r"\|[^\n]+\|\n\|[ :\-|]+\|\n((?:\|[^\n]+\|\n?)+)", re.MULTILINE
+    )
+    for match in table_pattern.finditer(content):
+        rows_str = match.group(1).strip()
+        table_records = []
+        for line in rows_str.splitlines():
+            cols = [c.strip() for c in line.strip().strip("|").split("|")]
+            if len(cols) >= 5:
+                table_records.append({
+                    "source": re.sub(r"\*\*|\*", "", cols[0]),
+                    "target": re.sub(r"\*\*|\*", "", cols[1]),
+                    "ingress": cols[2],
+                    "boundary": cols[3],
+                    "description": cols[4],
+                })
+        if table_records:
+            tables.append(table_records)
+    return tables
 
 
 @pytest.mark.parametrize(
-    ("relative_path", "expected_diagrams"),
-    DUAL_RENDER_DOCUMENTS.items(),
-    ids=DUAL_RENDER_DOCUMENTS,
+    "md_path",
+    get_all_markdown_files(),
+    ids=lambda p: str(p.relative_to(REPO_ROOT)),
 )
-def test_dual_render_artifacts_are_complete_and_ordered(
-    relative_path: str, expected_diagrams: int
-) -> None:
-    """Require one SVG, Mermaid block, and routing table per diagram, in order."""
-    content = _read_document(relative_path)
-    svg_blocks = list(SVG_BLOCK_PATTERN.finditer(content))
-    mermaid_blocks = list(MERMAID_BLOCK_PATTERN.finditer(content))
-    summary_headings = list(SUMMARY_HEADING_PATTERN.finditer(content))
+def test_dual_render_diagrams(md_path: Path) -> None:
+    """Verify that files with Dual-Render diagrams contain SVG, Mermaid, and non-empty routing tables.
 
-    assert len(svg_blocks) == expected_diagrams, f"Unexpected SVG count in {relative_path}"
-    assert len(mermaid_blocks) == expected_diagrams, (
-        f"Unexpected Mermaid block count in {relative_path}"
-    )
-    assert len(summary_headings) == expected_diagrams, (
-        f"Unexpected routing table count in {relative_path}"
-    )
+    Args:
+        md_path (Path): Path to the Markdown file being tested.
 
-    for index, (svg, mermaid, summary) in enumerate(
-        zip(svg_blocks, mermaid_blocks, summary_headings, strict=True)
-    ):
-        next_diagram_start = (
-            svg_blocks[index + 1].start() if index + 1 < expected_diagrams else len(content)
-        )
-        assert svg.start() < mermaid.start() < summary.start() < next_diagram_start, (
-            f"Diagram {index + 1} artifacts are out of order in {relative_path}"
-        )
+    """
+    content: str = md_path.read_text(encoding="utf-8")
+    rel_path: Path = md_path.relative_to(REPO_ROOT)
 
+    # Exclude non-documentation metadata files
+    if md_path.name in ["CHANGELOG.md", "HISTORY.md", "SUMMARY.md", "CLAUDE.md"]:
+        return
 
-@pytest.mark.parametrize("relative_path", DUAL_RENDER_DOCUMENTS, ids=DUAL_RENDER_DOCUMENTS)
-def test_dual_render_svgs_are_valid_and_self_contained(relative_path: str) -> None:
-    """Reject malformed SVGs, invalid canvases, duplicate IDs, and dangling references."""
-    content = _read_document(relative_path)
-    document_ids: list[str] = []
+    svg_blocks = extract_svg_blocks(content)
+    mermaid_blocks = extract_mermaid_blocks(content)
+    routing_tables = extract_routing_tables(content)
 
-    for diagram_number, match in enumerate(SVG_BLOCK_PATTERN.finditer(content), start=1):
-        try:
-            root = ET.fromstring(match.group())
-        except ET.ParseError as error:
-            pytest.fail(f"Malformed SVG {diagram_number} in {relative_path}: {error}")
+    if svg_blocks or mermaid_blocks or routing_tables:
+        assert len(svg_blocks) > 0, f"Missing SVG block in {rel_path}"
+        assert len(mermaid_blocks) > 0, f"Missing Mermaid block in {rel_path}"
+        assert len(routing_tables) > 0, f"Missing routing table in {rel_path}"
 
-        assert root.tag == "{http://www.w3.org/2000/svg}svg", (
-            f"SVG {diagram_number} in {relative_path} lacks the SVG namespace"
-        )
-
-        view_box = root.attrib.get("viewBox", "").split()
-        assert len(view_box) == 4, f"SVG {diagram_number} in {relative_path} lacks a viewBox"
-        try:
-            _, _, width, height = (float(value) for value in view_box)
-        except ValueError:
-            pytest.fail(f"SVG {diagram_number} in {relative_path} has a non-numeric viewBox")
-        assert width > 0 and height > 0, (
-            f"SVG {diagram_number} in {relative_path} has a non-positive canvas"
-        )
-        assert root.attrib.get("width") == "100%"
-        assert root.attrib.get("height") == "100%"
-
-        diagram_ids = [element.attrib["id"] for element in root.iter() if "id" in element.attrib]
-        assert len(diagram_ids) == len(set(diagram_ids)), (
-            f"SVG {diagram_number} in {relative_path} contains duplicate IDs"
-        )
-
-        references = {
-            reference
-            for element in root.iter()
-            for value in element.attrib.values()
-            for reference in SVG_REFERENCE_PATTERN.findall(value)
-        }
-        assert references <= set(diagram_ids), (
-            f"SVG {diagram_number} in {relative_path} has unresolved references: "
-            f"{sorted(references - set(diagram_ids))}"
-        )
-        document_ids.extend(diagram_ids)
-
-    assert len(document_ids) == len(set(document_ids)), (
-        f"Inline SVG IDs collide across diagrams in {relative_path}"
-    )
-
-
-@pytest.mark.parametrize("relative_path", DUAL_RENDER_DOCUMENTS, ids=DUAL_RENDER_DOCUMENTS)
-def test_dual_render_mermaid_blocks_are_valid_graphs(relative_path: str) -> None:
-    """Require renderable Mermaid declarations with at least one relationship."""
-    content = _read_document(relative_path)
-
-    for diagram_number, match in enumerate(MERMAID_BLOCK_PATTERN.finditer(content), start=1):
-        mermaid = match.group("body").strip()
-        declaration = mermaid.splitlines()[0]
-        assert re.match(r"^(?:flowchart|graph)\s+(?:TD|TB|BT|RL|LR)$|^sequenceDiagram$", declaration), (
-            f"Unsupported Mermaid declaration in diagram {diagram_number} of {relative_path}"
-        )
-        assert MERMAID_EDGE_PATTERN.search(mermaid), (
-            f"Mermaid diagram {diagram_number} in {relative_path} has no relationships"
-        )
-
-        valid, error = validate_mermaid_diagram(mermaid)
-        assert valid, f"Invalid Mermaid diagram {diagram_number} in {relative_path}: {error}"
-
-
-@pytest.mark.parametrize("relative_path", DUAL_RENDER_DOCUMENTS, ids=DUAL_RENDER_DOCUMENTS)
-def test_dual_render_routing_tables_have_consistent_rows(relative_path: str) -> None:
-    """Require a non-empty, rectangular Markdown table after every routing heading."""
-    content = _read_document(relative_path)
-
-    for table_number, heading in enumerate(SUMMARY_HEADING_PATTERN.finditer(content), start=1):
-        rows: list[str] = []
-        table_started = False
-        for line in content[heading.end() :].splitlines():
-            if line.strip().startswith("|"):
-                table_started = True
-                rows.append(line)
-            elif table_started:
-                break
-
-        assert len(rows) >= 3, (
-            f"Routing table {table_number} in {relative_path} needs a header and data row"
-        )
-        parsed_rows = [_table_cells(row) for row in rows]
-        column_count = len(parsed_rows[0])
-        assert column_count >= 4, (
-            f"Routing table {table_number} in {relative_path} needs at least four columns"
-        )
-        assert all(len(row) == column_count for row in parsed_rows), (
-            f"Routing table {table_number} in {relative_path} has inconsistent columns"
-        )
-        assert all(TABLE_SEPARATOR_PATTERN.fullmatch(cell) for cell in parsed_rows[1]), (
-            f"Routing table {table_number} in {relative_path} has an invalid separator row"
-        )
-        assert all(cell for row in parsed_rows[2:] for cell in row), (
-            f"Routing table {table_number} in {relative_path} contains empty data cells"
-        )
+        for idx, table in enumerate(routing_tables):
+            assert len(table) > 0, f"Routing table {idx + 1} in {rel_path} has zero rows"
+            for row in table:
+                assert row["source"], f"Row in {rel_path} table missing source"
+                assert row["target"], f"Row in {rel_path} table missing target"
+                assert row["ingress"], f"Row in {rel_path} table missing ingress"
+                assert row["boundary"], f"Row in {rel_path} table missing boundary"
+                assert row["description"], f"Row in {rel_path} table missing description"

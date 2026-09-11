@@ -149,7 +149,8 @@ flowchart TD
 | **NiFi 2.0 Pipeline** | **Apache Polaris Catalog** | `TCP 8181` / REST API | Polaris OAuth2 Token | Commits validated records as versioned Iceberg Parquet tables. |
 | **Apache Superset** | **Trino Query Engine** | `TCP 8080` / SQL REST API | OAuth2 RLS Scopes | Connects to Trino query gateway to execute interactive analytical spatial queries. |
 | **Trino / Polaris** | **Ceph RADOS Gateway** | `TCP 8080` (Ceph RGW) / S3 REST | S3 Access Key | Scans and commits Parquet data files under S3 Object Lock protection. |
-| **FastMCP Agent** | **PostgreSQL Master Hub &amp; Ceph S3** | `TCP 5432` / TLS 1.3 PostgreSQL | Read-Only Session Scope | Exposes master context from PostgreSQL PostGIS/pgvector and Ceph S3 WORM storage to AI models via read-only session roles. |
+| **FastMCP Agent** | **PostgreSQL Master Core** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only Session Scope | Exposes master context from PostgreSQL PostGIS/pgvector to AI models via read-only session roles. |
+| **Trino / Polaris / FastMCP** | **Ceph RADOS Gateway / MinIO** | `TCP 8080` (Ceph RGW) / `TCP 9000` (MinIO) S3 REST | S3 Access Key / WORM Compliance Lock | Queries, scans, and retrieves versioned Parquet table snapshots under S3 Object Lock. |
 
 ---
 

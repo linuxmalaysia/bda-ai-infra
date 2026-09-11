@@ -102,12 +102,12 @@ flowchart TD
 
 ### 3. Summary Interface & Routing Table
 
-| Quadrant | Target Audience | Primary Focus | Representative Documents |
-| :--- | :--- | :--- | :--- |
-| **Tutorials** | Onboarding Engineers | Hands-on guided setup | `docs/tutorials/onboarding-and-setup.md` |
-| **How-To Guides** | System Architects & Developers | Problem-solving procedures | `docs/how-to-guides/phased-migration-strategy.md` |
-| **Reference** | Technical Auditors & Engineers | Authoritative facts & specs | `docs/reference/solution-1-aws-native.md` |
-| **Explanation** | Security & Data Stewards | Concepts, rationale & governance | `docs/explanation/human-ai-quarantine-model.md` |
+| Source Quadrant | Target Audience | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Representative Specs |
+| :--- | :--- | :--- | :--- | :--- |
+| **Tutorials** | Onboarding Engineers | Local Interactive CLI | Developer Environment Sandbox | Hands-on guided onboarding and local developer environment setup (`docs/tutorials/onboarding-and-setup.md`). |
+| **How-To Guides** | System Architects &amp; Developers | REST / OTLP / mTLS | Ingestion &amp; Migration DMZ | Operational problem-solving procedures and 12-month migration strategy (`docs/how-to-guides/phased-migration-strategy.md`). |
+| **Reference** | Technical Auditors &amp; Engineers | S3 / JDBC / OIDC HTTPS | Authoritative SSoT Core | Authoritative technical specifications and infrastructure solution blueprints (`docs/reference/solution-1-aws-native.md`). |
+| **Explanation** | Security &amp; Data Stewards | JSON-RPC / OIDC JWT | Zero-Trust Quarantine DMZ | Conceptual frameworks, design rationale, and Human-to-AI Quarantine model (`docs/explanation/human-ai-quarantine-model.md`). |
 
 This documentation suite establishes a 100% open-source, S3-compatible data lakehouse architecture designed to serve as an authoritative **Single Source of Truth (SSoT)** for natural resources, environmental data, geological analytics, and climate risk modeling.
 

@@ -157,8 +157,9 @@ The diagram below details the second dual-render architecture spec for MCP Sandb
   <rect x="340" y="20" width="280" height="100" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5" rx="8" filter="url(#shadow-mcp-seq)"/>
   <rect x="340" y="20" width="280" height="26" fill="#0369A1" rx="8"/>
   <text x="350" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E0F2FE">2. APISIX MTLS GATEWAY PERIMETER</text>
-  <text x="350" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">mTLS Client Cert Verification</text>
-  <text x="350" y="82" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7DD3FC">HTTP Write Verb Filtering (allows POST for tool calls; blocks PUT, DELETE, PATCH)</text>
+  <text x="350" y="60" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">mTLS Client Cert Verification</text>
+  <text x="350" y="78" font-family="Consolas, Monaco, monospace" font-size="9" fill="#7DD3FC">HTTP Write Verb Filtering</text>
+  <text x="350" y="93" font-family="Consolas, Monaco, monospace" font-size="8.5" fill="#7DD3FC">(allows POST for tool calls; blocks PUT/DELETE/PATCH)</text>
 
   <!-- FastMCP Container Box -->
   <rect x="660" y="20" width="280" height="100" fill="#1E293B" stroke="#4ADE80" stroke-width="1.5" rx="8" filter="url(#shadow-mcp-seq)"/>

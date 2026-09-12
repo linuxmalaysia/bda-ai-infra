@@ -1,6 +1,5 @@
 ---
 okf_version: "0.2"
-type: documentation_index
 title: "Modernizing Big Data Analytics Architecture — BDA Lakehouse SSoT"
 description: "Master index and architecture gateway for the Big Data Analytics (BDA) Single Source of Truth (SSoT) platform."
 status: active
@@ -142,14 +141,14 @@ flowchart TD
     end
 
     Laravel -->|"1. Staging Upload"| RustFS
-    RustFS -->|"2. Pickup & Processing"| NiFi
+    RustFS -->|"2. POSIX Directory Watcher Pickup"| NiFi
     NiFi <-->|"3. Lineage & Governance"| OpenMetadata
     NiFi -->|"4. Return Processed File for Review"| RustFS
-    Laravel -->|"5. Human Verification & Approval"| RustFS
-    NiFi -->|"6. Secondary Pickup Post-Approval"| Postgres
+    Laravel -->|"5. Human Verification Sign-off Event"| NiFi
+    NiFi -->|"6. Master DB Write (Patroni Ingestion)"| Postgres
     NiFi -->|"7. Raw Artifact Storage"| Ceph
     Postgres -->|"Query SSoT"| Superset
-    Postgres <-->|"Read Context / Execute Tools"| MCP
+    Postgres <-->|"Read Context (bda_readonly_agent)"| MCP
     RestAPI <-->|"REST Calls"| Postgres
     AIOps -->|"Infrastructure Automation"| Proxmox
 ```
@@ -158,13 +157,13 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Laravel Web App** | **RustFS Storage** | `TCP 9000` / POSIX Mount & REST | Session JWT / Shared ACL | Non-IT users upload files into isolated shared staging directories. |
-| **RustFS Storage** | **Apache NiFi 2.0** | `TCP 8443` / Directory Watcher | Mutual TLS / Service Token | NiFi picks up raw files for extraction, normalization, and validation. |
+| **Laravel Web App** | **RustFS Storage** | Local POSIX Mount / Shared Volume | Session JWT / POSIX Directory ACLs | Non-IT users upload files into isolated shared staging directories. |
+| **RustFS Storage** | **Apache NiFi 2.0** | POSIX File System Watcher | POSIX Read ACLs & Group Scopes | NiFi directory watcher detects raw files for extraction and preliminary validation. |
 | **Apache NiFi 2.0** | **OpenMetadata** | `TCP 8585` / REST API | Bearer API Key | Emits lineage metadata, schema tags, and provenance classification records. |
-| **Apache NiFi 2.0** | **Laravel Verification** | `TCP 9000` / Shared Volume Swap | Session JWT | Places processed output back into staging directory for human review. |
-| **Apache NiFi 2.0** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Service Role Credentials | Ingests human-verified data into High-Availability PostgreSQL master database. |
-| **Apache Superset** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only Analytical Scope | Renders interactive dashboards, geospatial maps, and reporting analytics. |
-| **MCP Server** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Session Context Injection (`SET LOCAL`) | Exposes SSoT context to external AI agents via sandboxed read-only tools. |
+| **Apache NiFi 2.0** | **Laravel Verification** | Local POSIX Mount / Shared Volume | Session JWT / POSIX Write ACLs | Writes normalized output back to verification staging directory for human review. |
+| **Apache NiFi 2.0** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Dedicated Ingestion Role (`nifi_ingest_writer`) | Ingests human-verified payloads into High-Availability PostgreSQL master database upon sign-off. |
+| **Apache Superset** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only Analytical Role (`superset_reader`) | Renders interactive dashboards, geospatial maps, and reporting analytics. |
+| **MCP Server** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only DB Role (`bda_readonly_agent`) | Enforces `GRANT SELECT` / `REVOKE INSERT, UPDATE, DELETE` with `SET LOCAL` session context injection. |
 | **AIOps Suite** | **Proxmox / Podman** | `TCP 22` / SSH, `TCP 3000` SemaphoreUI | SSH Keys & Git Tokens | Automates playbook execution, configuration drift management, and pod deployments. |
 
 ---
@@ -192,7 +191,7 @@ To bridge non-IT user interactions with automated big data ETL while guaranteein
      ▼ (1. Login & Upload File)
 [Laravel Web App] ──> [RustFS Staging Directory]
                              │
-                             ▼ (2. Directory Watcher Pickup)
+                             ▼ (2. POSIX Directory Watcher Pickup)
                      [Apache NiFi 2.0 Pipeline]
                              │
                              ▼ (3. Extract, Normalize & Process)
@@ -201,8 +200,8 @@ To bridge non-IT user interactions with automated big data ETL while guaranteein
                              ▼ (4. Display Summary & Preview)
 [Laravel Web App] <── [Human User Review & Verification]
      │
-     ▼ (5. Human Grant Approval)
-[Apache NiFi 2.0] ──> (6. Final Load) ──> [Percona Patroni PostgreSQL 18]
+     ▼ (5. Digital Approval Event)
+[Apache NiFi 2.0] ──> (6. Master DB Write) ──> [Percona Patroni PostgreSQL 18]
 ```
 
 ### Process Lifecycle Stages
@@ -211,8 +210,8 @@ To bridge non-IT user interactions with automated big data ETL while guaranteein
 * **Automated NiFi Pickup:** Apache NiFi 2.0 directory monitoring processors pick up newly uploaded files, parse schemas, perform automated data cleansing, and execute quality validations.
 * **Verification Staging:** NiFi writes the processed outputs into a human verification directory and updates the file status in OpenMetadata and Laravel.
 * **Human Review & Verification:** Users inspect processed summaries, validation alerts, and diff previews within the user-friendly Laravel interface.
-* **Approval Trigger:** Upon human verification and digital sign-off in Laravel, NiFi is triggered to complete the workflow.
-* **Master Persistence Load:** NiFi moves the verified payload into Percona Patroni PostgreSQL 18 master database and archives raw artifacts to Ceph S3.
+* **Approval Trigger:** Upon human verification and digital sign-off in Laravel, an approval event triggers Apache NiFi 2.0 to execute master persistence.
+* **Master Persistence Load:** Apache NiFi 2.0 commits the verified payload into Percona Patroni PostgreSQL 18 master database using dedicated ingestion credentials (`nifi_ingest_writer`) and archives raw artifacts to Ceph S3.
 
 ---
 
@@ -232,7 +231,7 @@ All data processed within the platform is tagged into two distinct governance ca
 The platform exposes dual interface layers to accommodate both human application consumption and AI agent tool calling:
 
 * **Application REST APIs:** High-performance REST endpoints exposed to frontend web apps, mobile clients, and external enterprise software. Enables standard CRUD, spatial queries, and analytical reporting over HTTPS TLS 1.3.
-* **Model Context Protocol (MCP) Server:** Native Python MCP server integration allowing external AI agents (e.g. Claude, Antigravity, local LLMs) to query context, execute sandboxed analytical tools, and retrieve SSoT metadata without direct database write permissions.
+* **Model Context Protocol (MCP) Server:** Native Python MCP server integration allowing external AI agents (e.g. Claude, Antigravity, local LLMs) to query context, execute sandboxed analytical tools, and retrieve SSoT metadata without direct database write permissions. Privileges are strictly restricted via the `bda_readonly_agent` database role (`GRANT SELECT` only), using `SET LOCAL` for dynamic session context injection.
 
 ---
 

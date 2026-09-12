@@ -31,9 +31,9 @@ and this project adheres to Semantic Versioning.
 - Adopted new Human-AI Quarantine & Data Processing Architecture across `README.md` and `docs/explanation/human-ai-quarantine-model.md`.
 - Integrated specified technology stack components: Percona Patroni PostgreSQL 18, Apache NiFi 2.0 + OpenMetadata, Apache Superset, AIOps (Ansible + Gitea + ARA + SemaphoreUI), RustFS shared directory file staging, Ceph S3 object storage baseline, and Proxmox VE HCI with Podman rootless pods.
 - Documented human-in-the-loop file quarantine workflow using Laravel web application (user authentication, file upload to RustFS staging, NiFi extraction/processing, Laravel human verification review, and secondary NiFi load into Percona Patroni PostgreSQL 18).
-- Implemented Application REST APIs for human applications and Model Context Protocol (MCP) server for AI Agent tool calls.
-- Enforced two-tier data classification and tagging strategy (`REAL_DATA_AI_PROCESSED` vs `AI_PROCESS_RAG_ENRICHED`).
-- Established 1-year baseline build starting in 2028 followed by 4-year business case migration roadmap (2028–2032).
+- Documented Application REST APIs for human applications and Model Context Protocol (MCP) server for AI Agent tool calls.
+- Defined two-tier data classification and tagging strategy (`REAL_DATA_AI_PROCESSED` vs `AI_PROCESS_RAG_ENRICHED`).
+- Established 1-year baseline build in 2028 followed by a 4-year business case migration roadmap covering 2029–2032.
 - Published `docs/reference/consumption-and-integration-layer.md` detailing the Consumption & Integration Layer blueprint (Python MCP Server, FastAPI Hybrid API, and Apache NiFi 2.0 PGP SFTP Egress pipeline) operating over PostgreSQL Master (`pgvector` + `PostGIS` + `pgTDE`).
 - Published `docs/reference/apache-nifi-2-master-data-plane-and-migration.md` establishing Apache NiFi 2.0 as the master data plane, ETL process engine, and migration framework from NiFi 1.x.
 - Published `docs/reference/postgresql-pgvector-enterprise-strategy.md` establishing PostgreSQL and `pgvector` as the core primary/master database foundation for BDA and Enterprise AI infrastructure, adopting technical research from Percona enterprise guidance.

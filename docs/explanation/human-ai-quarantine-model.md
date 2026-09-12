@@ -123,15 +123,16 @@ flowchart TD
     end
 
     LaravelPortal -->|"Upload File"| RustFSStaging
-    RustFSStaging -->|"Extraction & Processing"| NiFiPipeline
+    RustFSStaging -->|"POSIX Watcher Extraction"| NiFiPipeline
     NiFiPipeline <-->|"Schema & Lineage Validation"| OpenMetadataCatalog
     NiFiPipeline -->|"Return Processed File"| RustFSStaging
     RustFSStaging -->|"Human Review & Verification"| LaravelPortal
-    LaravelPortal -->|"Human Officer Sign-off"| HumanSign
-    HumanSign -->|"Promote to Master SSoT"| MasterDB
+    LaravelPortal -->|"Digital Approval Event"| HumanSign
+    HumanSign -->|"Trigger Ingestion Pipeline"| NiFiPipeline
+    NiFiPipeline -->|"Master DB Load (nifi_ingest_writer)"| MasterDB
     NiFiPipeline -->|"Archive Raw Artifacts"| CephStorage
 
-    MasterDB -->|"Read-Only Context Query"| MCPAgents
+    MasterDB -->|"Read Context (bda_readonly_agent)"| MCPAgents
     MCPAgents --> RAGScratch
     RAGScratch -.-x|"STRICTLY BLOCKED: No Write Access"| MasterDB
     RAGScratch -.-x|"STRICTLY BLOCKED: No Write Access"| RustFSStaging
@@ -141,11 +142,12 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Laravel Web Portal** | **RustFS Shared Staging** | `TCP 9000` / Shared Directory Mount | Session JWT / Access ACL | Non-IT users upload raw files into isolated staging directories. |
-| **RustFS Shared Staging** | **Apache NiFi 2.0** | `TCP 8443` / Directory Watcher | Mutual TLS / Service Key | NiFi automatically picks up raw uploads for validation and preliminary transformation. |
-| **Apache NiFi 2.0** | **OpenMetadata** | `TCP 8585` / REST API | API Token / Contract Schema | Records metadata lineage, quality checks, and data classification tags. |
-| **Human Specialist** | **Percona Patroni PostgreSQL 18** | HTTPS Laravel UI / Database Role | Multi-Factor Auth & Session Verification | Promoted data receives official human verification and is committed into master SSoT tables. |
-| **AI Agent / MCP Tool** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only Session Scope (`SET LOCAL`) | AI models query SSoT context via read-only PostgreSQL session roles without write access. |
+| **Laravel Web Portal** | **RustFS Shared Staging** | Local POSIX Mount / Shared Volume | Session JWT / POSIX Directory ACLs | Non-IT users upload raw files into isolated staging directories. |
+| **RustFS Shared Staging** | **Apache NiFi 2.0** | POSIX File System Watcher | POSIX Read ACLs & Group Scopes | NiFi directory watcher detects raw uploads for validation and preliminary transformation. |
+| **Apache NiFi 2.0** | **OpenMetadata** | `TCP 8585` / REST API | Bearer API Key | Records metadata lineage, quality checks, and data classification tags. |
+| **Human Specialist** | **Apache NiFi 2.0 Pipeline** | HTTPS Laravel UI / REST Trigger | Multi-Factor Auth & Digital Signature Event | Human officer verification in Laravel triggers NiFi to execute master DB write. |
+| **Apache NiFi 2.0** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Dedicated Ingestion Role (`nifi_ingest_writer`) | Ingests verified payloads into master SSoT tables upon human verification sign-off. |
+| **AI Agent / MCP Tool** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only DB Role (`bda_readonly_agent`) | Enforces `GRANT SELECT` / `REVOKE INSERT, UPDATE, DELETE` with `SET LOCAL` session context injection. |
 
 ---
 
@@ -185,17 +187,17 @@ Tier 2: AI Operational and Analytical Sandbox (Isolated Quarantine)
 #### Tier 0: Golden Human Truth (Authoritative SSoT)
 
 - **Content:** Authoritative datasets verified and signed off by authorized human domain experts via the Laravel application verification loop. Includes gazetted conservation reserves, certified geological hazard maps, borehole logs, official forest concession boundaries, and statutory environmental indices.
-- **Storage Protection:** Committed into **Percona Patroni PostgreSQL 18** High-Availability clusters and archived to **Ceph S3** in Compliance Mode WORM storage. No record can be committed to Tier 0 without carrying an authorized human specialist's verification sign-off.
+- **Storage Protection:** Committed into **Percona Patroni PostgreSQL 18** High-Availability clusters and archived to **Ceph S3** in Compliance Mode WORM storage. Apache NiFi 2.0 acts as the single execution engine for database persistence using the `nifi_ingest_writer` role, triggered exclusively after an authorized human specialist's digital sign-off in Laravel.
 
 #### Tier 1: Machine Telemetry & Non-IT User Staging
 
 - **Content:** Raw telemetry streamed directly from physical instrumentation alongside raw spreadsheets/files uploaded by non-IT business users through the Laravel web interface into RustFS shared directories.
-- **Storage Protection:** Files remain staged in RustFS directories monitored by Apache NiFi 2.0. Records remain in Tier 1 until passing automated quality assertions, schema normalization, and receiving human verification.
+- **Storage Protection:** Files remain staged in RustFS directories monitored by Apache NiFi 2.0 directory watchers operating under POSIX filesystem ACLs. Records remain in Tier 1 until passing automated quality assertions, schema normalization, and receiving human verification.
 
 #### Tier 2: AI Operational and Analytical Sandbox
 
 - **Content:** Ephemeral execution environment for synthetic simulations, exploratory vector embeddings, predictive hazard scores, RAG context enrichments, and intermediate outputs generated by Model Context Protocol (MCP) server pipelines.
-- **Storage Protection:** Isolated storage buckets with automated **30-day Time-To-Live (TTL)** expiration cycles. Storage policies strictly block Tier 2 from writing directly to Tier 0 master tables or Tier 1 staging directories.
+- **Storage Protection:** Isolated storage buckets with automated **30-day Time-To-Live (TTL)** expiration cycles. Database access for MCP agents is strictly restricted to the `bda_readonly_agent` database role (`GRANT SELECT` only), preventing Tier 2 from writing directly to Tier 0 master tables or Tier 1 staging directories.
 
 ---
 
@@ -203,7 +205,11 @@ Tier 2: AI Operational and Analytical Sandbox (Isolated Quarantine)
 
 Data lineage and provenance across these tiers are enforced using **OpenMetadata** and open lineage standards. Every pipeline execution—whether managed by Apache NiFi 2.0, Ansible playbooks, or custom scripts—emits OpenMetadata events capturing execution context, job definitions, input dataset versions, output snapshots, and specialized dataset facets.
 
-To trace human custody and ensure complete isolation from unverified AI data, the platform implements a mandatory custom provenance facet:
+To trace human custody and ensure complete isolation from unverified AI data, the platform implements tier-specific provenance schemas.
+
+### Tier 0 Cryptographic Signature Provenance Contract
+
+Datasets promoted to `TIER_0_GOLDEN_SSOT` carry a full cryptographic verification contract within the `bda_provenance` metadata facet:
 
 ```json
 {
@@ -211,13 +217,48 @@ To trace human custody and ensure complete isolation from unverified AI data, th
     "origin_type": "CERTIFIED_HUMAN_VERIFICATION",
     "verification_tier": "TIER_0_GOLDEN_SSOT",
     "human_author_id": "usr_domain_specialist_8842",
+    "key_id": "key_eddsa_2026_secops_9923",
+    "signature": "3045022100a89d2c14f8a...8912c0128a",
+    "verification_status": "VERIFIED_VALID",
+    "verification_timestamp": "2026-09-12T10:15:30Z",
     "ai_generated_data": false,
     "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   }
 }
 ```
 
-Through this facet, any dataset derived through automated transformations preserves an auditable record of every processing step, ensuring that data lineage can be traced back to the original certified upload and human verification.
+### Tier 1 Telemetry Provenance
+
+Unpromoted telemetry and staged user files in Tier 1 carry deterministic validation metadata without human certification:
+
+```json
+{
+  "bda_provenance": {
+    "origin_type": "MACHINE_TELEMETRY_STAGING",
+    "verification_tier": "TIER_1_STAGING",
+    "ingestion_pipeline": "nifi_sensor_ingest_v2",
+    "verification_status": "PENDING_HUMAN_REVIEW",
+    "ai_generated_data": false,
+    "payload_sha256": "8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4"
+  }
+}
+```
+
+### Tier 2 Synthetic and RAG Model Output Provenance
+
+All model-generated artifacts, embeddings, and RAG enrichments in Tier 2 are explicitly marked with sandbox flags:
+
+```json
+{
+  "bda_provenance": {
+    "origin_type": "AI_SANDBOX_MODEL_OUTPUT",
+    "verification_tier": "TIER_2_SANDBOX",
+    "mcp_agent_id": "agent_llm_rag_enricher_04",
+    "ai_generated_data": true,
+    "payload_sha256": "7a3b49911e2b5432a9018bc1260481c90533ab70992341908b299a9a99ef0129"
+  }
+}
+```
 
 ---
 
@@ -228,6 +269,6 @@ Through this facet, any dataset derived through automated transformations preser
 | **Primary Institutional Purpose** | Authoritative national truth, statutory policy formulation, certified legal record. | Empirical environmental observation, user file staging, telemetry aggregation. | Exploratory modelling, scenario simulation, RAG contextual enrichment. |
 | **Storage Technology & WORM Mode** | Percona Patroni PostgreSQL 18 + Ceph S3 in **Compliance WORM Mode**. | RustFS Shared Directory Staging + Apache NiFi 2.0 flow queues. | Standard object/vector store; lifecycle rule with **30-day auto-purge TTL**. |
 | **Allowable Ingestion Sources** | Certified human domain surveys, Laravel-verified user uploads, gazetted boundaries. | Direct telemetry streams, raw user file uploads in RustFS staging directories. | Model outputs, MCP pipeline agents, synthetic RAG enrichments. |
-| **AI Role & Permissions** | Read-only access via MCP tools. Zero automated AI write access permitted. | Machine learning models execute cleansing, deduplication, and parsing. | Unrestricted generative and predictive computation within sandboxed perimeter. |
-| **Lineage & Validation Standard** | Mandatory OpenMetadata validation + human officer verification in Laravel. | Automated NiFi validation + deterministic schema assertion checks. | OpenMetadata job execution tracking; outputs tagged as `AI_PROCESS_RAG_ENRICHED`. |
+| **AI Role & Permissions** | Read-only access via `bda_readonly_agent` role (`GRANT SELECT`). Zero automated AI write access permitted. | Machine learning models execute cleansing, deduplication, and parsing. | Unrestricted generative and predictive computation within sandboxed perimeter. |
+| **Lineage & Validation Standard** | Mandatory Cryptographic Signature Provenance Contract + OpenMetadata validation + Laravel sign-off. | Automated NiFi validation + deterministic schema assertion checks (`TIER_1_STAGING`). | OpenMetadata job execution tracking; outputs tagged as `AI_SANDBOX_MODEL_OUTPUT` with `ai_generated_data: true`. |
 | **Promotion Criteria** | Terminal authoritative tier; updates require formal versioning and re-signing. | Promoted to Tier 0 only after automated DQ validation and human officer sign-off in Laravel. | Cannot be promoted directly; requires distillation and formal human certification. |

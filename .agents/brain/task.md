@@ -1,21 +1,28 @@
 ---
 okf_version: "0.2"
 type: spatial_memory
-title: "Task Registry - Dual-Render SVG Diagram Skill & Print Theme Upgrade"
-description: "EOD Palace Sync task registry documenting the upgrade of dual-render SVG architecture diagram skill and CSS printer-friendly styles."
+title: "Task Registry - Adoption of Human-AI Quarantine & Data Processing Architecture"
+description: "EOD Palace Sync task registry documenting the adoption and customization of the Human-AI Quarantine & Data Processing Architecture."
 status: active
-timestamp: "2026-09-07T11:45:00Z"
-stale_after: "2027-09-07T11:45:00Z"
+timestamp: "2026-09-12T00:00:00Z"
+stale_after: "2027-09-12T00:00:00Z"
 generated: false
 verified: true
 sources:
-  - id: "dual_render_skill"
-    path: ".agents/skills/dual-render-architecture-diagram/SKILL.md"
+  - id: "quarantine_architecture_readme"
+    path: "README.md"
+  - id: "quarantine_explanation_doc"
+    path: "docs/explanation/human-ai-quarantine-model.md"
 topics:
-  - dual-render-diagrams
-  - printer-friendly
-  - light-theme
-  - dark-theme
+  - human-ai-quarantine
+  - patroni-postgresql
+  - nifi
+  - openmetadata
+  - superset
+  - aiops
+  - rustfs
+  - ceph-s3
+  - proxmox
   - eod-sync
 ---
 
@@ -23,22 +30,21 @@ topics:
 
 ## 🟢 Completed Objectives
 
-1. **Enterprise AI ETL Lifecycle, Dynamic Multi-Modal Parsing & Multi-Tenant RLS Integration**:
-   - Created `docs/reference/enterprise-ai-etl-lifecycle-and-multi-tenancy.md` detailing the 5 AI ETL operational gaps (Token-Aware Chunking & Parent Metadata Enrichment, Vector Index Optimisation & Asynchronous REINDEX Triggers, CDC Delta Sync & Deletion Tombstones, Semantic Drift & Observability Checkpoints, and Multi-Tenant Row-Level Security Mapping).
-   - Detailed Dynamic MIME-Type Parsing Routing loop (`DetectMimeType`) for "All File Types" (Apache Tika, Record Path, AST Splitting, PostGIS/pgvector routing).
-   - Implemented production Python MCP Server (`mcp_postgres_server.py`) and FastAPI Gateway (`fastapi_gateway.py`) context-aware session parameter injection (`SELECT set_config('app.current_user_role', $1, true)`) and PyJWT claim validation with required `exp` claim verification.
-   - Updated PostgreSQL strategy DDL with `tenant_id`, `access_classification`, `organizational_unit`, RLS policies, and `CHECK (access_classification IN ('PUBLIC', 'RESTRICTED', 'INTERNAL_ONLY'))`.
-   - Included Dual-Render Architecture Diagrams (inline SVG, Mermaid topology, Summary Routing Table) in UK English.
+1. **Human-AI Quarantine Architecture Adoption & Stack Customization**:
+   - Updated `README.md` and `docs/explanation/human-ai-quarantine-model.md` to adopt the Human-AI Quarantine & Data Processing Architecture.
+   - Customized open-source software stack mapping: Percona Patroni PostgreSQL 18 (Master DB), Apache NiFi 2.0 + OpenMetadata (Data Plane & Governance), Apache Superset (BI & Spatial Visualizations), AIOps Suite (Ansible + Gitea + ARA + SemaphoreUI), RustFS (Non-IT User Upload Staging), Ceph S3 (Compliance WORM Object Storage), Proxmox VE HCI Baseline + Podman Rootless Pods.
+   - Documented Laravel human-in-the-loop file quarantine workflow (Non-IT user upload -> RustFS staging -> POSIX watcher NiFi extraction -> Laravel human verification review -> Digital sign-off -> NiFi load to Patroni PostgreSQL 18 & Ceph S3 archive).
+   - Defined Application REST APIs for human applications and Model Context Protocol (MCP) server for AI agents (`bda_readonly_agent` role with `GRANT SELECT` enforcement).
+   - Established two-tier data classification strategy (`REAL_DATA_AI_PROCESSED` vs `AI_PROCESS_RAG_ENRICHED`).
+   - Defined 5-year strategic timeline (1-year baseline build in 2028 + 4-year business case migration roadmap covering 2029–2032).
 
-2. **Dual-Render Architecture Diagram Skill Upgrade**:
-   - Updated `.agents/skills/dual-render-architecture-diagram/SKILL.md` to incorporate the Dual-Mode Terminal & Cloud Design System and Physical Print / PDF Handbook Mode (Zero Ink Waste & Print-Safe).
-   - Enforced light pastel card backgrounds (`#EFF6FF`, `#F0FDF4`, `#FEF2F2`, `#FAF5FF`, `#FFFBEB`, `#F8FAFC`), crisp boundary borders (`1px solid #CBD5E1`), 4px left color accent strips, explicit arrow markers, and high-contrast dark slate typography (`#0F172A`).
-   - Added Mermaid Multi-Diagram Isolation Protocol (diagram-scoped node prefixes and sequential DOM replacement).
-
-2. **Stylesheet Dual-Mode & Print Adaptation**:
-   - Enhanced `assets/css/style.scss` (`@mixin light-mode-svg-rules` and `@media print`) to dynamically override dark slate fills into high-contrast light pastel card fills with colored stroke boundaries in Light and Print modes.
+2. **Tier 0 Cryptographic Signature Contract & Verification Testing**:
+   - Specified Tier 0 `bda_provenance` cryptographic signature contract in `docs/explanation/human-ai-quarantine-model.md` binding `human_author_id`, `key_id`, `origin_type`, `payload_sha256`, `verification_tier`, and `verification_timestamp` into RFC 8785 Canonical JSON (JCS) byte streams.
+   - Added unit test `test_tier_0_cryptographic_signature_contract_mutations` in `tests/test_okf_and_links.py` to verify raw UTF-8 canonical encoding (including non-ASCII test vectors), dynamic `key_id` resolution against a key registry, valid Ed25519 signature verification, and strict mutation rejection across all bound fields.
 
 3. **Code Quality, Verification & EOD Protocol**:
-   - Ran `uv run pytest` (274/274 tests passed).
+   - Ran `uv run pytest` (280/280 tests passed, 100% pass rate).
    - Ran `uv run ruff check .` (100% clean).
+   - Ran `npx markdownlint-cli "**/*.md"` (0 errors).
    - Generated dynamic navigation indexes (`tools/generate_summary.py`).
+   - Performed End of Day (EOD) Palace Sync across spatial memory in `.agents/brain/`.

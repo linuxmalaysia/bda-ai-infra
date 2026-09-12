@@ -4,8 +4,8 @@ type: ledger
 title: "Sovereign Execution History Ledger"
 description: "Chronological record of execution milestones, governance shifts, and spatial brain synchronizations."
 status: active
-timestamp: "2026-09-07T11:20:00Z"
-stale_after: "2027-09-07T11:20:00Z"
+timestamp: "2026-09-12T00:00:00Z"
+stale_after: "2027-09-12T00:00:00Z"
 generated: false
 verified: true
 sources:
@@ -81,3 +81,12 @@ This document maintains a chronological record of execution milestones, governan
   - Published `docs/reference/apache-nifi-2-master-data-plane-and-migration.md` establishing Apache NiFi 2.0 as the master data plane and ETL engine.
   - Synchronized omni-documentation indexes and ledgers (`README.md`, `START-HERE.md`, `SUMMARY.md`, `_data/navigation.yml`, `CHANGELOG.md`, `HISTORY.md`).
   - Updated OpenWiki knowledge base and standalone graph visualizer (`openwiki/graph.html`).
+
+### 2026-09-12 — Adopt Human-AI Quarantine Architecture with Customized Software Stack
+
+- **Author:** Cognitive Twin (Jules / LinuxMalaysia)
+- **Scope:** Adoption and integration of customized Human-AI Quarantine and Data Processing Architecture for the BDA SSoT project.
+- **Deliverables:**
+  - Comprehensive update to `README.md` and `docs/explanation/human-ai-quarantine-model.md` reflecting Percona Patroni PostgreSQL 18, Apache NiFi 2.0 + OpenMetadata, Apache Superset, AIOps (Ansible + Gitea + ARA + SemaphoreUI), RustFS, Ceph S3, Proxmox VE HCI, Podman rootless pods, Laravel file quarantine workflow, REST API / MCP interfaces, 2-tier data tagging strategy (`REAL_DATA_AI_PROCESSED` vs `AI_PROCESS_RAG_ENRICHED`), and 5-year roadmap (2028–2032).
+  - Dual-Render Architecture Diagrams (SVG, Mermaid `.mmd`, Summary Routing Tables) across documentation files.
+  - Navigation indexes and triple-ledgers (`SUMMARY.md`, `_data/navigation.yml`, `CHANGELOG.md`, `HISTORY.md`) updated and verified.

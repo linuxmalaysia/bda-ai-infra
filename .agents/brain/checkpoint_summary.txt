@@ -1,15 +1,17 @@
 DSOM EOD Palace Sync Checkpoint Summary
 =======================================
-Timestamp: 2026-09-07T11:45:00Z
+Timestamp: 2026-09-12T00:00:00Z
 Author: Jules (Senior AI Systems Engineer & Technical Documentation Architect)
 
-1. Printer-Friendly Dual-Render SVG Diagram Skill & Stylesheet Upgrade:
-   - Upgraded `.agents/skills/dual-render-architecture-diagram/SKILL.md` with Physical Print / PDF Handbook Mode (Zero Ink Waste & Print-Safe) specifications.
-   - Updated `assets/css/style.scss` (`@mixin light-mode-svg-rules` and `@media print`) to adapt dark slate fills to crisp light pastel card fills (`#EFF6FF`, `#F0FDF4`, `#FEF2F2`, `#FAF5FF`, `#FFFBEB`, `#F8FAFC`) with colored borders and dark slate typography (`#0F172A`).
-   - Integrated Mermaid multi-diagram isolation protocols (diagram-scoped node prefixes and sequential DOM replacement).
+1. Adoption of Human-AI Quarantine & Data Processing Architecture:
+   - Updated `README.md` and `docs/explanation/human-ai-quarantine-model.md` with standalone SVG vector graphics, Git-native Mermaid flowcharts, and summary routing tables.
+   - Integrated custom software stack: Percona Patroni PostgreSQL 18, Apache NiFi 2.0 + OpenMetadata, Apache Superset, AIOps (Ansible + Gitea + ARA + SemaphoreUI), RustFS, Ceph S3, and Proxmox VE HCI with Podman rootless pods.
+   - Documented Laravel human-in-the-loop file quarantine workflow, REST API & MCP Server interfaces, two-tier data classification strategy, and 2028-2032 multi-year roadmap.
+   - Implemented RFC 8785 Canonical JSON Ed25519 cryptographic signature contract and mutation unit tests (`tests/test_okf_and_links.py`).
 
 2. Verification & Test Pass Matrix:
-   - Executed `uv run pytest` -> 274/274 passed cleanly.
+   - Executed `uv run pytest` -> 280/280 passed cleanly (100% pass rate).
    - Executed `uv run ruff check .` -> All checks passed cleanly.
+   - Executed `npx markdownlint-cli "**/*.md"` -> 0 errors.
    - Executed dynamic navigation synchronization via `tools/generate_summary.py` -> updated `SUMMARY.md` and `_data/navigation.yml`.
    - Performed DSOM EOD Palace Sync across `.agents/brain/` spatial memory.

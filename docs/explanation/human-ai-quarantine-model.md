@@ -4,8 +4,8 @@ title: The Human-to-AI Quarantine Model and Data Classification
 description: Detailed conceptual explanation of the 3-tier data classification topology (Tier 0 Golden Truth, Tier 1 Telemetry, Tier 2 AI Sandbox) preserving human ground truth.
 type: explanation
 status: verified
-timestamp: "2026-09-05T23:45:00Z"
-stale_after: "2027-09-05T23:45:00Z"
+timestamp: "2026-09-12T00:00:00Z"
+stale_after: "2027-09-12T00:00:00Z"
 topics:
   - bda
   - data-governance
@@ -13,13 +13,16 @@ topics:
   - tier-0
   - tier-1
   - tier-2
-  - openlineage
-  - provenance
+  - patroni-postgresql
+  - nifi
+  - openmetadata
+  - rustfs
+  - ceph-s3
 generated: false
 verified: true
 sources:
   - url: "README.md"
-    description: "Master platform index."
+    description: "Master platform index and SSoT baseline."
 ---
 
 # The Human-to-AI Quarantine Model and Data Classification Topology
@@ -53,25 +56,25 @@ The diagram below details the 3-tier data classification architecture, enforcing
   <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">TIER 0: GOLDEN HUMAN TRUTH (IMMUTABLE AUTHORITATIVE SSOT)</text>
 
   <rect x="40" y="55" width="430" height="60" fill="#0F172A" stroke="#22C55E" rx="6"/>
-  <text x="50" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">Ceph / MinIO S3 Object Lock (Compliance Mode WORM)</text>
-  <text x="50" y="95" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Certified Human Cryptographic Signatures Required</text>
+  <text x="50" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">Percona Patroni PostgreSQL 18 &amp; Ceph S3 (Compliance WORM)</text>
+  <text x="50" y="95" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Certified Human Verification &amp; Cryptographic Signatures Required</text>
 
   <rect x="490" y="55" width="430" height="60" fill="#0F172A" stroke="#22C55E" rx="6"/>
-  <text x="500" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">Bitol ODCS v3.1.0 Contract Validation Gate</text>
+  <text x="500" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">OpenMetadata Catalog &amp; NiFi 2.0 Ingestion Gate</text>
   <text x="500" y="95" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Strictly Zero Unvalidated AI Writes Permitted</text>
 
   <!-- Tier 1 Box -->
   <rect x="20" y="150" width="920" height="110" fill="#1E293B" stroke="#3B82F6" stroke-width="1.5" rx="8" filter="url(#shadow-quar)"/>
   <rect x="20" y="150" width="920" height="26" fill="#1E3A8A" rx="8"/>
-  <text x="35" y="168" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">TIER 1: MACHINE TELEMETRY &amp; SENSOR INGESTION LAYER</text>
+  <text x="35" y="168" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">TIER 1: STAGING, MACHINE TELEMETRY &amp; USER UPLOAD LAYER</text>
 
   <rect x="40" y="185" width="430" height="60" fill="#0F172A" stroke="#3B82F6" rx="6"/>
-  <text x="50" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">Automated Sensor Feeds &amp; Governance Lock</text>
-  <text x="50" y="225" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Precipitation, Hydrological Logs, Thermal Satellites</text>
+  <text x="50" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">Laravel Web App Uploads &amp; RustFS Shared Directory Staging</text>
+  <text x="50" y="225" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Non-IT User Login, Shared Directories &amp; Automated NiFi Extraction</text>
 
   <rect x="490" y="185" width="430" height="60" fill="#0F172A" stroke="#3B82F6" rx="6"/>
-  <text x="500" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">OpenLineage nres_provenance Tracking</text>
-  <text x="500" y="225" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Human Audit &amp; Stewardship Required for Promotion</text>
+  <text x="500" y="205" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">Apache NiFi 2.0 &amp; OpenMetadata Lineage Tracking</text>
+  <text x="500" y="225" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Human Audit &amp; Verification Required for Master DB Promotion</text>
 
   <!-- Tier 2 Box -->
   <rect x="20" y="280" width="920" height="120" fill="#1E293B" stroke="#EF4444" stroke-width="1.5" rx="8" filter="url(#shadow-quar)"/>
@@ -80,15 +83,15 @@ The diagram below details the 3-tier data classification architecture, enforcing
 
   <rect x="40" y="315" width="430" height="70" fill="#0F172A" stroke="#EF4444" rx="6"/>
   <text x="50" y="337" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FCA5A5">Ephemeral Scratch Storage (30-Day Auto-Purge TTL)</text>
-  <text x="50" y="357" font-family="Consolas, Monaco, monospace" font-size="10" fill="#EF4444">LLM Prompts, MCP Tool Outputs, Synthetic Scenarios</text>
+  <text x="50" y="357" font-family="Consolas, Monaco, monospace" font-size="10" fill="#EF4444">LLM Prompts, RAG Enrichments &amp; MCP Tool Output Buffers</text>
 
   <rect x="490" y="315" width="430" height="70" fill="#0F172A" stroke="#EF4444" rx="6"/>
   <text x="500" y="337" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FCA5A5">Strict One-Way Egress &amp; Read-Only Boundaries</text>
-  <text x="500" y="357" font-family="Consolas, Monaco, monospace" font-size="10" fill="#EF4444">Write Privileges to Tier 0 / Tier 1 Permanently Blocked</text>
+  <text x="500" y="357" font-family="Consolas, Monaco, monospace" font-size="10" fill="#EF4444">Direct Write Access to Percona Patroni PostgreSQL 18 Blocked</text>
 
   <!-- Flow Arrow -->
   <line x1="255" y1="185" x2="255" y2="115" stroke="#22C55E" stroke-width="2" marker-end="url(#arrow-quar)"/>
-  <text x="265" y="150" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#4ADE80">Certified Promotion (Human Sign-off)</text>
+  <text x="265" y="150" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#4ADE80">Certified Promotion (Laravel Verification)</text>
 
   <line x1="705" y1="315" x2="705" y2="245" stroke="#EF4444" stroke-width="2" stroke-dasharray="4,4"/>
   <text x="715" y="280" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="bold" fill="#EF4444">BLOCKED (No Tier 1 Writes)</text>
@@ -102,38 +105,49 @@ The diagram below details the 3-tier data classification architecture, enforcing
 ```mermaid
 flowchart TD
     subgraph Tier0 ["Tier 0: Golden Human Truth (Immutable SSoT)"]
-        GoldenDB["Ceph / MinIO S3 Object Lock (Compliance WORM)"]
-        HumanSign["Human Domain Specialist Signature"]
+        MasterDB["Percona Patroni PostgreSQL 18 Master Cluster"]
+        CephStorage["Ceph S3 Storage Baseline (Compliance WORM)"]
+        HumanSign["Human Domain Specialist Digital Approval"]
     end
 
-    subgraph Tier1 ["Tier 1: Machine & Sensor Telemetry"]
-        Sensors["Precipitation, Hydrological & Thermal Sensors"]
-        OpenLineage["OpenLineage (nres_provenance Facet)"]
+    subgraph Tier1 ["Tier 1: User Staging & Telemetry Processing"]
+        LaravelPortal["Laravel Web Portal (User Auth & Verification)"]
+        RustFSStaging["RustFS Shared Directory Staging"]
+        NiFiPipeline["Apache NiFi 2.0 ETL Pipeline"]
+        OpenMetadataCatalog["OpenMetadata Lineage & Catalog"]
     end
 
     subgraph Tier2 ["Tier 2: AI Operational Sandbox (Isolated Quarantine)"]
-        AIContainer["MCP Tools / LLM Models (Ollama, Bedrock)"]
-        ScratchStorage["Tier 2 Scratch Buckets (30-Day Auto-Purge TTL)"]
+        MCPAgents["MCP Tool Agents & LLM Models"]
+        RAGScratch["Tier 2 RAG & Vector Scratch Storage (30-Day TTL)"]
     end
 
-    Sensors -->|"Data Contract CLI Check"| Tier1
-    Tier1 -->|"Human Officer Audit & Promotion"| Tier0
-    GoldenDB --- HumanSign
+    LaravelPortal -->|"Upload File"| RustFSStaging
+    RustFSStaging -->|"POSIX Watcher Extraction"| NiFiPipeline
+    NiFiPipeline <-->|"Schema & Lineage Validation"| OpenMetadataCatalog
+    NiFiPipeline -->|"Return Processed File"| RustFSStaging
+    RustFSStaging -->|"Human Review & Verification"| LaravelPortal
+    LaravelPortal -->|"Digital Approval Event"| HumanSign
+    HumanSign -->|"Trigger Ingestion Pipeline"| NiFiPipeline
+    NiFiPipeline -->|"Master DB Load (nifi_ingest_writer)"| MasterDB
+    NiFiPipeline -->|"Archive Raw Artifacts"| CephStorage
 
-    Tier0 -->|"Read-Only Context Query"| AIContainer
-    AIContainer --> ScratchStorage
-    ScratchStorage -.-x|"STRICTLY BLOCKED: No Write Permissions"| Tier0
-    ScratchStorage -.-x|"STRICTLY BLOCKED: No Write Permissions"| Tier1
+    MasterDB -->|"Read Context (bda_readonly_agent)"| MCPAgents
+    MCPAgents --> RAGScratch
+    RAGScratch -.-x|"STRICTLY BLOCKED: No Write Access"| MasterDB
+    RAGScratch -.-x|"STRICTLY BLOCKED: No Write Access"| RustFSStaging
 ```
 
 ### 3. Summary Interface & Routing Table
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Telemetry Sensor** | **Tier 1 Storage** | `TCP 8443` / HTTPS Data Contract | Ingress Token / Contract Schema | Streamed telemetry is validated against Bitol ODCS v3.1.0 contracts. |
-| **Human Specialist** | **Tier 0 Storage** | HTTPS Web Portal / Keycloak | Cryptographic X.509 Signature | Promoted data receives official human sign-off and is locked under Compliance WORM. |
-| **AI Agent / MCP Tool** | **PostgreSQL Master Core** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only Session Scope | AI models query context via read-only PostgreSQL session roles without write access to master tables. |
-| **AI Agent / FastMCP** | **Ceph / MinIO S3 Object Lock (Compliance WORM)** | `TCP 8080` (Ceph RGW) / `TCP 9000` (MinIO) S3 REST | S3 Access Key / Read-Only Tool | Retrieves Tier 0 SSoT records over read-only S3 APIs without write or modification permissions. |
+| **Laravel Web Portal** | **RustFS Shared Staging** | Local POSIX Mount / Shared Volume | Session JWT / POSIX Directory ACLs | Non-IT users upload raw files into isolated staging directories. |
+| **RustFS Shared Staging** | **Apache NiFi 2.0** | POSIX File System Watcher | POSIX Read ACLs & Group Scopes | NiFi directory watcher detects raw uploads for validation and preliminary transformation. |
+| **Apache NiFi 2.0** | **OpenMetadata** | `TCP 8585` / REST API | Bearer API Key | Records metadata lineage, quality checks, and data classification tags. |
+| **Human Specialist** | **Apache NiFi 2.0 Pipeline** | HTTPS Laravel UI / REST Trigger | Multi-Factor Auth & Digital Signature Event | Human officer verification in Laravel triggers NiFi to execute master DB write. |
+| **Apache NiFi 2.0** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Dedicated Ingestion Role (`nifi_ingest_writer`) | Ingests verified payloads into master SSoT tables upon human verification sign-off. |
+| **AI Agent / MCP Tool** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only DB Role (`bda_readonly_agent`) | Enforces `GRANT SELECT` / `REVOKE INSERT, UPDATE, DELETE` with `SET LOCAL` session context injection. |
 
 ---
 
@@ -151,18 +165,18 @@ To institutionalize this boundary, the lakehouse architecture enforces a three-t
 
 ```
 Tier 0: Golden Human Truth (Authoritative SSoT)
-└── Immutable storage on MinIO/Ceph with S3 Object Lock (Compliance Mode)
-└── Requires human cryptographic signatures and ODCS contract validation
+└── Percona Patroni PostgreSQL 18 + Ceph S3 (Compliance WORM)
+└── Requires human verification in Laravel and OpenMetadata validation
 └── Strictly zero unvalidated AI-generated records permitted
 
-Tier 1: Machine and Sensor Ingestion
-└── Storage on standard S3 buckets with Governance Mode Object Lock
-└── Direct telemetry feeds: precipitation sensors, hydrological logs, thermal hotspots
-└── Pre-ingestion validation via Data Contract CLI; human audit required for promotion
+Tier 1: Machine Telemetry & Non-IT User Staging
+└── Laravel Web Application + RustFS Shared Staging Directories
+└── Automated processing by Apache NiFi 2.0 & OpenMetadata cataloging
+└── Human audit and verification required in Laravel prior to master DB promotion
 
 Tier 2: AI Operational and Analytical Sandbox (Isolated Quarantine)
-└── Isolated object buckets with automated 30-day Time-To-Live (TTL) expiration
-└── Ephemeral storage for LLM intermediate runs, synthetic models, and MCP outputs
+└── Isolated vector scratch storage with automated 30-day Time-To-Live (TTL) expiration
+└── Ephemeral storage for LLM prompts, RAG enrichments, and MCP tool outputs
 └── Strict access barriers preventing automated writing or promotion to Tier 0
 ```
 
@@ -172,50 +186,97 @@ Tier 2: AI Operational and Analytical Sandbox (Isolated Quarantine)
 
 #### Tier 0: Golden Human Truth (Authoritative SSoT)
 
-- **Content:** Authoritative datasets verified and signed off by authorized human domain experts. Includes gazetted conservation reserves, certified geological hazard maps, borehole logs, official forest concession boundaries, and statutory environmental indices.
-- **Storage Protection:** Dedicated object storage buckets configured with S3 Object Lock in **Compliance Mode**, rendering them completely immutable. No record can be committed to Tier 0 without carrying an authorized human specialist's cryptographic signature.
+- **Content:** Authoritative datasets verified and signed off by authorized human domain experts via the Laravel application verification loop. Includes gazetted conservation reserves, certified geological hazard maps, borehole logs, official forest concession boundaries, and statutory environmental indices.
+- **Storage Protection:** Committed into **Percona Patroni PostgreSQL 18** High-Availability clusters and archived to **Ceph S3** in Compliance Mode WORM storage. Apache NiFi 2.0 acts as the single execution engine for database persistence using the `nifi_ingest_writer` role, triggered exclusively after an authorized human specialist's digital sign-off in Laravel.
 
-#### Tier 1: Machine and Sensor Ingestion
+#### Tier 1: Machine Telemetry & Non-IT User Staging
 
-- **Content:** Raw telemetry streamed directly from physical instrumentation. Includes automated precipitation readings from rain gauges, river monitoring sensors, and thermal hotspot coordinates streamed from satellite feeds.
-- **Storage Protection:** Object buckets with S3 Object Lock in **Governance Mode**. Records remain in Tier 1 until passing automated quality assertions and receiving human domain stewardship sign-off.
+- **Content:** Raw telemetry streamed directly from physical instrumentation alongside raw spreadsheets/files uploaded by non-IT business users through the Laravel web interface into RustFS shared directories.
+- **Storage Protection:** Files remain staged in RustFS directories monitored by Apache NiFi 2.0 directory watchers operating under POSIX filesystem ACLs. Records remain in Tier 1 until passing automated quality assertions, schema normalization, and receiving human verification.
 
 #### Tier 2: AI Operational and Analytical Sandbox
 
-- **Content:** Ephemeral execution environment for synthetic simulations, exploratory model embeddings, predictive hazard scores, and intermediate outputs generated by Model Context Protocol (MCP) server pipelines.
-- **Storage Protection:** Isolated object buckets with automated **30-day Time-To-Live (TTL)** expiration cycles. Storage policies strictly block Tier 2 from writing directly to Tier 0 or Tier 1.
+- **Content:** Ephemeral execution environment for synthetic simulations, exploratory vector embeddings, predictive hazard scores, RAG context enrichments, and intermediate outputs generated by Model Context Protocol (MCP) server pipelines.
+- **Storage Protection:** Isolated storage buckets with automated **30-day Time-To-Live (TTL)** expiration cycles. Database access for MCP agents is strictly restricted to the `bda_readonly_agent` database role (`GRANT SELECT` only), preventing Tier 2 from writing directly to Tier 0 master tables or Tier 1 staging directories.
 
 ---
 
-## OpenLineage & `nres_provenance` Custom Facet
+## OpenMetadata & Provenance Lineage Tracking
 
-Data lineage and provenance across these tiers are enforced using the open-source **OpenLineage specification**. Every pipeline execution—whether managed by Apache Airflow, Apache Spark, or Trino—emits OpenLineage metadata events capturing execution context, job definitions, input dataset versions, output snapshots, and specialized dataset facets.
+Data lineage and provenance across these tiers are enforced using **OpenMetadata** and open lineage standards. Every pipeline execution—whether managed by Apache NiFi 2.0, Ansible playbooks, or custom scripts—emits OpenMetadata events capturing execution context, job definitions, input dataset versions, output snapshots, and specialized dataset facets.
 
-To trace human custody and ensure complete isolation from unverified AI data, the platform implements a mandatory custom OpenLineage facet named `nres_provenance`:
+To trace human custody and ensure complete isolation from unverified AI data, the platform implements tier-specific provenance schemas.
+
+### Tier 0 Cryptographic Signature Provenance Contract
+
+Datasets promoted to `TIER_0_GOLDEN_SSOT` carry a full cryptographic verification contract within the `bda_provenance` metadata facet:
 
 ```json
 {
-  "nres_provenance": {
-    "origin_type": "CERTIFIED_HUMAN_SURVEY",
+  "bda_provenance": {
+    "origin_type": "CERTIFIED_HUMAN_VERIFICATION",
     "verification_tier": "TIER_0_GOLDEN_SSOT",
     "human_author_id": "usr_domain_specialist_8842",
+    "key_id": "key_eddsa_2026_secops_9923",
+    "signature_algorithm": "Ed25519",
+    "signature_encoding": "HEX_RAW_64_BYTE",
+    "signature": "8beb46445f676032d0f0c1ac332a2590ca33a4e65376993547112cef9f9256e73f150666b51a69cf5c5b9ce94904806fef49eed3ec2478a24818be72226c3301",
+    "verification_status": "VERIFIED_VALID",
+    "verification_timestamp": "2026-09-12T10:15:30Z",
     "ai_generated_data": false,
     "payload_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
   }
 }
 ```
 
-Through this facet, any dataset derived through automated transformations preserves an auditable record of every processing step, ensuring that data lineage can be traced back to the original certified field survey.
+#### Contract Specification & Failure Handling Rules
+1. **Trusted Key Ownership:** `key_id` references the public key registered in Keycloak IAM / OpenMetadata key vault bound to `human_author_id`.
+2. **Canonical Signed Bytes Specification:** The signature is bound to all certification and identity fields: `origin_type`, `verification_tier`, `key_id`, `human_author_id`, `payload_sha256`, and `verification_timestamp`. The canonical byte stream is generated using RFC 8785 canonical JSON formatting over these bound fields (`verification_status` is verifier-derived output and excluded from signature input).
+3. **Verification Lifecycle:** During the NiFi Tier 0 ingestion gate execution, NiFi resolves the public key for `key_id`, reconstructs the canonical RFC 8785 byte stream, and verifies the 64-byte Ed25519 signature.
+4. **Failure Handling Policy:** If signature verification fails, key resolution fails, or any signed certification or identity field (`origin_type`, `verification_tier`, `key_id`, `human_author_id`, `payload_sha256`, `verification_timestamp`) is mutated, the transaction transitions to status `VERIFICATION_FAILED_QUARANTINED`, triggering an alert event in OpenMetadata and blocking database write persistence. `VERIFIED_VALID` status is assigned strictly upon successful cryptographic signature verification.
+
+### Tier 1 Telemetry Provenance
+
+Unpromoted telemetry and staged user files in Tier 1 carry deterministic validation metadata without human certification:
+
+```json
+{
+  "bda_provenance": {
+    "origin_type": "MACHINE_TELEMETRY_STAGING",
+    "verification_tier": "TIER_1_STAGING",
+    "ingestion_pipeline": "nifi_sensor_ingest_v2",
+    "verification_status": "PENDING_HUMAN_REVIEW",
+    "ai_generated_data": false,
+    "payload_sha256": "8f434346648f6b96df89dda901c5176b10a6d83961dd3c1ac88b59b2dc327aa4"
+  }
+}
+```
+
+### Tier 2 Synthetic and RAG Model Output Provenance
+
+All model-generated artifacts, embeddings, and RAG enrichments in Tier 2 are explicitly marked with sandbox flags:
+
+```json
+{
+  "bda_provenance": {
+    "origin_type": "AI_SANDBOX_MODEL_OUTPUT",
+    "verification_tier": "TIER_2_SANDBOX",
+    "mcp_agent_id": "agent_llm_rag_enricher_04",
+    "ai_generated_data": true,
+    "payload_sha256": "7a3b49911e2b5432a9018bc1260481c90533ab70992341908b299a9a99ef0129"
+  }
+}
+```
 
 ---
 
 ## Data Tier Governance Comparison Matrix
 
-| Governance Parameter | Tier 0: Golden Human SSoT | Tier 1: Machine & Sensor Ingestion | Tier 2: AI Sandbox & Analytics |
+| Governance Parameter | Tier 0: Golden Human SSoT | Tier 1: Machine & Sensor Ingestion / User Staging | Tier 2: AI Sandbox & RAG Analytics |
 | :--- | :--- | :--- | :--- |
-| **Primary Institutional Purpose** | Authoritative national truth, statutory policy formulation, certified legal record. | Empirical environmental observation, telemetry aggregation, baseline monitoring. | Exploratory modelling, scenario simulation, predictive risk computation. |
-| **Storage Technology & WORM Mode** | Distributed Object Store; S3 Object Lock in **Compliance Mode**. | Distributed Object Store; S3 Object Lock in **Governance Mode**. | Standard Object Store bucket; lifecycle rule with **30-day auto-purge TTL**. |
-| **Allowable Ingestion Sources** | Certified human domain surveys, gazetted boundaries, signed departmental records. | Direct telemetry streams: precipitation gauges, water sensors, satellite thermal API. | Model outputs, MCP pipeline agents, synthetic climate projections. |
-| **AI Role & Permissions** | Read-only access via certified tools. Zero automated AI write access permitted. | Machine learning models can execute cleansing, deduplication, and anomaly detection. | Unrestricted generative and predictive computation within sandboxed perimeter. |
-| **Lineage & Validation Standard** | Mandatory ODCS v3.1.0 contract validation + OpenLineage `nres_provenance` signing. | Automated ODCS contract validation + deterministic quality assertion checks. | OpenLineage job execution tracking; outputs permanently tagged as `AI_GENERATED`. |
-| **Promotion Criteria** | Terminal authoritative tier; updates require formal versioning and re-signing. | Promoted to Tier 0 only after automated DQ validation and human officer sign-off. | Cannot be promoted directly; requires distillation and formal human certification. |
+| **Primary Institutional Purpose** | Authoritative national truth, statutory policy formulation, certified legal record. | Empirical environmental observation, user file staging, telemetry aggregation. | Exploratory modelling, scenario simulation, RAG contextual enrichment. |
+| **Storage Technology & WORM Mode** | Percona Patroni PostgreSQL 18 + Ceph S3 in **Compliance WORM Mode**. | RustFS Shared Directory Staging + Apache NiFi 2.0 flow queues. | Standard object/vector store; lifecycle rule with **30-day auto-purge TTL**. |
+| **Allowable Ingestion Sources** | Certified human domain surveys, Laravel-verified user uploads, gazetted boundaries. | Direct telemetry streams, raw user file uploads in RustFS staging directories. | Model outputs, MCP pipeline agents, synthetic RAG enrichments. |
+| **AI Role & Permissions** | Read-only access via `bda_readonly_agent` role (`GRANT SELECT`). Zero automated AI write access permitted. | Machine learning models execute cleansing, deduplication, and parsing. | Unrestricted generative and predictive computation within sandboxed perimeter. |
+| **Lineage & Validation Standard** | Mandatory Cryptographic Signature Provenance Contract + OpenMetadata validation + Laravel sign-off. | Automated NiFi validation + deterministic schema assertion checks (`TIER_1_STAGING`). | OpenMetadata job execution tracking; outputs tagged as `AI_SANDBOX_MODEL_OUTPUT` with `ai_generated_data: true`. |
+| **Promotion Criteria** | Terminal authoritative tier; updates require formal versioning and re-signing. | Promoted to Tier 0 only after automated DQ validation and human officer sign-off in Laravel. | Cannot be promoted directly; requires distillation and formal human certification. |

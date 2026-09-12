@@ -4,8 +4,8 @@ type: spatial_memory
 title: "Active Context Manifest"
 description: "Live tracking manifest of files currently in active engineering scope under the DSOM protocol and LLM-WIKI framework."
 status: active
-timestamp: "2026-09-07T11:20:00Z"
-stale_after: "2027-09-07T11:20:00Z"
+timestamp: "2026-09-12T00:00:00Z"
+stale_after: "2027-09-12T00:00:00Z"
 generated: false
 verified: true
 sources:
@@ -44,6 +44,16 @@ The following assets are currently in active development or audit scope under th
 - `.agents/brain/active_context_manifest.md`
 - `.agents/brain/checkpoint_summary.txt`
 
+## 🛡️ Human-AI Quarantine Architecture Assets
+
+- `README.md`
+- `docs/explanation/human-ai-quarantine-model.md`
+- `CHANGELOG.md`
+- `HISTORY.md`
+- `SUMMARY.md`
+- `_data/navigation.yml`
+- `tests/test_okf_and_links.py`
+
 ## 🌐 OpenWiki & BDA SSoT Knowledge Base
 
 - `tools/openwiki_emulator.py`
@@ -62,30 +72,12 @@ The following assets are currently in active development or audit scope under th
 - `openwiki/graph.html`
 - `tests/test_openwiki.py`
 
-## 🌐 GitHub Pages & Multi-Platform Hosting
-
-- `.github/workflows/jekyll-gh-pages.yml`
-- `_config.yml`
-- `_layouts/default.html`
-- `_includes/header.html`
-- `_includes/sidebar.html`
-- `_includes/footer.html`
-- `assets/css/style.scss`
-- `assets/js/theme-toggle.js`
-- `index.md`
-- `.gitlab-ci.yml`
-- `.gitbook.yaml`
-- `.readthedocs.yaml`
-- `mkdocs.yml`
-- `docs/requirements.txt`
-- `docs/github-pages-setup.md`
-- `docs/multi-platform-hosting.md`
-
 ## 🧪 CI/CD, Linters, Infrastructure & Test Suites
 
 - `.github/workflows/dsom-audit.yml`
 - `pyproject.toml`
 - `tests/test_okf_and_links.py`
+- `tests/test_dual_render_diagrams.py`
 - `.markdownlint.json`
 - `.pre-commit-config.yaml`
 - `.ansible-lint`
@@ -96,13 +88,3 @@ The following assets are currently in active development or audit scope under th
 - `tests/e2e/docs_search.spec.ts`
 - `tools/generate_summary.py`
 - `tools/install_git_guardrails.py`
-
-## 📚 Navigation & Sovereign Ledgers
-
-- `README.md`
-- `START-HERE.md`
-- `SUMMARY.md`
-- `_data/navigation.yml`
-- `llms.txt`
-- `CHANGELOG.md`
-- `HISTORY.md`

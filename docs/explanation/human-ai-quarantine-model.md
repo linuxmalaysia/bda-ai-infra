@@ -220,7 +220,7 @@ Datasets promoted to `TIER_0_GOLDEN_SSOT` carry a full cryptographic verificatio
     "key_id": "key_eddsa_2026_secops_9923",
     "signature_algorithm": "Ed25519",
     "signature_encoding": "HEX_RAW_64_BYTE",
-    "signature": "808a8efaa80ea82fb5ebd6ed447da3ee0c0745c781ec1541fc7899161a8dceef96581e9871a748573b9fbc57fa00ad53226f85fb7c0a61f8b42bd4acbc3efcd4",
+    "signature": "8beb46445f676032d0f0c1ac332a2590ca33a4e65376993547112cef9f9256e73f150666b51a69cf5c5b9ce94904806fef49eed3ec2478a24818be72226c3301",
     "verification_status": "VERIFIED_VALID",
     "verification_timestamp": "2026-09-12T10:15:30Z",
     "ai_generated_data": false,
@@ -231,9 +231,9 @@ Datasets promoted to `TIER_0_GOLDEN_SSOT` carry a full cryptographic verificatio
 
 #### Contract Specification & Failure Handling Rules
 1. **Trusted Key Ownership:** `key_id` references the public key registered in Keycloak IAM / OpenMetadata key vault bound to `human_author_id`.
-2. **Canonical Signed Bytes Specification:** The signature is calculated over the canonical JSON (RFC 8785) UTF-8 byte stream of the fields `human_author_id`, `payload_sha256`, and `verification_timestamp`.
-3. **Verification Lifecycle:** During the NiFi Tier 0 ingestion gate execution, NiFi resolves the public key for `key_id`, computes canonical bytes, and verifies the 64-byte Ed25519 signature.
-4. **Failure Handling Policy:** If signature verification fails or key resolution returns invalid, the transaction transitions to status `VERIFICATION_FAILED_QUARANTINED`, triggering an alert event in OpenMetadata and blocking database write persistence. `VERIFIED_VALID` status is assigned strictly upon successful cryptographic signature verification.
+2. **Canonical Signed Bytes Specification:** The signature is bound to all certification and identity fields: `origin_type`, `verification_tier`, `key_id`, `human_author_id`, `payload_sha256`, and `verification_timestamp`. The canonical byte stream is generated using RFC 8785 canonical JSON formatting over these bound fields (`verification_status` is verifier-derived output and excluded from signature input).
+3. **Verification Lifecycle:** During the NiFi Tier 0 ingestion gate execution, NiFi resolves the public key for `key_id`, reconstructs the canonical RFC 8785 byte stream, and verifies the 64-byte Ed25519 signature.
+4. **Failure Handling Policy:** If signature verification fails, key resolution fails, or any signed certification or identity field (`origin_type`, `verification_tier`, `key_id`, `human_author_id`, `payload_sha256`, `verification_timestamp`) is mutated, the transaction transitions to status `VERIFICATION_FAILED_QUARANTINED`, triggering an alert event in OpenMetadata and blocking database write persistence. `VERIFIED_VALID` status is assigned strictly upon successful cryptographic signature verification.
 
 ### Tier 1 Telemetry Provenance
 

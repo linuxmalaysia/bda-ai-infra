@@ -2,36 +2,42 @@
 okf_version: "0.2"
 type: documentation_index
 title: "Modernizing Big Data Analytics Architecture — BDA Lakehouse SSoT"
-description: "Master index and navigation gateway for the Big Data Analytics (BDA) Lakehouse documentation suite."
+description: "Master index and architecture gateway for the Big Data Analytics (BDA) Single Source of Truth (SSoT) platform."
 status: active
-timestamp: "2026-09-06T00:00:00Z"
+timestamp: "2026-09-12T00:00:00Z"
 sources:
-  - url: "docs/README.md"
-    description: "Internal BDA Lakehouse documentation index."
+  - url: "docs/explanation/human-ai-quarantine-model.md"
+    description: "Human-AI Quarantine Model and Data Governance."
 topics:
   - bda
   - lakehouse
-  - diataxis
-  - dsom
-  - openwiki
-stale_after: "2027-09-06T00:00:00Z"
+  - patroni-postgresql
+  - nifi
+  - openmetadata
+  - superset
+  - aiops
+  - proxmox
+  - podman
+  - rustfs
+  - ceph-s3
+stale_after: "2027-09-12T00:00:00Z"
 generated: false
 verified: true
 ---
 
-# Modernizing Big Data Analytics Architecture: BDA Lakehouse Baseline
+# Modernizing Big Data Analytics Architecture: BDA Lakehouse SSoT Baseline
 
-Welcome to the authoritative baseline platform documentation for modernizing the **Big Data Analytics (BDA)** architecture into a 100% open-source, S3-compatible data lakehouse serving as a Single Source of Truth (SSoT).
+Welcome to the authoritative platform documentation for modernizing the **Big Data Analytics (BDA)** architecture into a 100% open-source, S3-compatible Single Source of Truth (SSoT) data lakehouse.
 
 ---
 
-## 🏛️ Master Platform Topology & Open-Source Stack Overview
+## 🏛️ Master Infrastructure & Data Governance Architecture
 
-The diagram below presents the high-level architecture of the modernized BDA Lakehouse, highlighting perimeter security, lakehouse core engines, and AI containment.
+The diagram below presents the high-level architecture of the modernized BDA SSoT platform, highlighting perimeter access, human-in-the-loop file quarantine workflow, data plane orchestration, database persistence, visualization, and AIOps automation.
 
 ### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 420" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="100%" height="100%">
   <defs>
     <marker id="arrow-rm" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
@@ -42,115 +48,211 @@ The diagram below presents the high-level architecture of the modernized BDA Lak
   </defs>
 
   <!-- Background -->
-  <rect width="960" height="420" fill="#0F172A" rx="10"/>
+  <rect width="960" height="520" fill="#0F172A" rx="10"/>
 
-  <!-- Tier 1: Ingress Gateway -->
-  <rect x="20" y="20" width="920" height="80" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-rm)"/>
+  <!-- Tier 1: Ingress & Client Interfaces -->
+  <rect x="20" y="20" width="920" height="90" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-rm)"/>
   <rect x="20" y="20" width="920" height="26" fill="#0F172A" rx="8"/>
-  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">INGRESS &amp; PERIMETER SECURITY GATEWAY</text>
+  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">INGRESS &amp; CLIENT INTERFACES</text>
 
-  <rect x="40" y="52" width="270" height="38" fill="#0369A1" stroke="#38BDF8" rx="4"/>
-  <text x="50" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E0F2FE">Apache APISIX Cloud-Native Gateway</text>
+  <rect x="40" y="55" width="270" height="42" fill="#0369A1" stroke="#38BDF8" rx="4"/>
+  <text x="50" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E0F2FE">Laravel Web App (Human Upload &amp; Review)</text>
 
-  <rect x="345" y="52" width="270" height="38" fill="#1E3A8A" stroke="#3B82F6" rx="4"/>
-  <text x="355" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">Keycloak OIDC &amp; OAuth2 Identity</text>
+  <rect x="345" y="55" width="270" height="42" fill="#1E3A8A" stroke="#3B82F6" rx="4"/>
+  <text x="355" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">Application REST APIs (Human Apps)</text>
 
-  <rect x="650" y="52" width="270" height="38" fill="#581C87" stroke="#A855F7" rx="4"/>
-  <text x="660" y="75" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">ODCS v3.1.0 Contract Gate</text>
+  <rect x="650" y="55" width="270" height="42" fill="#581C87" stroke="#A855F7" rx="4"/>
+  <text x="660" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">MCP Server (AI Agent Tool Integrations)</text>
 
-  <!-- Tier 2: Lakehouse Core -->
-  <rect x="20" y="135" width="920" height="150" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-rm)"/>
-  <rect x="20" y="135" width="920" height="26" fill="#0F172A" rx="8"/>
-  <text x="35" y="153" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">BDA LAKEHOUSE CORE ENGINE &amp; S3 STORAGE</text>
+  <!-- Tier 2: Storage & Data Plane Isolation -->
+  <rect x="20" y="130" width="920" height="150" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-rm)"/>
+  <rect x="20" y="130" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="148" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">STORAGE, FILE QUARANTINE &amp; DATA PLANE ENGINE</text>
 
-  <rect x="35" y="170" width="205" height="100" fill="#0F172A" stroke="#3B82F6" rx="6"/>
-  <text x="45" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">NiFi 2.0 &amp; Airflow</text>
-  <text x="45" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Master Data Plane</text>
-  <text x="45" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Python Ingestion</text>
+  <rect x="35" y="165" width="270" height="100" fill="#0F172A" stroke="#3B82F6" rx="6"/>
+  <text x="45" y="187" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">RustFS Shared Storage</text>
+  <text x="45" y="207" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Non-IT User Upload Staging</text>
+  <text x="45" y="227" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Verification Directory Swap</text>
 
-  <rect x="260" y="170" width="205" height="100" fill="#0F172A" stroke="#22C55E" rx="6"/>
-  <text x="270" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">Polaris REST Catalog</text>
-  <text x="270" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Iceberg REST API</text>
-  <text x="270" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Commit Control</text>
+  <rect x="345" y="165" width="270" height="100" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="355" y="187" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">Apache NiFi 2.0 &amp; OpenMetadata</text>
+  <text x="355" y="207" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">ETL Pipeline &amp; Governance</text>
+  <text x="355" y="227" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Metadata Lineage Tagging</text>
 
-  <rect x="485" y="170" width="205" height="100" fill="#0F172A" stroke="#F59E0B" rx="6"/>
-  <text x="495" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">Ceph / MinIO S3</text>
-  <text x="495" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">WORM S3 Object Lock</text>
-  <text x="495" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Parquet Compliance</text>
+  <rect x="650" y="165" width="270" height="100" fill="#0F172A" stroke="#F59E0B" rx="6"/>
+  <text x="660" y="187" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">Ceph S3 Object Store</text>
+  <text x="660" y="207" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">WORM Immutable S3 Storage</text>
+  <text x="660" y="227" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Long-Term Storage &amp; Raw Artifacts</text>
 
-  <rect x="710" y="170" width="205" height="100" fill="#0F172A" stroke="#3B82F6" rx="6"/>
-  <text x="720" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#93C5FD">Trino &amp; Spark</text>
-  <text x="720" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#60A5FA">Distributed SQL</text>
-  <text x="720" y="232" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">• Spatial Processing</text>
+  <!-- Tier 3: Master Database, Visualization & AIOps -->
+  <rect x="20" y="300" width="920" height="110" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-rm)"/>
+  <rect x="20" y="300" width="920" height="26" fill="#0F172A" rx="8"/>
+  <text x="35" y="318" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">MASTER PERSISTENCE, VISUALIZATION &amp; AIOPS AUTOMATION</text>
 
-  <!-- Tier 3: Consumption & AI -->
-  <rect x="20" y="315" width="920" height="85" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8" filter="url(#shadow-rm)"/>
-  <rect x="20" y="315" width="920" height="26" fill="#0F172A" rx="8"/>
-  <text x="35" y="333" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#4ADE80">CONSUMPTION, VISUALIZATION &amp; ZERO-TRUST AI CONTAINMENT</text>
+  <rect x="35" y="335" width="270" height="60" fill="#0F172A" stroke="#22C55E" rx="6"/>
+  <text x="45" y="357" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">Percona Patroni PostgreSQL 18</text>
+  <text x="45" y="377" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">HA SSoT Master Relational DB</text>
 
-  <rect x="40" y="348" width="430" height="42" fill="#0F172A" stroke="#22C55E" rx="6"/>
-  <text x="50" y="374" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">Apache Superset &amp; Next.js (deck.gl Spatial Views)</text>
+  <rect x="345" y="335" width="270" height="60" fill="#0F172A" stroke="#38BDF8" rx="6"/>
+  <text x="355" y="357" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E0F2FE">Apache Superset</text>
+  <text x="355" y="377" font-family="Consolas, Monaco, monospace" font-size="10" fill="#38BDF8">BI &amp; Spatial Visualizations</text>
 
-  <rect x="490" y="348" width="430" height="42" fill="#0F172A" stroke="#A855F7" rx="6"/>
-  <text x="500" y="374" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">Containerized FastMCP &amp; pgvector (Read-Only AI Sandbox)</text>
+  <rect x="650" y="335" width="270" height="60" fill="#0F172A" stroke="#A855F7" rx="6"/>
+  <text x="660" y="357" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#E9D5FF">AIOps Automation Control</text>
+  <text x="660" y="377" font-family="Consolas, Monaco, monospace" font-size="10" fill="#A855F7">Ansible + Gitea + ARA + SemaphoreUI</text>
 
-  <!-- Connectors -->
-  <line x1="310" y1="71" x2="345" y2="71" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
-  <path d="M 310 52 Q 480 25 650 52" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
-  <line x1="785" y1="90" x2="137" y2="170" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
-  <line x1="240" y1="220" x2="260" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
-  <line x1="465" y1="220" x2="485" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
-  <line x1="812" y1="220" x2="587" y2="220" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
-  <line x1="812" y1="270" x2="255" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
-  <line x1="587" y1="270" x2="705" y2="348" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <!-- Baseline Infrastructure Container -->
+  <rect x="20" y="430" width="920" height="70" fill="#0F172A" stroke="#64748B" stroke-width="1.5" rx="8"/>
+  <text x="35" y="450" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#94A3B8">INFRASTRUCTURE BASELINE &amp; CONTAINER RUNTIME</text>
+  <text x="35" y="475" font-family="Consolas, Monaco, monospace" font-size="11" fill="#E2E8F0">Proxmox VE (Hyper-Converged Infrastructure) + Podman Rootless Pods (Kubernetes to be evaluated post-2028 baseline build)</text>
+
+  <!-- Connector Lines -->
+  <line x1="175" y1="97" x2="175" y2="165" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="305" y1="215" x2="345" y2="215" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="615" y1="215" x2="650" y2="215" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="480" y1="265" x2="175" y2="335" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
+  <line x1="175" y1="395" x2="480" y2="335" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-rm)"/>
 </svg>
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)
 
 ```mermaid
 flowchart TD
-    subgraph Ingress ["Perimeter Access & Governance"]
-        APISIX["APISIX Gateway"]
-        Keycloak["Keycloak OIDC"]
-        ODCS["ODCS Data Contracts"]
+    subgraph Clients ["Perimeter & Access Layer"]
+        Laravel["Laravel Web Portal (User Auth & File Uploads)"]
+        RestAPI["Application REST APIs (Human Applications)"]
+        MCP["Model Context Protocol MCP Server (AI Agent Clients)"]
     end
 
-    subgraph Core ["BDA Open-Source Lakehouse Core"]
-        NiFi["Apache NiFi 2.0 Ingestion"]
-        Polaris["Apache Polaris REST Catalog"]
-        Ceph["Ceph / MinIO (S3 WORM)"]
-        Trino["Trino & Spark Sedona"]
+    subgraph DataPlane ["Data Plane & Storage Layer"]
+        RustFS["RustFS Shared Directory Staging"]
+        NiFi["Apache NiFi 2.0 Ingestion Pipeline"]
+        OpenMetadata["OpenMetadata Catalog & Governance"]
+        Ceph["Ceph S3 Object Storage Baseline"]
     end
 
-    subgraph Delivery ["Presentation & AI Containment"]
-        Superset["Apache Superset & Next.js"]
-        MCP["FastMCP Agent (pgvector Local Search)"]
+    subgraph CoreDB ["Master Database & BI Analytics"]
+        Postgres["Percona Patroni PostgreSQL 18"]
+        Superset["Apache Superset Visualizations"]
     end
 
-    APISIX --> Keycloak
-    APISIX --> ODCS
-    ODCS --> NiFi
+    subgraph ControlPlane ["AIOps & Infrastructure Baseline"]
+        AIOps["Ansible + Gitea + ARA + SemaphoreUI"]
+        Proxmox["Proxmox VE HCI Baseline (Podman Rootless Pods)"]
+    end
 
-    NiFi --> Polaris
-    Polaris --> Ceph
-    Trino --> Ceph
-
-    Trino --> Superset
-    Ceph -->|"Read-Only Context"| MCP
+    Laravel -->|"1. Staging Upload"| RustFS
+    RustFS -->|"2. Pickup & Processing"| NiFi
+    NiFi <-->|"3. Lineage & Governance"| OpenMetadata
+    NiFi -->|"4. Return Processed File for Review"| RustFS
+    Laravel -->|"5. Human Verification & Approval"| RustFS
+    NiFi -->|"6. Secondary Pickup Post-Approval"| Postgres
+    NiFi -->|"7. Raw Artifact Storage"| Ceph
+    Postgres -->|"Query SSoT"| Superset
+    Postgres <-->|"Read Context / Execute Tools"| MCP
+    RestAPI <-->|"REST Calls"| Postgres
+    AIOps -->|"Infrastructure Automation"| Proxmox
 ```
 
 ### 3. Summary Interface & Routing Table
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **API Client** | **APISIX Gateway** | `TCP 8443` / HTTPS TLS 1.3 | Keycloak JWT / mTLS Cert | Enforces perimeter access control and rate-limiting. |
-| **APISIX Gateway** | **Keycloak OIDC IAM** | `TCP 8443` / HTTPS OIDC | OAuth2 Realm Keys | Validates client bearer tokens and verifies user roles. |
-| **ODCS Contract Gate** | **NiFi 2.0 Ingestion** | `TCP 8443` / HTTPS Stream | ODCS Contract Spec | Streams validated telemetry into NiFi flow queues. |
-| **NiFi 2.0 Pipeline** | **Apache Polaris Catalog** | `TCP 8181` / REST API | Polaris OAuth2 Token | Commits validated records as versioned Iceberg Parquet tables. |
-| **Apache Superset** | **Trino Query Engine** | `TCP 8080` / SQL REST API | OAuth2 RLS Scopes | Connects to Trino query gateway to execute interactive analytical spatial queries. |
-| **Trino / Polaris** | **Ceph RADOS Gateway** | `TCP 8080` (Ceph RGW) / S3 REST | S3 Access Key | Scans and commits Parquet data files under S3 Object Lock protection. |
-| **FastMCP Agent** | **PostgreSQL Master Core** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only Session Scope | Exposes master context from PostgreSQL PostGIS/pgvector to AI models via read-only session roles. |
-| **Trino / Polaris / FastMCP** | **Ceph RADOS Gateway / MinIO** | `TCP 8080` (Ceph RGW) / `TCP 9000` (MinIO) S3 REST | S3 Access Key / WORM Compliance Lock | Queries, scans, and retrieves versioned Parquet table snapshots under S3 Object Lock. |
+| **Laravel Web App** | **RustFS Storage** | `TCP 9000` / POSIX Mount & REST | Session JWT / Shared ACL | Non-IT users upload files into isolated shared staging directories. |
+| **RustFS Storage** | **Apache NiFi 2.0** | `TCP 8443` / Directory Watcher | Mutual TLS / Service Token | NiFi picks up raw files for extraction, normalization, and validation. |
+| **Apache NiFi 2.0** | **OpenMetadata** | `TCP 8585` / REST API | Bearer API Key | Emits lineage metadata, schema tags, and provenance classification records. |
+| **Apache NiFi 2.0** | **Laravel Verification** | `TCP 9000` / Shared Volume Swap | Session JWT | Places processed output back into staging directory for human review. |
+| **Apache NiFi 2.0** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Service Role Credentials | Ingests human-verified data into High-Availability PostgreSQL master database. |
+| **Apache Superset** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Read-Only Analytical Scope | Renders interactive dashboards, geospatial maps, and reporting analytics. |
+| **MCP Server** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Session Context Injection (`SET LOCAL`) | Exposes SSoT context to external AI agents via sandboxed read-only tools. |
+| **AIOps Suite** | **Proxmox / Podman** | `TCP 22` / SSH, `TCP 3000` SemaphoreUI | SSH Keys & Git Tokens | Automates playbook execution, configuration drift management, and pod deployments. |
+
+---
+
+## 🛠️ Baseline Software Stack Architecture
+
+The platform standardizes on an enterprise-grade, 100% open-source software stack deployed on Proxmox VE hyper-converged infrastructure using Podman rootless pods:
+
+1. **Database:** **Percona Patroni PostgreSQL 18** — High-availability clustered relational master persistence engine providing SSoT transaction guarantees and spatial query execution.
+2. **Data Plane:** **Apache NiFi 2.0 + OpenMetadata** — Low-code visual workflow processing, automated stream/batch ingestion, schema extraction, and metadata lineage tracking.
+3. **Visualization:** **Apache Superset** — Enterprise business intelligence, spatial analytics, and executive reporting engine.
+4. **AIOps & Orchestration:** **Ansible + Gitea + ARA + SemaphoreUI** — GitOps automation pipeline, infrastructure-as-code management, execution audit tracking (ARA), and web UI orchestration (SemaphoreUI).
+5. **File & Object Storage:** **RustFS + Ceph S3** — RustFS provides high-performance shared file directory staging for non-IT user uploads, while Ceph S3 serves as the primary object storage baseline.
+6. **Infrastructure Baseline:** **Proxmox VE (HCI) + Podman Rootless Pods** — Hyper-converged virtualized infrastructure running container workloads in rootless Podman pods. *Note: Kubernetes container orchestration will be evaluated in a later operational phase.*
+
+---
+
+## 🔄 Human-in-the-Loop File Quarantine Workflow
+
+To bridge non-IT user interactions with automated big data ETL while guaranteeing SSoT data integrity, the architecture enforces a structured quarantine and approval workflow built using Laravel and Apache NiFi 2.0:
+
+```
+[Non-IT User]
+     │
+     ▼ (1. Login & Upload File)
+[Laravel Web App] ──> [RustFS Staging Directory]
+                             │
+                             ▼ (2. Directory Watcher Pickup)
+                     [Apache NiFi 2.0 Pipeline]
+                             │
+                             ▼ (3. Extract, Normalize & Process)
+                     [RustFS Verification Directory]
+                             │
+                             ▼ (4. Display Summary & Preview)
+[Laravel Web App] <── [Human User Review & Verification]
+     │
+     ▼ (5. Human Grant Approval)
+[Apache NiFi 2.0] ──> (6. Final Load) ──> [Percona Patroni PostgreSQL 18]
+```
+
+### Process Lifecycle Stages:
+1. **User Login & Upload:** Non-IT domain users authenticate via Laravel and upload raw spreadsheet/document files into dedicated staging directories managed by RustFS.
+2. **Automated NiFi Pickup:** Apache NiFi 2.0 directory monitoring processors pick up newly uploaded files, parse schemas, perform automated data cleansing, and execute quality validations.
+3. **Verification Staging:** NiFi writes the processed outputs into a human verification directory and updates the file status in OpenMetadata and Laravel.
+4. **Human Review & Verification:** Users inspect processed summaries, validation alerts, and diff previews within the user-friendly Laravel interface.
+5. **Approval Trigger:** Upon human verification and digital sign-off in Laravel, NiFi is triggered to complete the workflow.
+6. **Master Persistence Load:** NiFi moves the verified payload into Percona Patroni PostgreSQL 18 master database and archives raw artifacts to Ceph S3.
+
+---
+
+## 🏷️ Two-Tier Data Classification & Tagging Strategy
+
+All data processed within the platform is tagged into two distinct governance categories to preserve ground truth and prevent unverified AI outputs from corrupting SSoT datasets:
+
+| Tagging Category | Classification Name | Governance & Access Rules |
+| :--- | :--- | :--- |
+| **Category 1** | `REAL_DATA_AI_PROCESSED` | **Real Data & Real Processes with AI Processing:** Empirical physical data and human-driven business processes augmented by AI for cleaning, extraction, or formatting. Requires human verification before promotion to Percona Patroni PostgreSQL 18 master tables. |
+| **Category 2** | `AI_PROCESS_RAG_ENRICHED` | **AI Process with RAG & AI Enrichment:** Synthetic outputs, generative summaries, vector embeddings, and RAG contextual enrichments created by AI models. Contained in read-only sandbox layers with mandatory `AI_GENERATED` lineage tagging. |
+
+---
+
+## 📡 Interfaces for Humans and AI Agents
+
+The platform exposes dual interface layers to accommodate both human application consumption and AI agent tool calling:
+
+* **Application REST APIs:** High-performance REST endpoints exposed to frontend web apps, mobile clients, and external enterprise software. Enables standard CRUD, spatial queries, and analytical reporting over HTTPS TLS 1.3.
+* **Model Context Protocol (MCP) Server:** Native Python MCP server integration allowing external AI agents (e.g. Claude, Antigravity, local LLMs) to query context, execute sandboxed analytical tools, and retrieve SSoT metadata without direct database write permissions.
+
+---
+
+## 📅 Multi-Year Build & Business Case Migration Plan (2028–2032)
+
+Implementation and operational rollout are structured across a 5-year strategic timeline starting in 2028:
+
+```
+2028: Year 1 — Baseline Infrastructure Build
+├── Deploy Proxmox VE HCI cluster & Podman rootless runtime
+├── Provision Ceph S3 storage & RustFS staging directories
+├── Install Percona Patroni PostgreSQL 18 HA cluster
+├── Configure Apache NiFi 2.0, OpenMetadata & Apache Superset
+└── Deploy Laravel upload portal & MCP server integration
+
+2029–2032: Years 2–5 — Business Case Migration & System Evolution
+├── Migrate legacy departmental business cases into SSoT platform
+├── Onboard high-volume telemetry & IoT streaming feeds
+├── Enhance AI/RAG enrichment pipelines & MCP tool capabilities
+└── Evaluate Kubernetes container orchestration migration requirements
+```
 
 ---
 

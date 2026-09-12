@@ -1,5 +1,6 @@
 ---
 okf_version: "0.2"
+type: documentation_index
 title: "Modernizing Big Data Analytics Architecture — BDA Lakehouse SSoT"
 description: "Master index and architecture gateway for the Big Data Analytics (BDA) Single Source of Truth (SSoT) platform."
 status: active
@@ -294,7 +295,7 @@ Following the **Diátaxis Framework**, documentation is categorized into four di
 * [PostgreSQL & pgvector Enterprise Strategy Specification](docs/reference/postgresql-pgvector-enterprise-strategy.html)
 * [Apache NiFi 2.0 Master Data Plane Architecture and Migration Guide](docs/reference/apache-nifi-2-master-data-plane-and-migration.html)
 * [Consumption & Integration Layer Specification](docs/reference/consumption-and-integration-layer.html)
-* [5-Year Strategic BDA & AI Roadmap & Master Business Case Specification (2026–2030)](docs/reference/5-year-bda-ai-roadmap-and-business-case.html)
+* [5-Year Strategic BDA & AI Roadmap & Master Business Case Specification (2028–2032)](docs/reference/5-year-bda-ai-roadmap-and-business-case.html)
 * [OpenWiki SSoT Knowledge Base & Quickstart](openwiki/quickstart.md)
 
 ### 💡 4. Explanation (Theoretical Rationale)

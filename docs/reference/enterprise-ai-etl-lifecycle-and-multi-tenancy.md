@@ -209,7 +209,7 @@ flowchart TD
 
     subgraph Operate ["4. Operate &amp; Multi-Tenant AI Search"]
         ClientUser["Internal Staff / External Client"] --> Gateway["FastAPI Gateway / MCP Server"]
-        Gateway -->|"Extract JWT Claims"| ContextInject["Context Parameter Injection<br/>(SET LOCAL app.current_user_role<br/>SET LOCAL app.current_tenant_id)"]
+        Gateway -->|"Extract JWT Claims"| ContextInject["Context Parameter Injection<br/>(set_config app.current_user_role<br/>set_config app.current_tenant_id)"]
         ContextInject -->|"Execute Hybrid Search Query"| PostgresDB
         PostgresDB -->|"RLS Filtered Vector Candidates"| ClientUser
     end
@@ -222,7 +222,7 @@ flowchart TD
 | **Inbound Storage** | **NiFi CDC Engine** | File System / S3 API | Ingestion DMZ | Evaluates SHA-256 checksums against NiFi state storage; kills flow if unmodified to eliminate duplicate embeddings. |
 | **`DetectMimeType` Router** | **Native Python Worker** | Internal IPC Memory Bridge | Isolated Process Runtime | Routes documents to Apache Tika, code to AST splitters, and spatial files to GeoJSON parsers for context-aware chunking. |
 | **Observability Node** | **Embedding Generator** | In-Memory FlowFile | Isolation Runtime | Validates text length, token metrics, and language detection before sending payloads to GPU embedding transformers. |
-| **FastAPI / MCP Server** | **PostgreSQL Master Hub** | `TCP 5432` / PostgreSQL Protocol | TLS 1.3 (`verify-full`, JWT Token) | Injects `SET LOCAL` session context parameters; PostgreSQL Row-Level Security (RLS) automatically blocks unauthorized records. |
+| **FastAPI / MCP Server** | **PostgreSQL Master Hub** | `TCP 5432` / PostgreSQL Protocol | TLS 1.3 (`verify-full`, JWT Token) | Injects `set_config` session context parameters; PostgreSQL Row-Level Security (RLS) automatically blocks unauthorized records. |
 | **n8n Control Loop** | **PostgreSQL Master Hub** | `TCP 5432` / Admin SQL Role | Scheduled Low-Traffic Cron | Triggers `REINDEX CONCURRENTLY` for HNSW vector indexes to prevent performance degradation during large file transfers. |
 
 ---
@@ -322,7 +322,7 @@ If an existing enterprise document is edited or deleted on an upstream SFTP serv
 Utilise Apache NiFi's **Stateful Processors** to maintain an in-memory and persistent key-value store of cryptographic hashes (**SHA-256**) for all ingested payloads, combined with an authoritative inventory scan and deletion-tombstone workflow to manage removed documents:
 
 1. **Payload Modification Tracking:** When incoming files match existing SHA-256 hashes in state storage, NiFi terminates the flow early, avoiding unnecessary embedding model API calls.
-2. **Deletion & Tombstone Engine:** To handle deleted source files, a scheduled NiFi inventory processor compares active source listings against the state cache. When a previously indexed file is no longer present in the source manifest, NiFi emits a deletion event and executes a tenant-scoped SQL deletion query using the document's stable identity (`document_source_url` and `tenant_id`), purging its associated vector chunks from PostgreSQL:
+2. **Deletion & Tombstone Engine:** To handle deleted source files, a scheduled NiFi inventory processor compares active source listings against the state cache. When a previously indexed file is no longer present in the source manifest, NiFi emits a deletion event, removes the SHA-256 entry from its state cache, and executes a tenant-scoped SQL deletion query using the document's stable identity (`document_source_url` and `tenant_id`), purging its associated vector chunks from PostgreSQL so that any subsequent reappearance forces full re-ingestion:
 
 ```sql
 -- Purge vector chunks for deleted source documents scoped to tenant

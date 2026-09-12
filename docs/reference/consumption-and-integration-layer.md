@@ -485,7 +485,8 @@ def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Security(securi
             KEYCLOAK_PUBLIC_KEY,
             algorithms=["RS256"],
             audience=OIDC_AUDIENCE,
-            issuer=OIDC_ISSUER
+            issuer=OIDC_ISSUER,
+            options={"require": ["exp"]}
         )
         user_role = payload.get("user_role")
         tenant_id = payload.get("tenant_id")

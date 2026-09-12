@@ -53,6 +53,9 @@
     url: /docs/reference/consumption-and-integration-layer.html
   - title: Data Governance, Subsystems, and Standards Matrix
     url: /docs/reference/governance-matrix.html
+  - title: Enterprise AI ETL Lifecycle, Dynamic Multi-Modal Parsing, & Multi-Tenant
+      RLS Specification
+    url: /docs/reference/enterprise-ai-etl-lifecycle-and-multi-tenancy.html
   - title: Legacy Big Data Analytics Environment Architectural Deconstruction
     url: /docs/reference/legacy-architecture.html
   - title: Next Technology Roadmap Stack Specification

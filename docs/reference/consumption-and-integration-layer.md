@@ -338,7 +338,7 @@ async def semantic_spatial_search(
     radius_meters: float = 5000.0,
     limit: int = 5
 ) -> str:
-    """Executes a hybrid spatial (PostGIS) and semantic vector (pgvector) query over the PostgreSQL Lakehouse.
+    """Executes a hybrid spatial (PostGIS) and semantic vector (pgvector) query with strict session context injection.
 
     Args:
         query_text: Plain text search prompt from user.
@@ -354,11 +354,21 @@ async def semantic_spatial_search(
     if not db_pool or not embedding_model:
         return json.dumps({"error": "Server not initialized"})
 
+    # Derive identity parameters from authenticated MCP principal context rather than caller input
+    ctx = mcp.get_context()
+    user_role = getattr(ctx, "user_role", None) or os.getenv("MCP_CLIENT_ROLE")
+    tenant_id = getattr(ctx, "tenant_id", None) or os.getenv("MCP_CLIENT_TENANT_ID")
+
+    if not user_role or user_role not in ALLOWED_ROLES:
+        raise ValueError(f"Invalid or missing user_role in MCP identity context: {user_role}")
+    if not tenant_id or not isinstance(tenant_id, str):
+        raise ValueError("Missing or invalid tenant_id in MCP identity context")
+
     # 1. Generate local vector embedding
     embedding_vector = embedding_model.encode(query_text).tolist()
     embedding_str = f"[{','.join(map(str, embedding_vector))}]"
 
-    # 2. Query PostgreSQL Master with SRID 4326 geography casting
+    # 2. Query PostgreSQL Master with transactional session context parameter binding via set_config
     sql_query = """
         SELECT
             uuid,
@@ -374,7 +384,12 @@ async def semantic_spatial_search(
     """
 
     async with db_pool.acquire() as conn:
-        records = await conn.fetch(sql_query, longitude, latitude, embedding_str, radius_meters, limit)
+        async with conn.transaction():
+            # Inject authenticated session security parameters for PostgreSQL Row-Level Security (RLS) via set_config
+            await conn.execute("SELECT set_config('app.current_user_role', $1, true);", user_role)
+            await conn.execute("SELECT set_config('app.current_tenant_id', $1, true);", tenant_id)
+
+            records = await conn.fetch(sql_query, longitude, latitude, embedding_str, radius_meters, limit)
 
         results = []
         for r in records:
@@ -455,7 +470,7 @@ def get_db_connection():
     return conn
 
 def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Security(security)) -> Dict[str, Any]:
-    """Validates Keycloak OIDC JWT Bearer token signature, issuer, audience, and expiry."""
+    """Validates Keycloak OIDC JWT Bearer token signature, issuer, audience, and security claims."""
     token = credentials.credentials
     if not token or not KEYCLOAK_PUBLIC_KEY:
         raise HTTPException(
@@ -470,8 +485,25 @@ def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Security(securi
             KEYCLOAK_PUBLIC_KEY,
             algorithms=["RS256"],
             audience=OIDC_AUDIENCE,
-            issuer=OIDC_ISSUER
+            issuer=OIDC_ISSUER,
+            options={"require": ["exp"]}
         )
+        user_role = payload.get("user_role")
+        tenant_id = payload.get("tenant_id")
+
+        if not user_role or user_role not in ALLOWED_ROLES:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Missing or invalid user_role claim in JWT token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        if not tenant_id or not isinstance(tenant_id, str):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Missing or invalid tenant_id claim in JWT token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
         return payload
     except jwt.PyJWTError as err:
         raise HTTPException(
@@ -494,29 +526,36 @@ class IngestionPayload(BaseModel):
     latitude: float = Field(..., example=2.9213)
 
 @app.post("/api/v1/search/hybrid", summary="Execute Hybrid Spatial + Vector Search", dependencies=[Depends(verify_jwt_token)])
-def hybrid_search(req: SearchRequest):
-    """Converts user query text into vector embedding and executes unified PostGIS + pgvector query with SRID 4326."""
+def hybrid_search(req: SearchRequest, token_payload: Dict[str, Any] = Depends(verify_jwt_token)):
+    """Converts user query text into vector embedding and executes unified PostGIS + pgvector query with RLS context injection."""
     query_vector = model.encode(req.query_text).tolist()
+    user_role = token_payload["user_role"]
+    tenant_id = token_payload["tenant_id"]
 
     conn = get_db_connection()
     try:
-        with conn.cursor(cursor_factory=RealDictCursor) as cur:
-            sql = """
-                SELECT
-                    uuid,
-                    source_origin,
-                    payload_content,
-                    ST_AsText(spatial_coordinates) AS location_wkt,
-                    ST_Distance(spatial_coordinates, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography) AS distance_meters,
-                    1 - (semantic_embedding <=> %s::vector) AS cosine_similarity
-                FROM secure_ai_lakehouse
-                WHERE ST_DWithin(spatial_coordinates, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography, %s)
-                ORDER BY semantic_embedding <=> %s::vector
-                LIMIT %s;
-            """
-            cur.execute(sql, (req.longitude, req.latitude, query_vector, req.longitude, req.latitude, req.radius_meters, query_vector, req.limit))
-            results = cur.fetchall()
-            return {"status": "success", "count": len(results), "data": results}
+        with conn:
+            with conn.cursor(cursor_factory=RealDictCursor) as cur:
+                # Inject authenticated user context parameters for PostgreSQL Row-Level Security (RLS) via set_config
+                cur.execute("SELECT set_config('app.current_user_role', %s, true);", (user_role,))
+                cur.execute("SELECT set_config('app.current_tenant_id', %s, true);", (tenant_id,))
+
+                sql = """
+                    SELECT
+                        uuid,
+                        source_origin,
+                        payload_content,
+                        ST_AsText(spatial_coordinates) AS location_wkt,
+                        ST_Distance(spatial_coordinates, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography) AS distance_meters,
+                        1 - (semantic_embedding <=> %s::vector) AS cosine_similarity
+                    FROM secure_ai_lakehouse
+                    WHERE ST_DWithin(spatial_coordinates, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography, %s)
+                    ORDER BY semantic_embedding <=> %s::vector
+                    LIMIT %s;
+                """
+                cur.execute(sql, (req.longitude, req.latitude, query_vector, req.longitude, req.latitude, req.radius_meters, query_vector, req.limit))
+                results = cur.fetchall()
+                return {"status": "success", "count": len(results), "data": results}
     finally:
         conn.close()
 

@@ -22,6 +22,23 @@ topics:
 
 # 📜 DSOM Execution Walkthrough & Mental Anchors
 
+## Session Anchor: 2026-09-10 — Enterprise AI ETL Lifecycle, Dynamic Parsing & Multi-Tenant RLS Integration
+
+- **Context:** Formulated and published the authoritative reference specification `docs/reference/enterprise-ai-etl-lifecycle-and-multi-tenancy.md` in UK English addressing five operational gaps in the AI ETL cycle, dynamic multi-modal parsing ("All File Types"), and multi-tenant PostgreSQL Row-Level Security (RLS). Handled all PR feedback comments, updated spatial memory, and completed End of Day (EOD) Palace Sync.
+- **Actions Taken:**
+  1. Authored `docs/reference/enterprise-ai-etl-lifecycle-and-multi-tenancy.md` detailing the 5 AI ETL operational gaps (Token-Aware Chunking & Metadata Enrichment, Vector Index Optimisation & Asynchronous REINDEX Triggers, CDC Delta Sync & Deletion Tombstones, Semantic Drift & Observability Checkpoints, and Multi-Tenant RLS Mapping).
+  2. Detailed Dynamic MIME-Type Parsing Routing loop (`DetectMimeType`) for "All File Types" (Apache Tika, Record Path Parser, AST code splitters, PostGIS/pgvector routing).
+  3. Updated `docs/reference/consumption-and-integration-layer.md` and `docs/reference/postgresql-pgvector-enterprise-strategy.md` with:
+     - MCP Server tool deriving identity context from `mcp.get_context()`.
+     - Transaction-local `SELECT set_config(...)` parameter injection for PostgreSQL RLS.
+     - FastAPI `verify_jwt_token` requiring `exp`, `user_role` (validated against allowed roles), and `tenant_id` claims without insecure default fallbacks.
+     - PostgreSQL schema DDL update adding `CHECK (access_classification IN ('PUBLIC', 'RESTRICTED', 'INTERNAL_ONLY'))`.
+     - CDC deletion tombstone flow clearing NiFi SHA-256 state cache entries on source file removal.
+  4. Synchronised SVG graphics, Mermaid topologies, and summary routing tables to use `set_config` labels consistently.
+  5. Updated dynamic documentation summary indexes (`SUMMARY.md` and `_data/navigation.yml`) via `tools/generate_summary.py`.
+  6. Verified 100% test pass rate across all 279 pytest unit/OKF tests.
+  7. Executed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory files (`task.md`, `walkthrough.md`, `palace_registry.md`, `active_context_manifest.md`, `checkpoint_summary.txt`).
+
 ## Session Anchor: 2026-09-10 — EOD Palace Sync & Dual-Render Diagrams PR Review Alignment
 
 - **Context:** Executed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory under the Deep State of Mind (DSOM) Protocol and LLM-WIKI framework. Completed full Dual-Render Architecture Diagram Adoption (inline SVG, Mermaid code blocks, and Summary Routing Tables) across all 22 documentation files in `docs/` and root landing pages (`README.md`, `START-HERE.md`, `docs/README.md`), and resolved all PR review comments and line-specific alignment feedback.

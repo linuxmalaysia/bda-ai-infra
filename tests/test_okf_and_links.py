@@ -10,7 +10,7 @@ import os
 
 from pathlib import Path
 import re
-from typing import List, Union
+from typing import Dict, List, Union
 import pytest
 import yaml
 
@@ -312,11 +312,12 @@ def test_svg_graphics_embedded_raw_inline_without_code_fences(md_path: Path) -> 
 
 
 def test_tier_0_cryptographic_signature_contract_mutations() -> None:
-    """Verify Ed25519 signature validation and mutation rejection for Tier 0 contracts.
+    """Verify Ed25519 signature validation, key resolution, and mutation rejection for Tier 0 contracts.
 
-    Validates that mutating any bound certification or identity field
-    (origin_type, verification_tier, key_id, human_author_id, payload_sha256, verification_timestamp)
-    invalidates the Ed25519 signature and prevents assignment of VERIFIED_VALID status.
+    Validates that:
+    1) RFC 8785 Canonical JSON (JCS) encoding produces raw UTF-8 bytes for non-ASCII characters without escaping.
+    2) Verification key is resolved dynamically via an independent key registry using provenance_data["key_id"].
+    3) Mutating any bound certification or identity field invalidates the signature and prevents assignment of VERIFIED_VALID.
     """
     doc_path = REPO_ROOT / "docs" / "explanation" / "human-ai-quarantine-model.md"
     content = doc_path.read_text(encoding="utf-8")
@@ -345,7 +346,7 @@ def test_tier_0_cryptographic_signature_contract_mutations() -> None:
     sig_hex = provenance_data["signature"]
     assert len(sig_hex) == 128, f"Invalid 64-byte raw hex signature length: {len(sig_hex)}"
 
-    # Pure Python Ed25519 verification helper
+    # Pure Python Ed25519 verification & signing helper
     b_len = 256
     q_mod = 2**255 - 19
     l_order = 2**252 + 27742317777372353535851937790883648493
@@ -405,6 +406,38 @@ def test_tier_0_cryptographic_signature_contract_mutations() -> None:
         )
         return scalarmult(b_point, a)
 
+    def sign_ed25519(m, sk, pk):
+        h = hash_sha512(sk)
+        a = 2 ** (b_len - 2) + sum(
+            2**i * (h[i // 8] >> (i % 8) & 1) for i in range(3, b_len - 2)
+        )
+        r = sum(
+            2**i * (hash_sha512(h[b_len // 8 :] + m)[i // 8] >> (i % 8) & 1)
+            for i in range(0, 2 * b_len)
+        )
+        R = scalarmult(b_point, r)
+
+        encoded_r = sum(
+            2**i * (R[1] >> i & 1) for i in range(0, b_len - 1)
+        ) + 2 ** (b_len - 1) * (R[0] & 1)
+        encoded_r_bytes = encoded_r.to_bytes(32, "little")
+
+        encoded_a = sum(
+            2**i * (pk[1] >> i & 1) for i in range(0, b_len - 1)
+        ) + 2 ** (b_len - 1) * (pk[0] & 1)
+        encoded_a_bytes = encoded_a.to_bytes(32, "little")
+
+        s_val = (
+            r
+            + sum(
+                2**i * (hash_sha512(encoded_r_bytes + encoded_a_bytes + m)[i // 8] >> (i % 8) & 1)
+                for i in range(0, 2 * b_len)
+            )
+            * a
+        ) % l_order
+        encoded_s_bytes = s_val.to_bytes(32, "little")
+        return encoded_r_bytes + encoded_s_bytes
+
     def verify_signature(m_bytes, sig_bytes, pk):
         if len(sig_bytes) != 64:
             return False
@@ -436,29 +469,53 @@ def test_tier_0_cryptographic_signature_contract_mutations() -> None:
         ka = scalarmult(pk, k)
         return sb == edwards(r_point, ka)
 
-    sk_test = b"12345678901234567890123456789012"
-    pk_test = secret_to_public(sk_test)
+    # Setup Key Registry to test dynamic resolution via key_id
+    sk_secops = b"12345678901234567890123456789012"
+    pk_secops = secret_to_public(sk_secops)
+
+    key_registry: Dict[str, object] = {
+        "key_eddsa_2026_secops_9923": pk_secops,
+    }
+
+    # Resolve verification key dynamically via key_id
+    resolved_key_id = provenance_data["key_id"]
+    assert resolved_key_id in key_registry, f"Key ID {resolved_key_id} not found in key registry"
+    resolved_pk = key_registry[resolved_key_id]
+
+    # RFC 8785 JSON Canonicalization (ensure_ascii=False for UTF-8 non-ASCII byte validation)
+    def rfc8785_canonical_encode(data_dict: dict) -> bytes:
+        return json.dumps(
+            data_dict, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+        ).encode("utf-8")
 
     # Reconstruct canonical signed payload
     canonical_payload = {k: provenance_data[k] for k in sorted(bound_fields)}
-    canonical_bytes = json.dumps(
-        canonical_payload, sort_keys=True, separators=(",", ":")
-    ).encode("utf-8")
+    canonical_bytes = rfc8785_canonical_encode(canonical_payload)
 
-    # Verify signature over valid canonical payload
+    # Verify signature over valid canonical payload using resolved key
     raw_sig = bytes.fromhex(sig_hex)
     assert verify_signature(
-        canonical_bytes, raw_sig, pk_test
+        canonical_bytes, raw_sig, resolved_pk
     ), "Tier 0 valid Ed25519 signature verification failed"
+
+    # Verify RFC 8785 canonicalization with non-ASCII test vector
+    non_ascii_payload = dict(canonical_payload)
+    non_ascii_payload["human_author_id"] = "usr_domain_specialist_8842_Kuala_Lumpur_—_Taman_Negara"
+    non_ascii_bytes = rfc8785_canonical_encode(non_ascii_payload)
+    assert "—".encode("utf-8") in non_ascii_bytes, "RFC 8785 canonical bytes must contain raw UTF-8 non-ASCII characters"
+    assert b"\\u2014" not in non_ascii_bytes, "RFC 8785 canonical bytes must not contain escaped Unicode"
+
+    non_ascii_sig = sign_ed25519(non_ascii_bytes, sk_secops, pk_secops)
+    assert verify_signature(
+        non_ascii_bytes, non_ascii_sig, resolved_pk
+    ), "Ed25519 verification failed for non-ASCII RFC 8785 canonical bytes"
 
     # Assert that mutating ANY bound field invalidates the signature
     for mutated_field in bound_fields:
         mutated_payload = dict(canonical_payload)
         mutated_payload[mutated_field] = mutated_payload[mutated_field] + "_mutated"
-        mutated_bytes = json.dumps(
-            mutated_payload, sort_keys=True, separators=(",", ":")
-        ).encode("utf-8")
+        mutated_bytes = rfc8785_canonical_encode(mutated_payload)
 
         assert not verify_signature(
-            mutated_bytes, raw_sig, pk_test
+            mutated_bytes, raw_sig, resolved_pk
         ), f"Signature verification unexpectedly succeeded for mutated field: {mutated_field}"

@@ -205,13 +205,14 @@ To bridge non-IT user interactions with automated big data ETL while guaranteein
 [Apache NiFi 2.0] ──> (6. Final Load) ──> [Percona Patroni PostgreSQL 18]
 ```
 
-### Process Lifecycle Stages:
-1. **User Login & Upload:** Non-IT domain users authenticate via Laravel and upload raw spreadsheet/document files into dedicated staging directories managed by RustFS.
-2. **Automated NiFi Pickup:** Apache NiFi 2.0 directory monitoring processors pick up newly uploaded files, parse schemas, perform automated data cleansing, and execute quality validations.
-3. **Verification Staging:** NiFi writes the processed outputs into a human verification directory and updates the file status in OpenMetadata and Laravel.
-4. **Human Review & Verification:** Users inspect processed summaries, validation alerts, and diff previews within the user-friendly Laravel interface.
-5. **Approval Trigger:** Upon human verification and digital sign-off in Laravel, NiFi is triggered to complete the workflow.
-6. **Master Persistence Load:** NiFi moves the verified payload into Percona Patroni PostgreSQL 18 master database and archives raw artifacts to Ceph S3.
+### Process Lifecycle Stages
+
+* **User Login & Upload:** Non-IT domain users authenticate via Laravel and upload raw spreadsheet/document files into dedicated staging directories managed by RustFS.
+* **Automated NiFi Pickup:** Apache NiFi 2.0 directory monitoring processors pick up newly uploaded files, parse schemas, perform automated data cleansing, and execute quality validations.
+* **Verification Staging:** NiFi writes the processed outputs into a human verification directory and updates the file status in OpenMetadata and Laravel.
+* **Human Review & Verification:** Users inspect processed summaries, validation alerts, and diff previews within the user-friendly Laravel interface.
+* **Approval Trigger:** Upon human verification and digital sign-off in Laravel, NiFi is triggered to complete the workflow.
+* **Master Persistence Load:** NiFi moves the verified payload into Percona Patroni PostgreSQL 18 master database and archives raw artifacts to Ceph S3.
 
 ---
 
@@ -258,12 +259,12 @@ Implementation and operational rollout are structured across a 5-year strategic 
 
 ## 🤖 AI Gateway & Sovereign Protocols
 
-- **Root AI Gateway:** [AGENTS.html](AGENTS.html)
-- **Sovereign AI Constitution:** [.agents/AGENTS.md](.agents/AGENTS.md)
-- **Spatial Memory Engine:** [.agents/brain/](.agents/brain/) (`task.md`, `walkthrough.md`, `palace_registry.md`, `active_context_manifest.md`)
-- **AI Cognitive Twin Protocol:** [docs/AI-COGNITIVE-TWIN-PROTOCOL.html](docs/AI-COGNITIVE-TWIN-PROTOCOL.html)
-- **OpenWiki SSoT Navigation & Graph:** [openwiki/quickstart.md](openwiki/quickstart.md) (`tools/openwiki_emulator.py`)
-- **Master Onboarding Map:** [START-HERE.html](START-HERE.html)
+* **Root AI Gateway:** [AGENTS.html](AGENTS.html)
+* **Sovereign AI Constitution:** [.agents/AGENTS.md](.agents/AGENTS.md)
+* **Spatial Memory Engine:** [.agents/brain/](.agents/brain/) (`task.md`, `walkthrough.md`, `palace_registry.md`, `active_context_manifest.md`)
+* **AI Cognitive Twin Protocol:** [docs/AI-COGNITIVE-TWIN-PROTOCOL.html](docs/AI-COGNITIVE-TWIN-PROTOCOL.html)
+* **OpenWiki SSoT Navigation & Graph:** [openwiki/quickstart.md](openwiki/quickstart.md) (`tools/openwiki_emulator.py`)
+* **Master Onboarding Map:** [START-HERE.html](START-HERE.html)
 
 ---
 
@@ -273,51 +274,51 @@ Following the **Diátaxis Framework**, documentation is categorized into four di
 
 ### 🎓 1. Tutorials (Practical Learning)
 
-- [Onboarding and Developer Setup Guide](docs/tutorials/onboarding-and-setup.html)
+* [Onboarding and Developer Setup Guide](docs/tutorials/onboarding-and-setup.html)
 
 ### 🛠️ 2. How-To Guides (Practical Problem-Solving)
 
-- [Ingestion Pipeline & Superset Modernization](docs/how-to-guides/ingestion-pipeline-modernization.html)
-- [Phased Migration Strategy & Roadmap](docs/how-to-guides/phased-migration-strategy.html)
-- [Onboarding and Scaling New AI/ML Business Cases](docs/how-to-guides/onboarding-new-ai-business-cases.html)
+* [Ingestion Pipeline & Superset Modernization](docs/how-to-guides/ingestion-pipeline-modernization.html)
+* [Phased Migration Strategy & Roadmap](docs/how-to-guides/phased-migration-strategy.html)
+* [Onboarding and Scaling New AI/ML Business Cases](docs/how-to-guides/onboarding-new-ai-business-cases.html)
 
 ### 📚 3. Reference Material (Factual Technical Specs)
 
-- [Legacy BDA Environment Architectural Deconstruction](docs/reference/legacy-architecture.html)
-- [Target 100% Open-Source Lakehouse Architecture](docs/reference/lakehouse-architecture.html)
-- [Big Data Domain Analytical Modules Specifications](docs/reference/business-applications.html)
-- [Data Governance & Subsystems Matrix](docs/reference/governance-matrix.html)
-- [Solution 1 Reference Spec: AWS Native & Cloud Managed Infrastructure](docs/reference/solution-1-aws-native.html)
-- [Solution 2 Reference Spec: Hybrid Cloud Lakehouse & On-Premises GPU Infrastructure](docs/reference/solution-2-hybrid-ai.html)
-- [Solution 3 Reference Spec: 100% On-Premises Sovereign Architecture (Proxmox VE + RKE2 + Ceph SDS)](docs/reference/solution-3-onprem-proxmox-rke2.html)
-- [Next Technology Roadmap Stack Specification (Apache Polaris, DuckDB vss / pgvector, OpenTelemetry)](docs/reference/next-technology-roadmap-stack.html)
-- [PostgreSQL & pgvector Enterprise Strategy Specification](docs/reference/postgresql-pgvector-enterprise-strategy.html)
-- [Apache NiFi 2.0 Master Data Plane Architecture and Migration Guide](docs/reference/apache-nifi-2-master-data-plane-and-migration.html)
-- [Consumption & Integration Layer Specification](docs/reference/consumption-and-integration-layer.html)
-- [5-Year Strategic BDA & AI Roadmap & Master Business Case Specification (2026–2030)](docs/reference/5-year-bda-ai-roadmap-and-business-case.html)
-- [OpenWiki SSoT Knowledge Base & Quickstart](openwiki/quickstart.md)
+* [Legacy BDA Environment Architectural Deconstruction](docs/reference/legacy-architecture.html)
+* [Target 100% Open-Source Lakehouse Architecture](docs/reference/lakehouse-architecture.html)
+* [Big Data Domain Analytical Modules Specifications](docs/reference/business-applications.html)
+* [Data Governance & Subsystems Matrix](docs/reference/governance-matrix.html)
+* [Solution 1 Reference Spec: AWS Native & Cloud Managed Infrastructure](docs/reference/solution-1-aws-native.html)
+* [Solution 2 Reference Spec: Hybrid Cloud Lakehouse & On-Premises GPU Infrastructure](docs/reference/solution-2-hybrid-ai.html)
+* [Solution 3 Reference Spec: 100% On-Premises Sovereign Architecture (Proxmox VE + RKE2 + Ceph SDS)](docs/reference/solution-3-onprem-proxmox-rke2.html)
+* [Next Technology Roadmap Stack Specification (Apache Polaris, DuckDB vss / pgvector, OpenTelemetry)](docs/reference/next-technology-roadmap-stack.html)
+* [PostgreSQL & pgvector Enterprise Strategy Specification](docs/reference/postgresql-pgvector-enterprise-strategy.html)
+* [Apache NiFi 2.0 Master Data Plane Architecture and Migration Guide](docs/reference/apache-nifi-2-master-data-plane-and-migration.html)
+* [Consumption & Integration Layer Specification](docs/reference/consumption-and-integration-layer.html)
+* [5-Year Strategic BDA & AI Roadmap & Master Business Case Specification (2026–2030)](docs/reference/5-year-bda-ai-roadmap-and-business-case.html)
+* [OpenWiki SSoT Knowledge Base & Quickstart](openwiki/quickstart.md)
 
 ### 💡 4. Explanation (Theoretical Rationale)
 
-- [The Human-to-AI Quarantine Model](docs/explanation/human-ai-quarantine-model.html)
-- [Model Context Protocol (MCP) & AI Sandboxing Architecture](docs/explanation/mcp-and-ai-sandboxing.html)
-- [Governance, Security, and Compliance Framework](docs/explanation/governance-and-compliance.html)
+* [The Human-to-AI Quarantine Model](docs/explanation/human-ai-quarantine-model.html)
+* [Model Context Protocol (MCP) & AI Sandboxing Architecture](docs/explanation/mcp-and-ai-sandboxing.html)
+* [Governance, Security, and Compliance Framework](docs/explanation/governance-and-compliance.html)
 
 ---
 
 ## 🛠️ CI/CD Workflows, Linters & Test Suites
 
-- **Automated OKF & Zero Link Decay Audit:** `.github/workflows/dsom-audit.yml` and `tests/test_okf_and_links.py`
-- **OpenWiki Emulator & Knowledge Graph:** `tools/openwiki_emulator.py` (`uv run python tools/openwiki_emulator.py --init`)
-- **Code Health Linters:** `ruff` & `markdownlint-cli` configured via `pyproject.toml`, `.markdownlint.json`, and `.pre-commit-config.yaml`
-- **Ansible & Infrastructure Testing:** `.ansible-lint` and Molecule scenarios in `molecule/default/`
-- **Playwright E2E Search Tests:** `playwright.config.ts` and `tests/e2e/docs_search.spec.ts`
+* **Automated OKF & Zero Link Decay Audit:** `.github/workflows/dsom-audit.yml` and `tests/test_okf_and_links.py`
+* **OpenWiki Emulator & Knowledge Graph:** `tools/openwiki_emulator.py` (`uv run python tools/openwiki_emulator.py --init`)
+* **Code Health Linters:** `ruff` & `markdownlint-cli` configured via `pyproject.toml`, `.markdownlint.json`, and `.pre-commit-config.yaml`
+* **Ansible & Infrastructure Testing:** `.ansible-lint` and Molecule scenarios in `molecule/default/`
+* **Playwright E2E Search Tests:** `playwright.config.ts` and `tests/e2e/docs_search.spec.ts`
 
 ---
 
 ## 📜 Sovereign Ledgers & Standards
 
-- **Master Navigation Summary:** [SUMMARY.html](SUMMARY.html)
-- **AI Crawler Sitemap:** [llms.txt](llms.txt)
-- **Changelog Ledger:** [CHANGELOG.html](CHANGELOG.html)
-- **Execution History Ledger:** [HISTORY.html](HISTORY.html)
+* **Master Navigation Summary:** [SUMMARY.html](SUMMARY.html)
+* **AI Crawler Sitemap:** [llms.txt](llms.txt)
+* **Changelog Ledger:** [CHANGELOG.html](CHANGELOG.html)
+* **Execution History Ledger:** [HISTORY.html](HISTORY.html)

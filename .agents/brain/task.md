@@ -23,7 +23,14 @@ topics:
 
 ## 🟢 Completed Objectives
 
-1. **Dual-Render Architecture Diagram Skill Upgrade**:
+1. **Enterprise AI ETL Lifecycle, Dynamic Multi-Modal Parsing & Multi-Tenant RLS Integration**:
+   - Created `docs/reference/enterprise-ai-etl-lifecycle-and-multi-tenancy.md` detailing the 5 AI ETL operational gaps (Token-Aware Chunking & Parent Metadata Enrichment, Vector Index Optimisation & Asynchronous REINDEX Triggers, CDC Delta Sync & Deletion Tombstones, Semantic Drift & Observability Checkpoints, and Multi-Tenant Row-Level Security Mapping).
+   - Detailed Dynamic MIME-Type Parsing Routing loop (`DetectMimeType`) for "All File Types" (Apache Tika, Record Path, AST Splitting, PostGIS/pgvector routing).
+   - Implemented production Python MCP Server (`mcp_postgres_server.py`) and FastAPI Gateway (`fastapi_gateway.py`) context-aware session parameter injection (`SELECT set_config('app.current_user_role', $1, true)`) and PyJWT claim validation with required `exp` claim verification.
+   - Updated PostgreSQL strategy DDL with `tenant_id`, `access_classification`, `organizational_unit`, RLS policies, and `CHECK (access_classification IN ('PUBLIC', 'RESTRICTED', 'INTERNAL_ONLY'))`.
+   - Included Dual-Render Architecture Diagrams (inline SVG, Mermaid topology, Summary Routing Table) in UK English.
+
+2. **Dual-Render Architecture Diagram Skill Upgrade**:
    - Updated `.agents/skills/dual-render-architecture-diagram/SKILL.md` to incorporate the Dual-Mode Terminal & Cloud Design System and Physical Print / PDF Handbook Mode (Zero Ink Waste & Print-Safe).
    - Enforced light pastel card backgrounds (`#EFF6FF`, `#F0FDF4`, `#FEF2F2`, `#FAF5FF`, `#FFFBEB`, `#F8FAFC`), crisp boundary borders (`1px solid #CBD5E1`), 4px left color accent strips, explicit arrow markers, and high-contrast dark slate typography (`#0F172A`).
    - Added Mermaid Multi-Diagram Isolation Protocol (diagram-scoped node prefixes and sequential DOM replacement).

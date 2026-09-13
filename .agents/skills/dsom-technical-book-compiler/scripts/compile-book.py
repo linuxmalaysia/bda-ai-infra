@@ -5,8 +5,6 @@ Protocol: Deep State of Mind (DSOM) Protocol
 License: GNU General Public License v3.0
 """
 
-import sys
-from pathlib import Path
 
 
 def main() -> None:

@@ -20,7 +20,7 @@ topics:
 
 # OKF v0.2 Adoption & Compliance Skill
 
-This skill audits all Markdown files, enforcing OKF v0.2 frontmatter headers starting at line 1 column 1 without BOM, and verifying internal link integrity.
+This skill audits all Markdown files (`.md` only), enforcing OKF v0.2 frontmatter headers starting at line 1 column 1 without BOM, and verifying internal link integrity. OKF format does not apply to non-Markdown files.
 
 ## Executable Action
 

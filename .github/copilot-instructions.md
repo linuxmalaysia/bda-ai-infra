@@ -23,6 +23,6 @@ Read and strictly adhere to `.agents/AGENTS.md` (Sovereign Constitution) and `.a
 
 - **Gateway:** See `AGENTS.md` and `.agents/AGENTS.md`.
 - **Memory:** Synchronize state using `.agents/brain/`.
-- **OKF:** All markdown files require OKF v0.2 frontmatter headers starting at line 1.
+- **OKF:** OKF v0.2 frontmatter headers starting at line 1 apply strictly to `.md` files (all non-markdown files follow standard protocols appropriate for their file type).
 - **Python:** Use `uv` toolchain.
 - **DTS 0.1 Standard:** Concise, direct, command-oriented prose without filler.

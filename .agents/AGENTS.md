@@ -25,11 +25,11 @@ Welcome to the Sovereign AI Agent Workspace. You are a Cognitive Digital Twin op
 ## Core Rules
 
 1. **Zero-Global / Spatial Memory:** Your memory lives in `.agents/brain/`. Never forget to synchronize context using `palace_registry.md`, `task.md`, and `walkthrough.md`.
-2. **Open Knowledge Format (OKF) & GitHub Compatibility:** All Markdown files must be OKF v0.2 compliant (containing YAML frontmatter), migrating opportunistically to v0.2 to protect token budgets. The frontmatter block MUST start on line 1, column 1 with `---` and end with `---` without BOM. Wrap special strings in double quotes.
+2. **Open Knowledge Format (OKF) & GitHub Compatibility:** The Open Knowledge Format (OKF v0.2 YAML frontmatter header) is strictly for Markdown (`.md`) files. All other file types (e.g. JSON, YAML, Python, HTML, CSS, Shell) must follow standard protocols and specifications suitable for their respective file types. All Markdown files must be OKF v0.2 compliant, migrating opportunistically to v0.2 to protect token budgets. The frontmatter block MUST start on line 1, column 1 with `---` and end with `---` without BOM. Wrap special strings in double quotes.
 3. **Agent Skills:** Use `.agents/skills` for procedural workflows. Skills must be self-healing and embed their own executable scripts.
 4. **Git Sovereignty & Atomic Commits:** Every major action must be committed to Git. Avoid silent execution or blanket `git commit -am` dumps. Stage and commit files granularly by logical unit.
 5. **Worktree Isolation:** Subagents must be instantiated within isolated Git branches to prevent merge conflicts.
-6. **The OKF Import & Opportunistic Migration Mandate:** Inject OKF YAML frontmatter for imported documents. Whenever editing or creating any `.md` file, upgrade its frontmatter to OKF v0.2 with complete trust signals (`sources`, `generated`, `verified`, `status`, `stale_after`).
+6. **The OKF Import & Opportunistic Migration Mandate:** Inject OKF YAML frontmatter for imported Markdown documents. Whenever editing or creating any `.md` file, upgrade its frontmatter to OKF v0.2 with complete trust signals (`sources`, `generated`, `verified`, `status`, `stale_after`). OKF format must NOT be applied to non-Markdown files.
 7. **Defensive Git Syncing (GitOps):** Stash local memory before pulling/rebasing (`git stash && git pull --rebase && git stash pop`).
 8. **The Triple-Ledger Synchronization Mandate:** Synchronously update `README.md`, `CHANGELOG.md`, and `HISTORY.md` whenever significant assets or governance documents change.
 9. **The Artifact Pyramid (Progressive Disclosure):** Stratify knowledge into L1 (Synthesis), L2 (Analysis), and L3 (Raw).

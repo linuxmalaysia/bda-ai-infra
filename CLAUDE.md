@@ -23,6 +23,6 @@ Read and strictly adhere to `.agents/AGENTS.md` (Sovereign Constitution) and `.a
 
 - **Gateway:** Read `AGENTS.md` and `.agents/AGENTS.md`.
 - **Memory:** Read `.agents/brain/task.md` and `.agents/brain/walkthrough.md`.
-- **OKF Mandate:** Maintain OKF v0.2 YAML frontmatter on all markdown documents.
+- **OKF Mandate:** Maintain OKF v0.2 YAML frontmatter on all markdown documents (`.md` files only; non-markdown files must follow standard syntax for their file type).
 - **Python:** Use `uv run` exclusively.
 - **Tone:** Formally conversational UK English, no filler, answer first (DTS 0.1 standard).

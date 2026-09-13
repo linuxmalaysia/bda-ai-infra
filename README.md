@@ -186,24 +186,164 @@ The platform standardizes on an enterprise-grade, 100% open-source software stac
 
 To bridge non-IT user interactions with automated big data ETL while guaranteeing SSoT data integrity, the architecture enforces a structured quarantine and approval workflow built using Laravel and Apache NiFi 2.0:
 
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" height="100%">
+  <defs>
+    <marker id="arr-quar-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB" />
+    </marker>
+    <marker id="arr-quar-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#16A34A" />
+    </marker>
+    <marker id="arr-quar-amber" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#D97706" />
+    </marker>
+    <marker id="arr-quar-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#9333EA" />
+    </marker>
+    <filter id="shadow-quar-light" x="-2%" y="-2%" width="104%" height="104%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="960" height="480" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" rx="10"/>
+
+  <!-- Stage 1 Container: Ingress & Directory Staging -->
+  <rect x="20" y="20" width="280" height="420" fill="#F0F9FF" stroke="#2563EB" stroke-width="1.5" rx="8" filter="url(#shadow-quar-light)"/>
+  <rect x="20" y="20" width="280" height="28" fill="#DBEAFE" rx="8"/>
+  <text x="30" y="39" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#1E40AF">1. USER INGRESS &amp; STAGING</text>
+
+  <!-- Card: Non-IT User -->
+  <rect x="35" y="60" width="250" height="65" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.2" rx="6"/>
+  <text x="45" y="82" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Non-IT Domain User</text>
+  <text x="45" y="102" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Authenticates &amp; Uploads File</text>
+
+  <!-- Card: Laravel Web App -->
+  <rect x="35" y="185" width="250" height="65" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.2" rx="6"/>
+  <text x="45" y="207" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Laravel Web Portal</text>
+  <text x="45" y="227" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Auth JWT / Form File Handler</text>
+
+  <!-- Card: RustFS Staging Directory -->
+  <rect x="35" y="325" width="250" height="85" fill="#FFFFFF" stroke="#3B82F6" stroke-width="1.2" rx="6"/>
+  <text x="45" y="347" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">RustFS Staging Directory</text>
+  <text x="45" y="367" font-family="Consolas, Monaco, monospace" font-size="10" fill="#2563EB">Shared Storage Volume</text>
+  <text x="45" y="387" font-family="Consolas, Monaco, monospace" font-size="9" fill="#475569">Path: /data/staging/raw/</text>
+
+  <!-- Stage 2 Container: Automated NiFi Processing -->
+  <rect x="340" y="20" width="280" height="420" fill="#F0FDF4" stroke="#16A34A" stroke-width="1.5" rx="8" filter="url(#shadow-quar-light)"/>
+  <rect x="340" y="20" width="280" height="28" fill="#DCFCE7" rx="8"/>
+  <text x="350" y="39" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#15803D">2. AUTOMATED NIFI ETL PIPELINE</text>
+
+  <!-- Card: Apache NiFi 2.0 Pipeline -->
+  <rect x="355" y="125" width="250" height="85" fill="#FFFFFF" stroke="#16A34A" stroke-width="1.2" rx="6"/>
+  <text x="365" y="147" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache NiFi 2.0 Pipeline</text>
+  <text x="365" y="167" font-family="Consolas, Monaco, monospace" font-size="10" fill="#16A34A">Directory Watcher &amp; Parser</text>
+  <text x="365" y="187" font-family="Consolas, Monaco, monospace" font-size="9" fill="#047857">Extract, Normalize &amp; Validate</text>
+
+  <!-- Card: RustFS Verification Directory -->
+  <rect x="355" y="285" width="250" height="85" fill="#FFFFFF" stroke="#16A34A" stroke-width="1.2" rx="6"/>
+  <text x="365" y="307" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">RustFS Verification Directory</text>
+  <text x="365" y="327" font-family="Consolas, Monaco, monospace" font-size="10" fill="#16A34A">Processed Preview Payload</text>
+  <text x="365" y="347" font-family="Consolas, Monaco, monospace" font-size="9" fill="#475569">Path: /data/staging/verify/</text>
+
+  <!-- Stage 3 Container: Human Approval & Master Persistence -->
+  <rect x="660" y="20" width="280" height="420" fill="#FAF5FF" stroke="#9333EA" stroke-width="1.5" rx="8" filter="url(#shadow-quar-light)"/>
+  <rect x="660" y="20" width="280" height="28" fill="#F3E8FF" rx="8"/>
+  <text x="670" y="39" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">3. HUMAN APPROVAL &amp; MASTER DB</text>
+
+  <!-- Card: Human User Review & Verification -->
+  <rect x="675" y="60" width="250" height="85" fill="#FFFFFF" stroke="#D97706" stroke-width="1.2" rx="6"/>
+  <text x="685" y="82" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Human User Review &amp; Approval</text>
+  <text x="685" y="102" font-family="Consolas, Monaco, monospace" font-size="10" fill="#B45309">Laravel UI Review &amp; Sign-off</text>
+  <text x="685" y="122" font-family="Consolas, Monaco, monospace" font-size="9" fill="#92400E">Diff Preview &amp; DQ Assertions</text>
+
+  <!-- Card: Digital Approval Event Gate -->
+  <rect x="675" y="205" width="250" height="65" fill="#FFFFFF" stroke="#9333EA" stroke-width="1.2" rx="6"/>
+  <text x="685" y="227" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Apache NiFi Ingest Gate</text>
+  <text x="685" y="247" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7E22CE">Triggered by Digital Signature</text>
+
+  <!-- Card: Master PostgreSQL DB -->
+  <rect x="675" y="325" width="250" height="85" fill="#FFFFFF" stroke="#9333EA" stroke-width="1.2" rx="6"/>
+  <text x="685" y="347" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#0F172A">Percona Patroni PostgreSQL 18</text>
+  <text x="685" y="367" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7E22CE">Master SSoT Persistence</text>
+  <text x="685" y="387" font-family="Consolas, Monaco, monospace" font-size="9" fill="#6B21A8">Role: nifi_ingest_writer</text>
+
+  <!-- Path Connections & Badges -->
+  <!-- Step 1: User -> Laravel -->
+  <line x1="160" y1="125" x2="160" y2="185" stroke="#2563EB" stroke-width="2" marker-end="url(#arr-quar-blue)"/>
+  <rect x="85" y="143" width="150" height="20" fill="#DBEAFE" stroke="#2563EB" stroke-width="1" rx="4"/>
+  <text x="160" y="157" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" fill="#1E40AF">1. Login &amp; Upload File</text>
+
+  <!-- Step 1b: Laravel -> RustFS Staging -->
+  <line x1="160" y1="250" x2="160" y2="325" stroke="#2563EB" stroke-width="2" marker-end="url(#arr-quar-blue)"/>
+
+  <!-- Step 2: RustFS Staging -> NiFi Pipeline -->
+  <path d="M 285 367 L 480 367 L 480 210" fill="none" stroke="#16A34A" stroke-width="2" marker-end="url(#arr-quar-green)"/>
+  <rect x="310" y="355" width="155" height="20" fill="#DCFCE7" stroke="#16A34A" stroke-width="1" rx="4"/>
+  <text x="387" y="369" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" fill="#15803D">2. POSIX Watcher Pickup</text>
+
+  <!-- Step 3: NiFi -> RustFS Verify -->
+  <line x1="480" y1="210" x2="480" y2="285" stroke="#16A34A" stroke-width="2" marker-end="url(#arr-quar-green)"/>
+  <rect x="395" y="235" width="170" height="20" fill="#DCFCE7" stroke="#16A34A" stroke-width="1" rx="4"/>
+  <text x="480" y="249" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" fill="#15803D">3. Extract, Normalize &amp; Process</text>
+
+  <!-- Step 4: RustFS Verify -> Laravel User Review -->
+  <path d="M 605 327 L 640 327 L 640 102 L 675 102" fill="none" stroke="#D97706" stroke-width="2" marker-end="url(#arr-quar-amber)"/>
+  <rect x="535" y="80" width="130" height="20" fill="#FEF3C7" stroke="#D97706" stroke-width="1" rx="4"/>
+  <text x="600" y="94" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" fill="#B45309">4. Display Summary</text>
+
+  <!-- Step 5: Human Review -> Digital Approval -> NiFi Ingest -->
+  <line x1="800" y1="145" x2="800" y2="205" stroke="#9333EA" stroke-width="2" marker-end="url(#arr-quar-purple)"/>
+  <rect x="730" y="163" width="140" height="20" fill="#F3E8FF" stroke="#9333EA" stroke-width="1" rx="4"/>
+  <text x="800" y="177" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" fill="#7E22CE">5. Digital Approval Event</text>
+
+  <!-- Step 6: NiFi Ingest -> PostgreSQL 18 -->
+  <line x1="800" y1="270" x2="800" y2="325" stroke="#9333EA" stroke-width="2" marker-end="url(#arr-quar-purple)"/>
+  <rect x="735" y="285" width="130" height="20" fill="#F3E8FF" stroke="#9333EA" stroke-width="1" rx="4"/>
+  <text x="800" y="299" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="bold" fill="#7E22CE">6. Master DB Write</text>
+
+  <!-- Centered Figure Caption -->
+  <text x="480" y="462" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#475569">Figure 1.2: Human-in-the-Loop File Quarantine Workflow Architecture</text>
+</svg>
+
+```mermaid
+flowchart TD
+    subgraph Stage1 ["1. User Ingress & Directory Staging"]
+        User["Non-IT Domain User"]
+        LaravelPortal["Laravel Web Portal"]
+        RustFSStaging["RustFS Staging Directory"]
+    end
+
+    subgraph Stage2 ["2. Automated NiFi Processing & Verification"]
+        NiFiPipeline["Apache NiFi 2.0 Pipeline"]
+        RustFSVerify["RustFS Verification Directory"]
+    end
+
+    subgraph Stage3 ["3. Human Approval & Master Persistence"]
+        HumanReview["Human User Review & Verification"]
+        NiFiIngest["Apache NiFi Ingest Gate"]
+        PostgreSQL18["Percona Patroni PostgreSQL 18 (Master SSoT)"]
+    end
+
+    User -->|"1. Login & Upload File"| LaravelPortal
+    LaravelPortal -->|"Write Raw File"| RustFSStaging
+    RustFSStaging -->|"2. POSIX Directory Watcher Pickup"| NiFiPipeline
+    NiFiPipeline -->|"3. Extract, Normalize & Process"| RustFSVerify
+    RustFSVerify -->|"4. Display Summary & Preview"| LaravelPortal
+    LaravelPortal -->|"User Audit & Verification"| HumanReview
+    HumanReview -->|"5. Digital Approval Event"| NiFiIngest
+    NiFiIngest -->|"6. Master DB Write (nifi_ingest_writer)"| PostgreSQL18
 ```
-[Non-IT User]
-     │
-     ▼ (1. Login & Upload File)
-[Laravel Web App] ──> [RustFS Staging Directory]
-                             │
-                             ▼ (2. POSIX Directory Watcher Pickup)
-                     [Apache NiFi 2.0 Pipeline]
-                             │
-                             ▼ (3. Extract, Normalize & Process)
-                     [RustFS Verification Directory]
-                             │
-                             ▼ (4. Display Summary & Preview)
-[Laravel Web App] <── [Human User Review & Verification]
-     │
-     ▼ (5. Digital Approval Event)
-[Apache NiFi 2.0] ──> (6. Master DB Write) ──> [Percona Patroni PostgreSQL 18]
-```
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **Non-IT Domain User** | **Laravel Web Portal** | `HTTPS TCP 443` / Web Portal | IAM Authenticated Session (Keycloak JWT) | Domain user authenticates and uploads raw spreadsheet/document files into staging. |
+| **Laravel Web Portal** | **RustFS Staging Directory** | Local POSIX Volume Mount | POSIX Staging Directory ACLs | Staged uploads are saved to isolated RustFS staging directories before ETL pickup. |
+| **RustFS Staging Directory** | **Apache NiFi 2.0 Pipeline** | POSIX Directory Watcher | Read-Only POSIX File System Access | Apache NiFi directory monitoring processor detects and picks up newly uploaded files. |
+| **Apache NiFi 2.0 Pipeline** | **RustFS Verification Directory** | POSIX File Output | Verification Directory ACLs | NiFi extracts, cleanses, normalises, and writes preview payloads into verification directory. |
+| **RustFS Verification Directory** | **Laravel Web Portal** | Local POSIX Volume Mount | POSIX Verification Directory ACLs | Reads processed preview payload to display summary, data quality alerts, and diff previews. |
+| **Human Reviewer / Laravel** | **Apache NiFi Ingest Gate** | `HTTPS TCP 8443` / REST API Trigger | Multi-Factor Auth & Digital Signature | Digital approval event in Laravel triggers Apache NiFi ingestion pipeline. |
+| **Apache NiFi Ingest Gate** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Dedicated Ingestion Role (`nifi_ingest_writer`) | NiFi commits verified master records into PostgreSQL 18 SSoT database upon approval sign-off. |
 
 ### Process Lifecycle Stages
 

@@ -7,7 +7,7 @@ License: GNU General Public License v3.0
 
 
 def main() -> None:
-    """Print a success message for the native SVG and inline CSS baking step."""
+    """Bake vector SVGs and inline CSS into compiled book assets."""
     print("Native vector SVGs and inline CSS baked successfully.")
 
 

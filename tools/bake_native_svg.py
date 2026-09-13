@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Bake Native Vector SVGs and Inline CSS into HTML/PDF book outputs.
+"""Bake Native Vector SVGs and Inline CSS into Handbook Outputs.
+
+This tool bakes vector graphics, light/dark mode dual-render SVGs, and inline CSS
+stylesheets directly into generated HTML and PDF book outputs.
 
 Protocol: Deep State of Mind (DSOM) Protocol
 License: GNU General Public License v3.0
@@ -7,7 +10,7 @@ License: GNU General Public License v3.0
 
 
 def main() -> None:
-    """Bake vector SVGs and inline CSS into compiled book assets."""
+    """Inject inline CSS and vector SVG assets into HTML and PDF outputs."""
     print("Native vector SVGs and inline CSS baked successfully.")
 
 

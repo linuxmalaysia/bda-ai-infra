@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """Technical Ebook & Handbook Compiler Entry Point.
 
+This module orchestrates the multi-format compilation of repository source code,
+Diátaxis documentation, and telemetry assets into publication-grade handbooks
+(PDF, standalone HTML, EPUB, ODT) using Pandoc and headless Chromium/Edge browser engines.
+
 Protocol: Deep State of Mind (DSOM) Protocol
 License: GNU General Public License v3.0
 """
@@ -11,13 +15,30 @@ import sys
 
 
 def run_command(cmd: list[str]) -> None:
-    """Execute a command via subprocess and check return code."""
+    """Execute a system command using subprocess and verify successful completion.
+
+    Args:
+        cmd (list[str]): List of command line arguments to execute.
+
+    Raises:
+        subprocess.CalledProcessError: If the process exits with a non-zero exit code.
+
+    """
     print(f"Running: {' '.join(cmd)}")
     subprocess.run(cmd, check=True)
 
 
 def main() -> None:
-    """Execute the technical book compilation workflow."""
+    """Orchestrate the complete technical book compilation pipeline.
+
+    Executes sequential build stages:
+    1. Assembles master markdown document via tools/build_project_book.py.
+    2. Compiles standalone interactive HTML using Pandoc.
+    3. Bakes native vector SVGs and inline CSS styling via tools/bake_native_svg.py.
+    4. Compiles publication-grade PDF using headless Chromium/Chrome/Edge.
+    5. Compiles EPUB 3 ebook using Pandoc.
+    6. Compiles ODT document using Pandoc.
+    """
     print("Executing Technical Book Compiler Workflow...")
 
     # 1. Build Master Markdown handbook

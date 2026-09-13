@@ -7,7 +7,7 @@ License: GNU General Public License v3.0
 
 
 def main() -> None:
-    """Build master project book markdown document."""
+    """Print a success message for the project handbook assembly step."""
     print("Master project handbook assembled successfully.")
 
 

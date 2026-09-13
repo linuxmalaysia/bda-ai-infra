@@ -11,13 +11,29 @@ import sys
 
 
 def run_command(cmd: list[str]) -> None:
-    """Execute a command via subprocess and check return code."""
+    """Run a command and fail if it exits unsuccessfully.
+
+    Args:
+        cmd: Command and arguments to execute.
+
+    Raises:
+        subprocess.CalledProcessError: If the command returns a nonzero exit status.
+
+    """
     print(f"Running: {' '.join(cmd)}")
     subprocess.run(cmd, check=True)
 
 
 def main() -> None:
-    """Execute the technical book compilation workflow."""
+    """Run the available steps of the technical book compilation workflow.
+
+    Helper script commands are not gated by executable discovery. Pandoc outputs
+    and PDF generation are skipped when their required executables are unavailable.
+
+    Raises:
+        subprocess.CalledProcessError: If an invoked command exits unsuccessfully.
+
+    """
     print("Executing Technical Book Compiler Workflow...")
 
     # 1. Build Master Markdown handbook

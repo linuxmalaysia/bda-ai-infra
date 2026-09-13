@@ -25,7 +25,7 @@ This repository operates under the **Deep State of Mind (DSOM)** sovereign AI pr
 
 ## 🧭 Immediate Action Required
 
-1. **Full Constitution:** Read [.agents/AGENTS.md](.agents/AGENTS.md) to establish your 31 Constitutional AI Laws, persona constraints, and operational safety rules.
+1. **Full Constitution:** Read [.agents/AGENTS.md](.agents/AGENTS.md) to establish your 31 Constitutional AI Laws, persona constraints, and operational safety rules (including the OKF mandate: OKF format applies strictly to `.md` files; non-markdown files follow their standard specifications).
 2. **Spatial Memory:** Read [.agents/brain/task.md](.agents/brain/task.md) and [.agents/brain/walkthrough.md](.agents/brain/walkthrough.md) to orient yourself on active tasks and previous mental state.
 3. **Master Topology:** Read [START-HERE.html](START-HERE.html) for global project entry points and Diátaxis quadrant navigation.
 

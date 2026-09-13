@@ -341,8 +341,9 @@ flowchart TD
 | **Laravel Web Portal** | **RustFS Staging Directory** | Local POSIX Volume Mount | POSIX Staging Directory ACLs | Staged uploads are saved to isolated RustFS staging directories before ETL pickup. |
 | **RustFS Staging Directory** | **Apache NiFi 2.0 Pipeline** | POSIX Directory Watcher | Read-Only POSIX File System Access | Apache NiFi directory monitoring processor detects and picks up newly uploaded files. |
 | **Apache NiFi 2.0 Pipeline** | **RustFS Verification Directory** | POSIX File Output | Verification Directory ACLs | NiFi extracts, cleanses, normalises, and writes preview payloads into verification directory. |
-| **Laravel Web Portal** | **Human Reviewer** | `HTTPS TCP 443` / Laravel UI | Role-Based Access Control (RBAC) | Displays processed summary, data quality alerts, and diff previews for human review. |
-| **Human Reviewer / Laravel** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Dedicated Ingestion Role (`nifi_ingest_writer`) | Digital approval triggers NiFi to persist verified master records into PostgreSQL 18 SSoT. |
+| **RustFS Verification Directory** | **Laravel Web Portal** | Local POSIX Volume Mount | POSIX Verification Directory ACLs | Reads processed preview payload to display summary, data quality alerts, and diff previews. |
+| **Human Reviewer / Laravel** | **Apache NiFi Ingest Gate** | `HTTPS TCP 8443` / REST API Trigger | Multi-Factor Auth & Digital Signature | Digital approval event in Laravel triggers Apache NiFi ingestion pipeline. |
+| **Apache NiFi Ingest Gate** | **Percona Patroni PostgreSQL 18** | `TCP 5432` / PostgreSQL TLS 1.3 | Dedicated Ingestion Role (`nifi_ingest_writer`) | NiFi commits verified master records into PostgreSQL 18 SSoT database upon approval sign-off. |
 
 ### Process Lifecycle Stages
 

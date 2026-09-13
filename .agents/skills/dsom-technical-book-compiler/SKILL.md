@@ -31,14 +31,15 @@ verified: true
 
 ## Embedded Skill: project-technical-book-compiler
 
-**Purpose:** Autonomously synthesises repository code, Diátaxis documentation, and system telemetry into publication-grade print-ready PDF, standalone HTML, and EPUB handbooks using Pandoc, Headless Chromium, and the Terminal & Cloud design framework.
+**Purpose:** Autonomously synthesises repository code, Diátaxis documentation, and system telemetry into publication-grade print-ready PDF, standalone HTML, EPUB, and ODT handbooks using Pandoc, Headless Chromium/Edge, and the Terminal & Cloud design framework.
 
 ## Execution Workflow
 1. **Build Master Markdown:** `uv run python tools/build_project_book.py`
-2. **Compile Standalone Interactive HTML:** `pandoc ...`
+2. **Compile Standalone Interactive HTML:** `pandoc book.md -o handbook.html --standalone --toc --template=templates/terminal.html`
 3. **Bake Native Vector SVGs & Inline CSS:** `uv run python tools/bake_native_svg.py`
-4. **Compile Publication-Grade PDF:** `msedge.exe --headless=new ...`
-5. **Compile EPUB 3 Ebook:** `pandoc ... -t epub3`
+4. **Compile Publication-Grade PDF (Cross-Platform Browser Engine):** `chromium --headless=new --print-to-pdf=handbook.pdf handbook.html` *(Note: On Windows systems, `msedge.exe --headless=new` or `google-chrome --headless=new` may be configured as the browser executable path).*
+5. **Compile EPUB 3 Ebook:** `pandoc book.md -o handbook.epub -t epub3 --toc`
+6. **Compile ODT Document:** `pandoc book.md -o handbook.odt --toc`
 
 ## Operational Verification Checklist & Quality Assurance Protocol
 

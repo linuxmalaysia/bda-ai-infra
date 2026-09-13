@@ -1,17 +1,17 @@
 DSOM EOD Palace Sync Checkpoint Summary
 =======================================
-Timestamp: 2026-09-12T00:00:00Z
+Timestamp: 2026-09-13T00:00:00Z
 Author: Jules (Senior AI Systems Engineer & Technical Documentation Architect)
 
-1. Adoption of Human-AI Quarantine & Data Processing Architecture:
-   - Updated `README.md` and `docs/explanation/human-ai-quarantine-model.md` with standalone SVG vector graphics, Git-native Mermaid flowcharts, and summary routing tables.
-   - Integrated custom software stack: Percona Patroni PostgreSQL 18, Apache NiFi 2.0 + OpenMetadata, Apache Superset, AIOps (Ansible + Gitea + ARA + SemaphoreUI), RustFS, Ceph S3, and Proxmox VE HCI with Podman rootless pods.
-   - Documented Laravel human-in-the-loop file quarantine workflow, REST API & MCP Server interfaces, two-tier data classification strategy, and 2028-2032 multi-year roadmap.
-   - Implemented RFC 8785 Canonical JSON Ed25519 cryptographic signature contract and mutation unit tests (`tests/test_okf_and_links.py`).
+1. Adoption of Technical Book Compiler Skill & Quarantine Workflow SVG:
+   - Created `.agents/skills/dsom-technical-book-compiler/SKILL.md` with OKF v0.2 frontmatter metadata.
+   - Implemented executable entry point `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py` and supporting tool scripts (`tools/build_project_book.py`, `tools/bake_native_svg.py`) with Google-style PEP-257 docstrings.
+   - Refactored `README.md` Human-in-the-Loop File Quarantine Workflow into a Dual-Render Architecture Diagram with a printer-friendly light-mode SVG canvas (`#FFFFFF`), Mermaid flowchart, and summary routing table.
+   - Updated summary routing table in `README.md` to separate Laravel approval trigger, NiFi DB persistence (`nifi_ingest_writer`), and RustFS verification directory preview routes.
+   - Created comprehensive unit tests in `tests/test_book_compiler.py`.
 
 2. Verification & Test Pass Matrix:
-   - Executed `uv run pytest` -> 280/280 passed cleanly (100% pass rate).
+   - Executed `uv run pytest` -> 286/286 passed cleanly (100% pass rate).
    - Executed `uv run ruff check .` -> All checks passed cleanly.
-   - Executed `npx markdownlint-cli "**/*.md"` -> 0 errors.
    - Executed dynamic navigation synchronization via `tools/generate_summary.py` -> updated `SUMMARY.md` and `_data/navigation.yml`.
    - Performed DSOM EOD Palace Sync across `.agents/brain/` spatial memory.

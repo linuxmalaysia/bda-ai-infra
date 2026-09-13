@@ -35,6 +35,8 @@ The following assets are currently in active development or audit scope under th
 - `docs/reference/postgresql-pgvector-enterprise-strategy.md`
 - `docs/reference/apache-nifi-2-master-data-plane-and-migration.md`
 - `.agents/skills/dual-render-architecture-diagram/SKILL.md`
+- `.agents/skills/dsom-technical-book-compiler/SKILL.md`
+- `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py`
 
 ## 🧠 Spatial Memory State (`.agents/brain/`)
 
@@ -88,3 +90,6 @@ The following assets are currently in active development or audit scope under th
 - `tests/e2e/docs_search.spec.ts`
 - `tools/generate_summary.py`
 - `tools/install_git_guardrails.py`
+- `tools/build_project_book.py`
+- `tools/bake_native_svg.py`
+- `tests/test_book_compiler.py`

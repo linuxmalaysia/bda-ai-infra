@@ -48,7 +48,7 @@ This layer acts as the unified, zero-trust gateway. It securely exposes semantic
 The Consumption & Integration Layer provides three dedicated ingress/egress paradigms over the encrypted PostgreSQL Master core:
 
 1. **AI / LLM Clients via MCP Server:** Dynamic tool invocation and context retrieval using the Model Context Protocol (MCP).
-2. **Modern REST / gRPC APIs via FastAPI:** Sub-10ms hybrid spatial-vector-text searches, OAuth2/JWT security perimeters, and data ingestion webhooks.
+2. **Modern REST / gRPC APIs via Fusio API Server:** Sub-10ms hybrid spatial-vector-text searches, OAuth2/JWT security perimeters, and data ingestion webhooks.
 3. **External File Transfer Layer via Apache NiFi 2.0:** Scheduled DB extraction, native PGP encryption, and automated SFTP delivery.
 
 ### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
@@ -422,11 +422,10 @@ if __name__ == "__main__":
 
 For microservices, web apps, external partners, and self-hosted autonomous AI agent orchestration, **Fusio API Server** serves as an open-source API management and API server platform. Fusio incorporates **TypeSchema** for strict JSON data contract definitions and formats endpoints into standard **OpenAPI** (JSON Schema) specifications.
 
-### Fusio API Server Configuration & TypeSchema Definition Specification (`fusio_app.json`)
+### Fusio API Server Configuration & Schema Specification (`fusio_app.json`)
 
 ```json
 {
-  "$schema": "https://typeschema.org/specification",
   "title": "BDA Hybrid Search & Ingestion API",
   "version": "6.0.0",
   "definitions": {
@@ -435,7 +434,7 @@ For microservices, web apps, external partners, and self-hosted autonomous AI ag
       "properties": {
         "query": {
           "type": "string",
-          "description": "Natural language query string for semantic vector matching"
+          "description": "Natural language query string for full-text and semantic vector matching"
         },
         "latitude": {
           "type": "number",
@@ -447,12 +446,17 @@ For microservices, web apps, external partners, and self-hosted autonomous AI ag
         },
         "radius_meters": {
           "type": "number",
+          "minimum": 1.0,
+          "maximum": 50000.0,
           "default": 5000.0,
-          "description": "Spatial search buffer radius in meters"
+          "description": "Spatial search buffer radius in meters (1.0 to 50000.0)"
         },
         "limit": {
           "type": "integer",
-          "default": 10
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10,
+          "description": "Maximum candidate result rows to return (1 to 100)"
         }
       },
       "required": ["query", "latitude", "longitude"]
@@ -476,24 +480,46 @@ For microservices, web apps, external partners, and self-hosted autonomous AI ag
       "properties": {
         "id": { "type": "string" },
         "chunk_content": { "type": "string" },
+        "metadata": {
+          "type": "object",
+          "description": "JSON metadata key-value document attributes"
+        },
         "latitude": { "type": "number" },
         "longitude": { "type": "number" },
         "distance_meters": { "type": "number" },
-        "cosine_similarity": { "type": "number" }
+        "cosine_similarity": { "type": "number" },
+        "text_rank": { "type": "number" }
+      }
+    },
+    "IngestPayloadRequest": {
+      "type": "object",
+      "properties": {
+        "document_id": { "type": "string" },
+        "content": { "type": "string" },
+        "metadata": { "type": "object" }
+      },
+      "required": ["document_id", "content"]
+    },
+    "IngestPayloadResponse": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "string" },
+        "message": { "type": "string" },
+        "nifi_queue_status": { "type": "integer" }
       }
     }
   }
 }
 ```
 
-### Self-Hosted Fusio Action PHP / Python Service Wrapper (`fusio_hybrid_search.php`)
+### Self-Hosted Fusio Hybrid Search Action (`fusio_hybrid_search.php`)
 
 ```php
 <?php
 /**
- * Fusio API Action for BDA Hybrid Spatial-Vector Search over PostgreSQL Master.
+ * Fusio API Action for BDA Hybrid Spatial-Vector-Text Search over PostgreSQL Master.
  *
- * Uses OpenAPI JSON formatting and TypeSchema structural contracts.
+ * Uses OpenAPI JSON formatting, Fusio/PSX schema structural contracts, and RLS context binding.
  */
 
 namespace App\Action;
@@ -508,16 +534,32 @@ class HybridSearchAction extends ActionAbstract
     public function handle(RequestInterface $request, ParametersInterface $parameters, ContextInterface $context): mixed
     {
         $body = $request->getPayload();
-        $query = $body->query;
-        $lat = $body->latitude;
-        $lon = $body->longitude;
-        $radius = $body->radius_meters ?? 5000.0;
-        $limit = $body->limit ?? 10;
+        $query = (string) ($body->query ?? '');
+        $lat = (float) ($body->latitude ?? 0.0);
+        $lon = (float) ($body->longitude ?? 0.0);
+        $radius = (float) ($body->radius_meters ?? 5000.0);
+        $limit = (int) ($body->limit ?? 10);
+
+        // Server-side bounds validation
+        if ($radius < 1.0 || $radius > 50000.0) {
+            throw new \InvalidArgumentException('radius_meters must be between 1.0 and 50000.0 meters');
+        }
+        if ($limit < 1 || $limit > 100) {
+            throw new \InvalidArgumentException('limit must be between 1 and 100');
+        }
 
         /** @var \PDO $pdo */
         $pdo = $this->connector->getConnection('PostgreSQL-Master');
 
-        // Execute combined PostGIS ST_DWithin and pgvector cosine distance match
+        $userRole = $context->getUser()->getRole() ?? 'bda_api_user';
+        $tenantId = $context->getUser()->getTenantId() ?? 'default_tenant';
+
+        // Bind PostgreSQL Row-Level Security (RLS) context parameters within query transaction
+        $pdo->beginTransaction();
+        $pdo->exec("SELECT set_config('app.current_user_role', " . $pdo->quote($userRole) . ", true)");
+        $pdo->exec("SELECT set_config('app.current_tenant_id', " . $pdo->quote($tenantId) . ", true)");
+
+        // Combined PostGIS ST_DWithin, pgvector cosine distance, and full-text search with unique parameter placeholders
         $sql = "
             SELECT
                 id,
@@ -527,31 +569,37 @@ class HybridSearchAction extends ActionAbstract
                 ST_X(location::geometry) as longitude,
                 ST_Distance(
                     location,
-                    ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography
+                    ST_SetSRID(ST_MakePoint(:lon1, :lat1), 4326)::geography
                 ) as distance_meters,
-                1 - (embedding <=> :vector::vector) as cosine_similarity
+                1 - (embedding <=> :vector1::vector) as cosine_similarity,
+                ts_rank(search_vector, plainto_tsquery('english', :fts_query)) as text_rank
             FROM bda_golden_ssot.enterprise_knowledge_base
             WHERE ST_DWithin(
                 location,
-                ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography,
+                ST_SetSRID(ST_MakePoint(:lon2, :lat2), 4326)::geography,
                 :radius
             )
-            ORDER BY embedding <=> :vector::vector ASC
+            AND search_vector @@ plainto_tsquery('english', :fts_query)
+            ORDER BY embedding <=> :vector2::vector ASC, text_rank DESC
             LIMIT :limit;
         ";
 
-        // Embedding vector generated via local inference sidecar
         $vectorStr = $this->generateVectorEmbedding($query);
 
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':lon', $lon);
-        $stmt->bindValue(':lat', $lat);
-        $stmt->bindValue(':vector', $vectorStr);
+        $stmt->bindValue(':lon1', $lon);
+        $stmt->bindValue(':lat1', $lat);
+        $stmt->bindValue(':vector1', $vectorStr);
+        $stmt->bindValue(':fts_query', $query);
+        $stmt->bindValue(':lon2', $lon);
+        $stmt->bindValue(':lat2', $lat);
         $stmt->bindValue(':radius', $radius);
+        $stmt->bindValue(':vector2', $vectorStr);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
 
         $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $pdo->commit();
 
         return $this->response->build(200, [], [
             'status' => 'success',
@@ -563,15 +611,91 @@ class HybridSearchAction extends ActionAbstract
 
     private function generateVectorEmbedding(string $text): string
     {
-        // Local embedding service execution call
         $ch = curl_init('http://localhost:8081/embed');
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['text' => $text]));
         curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+
         $res = curl_exec($ch);
+        if ($res === false) {
+            $error = curl_error($ch);
+            curl_close($ch);
+            throw new \RuntimeException('Embedding sidecar request failed: ' . $error);
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
+
+        if ($httpCode !== 200) {
+            throw new \RuntimeException('Embedding sidecar returned HTTP status ' . $httpCode);
+        }
+
         $data = json_decode($res, true);
+        if (!is_array($data) || !isset($data['embedding']) || !is_array($data['embedding'])) {
+            throw new \RuntimeException('Invalid JSON response format from embedding sidecar');
+        }
+
         return '[' . implode(',', $data['embedding']) . ']';
+    }
+}
+```
+
+### Self-Hosted Fusio Ingestion Action (`fusio_nifi_ingest.php`)
+
+```php
+<?php
+/**
+ * Fusio API Action for Ingesting Payload into Apache NiFi 2.0 Flow Queues.
+ */
+
+namespace App\Action;
+
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
+
+class IngestAction extends ActionAbstract
+{
+    public function handle(RequestInterface $request, ParametersInterface $parameters, ContextInterface $context): mixed
+    {
+        $payload = $request->getPayload();
+        $nifiUrl = getenv('NIFI_WEBHOOK_URL') ?: 'https://nifi.master.internal:8443/content-ingest';
+
+        $ch = curl_init($nifiUrl);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'X-User-ID: ' . $context->getUser()->getUserId()
+        ]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+        curl_setopt($ch, CURLOPT_CAINFO, '/etc/ssl/certs/nifi-ca.crt');
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+
+        $res = curl_exec($ch);
+        if ($res === false) {
+            $error = curl_error($ch);
+            curl_close($ch);
+            throw new \RuntimeException('NiFi Ingestion Webhook unreachable: ' . $error);
+        }
+
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        if ($httpCode !== 200 && $httpCode !== 202) {
+            throw new \RuntimeException('NiFi Ingestion Webhook rejected payload with status ' . $httpCode);
+        }
+
+        return $this->response->build(202, [], [
+            'status' => 'queued',
+            'message' => 'Payload successfully forwarded to Apache NiFi processing queue',
+            'nifi_queue_status' => $httpCode
+        ]);
     }
 }
 ```
@@ -652,5 +776,5 @@ Selepas penyediaan Data Plane (**Apache NiFi 2.0**) dan Secure Multi-Model Datab
 ### Tiga Komponen Utama Lapisan Konsumsi:
 
 1. **AI / LLM melalui MCP Server (Python):** Model Context Protocol membolehkan model AI memanggil fungsi SQL pratakrif (`semantic_spatial_search`) secara selamat tanpa mengeksekusi arahan SQL bebas yang berisiko.
-2. **Lapisan API FastAPI (REST / gRPC):** Gateway berprestasi tinggi yang menukarkan soalan teks pengguna kepada vektor secara dinamik, mengeksekusi carian gabungan spatial-vektor, serta menyediakan webhook ingestion ke dalam barisan NiFi 2.0.
+2. **Lapisan API Fusio API Server (TypeSchema & OpenAPI):** Gateway berprestasi tinggi yang menukarkan soalan teks pengguna kepada vektor secara dinamik, mengeksekusi carian gabungan spatial-vektor, serta menyediakan webhook ingestion ke dalam barisan NiFi 2.0.
 3. **Egress Fail Terenkripsi NiFi 2.0 & SFTP:** Aliran kerja automatik NiFi 2.0 untuk megekstrak data dari PostgreSQL, memproses fail ke format CSV/Parquet, menyifratkannya dengan **PGP Encryption** (`EncryptContent`), dan menghantarnya ke pelayan SFTP luaran secara selamat.

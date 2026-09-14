@@ -163,7 +163,7 @@ flowchart TD
     LegacyB2B <-->|"Secure SFTP / Encrypted Files"| NiFiEgress
 
     MCP -->|"Controlled Spatial + Vector SQL"| DatabaseHub
-    Fusio -->|"TypeSchema Validation & SQL Joins"| DatabaseHub
+    Fusio -->|"Fusio/PSX Schema Validation & SQL Joins"| DatabaseHub
     NiFiEgress <-->|"Cron Extraction & Ingestion Webhooks"| DatabaseHub
 
     DatabaseHub --- pgTDE
@@ -809,37 +809,6 @@ class PGPEncryptAndPackage(FlowFileTransform):
 ## 🇲🇾 Ringkasan Seni Bina (Bahasa Malaysia)
 
 Selepas penyediaan Data Plane (**Apache NiFi 2.0**) dan Secure Multi-Model Database (**PostgreSQL Master** + **`pgvector`** + **`PostGIS`** + **`pgTDE`**), **Lapisan Konsumsi & Integrasi (Consumption & Integration Layer)** bertindak sebagai jambatan utama yang menghubungkan data berstruktur, spatial, dan vektor kepada pengguna luaran.
-
-Dengan perkembangan pesat ejen kecerdasan buatan (AI Agents), model bahasa raya (LLM) tidak lagi sekadar membalas teks, malah bertindak sebagai enjin penaakulan yang memanggil fungsi luaran. Walau bagaimanapun, jurang terbesar dalam persekitaran perusahaan (enterprise) ialah bagaimana membolehkan LLM mencapai API sedia ada secara selamat tanpa memerlukan integrasi kod tersuai (custom glue code) yang rapuh.
-
-Tajuk ini membedah kaedah merapatkan jurang antara senibina REST/OpenAPI dan Model Context Protocol (MCP) bagi menghasilkan titik akhir (endpoint) bersedia-MCP (MCP-ready).
-
-#### 1. Masalah Utama: Mengapa API Tradisional Sukar Ditelan AI?
-* **Konteks Terlalu Padat (Token Bloat):** Spesifikasi OpenAPI/Swagger yang mengandungi ratusan skema memakan bajet tetingkap konteks (context window) model sebelum sebarang penaakulan bermula.
-* **Protokol Berbeza:** REST berasaskan HTTP tanpa status (stateless request-response), manakala interaksi ejen moden memerlukan pertukaran dwiarah berasaskan JSON-RPC melalui stdio atau SSE (Server-Sent Events).
-* **Risiko Keselamatan Tanpa Sempadan:** Menyerahkan kunci API terus kepada model mendedahkan risiko tindakan tidak sah (unintended tool invocation) tanpa pengauditan.
-
-#### 2. Jambatan Senibina: Fusio API Server sebagai Hab MCP
-Fusio API Server (berasaskan PHP dan sumber terbuka) bertindak sebagai lapisan abstraksi antara pangkalan data dalaman dan model AI.
-
-```
-[ Ejen AI (Gemini / Claude / Qwen) ]
-                 │
-                 ▼  (Model Context Protocol / JSON-RPC over SSE)
-    [ Lapisan MCP Proxy / Gateway ]
-                 │
-                 ▼  (REST / OpenAPI Spek Automatik)
-     [ Fusio API Server (Self-Hosted) ]
-                 │
-      ┌──────────┴──────────┐
-      ▼                     ▼
-[ PostgreSQL / Patroni ]  [ Logik Bisnes PHP/Worker ]
-```
-
-Dengan meletakkan Fusio di tengah:
-* **Penjanaan Skema Segera:** Setiap titik akhir dalam Fusio menjana TypeSchema dan OpenAPI secara automatik.
-* **Penapisan Skema (Schema Thinning):** Hanya titik akhir kritikal (contohnya: semakan log, status kluster, pencarian data) didedahkan kepada MCP, mengelakkan suntikan ratusan skema CRUD yang membazir token.
-* **Kedaulatan Data (Data Sovereignty):** Kunci pangkalan data dan kelayakan API kekal di dalam sempadan infrastruktur pelayan tanpa terdedah kepada perkhidmatan awan pihak ketiga.
 
 ### Tiga Komponen Utama Lapisan Konsumsi:
 

@@ -187,6 +187,42 @@ flowchart TD
 
 The **Model Context Protocol (MCP)** is an open standard designed to connect Large Language Models to local data infrastructure. By exposing pre-defined database tools, LLMs execute controlled SQL operations rather than raw, arbitrary queries.
 
+### 1.1 Architectural Bridge: REST/OpenAPI to MCP Transition via Fusio
+
+With the rapid advancement of Artificial Intelligence (AI) agents, Large Language Models (LLMs) are no longer merely responding with text; they act as reasoning engines calling external functions. However, the largest gap in enterprise environments is enabling LLMs to securely access existing APIs without requiring fragile custom glue code.
+
+This section dissects the methodology for bridging the gap between REST/OpenAPI architectures and the Model Context Protocol (MCP) to produce MCP-ready endpoints.
+
+#### 1. Key Problem: Why Are Traditional APIs Difficult for AI to Consume?
+
+* **Context Window Bloat (Token Bloat):** OpenAPI/Swagger specifications containing hundreds of schemas consume the model's context window budget before reasoning even begins.
+* **Protocol Differences:** REST is based on stateless HTTP (request-response), whereas modern agent interactions require bidirectional JSON-RPC exchanges via stdio or Server-Sent Events (SSE / Streamable HTTP).
+* **Security Risks Without Boundaries:** Passing API keys directly to models exposes risks of unintended tool invocation without strict auditing.
+
+#### 2. Architectural Bridge: Fusio API Server as an MCP Hub
+
+Fusio API Server (an open-source, PHP-based platform) acts as an abstraction layer between internal databases and AI models.
+
+```
+[ AI Agents (Gemini / Claude / Qwen / Local LLM) ]
+                 │
+                 ▼  (Model Context Protocol / JSON-RPC over SSE)
+    [ MCP Proxy / Gateway Layer ]
+                 │
+                 ▼  (REST / Automatic OpenAPI Spec)
+     [ Fusio API Server (Self-Hosted) ]
+                 │
+      ┌──────────┴──────────┐
+      ▼                     ▼
+[ PostgreSQL / Patroni ]  [ Business Logic PHP/Worker ]
+```
+
+By positioning Fusio at the core of the enterprise gateway:
+
+* **Instant Schema Generation:** Every endpoint in Fusio automatically generates TypeSchema and OpenAPI definitions.
+* **Schema Thinning:** Only critical endpoints (e.g., log inspection, cluster status, data search) are exposed to MCP, avoiding the token waste of exposing hundreds of CRUD schemas.
+* **Data Sovereignty:** Database credentials and API keys remain strictly within infrastructure boundaries without exposure to third-party cloud services.
+
 ### Dual-Render Diagram 2: Model Context Protocol (MCP) Tool Invocation & Spatial-Vector Query Execution
 
 The diagram below details the second dual-render architecture spec for the Consumption Layer: the end-to-end MCP JSON-RPC 2.0 tool invocation lifecycle over PostgreSQL `PostGIS` and `pgvector`.
@@ -572,14 +608,14 @@ class HybridSearchAction extends ActionAbstract
                     ST_SetSRID(ST_MakePoint(:lon1, :lat1), 4326)::geography
                 ) as distance_meters,
                 1 - (embedding <=> :vector1::vector) as cosine_similarity,
-                ts_rank(search_vector, plainto_tsquery('english', :fts_query)) as text_rank
+                ts_rank(search_vector, plainto_tsquery('english', :fts_query1)) as text_rank
             FROM bda_golden_ssot.enterprise_knowledge_base
             WHERE ST_DWithin(
                 location,
                 ST_SetSRID(ST_MakePoint(:lon2, :lat2), 4326)::geography,
                 :radius
             )
-            AND search_vector @@ plainto_tsquery('english', :fts_query)
+            AND search_vector @@ plainto_tsquery('english', :fts_query2)
             ORDER BY embedding <=> :vector2::vector ASC, text_rank DESC
             LIMIT :limit;
         ";
@@ -590,10 +626,11 @@ class HybridSearchAction extends ActionAbstract
         $stmt->bindValue(':lon1', $lon);
         $stmt->bindValue(':lat1', $lat);
         $stmt->bindValue(':vector1', $vectorStr);
-        $stmt->bindValue(':fts_query', $query);
+        $stmt->bindValue(':fts_query1', $query);
         $stmt->bindValue(':lon2', $lon);
         $stmt->bindValue(':lat2', $lat);
         $stmt->bindValue(':radius', $radius);
+        $stmt->bindValue(':fts_query2', $query);
         $stmt->bindValue(':vector2', $vectorStr);
         $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
         $stmt->execute();
@@ -772,6 +809,37 @@ class PGPEncryptAndPackage(FlowFileTransform):
 ## 🇲🇾 Ringkasan Seni Bina (Bahasa Malaysia)
 
 Selepas penyediaan Data Plane (**Apache NiFi 2.0**) dan Secure Multi-Model Database (**PostgreSQL Master** + **`pgvector`** + **`PostGIS`** + **`pgTDE`**), **Lapisan Konsumsi & Integrasi (Consumption & Integration Layer)** bertindak sebagai jambatan utama yang menghubungkan data berstruktur, spatial, dan vektor kepada pengguna luaran.
+
+Dengan perkembangan pesat ejen kecerdasan buatan (AI Agents), model bahasa raya (LLM) tidak lagi sekadar membalas teks, malah bertindak sebagai enjin penaakulan yang memanggil fungsi luaran. Walau bagaimanapun, jurang terbesar dalam persekitaran perusahaan (enterprise) ialah bagaimana membolehkan LLM mencapai API sedia ada secara selamat tanpa memerlukan integrasi kod tersuai (custom glue code) yang rapuh.
+
+Tajuk ini membedah kaedah merapatkan jurang antara senibina REST/OpenAPI dan Model Context Protocol (MCP) bagi menghasilkan titik akhir (endpoint) bersedia-MCP (MCP-ready).
+
+#### 1. Masalah Utama: Mengapa API Tradisional Sukar Ditelan AI?
+* **Konteks Terlalu Padat (Token Bloat):** Spesifikasi OpenAPI/Swagger yang mengandungi ratusan skema memakan bajet tetingkap konteks (context window) model sebelum sebarang penaakulan bermula.
+* **Protokol Berbeza:** REST berasaskan HTTP tanpa status (stateless request-response), manakala interaksi ejen moden memerlukan pertukaran dwiarah berasaskan JSON-RPC melalui stdio atau SSE (Server-Sent Events).
+* **Risiko Keselamatan Tanpa Sempadan:** Menyerahkan kunci API terus kepada model mendedahkan risiko tindakan tidak sah (unintended tool invocation) tanpa pengauditan.
+
+#### 2. Jambatan Senibina: Fusio API Server sebagai Hab MCP
+Fusio API Server (berasaskan PHP dan sumber terbuka) bertindak sebagai lapisan abstraksi antara pangkalan data dalaman dan model AI.
+
+```
+[ Ejen AI (Gemini / Claude / Qwen) ]
+                 │
+                 ▼  (Model Context Protocol / JSON-RPC over SSE)
+    [ Lapisan MCP Proxy / Gateway ]
+                 │
+                 ▼  (REST / OpenAPI Spek Automatik)
+     [ Fusio API Server (Self-Hosted) ]
+                 │
+      ┌──────────┴──────────┐
+      ▼                     ▼
+[ PostgreSQL / Patroni ]  [ Logik Bisnes PHP/Worker ]
+```
+
+Dengan meletakkan Fusio di tengah:
+* **Penjanaan Skema Segera:** Setiap titik akhir dalam Fusio menjana TypeSchema dan OpenAPI secara automatik.
+* **Penapisan Skema (Schema Thinning):** Hanya titik akhir kritikal (contohnya: semakan log, status kluster, pencarian data) didedahkan kepada MCP, mengelakkan suntikan ratusan skema CRUD yang membazir token.
+* **Kedaulatan Data (Data Sovereignty):** Kunci pangkalan data dan kelayakan API kekal di dalam sempadan infrastruktur pelayan tanpa terdedah kepada perkhidmatan awan pihak ketiga.
 
 ### Tiga Komponen Utama Lapisan Konsumsi:
 

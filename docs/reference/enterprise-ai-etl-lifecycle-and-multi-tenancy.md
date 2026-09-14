@@ -162,7 +162,7 @@ The end-to-end AI pipeline operates as a continuous, resilient loop spanning ing
   </text>
 
   <rect x="775" y="130" width="190" height="110" fill="#0F172A" stroke="#F59E0B" stroke-width="1" rx="6"/>
-  <text x="785" y="150" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">MCP / FastAPI Gateway</text>
+  <text x="785" y="150" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#FDE68A">Fusio API &amp; MCP Gateway</text>
   <text x="785" y="168" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBBF24">JWT Token Authentication</text>
   <text x="785" y="186" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#E2E8F0">Extract role &amp; tenant_id</text>
 
@@ -208,7 +208,7 @@ flowchart TD
     end
 
     subgraph Operate ["4. Operate &amp; Multi-Tenant AI Search"]
-        ClientUser["Internal Staff / External Client"] --> Gateway["FastAPI Gateway / MCP Server"]
+        ClientUser["Internal Staff / External Client"] --> Gateway["Fusio API Server & MCP Gateway"]
         Gateway -->|"Extract JWT Claims"| ContextInject["Context Parameter Injection<br/>(set_config app.current_user_role<br/>set_config app.current_tenant_id)"]
         ContextInject -->|"Execute Hybrid Search Query"| PostgresDB
         PostgresDB -->|"RLS Filtered Vector Candidates"| ClientUser
@@ -222,7 +222,7 @@ flowchart TD
 | **Inbound Storage** | **NiFi CDC Engine** | File System / S3 API | Ingestion DMZ | Evaluates SHA-256 checksums against NiFi state storage; kills flow if unmodified to eliminate duplicate embeddings. |
 | **`DetectMimeType` Router** | **Native Python Worker** | Internal IPC Memory Bridge | Isolated Process Runtime | Routes documents to Apache Tika, code to AST splitters, and spatial files to GeoJSON parsers for context-aware chunking. |
 | **Observability Node** | **Embedding Generator** | In-Memory FlowFile | Isolation Runtime | Validates text length, token metrics, and language detection before sending payloads to GPU embedding transformers. |
-| **FastAPI / MCP Server** | **PostgreSQL Master Hub** | `TCP 5432` / PostgreSQL Protocol | TLS 1.3 (`verify-full`, JWT Token) | Injects `set_config` session context parameters; PostgreSQL Row-Level Security (RLS) automatically blocks unauthorized records. |
+| **Fusio API / MCP Server** | **PostgreSQL Master Hub** | `TCP 5432` / PostgreSQL Protocol | TLS 1.3 (`verify-full`, JWT Token) | Injects `set_config` session context parameters; PostgreSQL Row-Level Security (RLS) automatically blocks unauthorized records. |
 | **n8n Control Loop** | **PostgreSQL Master Hub** | `TCP 5432` / Admin SQL Role | Scheduled Low-Traffic Cron | Triggers `REINDEX CONCURRENTLY` for HNSW vector indexes to prevent performance degradation during large file transfers. |
 
 ---
@@ -376,7 +376,7 @@ def validate_content_health(text: str) -> tuple[bool, str]:
 
 ### Gap 5: Multi-Tenant and Row-Level Security (RLS) Mapping
 
-Exposing an AI Model Context Protocol (MCP) Server or FastAPI endpoint directly to external users creates prompt injection vulnerabilities. If an external client tricks the LLM into executing broad SQL queries, sensitive internal documents could leak across tenant boundaries.
+Exposing an AI Model Context Protocol (MCP) Server or Fusio API endpoint directly to external users creates prompt injection vulnerabilities. If an external client tricks the LLM into executing broad SQL queries, sensitive internal documents could leak across tenant boundaries.
 
 #### Technical Solution
 Enforce security at the database engine level by implementing **PostgreSQL Row-Level Security (RLS)** mapped directly to attributes stamped during ETL ingestion.

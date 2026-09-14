@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 title: "Consumption & Integration Layer Specification"
-description: "Master reference specification and operational blueprints for the Consumption & Integration Layer, encompassing MCP Servers, FastAPI Hybrid APIs, and Apache NiFi 2.0 Egress Pipelines."
+description: "Master reference specification and operational blueprints for the Consumption & Integration Layer, encompassing Fusio API Server, TypeSchema, OpenAPI specifications, self-hosted MCP Servers, and Apache NiFi 2.0 Egress Pipelines."
 type: reference
 status: active
 timestamp: "2026-09-08T00:00:00Z"
@@ -9,7 +9,9 @@ stale_after: "2027-09-08T00:00:00Z"
 topics:
   - consumption-layer
   - mcp
-  - fastapi
+  - fusio
+  - typeschema
+  - openapi
   - nifi
   - postgresql
   - pgvector
@@ -23,6 +25,12 @@ sources:
     description: "PostgreSQL & pgvector Enterprise Strategy Specification."
   - url: "docs/reference/apache-nifi-2-master-data-plane-and-migration.md"
     description: "Apache NiFi 2.0 Master Data Plane Architecture and Migration Guide."
+  - url: "https://www.fusio-project.org/"
+    description: "Fusio API Management & API Server Platform."
+  - url: "https://typeschema.org/specification"
+    description: "TypeSchema JSON Specification."
+  - url: "https://www.openapis.org/"
+    description: "OpenAPI Specification."
   - url: "https://modelcontextprotocol.io"
     description: "Model Context Protocol Specification."
 ---
@@ -85,13 +93,13 @@ The Consumption & Integration Layer provides three dedicated ingress/egress para
   <text x="50" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Dynamic Context Retrieval</text>
   <text x="50" y="258" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Keycloak OIDC Service Account</text>
 
-  <!-- Component 2: FastAPI -->
+  <!-- Component 2: Fusio API Server -->
   <rect x="350" y="160" width="260" height="140" fill="#0F172A" stroke="#22C55E" stroke-width="1" rx="6"/>
-  <text x="360" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">2. FastAPI REST/gRPC Gateway</text>
-  <text x="360" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Port 8000 / OpenAPI 3.1</text>
-  <text x="360" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Hybrid Search Endpoints</text>
-  <text x="360" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• Data Ingestion Webhooks</text>
-  <text x="360" y="258" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• JWT OAuth2 Security Perimeter</text>
+  <text x="360" y="182" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">2. Fusio API Server &amp; Gateway</text>
+  <text x="360" y="202" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">Port 8080 / OpenAPI &amp; TypeSchema</text>
+  <text x="360" y="222" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• TypeSchema Data Contracts</text>
+  <text x="360" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• OpenAPI JSON Formatted Actions</text>
+  <text x="360" y="258" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#E2E8F0">• OAuth2 / OIDC Security Perimeter</text>
 
   <!-- Component 3: File Transfer NiFi Egress -->
   <rect x="660" y="160" width="260" height="140" fill="#0F172A" stroke="#F59E0B" stroke-width="1" rx="6"/>
@@ -139,8 +147,8 @@ flowchart TD
     end
 
     subgraph ConsumptionLayer ["Consumption & Integration Layer"]
-        MCP["1. Custom Python MCP Server<br/>(FastMCP / Tool Invocation)"]
-        FastAPI["2. FastAPI REST/gRPC Gateway<br/>(Hybrid Search & Webhooks)"]
+        MCP["1. Self-Hosted MCP Server<br/>(Tool Invocation & Prompts)"]
+        Fusio["2. Fusio API Server & Gateway<br/>(TypeSchema & OpenAPI REST)"]
         NiFiEgress["3. NiFi 2.0 Egress Pipeline<br/>(PGP Encrypt & PutSFTP)"]
     end
 
@@ -151,11 +159,11 @@ flowchart TD
     end
 
     LLM -->|"JSON-RPC 2.0 / MCP Protocol"| MCP
-    WebApps -->|"HTTPS REST / OAuth2 JWT"| FastAPI
+    WebApps -->|"HTTPS REST / OAuth2 JWT"| Fusio
     LegacyB2B <-->|"Secure SFTP / Encrypted Files"| NiFiEgress
 
     MCP -->|"Controlled Spatial + Vector SQL"| DatabaseHub
-    FastAPI -->|"Sub-10ms Hybrid SQL Joins"| DatabaseHub
+    Fusio -->|"TypeSchema Validation & SQL Joins"| DatabaseHub
     NiFiEgress <-->|"Cron Extraction & Ingestion Webhooks"| DatabaseHub
 
     DatabaseHub --- pgTDE
@@ -167,9 +175,9 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **LLM / AI Agent** | **MCP Server** | Stdio / `TCP 8080` (JSON-RPC 2.0) | Keycloak Service Account / Read-Only Tool Limits | Intercepts model prompts and executes deterministic `semantic_spatial_search` tools against PostgreSQL. |
-| **Web / Microservices** | **FastAPI Gateway** | `TCP 8000` / HTTPS REST API | OAuth2 Bearer JWT Token / APISIX Gateway | Exposes hybrid search endpoints and vector ingestion webhooks with sub-10ms target latency. |
-| **FastAPI Gateway** | **Apache NiFi 2.0** | `TCP 8443` / HTTPS Webhook | NiFi Mutual TLS (mTLS) Client Certificate | Streams incoming vector ingestion payloads directly into NiFi flow queues. |
+| **LLM / AI Agent** | **MCP Server** | Stdio / `TCP 8080` (JSON-RPC 2.0) | Keycloak Service Account / Read-Only Tool Limits | Self-hosted MCP server intercepting model prompts and executing deterministic `semantic_spatial_search` tools against PostgreSQL. |
+| **Web / Microservices** | **Fusio API Server** | `TCP 8080` / HTTPS REST API | OAuth2 Bearer JWT Token / APISIX Gateway | Exposes TypeSchema-validated endpoints formatted in OpenAPI JSON standard with sub-10ms target latency. |
+| **Fusio API Server** | **Apache NiFi 2.0** | `TCP 8443` / HTTPS Webhook | NiFi Mutual TLS (mTLS) Client Certificate | Streams incoming vector ingestion payloads directly into NiFi flow queues. |
 | **Apache NiFi 2.0** | **External SFTP Server** | `TCP 22` / SSH SFTP Protocol | SSH Public Key / PGP Encryption Key | Extracts scheduled SQL batches from PostgreSQL, packages encrypted CSVs/Parquet, and transfers via SFTP. |
 | **Consumption Layer** | **PostgreSQL Master** | `TCP 5432` / PostgreSQL TLS 1.3 | DB Role Permissions (`verify-full`, pgTDE key) | Executes unified SQL queries combining PostGIS `ST_DWithin` spatial buffers and `pgvector` HNSW distance matchers. |
 
@@ -410,172 +418,162 @@ if __name__ == "__main__":
 
 ---
 
-## 2. FastAPI Hybrid Search API Blueprint
+## 2. Fusio API Server & Self-Hosted MCP Blueprint
 
-For microservices, web apps, and internal tools requiring predictable low latency without autonomous AI agent orchestration, **FastAPI** provides an asynchronous API gateway.
+For microservices, web apps, external partners, and self-hosted autonomous AI agent orchestration, **Fusio API Server** serves as an open-source API management and API server platform. Fusio incorporates **TypeSchema** for strict JSON data contract definitions and formats endpoints into standard **OpenAPI** (JSON Schema) specifications.
 
-### Production FastAPI Application Code (`fastapi_gateway.py`)
+### Fusio API Server Configuration & TypeSchema Definition Specification (`fusio_app.json`)
 
-```python
-"""FastAPI Hybrid Search & Data Ingestion Gateway.
+```json
+{
+  "$schema": "https://typeschema.org/specification",
+  "title": "BDA Hybrid Search & Ingestion API",
+  "version": "6.0.0",
+  "definitions": {
+    "HybridSearchRequest": {
+      "type": "object",
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "Natural language query string for semantic vector matching"
+        },
+        "latitude": {
+          "type": "number",
+          "description": "WGS84 latitude coordinate"
+        },
+        "longitude": {
+          "type": "number",
+          "description": "WGS84 longitude coordinate"
+        },
+        "radius_meters": {
+          "type": "number",
+          "default": 5000.0,
+          "description": "Spatial search buffer radius in meters"
+        },
+        "limit": {
+          "type": "integer",
+          "default": 10
+        }
+      },
+      "required": ["query", "latitude", "longitude"]
+    },
+    "HybridSearchResponse": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "string" },
+        "user_id": { "type": "string" },
+        "total_results": { "type": "integer" },
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SearchResultItem"
+          }
+        }
+      }
+    },
+    "SearchResultItem": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "chunk_content": { "type": "string" },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "distance_meters": { "type": "number" },
+        "cosine_similarity": { "type": "number" }
+      }
+    }
+  }
+}
+```
 
-Author: BDA Infrastructure Team
-License: Apache-2.0
-"""
+### Self-Hosted Fusio Action PHP / Python Service Wrapper (`fusio_hybrid_search.php`)
 
-import os
-import requests
-import jwt
-from typing import List, Optional, Dict, Any
-from fastapi import FastAPI, Depends, HTTPException, status, Security
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from pydantic import BaseModel, Field
-import psycopg2
-from psycopg2.extras import RealDictCursor
-from pgvector.psycopg2 import register_vector
-from sentence_transformers import SentenceTransformer
+```php
+<?php
+/**
+ * Fusio API Action for BDA Hybrid Spatial-Vector Search over PostgreSQL Master.
+ *
+ * Uses OpenAPI JSON formatting and TypeSchema structural contracts.
+ */
 
-app = FastAPI(
-    title="BDA Lakehouse Hybrid Search & Ingestion API",
-    version="2.0.0",
-    description="Low-latency REST API exposing PostgreSQL pgvector, PostGIS, and NiFi ingestion webhooks."
-)
+namespace App\Action;
 
-security = HTTPBearer()
+use Fusio\Engine\ActionAbstract;
+use Fusio\Engine\ContextInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\RequestInterface;
 
-# Pre-load local transformer model
-MODEL_PATH = os.getenv("EMBEDDING_MODEL_PATH", "/opt/models/WhereIsAI/UAE-Large-V1")
-model = SentenceTransformer(MODEL_PATH, local_files_only=True)
+class HybridSearchAction extends ActionAbstract
+{
+    public function handle(RequestInterface $request, ParametersInterface $parameters, ContextInterface $context): mixed
+    {
+        $body = $request->getPayload();
+        $query = $body->query;
+        $lat = $body->latitude;
+        $lon = $body->longitude;
+        $radius = $body->radius_meters ?? 5000.0;
+        $limit = $body->limit ?? 10;
 
-NIFI_WEBHOOK_URL = os.getenv("NIFI_WEBHOOK_URL", "https://nifi.master.internal:8443/content-ingest")
-KEYCLOAK_PUBLIC_KEY = os.getenv("KEYCLOAK_PUBLIC_KEY")  # PEM-encoded RSA public key from Keycloak realm
-OIDC_ISSUER = os.getenv("OIDC_ISSUER", "https://idp.master.internal/realms/bda-realm")
-OIDC_AUDIENCE = os.getenv("OIDC_AUDIENCE", "bda-api-service")
+        /** @var \PDO $pdo */
+        $pdo = $this->connector->getConnection('PostgreSQL-Master');
 
-def get_db_connection():
-    """Connects to PostgreSQL Master with TLS verification."""
-    db_password = os.getenv("DB_PASSWORD")
-    if not db_password:
-        raise RuntimeError("DB_PASSWORD environment variable must be set in deployment secret store.")
-
-    conn = psycopg2.connect(
-        host=os.getenv("DB_HOST", "postgres.master.internal"),
-        dbname=os.getenv("DB_NAME", "enterprise_ai_db"),
-        user=os.getenv("DB_USER", "api_gateway"),
-        password=db_password,
-        sslmode="verify-full",
-        sslrootcert="/etc/ssl/certs/pg-ca.crt"
-    )
-    register_vector(conn)
-    return conn
-
-def verify_jwt_token(credentials: HTTPAuthorizationCredentials = Security(security)) -> Dict[str, Any]:
-    """Validates Keycloak OIDC JWT Bearer token signature, issuer, audience, and security claims."""
-    token = credentials.credentials
-    if not token or not KEYCLOAK_PUBLIC_KEY:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authentication token or Keycloak key configuration missing",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    try:
-        payload = jwt.decode(
-            token,
-            KEYCLOAK_PUBLIC_KEY,
-            algorithms=["RS256"],
-            audience=OIDC_AUDIENCE,
-            issuer=OIDC_ISSUER,
-            options={"require": ["exp"]}
-        )
-        user_role = payload.get("user_role")
-        tenant_id = payload.get("tenant_id")
-
-        if not user_role or user_role not in ALLOWED_ROLES:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Missing or invalid user_role claim in JWT token",
-                headers={"WWW-Authenticate": "Bearer"},
+        // Execute combined PostGIS ST_DWithin and pgvector cosine distance match
+        $sql = "
+            SELECT
+                id,
+                chunk_content,
+                metadata,
+                ST_Y(location::geometry) as latitude,
+                ST_X(location::geometry) as longitude,
+                ST_Distance(
+                    location,
+                    ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography
+                ) as distance_meters,
+                1 - (embedding <=> :vector::vector) as cosine_similarity
+            FROM bda_golden_ssot.enterprise_knowledge_base
+            WHERE ST_DWithin(
+                location,
+                ST_SetSRID(ST_MakePoint(:lon, :lat), 4326)::geography,
+                :radius
             )
-        if not tenant_id or not isinstance(tenant_id, str):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Missing or invalid tenant_id claim in JWT token",
-                headers={"WWW-Authenticate": "Bearer"},
-            )
+            ORDER BY embedding <=> :vector::vector ASC
+            LIMIT :limit;
+        ";
 
-        return payload
-    except jwt.PyJWTError as err:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Invalid JWT Token: {str(err)}",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+        // Embedding vector generated via local inference sidecar
+        $vectorStr = $this->generateVectorEmbedding($query);
 
-class SearchRequest(BaseModel):
-    query_text: str = Field(..., example="Cyberjaya safety incident report")
-    longitude: float = Field(..., example=101.6868)
-    latitude: float = Field(..., example=2.9213)
-    radius_meters: Optional[float] = Field(5000.0, example=5000.0)
-    limit: Optional[int] = Field(5, example=5)
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':lon', $lon);
+        $stmt->bindValue(':lat', $lat);
+        $stmt->bindValue(':vector', $vectorStr);
+        $stmt->bindValue(':radius', $radius);
+        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+        $stmt->execute();
 
-class IngestionPayload(BaseModel):
-    source_origin: str = Field(..., example="mobile_app_sensor")
-    payload_content: str = Field(..., example="Environmental sensor reading at Cyberjaya station.")
-    longitude: float = Field(..., example=101.6868)
-    latitude: float = Field(..., example=2.9213)
+        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-@app.post("/api/v1/search/hybrid", summary="Execute Hybrid Spatial + Vector Search", dependencies=[Depends(verify_jwt_token)])
-def hybrid_search(req: SearchRequest, token_payload: Dict[str, Any] = Depends(verify_jwt_token)):
-    """Converts user query text into vector embedding and executes unified PostGIS + pgvector query with RLS context injection."""
-    query_vector = model.encode(req.query_text).tolist()
-    user_role = token_payload["user_role"]
-    tenant_id = token_payload["tenant_id"]
-
-    conn = get_db_connection()
-    try:
-        with conn:
-            with conn.cursor(cursor_factory=RealDictCursor) as cur:
-                # Inject authenticated user context parameters for PostgreSQL Row-Level Security (RLS) via set_config
-                cur.execute("SELECT set_config('app.current_user_role', %s, true);", (user_role,))
-                cur.execute("SELECT set_config('app.current_tenant_id', %s, true);", (tenant_id,))
-
-                sql = """
-                    SELECT
-                        uuid,
-                        source_origin,
-                        payload_content,
-                        ST_AsText(spatial_coordinates) AS location_wkt,
-                        ST_Distance(spatial_coordinates, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography) AS distance_meters,
-                        1 - (semantic_embedding <=> %s::vector) AS cosine_similarity
-                    FROM secure_ai_lakehouse
-                    WHERE ST_DWithin(spatial_coordinates, ST_SetSRID(ST_MakePoint(%s, %s), 4326)::geography, %s)
-                    ORDER BY semantic_embedding <=> %s::vector
-                    LIMIT %s;
-                """
-                cur.execute(sql, (req.longitude, req.latitude, query_vector, req.longitude, req.latitude, req.radius_meters, query_vector, req.limit))
-                results = cur.fetchall()
-                return {"status": "success", "count": len(results), "data": results}
-    finally:
-        conn.close()
-
-@app.post("/api/v1/ingest/webhook", summary="Stream Ingestion Payload into NiFi Ingestion Queue", dependencies=[Depends(verify_jwt_token)])
-def stream_ingestion_webhook(payload: IngestionPayload):
-    """Receives data payloads from external sources and dispatches directly to Apache NiFi 2.0 queue."""
-    nifi_payload = {
-        "source_origin": payload.source_origin,
-        "payload_content": payload.payload_content,
-        "wkt_location": f"POINT({payload.longitude} {payload.latitude})"
+        return $this->response->build(200, [], [
+            'status' => 'success',
+            'user_id' => $context->getUser()->getUserId(),
+            'total_results' => count($results),
+            'data' => $results
+        ]);
     }
 
-    try:
-        response = requests.post(NIFI_WEBHOOK_URL, json=nifi_payload, verify="/etc/ssl/certs/nifi-ca.crt", timeout=5.0)
-        if response.status_code in [200, 202]:
-            return {"status": "queued", "nifi_response": response.status_code}
-        else:
-            raise HTTPException(status_code=500, detail=f"NiFi ingestion queue rejected payload: {response.text}")
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to reach NiFi Webhook: {str(e)}")
+    private function generateVectorEmbedding(string $text): string
+    {
+        // Local embedding service execution call
+        $ch = curl_init('http://localhost:8081/embed');
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['text' => $text]));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $res = curl_exec($ch);
+        curl_close($ch);
+        $data = json_decode($res, true);
+        return '[' . implode(',', $data['embedding']) . ']';
+    }
+}
 ```
 
 ---

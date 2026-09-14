@@ -48,7 +48,7 @@ This layer acts as the unified, zero-trust gateway. It securely exposes semantic
 The Consumption & Integration Layer provides three dedicated ingress/egress paradigms over the encrypted PostgreSQL Master core:
 
 1. **AI / LLM Clients via MCP Server:** Dynamic tool invocation and context retrieval using the Model Context Protocol (MCP).
-2. **Modern REST / gRPC APIs via Fusio API Server:** Sub-10ms hybrid spatial-vector-text searches, OAuth2/JWT security perimeters, and data ingestion webhooks.
+2. **Modern REST APIs via Fusio API Server:** Sub-10ms hybrid spatial-vector-text searches, OAuth2/JWT security perimeters, and data ingestion webhooks.
 3. **External File Transfer Layer via Apache NiFi 2.0:** Scheduled DB extraction, native PGP encryption, and automated SFTP delivery.
 
 ### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
@@ -164,7 +164,8 @@ flowchart TD
 
     MCP -->|"Controlled Spatial + Vector SQL"| DatabaseHub
     Fusio -->|"Fusio/PSX Schema Validation & SQL Joins"| DatabaseHub
-    NiFiEgress <-->|"Cron Extraction & Ingestion Webhooks"| DatabaseHub
+    Fusio -->|"REST Ingestion Payload"| NiFiEgress
+    NiFiEgress <-->|"Cron Extraction & Scheduled Pipeline"| DatabaseHub
 
     DatabaseHub --- pgTDE
     DatabaseHub --- pgvector
@@ -474,11 +475,15 @@ For microservices, web apps, external partners, and self-hosted autonomous AI ag
         },
         "latitude": {
           "type": "number",
-          "description": "WGS84 latitude coordinate"
+          "minimum": -90.0,
+          "maximum": 90.0,
+          "description": "WGS84 latitude coordinate (-90.0 to 90.0)"
         },
         "longitude": {
           "type": "number",
-          "description": "WGS84 longitude coordinate"
+          "minimum": -180.0,
+          "maximum": 180.0,
+          "description": "WGS84 longitude coordinate (-180.0 to 180.0)"
         },
         "radius_meters": {
           "type": "number",
@@ -577,6 +582,12 @@ class HybridSearchAction extends ActionAbstract
         $limit = (int) ($body->limit ?? 10);
 
         // Server-side bounds validation
+        if ($lat < -90.0 || $lat > 90.0) {
+            throw new \InvalidArgumentException('latitude must be between -90.0 and 90.0 degrees');
+        }
+        if ($lon < -180.0 || $lon > 180.0) {
+            throw new \InvalidArgumentException('longitude must be between -180.0 and 180.0 degrees');
+        }
         if ($radius < 1.0 || $radius > 50000.0) {
             throw new \InvalidArgumentException('radius_meters must be between 1.0 and 50000.0 meters');
         }
@@ -590,10 +601,8 @@ class HybridSearchAction extends ActionAbstract
         $userRole = $context->getUser()->getRole() ?? 'bda_api_user';
         $tenantId = $context->getUser()->getTenantId() ?? 'default_tenant';
 
-        // Bind PostgreSQL Row-Level Security (RLS) context parameters within query transaction
-        $pdo->beginTransaction();
-        $pdo->exec("SELECT set_config('app.current_user_role', " . $pdo->quote($userRole) . ", true)");
-        $pdo->exec("SELECT set_config('app.current_tenant_id', " . $pdo->quote($tenantId) . ", true)");
+        // Generate vector embedding prior to starting the database transaction
+        $vectorStr = $this->generateVectorEmbedding($query);
 
         // Combined PostGIS ST_DWithin, pgvector cosine distance, and full-text search with unique parameter placeholders
         $sql = "
@@ -620,23 +629,32 @@ class HybridSearchAction extends ActionAbstract
             LIMIT :limit;
         ";
 
-        $vectorStr = $this->generateVectorEmbedding($query);
+        try {
+            $pdo->beginTransaction();
+            $pdo->exec("SELECT set_config('app.current_user_role', " . $pdo->quote($userRole) . ", true)");
+            $pdo->exec("SELECT set_config('app.current_tenant_id', " . $pdo->quote($tenantId) . ", true)");
 
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':lon1', $lon);
-        $stmt->bindValue(':lat1', $lat);
-        $stmt->bindValue(':vector1', $vectorStr);
-        $stmt->bindValue(':fts_query1', $query);
-        $stmt->bindValue(':lon2', $lon);
-        $stmt->bindValue(':lat2', $lat);
-        $stmt->bindValue(':radius', $radius);
-        $stmt->bindValue(':fts_query2', $query);
-        $stmt->bindValue(':vector2', $vectorStr);
-        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
-        $stmt->execute();
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':lon1', $lon);
+            $stmt->bindValue(':lat1', $lat);
+            $stmt->bindValue(':vector1', $vectorStr);
+            $stmt->bindValue(':fts_query1', $query);
+            $stmt->bindValue(':lon2', $lon);
+            $stmt->bindValue(':lat2', $lat);
+            $stmt->bindValue(':radius', $radius);
+            $stmt->bindValue(':fts_query2', $query);
+            $stmt->bindValue(':vector2', $vectorStr);
+            $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+            $stmt->execute();
 
-        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        $pdo->commit();
+            $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
+            throw $e;
+        }
 
         return $this->response->build(200, [], [
             'status' => 'success',
@@ -700,6 +718,10 @@ class IngestAction extends ActionAbstract
     {
         $payload = $request->getPayload();
         $nifiUrl = getenv('NIFI_WEBHOOK_URL') ?: 'https://nifi.master.internal:8443/content-ingest';
+        $parsedUrl = parse_url($nifiUrl);
+        if (!is_array($parsedUrl) || strtolower($parsedUrl['scheme'] ?? '') !== 'https') {
+            throw new \InvalidArgumentException('NIFI_WEBHOOK_URL must use an HTTPS URL scheme');
+        }
 
         $ch = curl_init($nifiUrl);
         curl_setopt($ch, CURLOPT_POST, true);

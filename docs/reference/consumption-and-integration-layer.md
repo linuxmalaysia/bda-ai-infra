@@ -576,8 +576,19 @@ class HybridSearchAction extends ActionAbstract
     {
         $body = $request->getPayload();
         $query = (string) ($body->query ?? '');
-        $lat = (float) ($body->latitude ?? 0.0);
-        $lon = (float) ($body->longitude ?? 0.0);
+
+        $rawLat = $body->latitude ?? null;
+        $rawLon = $body->longitude ?? null;
+
+        if (!is_numeric($rawLat) || !is_finite((float) $rawLat)) {
+            throw new \InvalidArgumentException('latitude must be a valid finite numeric value');
+        }
+        if (!is_numeric($rawLon) || !is_finite((float) $rawLon)) {
+            throw new \InvalidArgumentException('longitude must be a valid finite numeric value');
+        }
+
+        $lat = (float) $rawLat;
+        $lon = (float) $rawLon;
         $radius = (float) ($body->radius_meters ?? 5000.0);
         $limit = (int) ($body->limit ?? 10);
 
@@ -598,8 +609,15 @@ class HybridSearchAction extends ActionAbstract
         /** @var \PDO $pdo */
         $pdo = $this->connector->getConnection('PostgreSQL-Master');
 
-        $userRole = $context->getUser()->getRole() ?? 'bda_api_user';
-        $tenantId = $context->getUser()->getTenantId() ?? 'default_tenant';
+        $userRole = $context->getUser()->getRole();
+        $tenantId = $context->getUser()->getTenantId();
+
+        if (empty($userRole) || !is_string($userRole)) {
+            throw new \InvalidArgumentException('Missing or invalid authenticated user_role identity claim');
+        }
+        if (empty($tenantId) || !is_string($tenantId)) {
+            throw new \InvalidArgumentException('Missing or invalid authenticated tenant_id identity claim');
+        }
 
         // Generate vector embedding prior to starting the database transaction
         $vectorStr = $this->generateVectorEmbedding($query);
@@ -733,6 +751,8 @@ class IngestAction extends ActionAbstract
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($ch, CURLOPT_CAINFO, '/etc/ssl/certs/nifi-ca.crt');
+        curl_setopt($ch, CURLOPT_SSLCERT, '/etc/ssl/certs/fusio_client.crt');
+        curl_setopt($ch, CURLOPT_SSLKEY, '/etc/ssl/private/fusio_client.key');
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 

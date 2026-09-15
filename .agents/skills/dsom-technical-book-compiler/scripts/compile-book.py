@@ -14,18 +14,20 @@ import subprocess
 import sys
 
 
-def run_command(cmd: list[str]) -> None:
+def run_command(cmd: list[str], timeout: float = 60.0) -> None:
     """Execute a system command using subprocess and verify successful completion.
 
     Args:
         cmd (list[str]): List of command line arguments to execute.
+        timeout (float): Subprocess execution timeout in seconds. Defaults to 60.0.
 
     Raises:
         subprocess.CalledProcessError: If the process exits with a non-zero exit code.
+        subprocess.TimeoutExpired: If the process execution exceeds the timeout limit.
 
     """
     print(f"Running: {' '.join(cmd)}")
-    subprocess.run(cmd, check=True)
+    subprocess.run(cmd, check=True, timeout=timeout)
 
 
 def main() -> None:
@@ -70,6 +72,9 @@ def main() -> None:
         run_command([
             browser_bin,
             "--headless=new",
+            "--disable-gpu",
+            "--run-all-compositor-stages-before-draw",
+            "--virtual-time-budget=8000",
             "--print-to-pdf=handbook.pdf",
             "handbook.html",
         ])

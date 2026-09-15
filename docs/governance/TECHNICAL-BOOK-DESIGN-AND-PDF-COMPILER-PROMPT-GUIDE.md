@@ -143,7 +143,7 @@ The Terminal & Cloud design framework balances screen aesthetics with strict phy
 | **Page Background** | `#FFFFFF` | Pure white. Eliminates background toner wash entirely. | `body { background-color: #FFFFFF !important; }` |
 | **Body Typography** | `#0F172A` | Deep charcoal slate. High contrast without harsh black glare. | `color: #0F172A !important;` |
 | **Primary Headings** | `#1E3A8A` | Linux Blue. Authoritative enterprise architecture branding. | `h1, h2 { color: #1E3A8A; }` |
-| **Secondary Headings**| `#77216F` | Deep Ubuntu Purple. Distinct demarcator for major subsections. | `h3 { color: #77216F; }` |
+| **Secondary Headings** | `#77216F` | Deep Ubuntu Purple. Distinct demarcator for major subsections. | `h3 { color: #77216F; }` |
 | **Tertiary Headings** | `#0D9488` | Deep Teal. Scannable sub-procedure demarcator. | `h4 { color: #0D9488; }` |
 | **Code Container** | `#F8FAFC` | Light alabaster. Defines boundaries without heavy toner coverage. | `pre, code { background-color: #F8FAFC !important; }` |
 | **Code Border** | `#CBD5E1` | Slate hairline border. Ensures razor-sharp container boundaries. | `border: 1px solid #CBD5E1 !important;` |
@@ -259,7 +259,7 @@ The Terminal & Cloud design framework balances screen aesthetics with strict phy
 | **13** | **Mermaid Namespace Isolation** | Global node collisions when diagrams reuse IDs | Prefix all diagram node IDs with unique namespaces (e.g. `TB_`, `AN_`). |
 | **14** | **Pandoc Code-Tag Wrapping** | Pandoc wraps `<pre class="mermaid"><code>` and escapes | Regex must match standard and `<code>`-wrapped pre blocks and unescape arrows. |
 | **15** | **Isolated Browser Profile** | Headless Chromium hangs if desktop instances active | Launch headless engines with `--user-data-dir="$env:TEMP/edge-pdf-profile-$(Get-Random)"`. |
-| **16** | **Synchronous Process Execution**| Shell exits before browser flushes disk buffer | Always invoke print processes with synchronous execution guards (e.g. `Start-Process ... -Wait`). |
+| **16** | **Synchronous Process Execution** | Shell exits before browser flushes disk buffer | Always invoke print processes with synchronous execution guards (e.g. `Start-Process ... -Wait`). |
 | **17** | **Provenance Audit Banners** | Loss of repository source traceability | Inject `<div class="doc-provenance">` detailing the exact source path. |
 
 ---

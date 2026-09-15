@@ -42,6 +42,10 @@ topics:
 * [GitHub Pages Setup & Deployment Guide](docs/github-pages-setup.md)
 * [Multi-Platform Hosting Guide (GitLab, GitBook, ReadTheDocs)](docs/multi-platform-hosting.md)
 
+## Governance
+
+* [Technical Book Design & PDF Compilation Master Prompt Guide](docs/governance/TECHNICAL-BOOK-DESIGN-AND-PDF-COMPILER-PROMPT-GUIDE.md)
+
 ## How To Guides
 
 * [How-To Guide: Onboarding and Scaling New AI/ML Business Cases](docs/how-to-guides/onboarding-new-ai-business-cases.md)

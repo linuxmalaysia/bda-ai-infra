@@ -43,7 +43,7 @@ Modern software, DevOps, and sovereign infrastructure projects frequently suffer
 This master guide serves two complementary functions:
 1. **The Reusable AI Master Prompt (Section 2):** A complete, drop-in system prompt engineered for advanced autonomous AI coding assistants (Google Antigravity, Google Jules, Claude, Cursor, ChatGPT) to autonomously orchestrate, style, and compile an entire multi-file Markdown documentation suite and source code repository into a publication-grade technical handbook.
 2. **The Architectural Blueprint & Engineering Field Manual (Sections 3–8):** An exhaustive technical record documenting typography pairings, color palette economics, CSS `@page` constraints, the 17 non-negotiable compilation invariants, and the solutions to the 10 critical engineering hurdles encountered when compiling to print-optimised PDF, standalone HTML, EPUB 3, and styled OpenDocument Text (ODT).
-3. **The Embedded Autonomous Skill SOPs (Section 9):** The unabridged operational specifications for `dsom-technical-book-compiler` and `project-technical-book-compiler`, ensuring total self-containment across repositories.
+3. **The Summary Skill References (Section 7):** Abbreviated reference summaries linking to the canonical skill definitions (`.agents/skills/dsom-technical-book-compiler/SKILL.md`).
 
 ---
 
@@ -267,11 +267,12 @@ The Terminal & Cloud design framework balances screen aesthetics with strict phy
 ## 6. Multi-Format Compilation Commands
 
 ```bash
+# 0. Build Master Markdown Handbook
+uv run python tools/build_project_book.py
+
 # 1. Compile Standalone Interactive HTML Ebook (Pandoc 3.x)
-pandoc build/book/master_book.md -o build/book/handbook.html \
+pandoc book.md -o handbook.html \
   --standalone --toc --toc-depth=3 --number-sections \
-  --include-before-body=build/book/cover.html \
-  --css=terminal-theme.css \
   --syntax-highlighting=tango \
   --metadata title="Project Technical Handbook" \
   --metadata author="Compile by: Harisfazillah Jamel" \
@@ -280,28 +281,29 @@ pandoc build/book/master_book.md -o build/book/handbook.html \
 # 2. Pre-Render Native Vector SVGs and Inline Stylesheet
 uv run python tools/bake_native_svg.py
 
-# 3. Compile Publication-Grade PDF via Headless Chromium / Edge
+# 3. Compile Publication-Grade PDF via Headless Chromium / Edge (PowerShell)
 $tmpProfile = "$env:TEMP\edge-pdf-profile-$(Get-Random)"
-Start-Process -FilePath "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" \
-  -ArgumentList "--headless=new", "--disable-gpu", "--run-all-compositor-stages-before-draw", \
-  "--virtual-time-budget=8000", "--no-pdf-header-footer", \
-  "--print-to-pdf=build/book/handbook.pdf", \
-  "--user-data-dir=$tmpProfile", "file:///path/to/build/book/handbook.html" -Wait
+Start-Process -FilePath "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" `
+  -ArgumentList "--headless=new", "--disable-gpu", "--run-all-compositor-stages-before-draw", `
+  "--virtual-time-budget=8000", "--no-pdf-header-footer", `
+  "--print-to-pdf=handbook.pdf", `
+  "--user-data-dir=$tmpProfile", "file:///$PWD/handbook.html" -Wait
 Remove-Item -Recurse -Force $tmpProfile -ErrorAction SilentlyContinue
 
 # 4. Compile EPUB 3 Ebook
-pandoc build/book/master_book.md -o build/book/handbook.epub \
+pandoc book.md -o handbook.epub \
   -t epub3 --toc --toc-depth=3 \
-  --css=build/book/terminal-theme.css \
   --metadata title="Project Technical Handbook" \
   --metadata author="Compile by: Harisfazillah Jamel"
 
-# 5. Compile Styled OpenDocument Text (ODT) for Google Docs Collaboration
-pandoc build/book/master_book.md -o build/book/handbook.odt \
-  --reference-doc=build/book/custom_reference.odt \
+# 5. Compile OpenDocument Text (ODT)
+pandoc book.md -o handbook.odt \
   --toc --toc-depth=3 \
   --metadata title="Project Technical Handbook" \
   --metadata author="Compile by: Harisfazillah Jamel"
+
+# Or execute the complete turnkey script wrapper:
+uv run python .agents/skills/dsom-technical-book-compiler/scripts/compile-book.py
 ```
 
 ---
@@ -316,7 +318,7 @@ okf_version: "0.2"
 type: skill
 title: Technical Ebook & Handbook Compiler (Pandoc / Print & Terminal Theme)
 description: Compiles complete Diataxis documentation suites and source code repositories into publication-grade, print-optimized technical handbooks (PDF, standalone HTML, EPUB, ODT) using Pandoc and the Terminal & Cloud design framework.
-status: stable
+status: verified
 stale_after: "2027-09-12"
 generated:
   by: human:harisfazillah

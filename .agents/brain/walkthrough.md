@@ -22,6 +22,21 @@ topics:
 
 # 📜 DSOM Execution Walkthrough & Mental Anchors
 
+## Session Anchor: 2026-09-14 — Consumption & Integration Layer: Fusio API Server, TypeSchema, OpenAPI & Self-Hosted MCP Integration
+
+- **Context:** Refactored and published the updated `docs/reference/consumption-and-integration-layer.md` adopting Fusio API Server, TypeSchema definitions, OpenAPI standard formatting, and self-hosted Model Context Protocol (MCP) server integration. Applied PR review feedback across all code actions, schemas, and diagrams, and completed End of Day (EOD) Palace Sync under the Deep State of Mind (DSOM) Protocol.
+- **Actions Taken:**
+  1. Updated `docs/reference/consumption-and-integration-layer.md` and `docs/reference/enterprise-ai-etl-lifecycle-and-multi-tenancy.md` replacing legacy FastAPI references with Fusio API Server & MCP Gateway.
+  2. Integrated TypeSchema definitions and OpenAPI standard JSON schema formatting (`fusio_app.json`).
+  3. Implemented self-hosted Fusio actions `HybridSearchAction` (`fusio_hybrid_search.php`) and `IngestAction` (`fusio_nifi_ingest.php`).
+  4. Added WGS84 numeric/finite bounds validation (`latitude` -90 to 90, `longitude` -180 to 180, `radius_meters` 1.0 to 50000.0, `limit` 1 to 100).
+  5. Moved vector embedding generation outside PDO transaction block and added explicit transaction rollback handling (`try ... catch (\Throwable $e)`).
+  6. Enforced strict identity claim validation (`user_role` and `tenant_id`) before setting PostgreSQL Row-Level Security (RLS) context parameters.
+  7. Configured mTLS client certificate credentials (`CURLOPT_SSLCERT` and `CURLOPT_SSLKEY`) and HTTPS scheme validation for NiFi ingestion webhooks.
+  8. Added Section 1.1 "Architectural Bridge: REST/OpenAPI to MCP Transition via Fusio" in UK English detailing token context bloat, protocol differences, instant schema generation, schema thinning, and data sovereignty.
+  9. Executed and passed all 292 pytest unit/OKF tests, markdownlint-cli checks (0 errors), and ruff static linter checks (0 violations).
+  10. Executed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory files.
+
 ## Session Anchor: 2026-09-10 — Enterprise AI ETL Lifecycle, Dynamic Parsing & Multi-Tenant RLS Integration
 
 - **Context:** Formulated and published the authoritative reference specification `docs/reference/enterprise-ai-etl-lifecycle-and-multi-tenancy.md` in UK English addressing five operational gaps in the AI ETL cycle, dynamic multi-modal parsing ("All File Types"), and multi-tenant PostgreSQL Row-Level Security (RLS). Handled all PR feedback comments, updated spatial memory, and completed End of Day (EOD) Palace Sync.

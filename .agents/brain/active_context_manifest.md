@@ -37,6 +37,7 @@ The following assets are currently in active development or audit scope under th
 - `.agents/skills/dual-render-architecture-diagram/SKILL.md`
 - `.agents/skills/dsom-technical-book-compiler/SKILL.md`
 - `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py`
+- `docs/governance/TECHNICAL-BOOK-DESIGN-AND-PDF-COMPILER-PROMPT-GUIDE.md`
 
 ## 🧠 Spatial Memory State (`.agents/brain/`)
 

@@ -32,6 +32,10 @@
     url: /docs/github-pages-setup.html
   - title: Multi-Platform Hosting Guide (GitLab, GitBook, ReadTheDocs)
     url: /docs/multi-platform-hosting.html
+- title: Governance
+  items:
+  - title: Technical Book Design & PDF Compilation Master Prompt Guide
+    url: /docs/governance/TECHNICAL-BOOK-DESIGN-AND-PDF-COMPILER-PROMPT-GUIDE.html
 - title: How To Guides
   items:
   - title: 'How-To Guide: Onboarding and Scaling New AI/ML Business Cases'

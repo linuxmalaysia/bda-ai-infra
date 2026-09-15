@@ -1,14 +1,16 @@
 DSOM EOD Palace Sync Checkpoint Summary
 =======================================
-Timestamp: 2026-09-13T16:00:00Z
+Timestamp: 2026-09-15T14:00:00Z
 Author: Jules (Senior AI Systems Engineer & Technical Documentation Architect)
 
-1. Scope Policy Restriction & OKF Markdown Mandate:
-   - Updated agent constitutions, rules, gateways, and skills (`.agents/AGENTS.md`, `AGENTS.md`, `CLAUDE.md`, `.cursorrules`, `.github/copilot-instructions.md`, `.agents/skills/okf-v02-adoption-engineer/SKILL.md`) to restrict OKF v0.2 frontmatter exclusively to `.md` files.
-   - Added unit test `tests/test_okf_scope_policy.py` verifying positive rules linking OKF YAML frontmatter to `.md` files across policy files.
+1. Skill & Prompt Guide Adoption:
+   - Adopted full OKF v0.2 `dsom-technical-book-compiler` skill specification in `.agents/skills/dsom-technical-book-compiler/SKILL.md`.
+   - Created `docs/governance/TECHNICAL-BOOK-DESIGN-AND-PDF-COMPILER-PROMPT-GUIDE.md` master prompt guide and updated site navigation (`SUMMARY.md`, `_data/navigation.yml`).
+   - Updated `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py` with headless browser compositor flags (`--disable-gpu`, `--run-all-compositor-stages-before-draw`, `--virtual-time-budget=8000`) and a 60s execution timeout.
 
 2. Verification & Full Test Pass Matrix:
-   - Executed `uv run pytest` -> 292/292 passed cleanly (100% pass rate).
-   - Executed `uv run ruff check .` -> All checks passed cleanly.
-   - Executed dynamic navigation synchronization via `tools/generate_summary.py` -> updated `SUMMARY.md` and `_data/navigation.yml`.
+   - Executed `uv run pytest` -> 297/297 passed cleanly (100% pass rate).
+   - Executed `uv run ruff check .` -> All checks passed cleanly (0 errors).
+   - Executed `npx markdownlint-cli --config .markdownlint.json "**/*.md"` -> 0 linting errors.
+   - Executed dynamic navigation synchronization via `tools/generate_summary.py`.
    - Performed DSOM EOD Palace Sync across `.agents/brain/` spatial memory.

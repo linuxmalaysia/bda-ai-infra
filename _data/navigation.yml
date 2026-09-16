@@ -53,6 +53,8 @@
   - title: 'NRE BDA Technical Migration Proposal: Legacy Joomla 3 to Decoupled Astro
       7.3.2'
     url: /docs/proposals/nre-bda-astro-migration.html
+  - title: 'Technical Proposal: BDA Data Plane Evolution & Client-Side AI Acceleration'
+    url: /docs/proposals/nre-bda-pipeline-upgrade.html
 - title: Reference
   items:
   - title: "5-Year Strategic BDA & AI Roadmap & Master Business Case Specification\

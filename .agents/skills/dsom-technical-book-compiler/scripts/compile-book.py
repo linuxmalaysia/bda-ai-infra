@@ -40,7 +40,7 @@ def main() -> None:
 
     Executes sequential build stages:
     1. Assembles master markdown document via tools/build_project_book.py into build/book.md.
-    2. Compiles standalone interactive HTML using Pandoc.
+    2. Compiles standalone interactive HTML using Pandoc with lang=en.
     3. Bakes native vector SVGs and inline CSS styling via tools/bake_native_svg.py.
     4. Compiles publication-grade PDF using headless Chromium/Chrome/Edge.
     5. Compiles EPUB 3 ebook using Pandoc.
@@ -61,6 +61,8 @@ def main() -> None:
             "handbook.html",
             "--standalone",
             "--toc",
+            "-V",
+            "lang=en",
         ])
     else:
         print("Pandoc not found or build/book.md missing; skipping HTML build.")
@@ -100,6 +102,8 @@ def main() -> None:
             "-t",
             "epub3",
             "--toc",
+            "-V",
+            "lang=en",
         ])
         run_command(["pandoc", str(BOOK_MD), "-o", "handbook.odt", "--toc"])
 
@@ -115,6 +119,8 @@ def main() -> None:
             proposal_html,
             "--standalone",
             "--toc",
+            "-V",
+            "lang=en",
         ])
         if browser_bin:
             run_command([

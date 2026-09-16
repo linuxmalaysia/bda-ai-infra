@@ -51,6 +51,7 @@ def main() -> None:
 
     sections: list[str] = [
         "---",
+        'okf_version: "0.2"',
         'title: "DSOM Big Data Analytics & Enterprise AI Infrastructure Handbook"',
         'author: "Harisfazillah Jamel"',
         'date: "2026-09-16"',

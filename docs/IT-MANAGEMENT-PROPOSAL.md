@@ -220,7 +220,7 @@ metadata:
 spec:
   containers:
     - name: postgres-engine
-      image: docker.io/pgvector/pgvector:pg16
+      image: docker.io/pgvector/pgvector:pg18
       description: "Central database store equipped with vector search capabilities."
 
     - name: nifi-orchestrator

@@ -11,7 +11,6 @@ License: GNU General Public License v3.0
 
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
 REPO_ROOT: Path = Path(__file__).parent.parent.parent.parent.parent
@@ -50,7 +49,9 @@ def main() -> None:
     print("Executing Technical Book Compiler Workflow...")
 
     uv_bin = shutil.which("uv")
-    python_cmd = [uv_bin, "run", "python"] if uv_bin else [sys.executable]
+    if not uv_bin:
+        raise RuntimeError("Required dependency 'uv' executable not found in PATH.")
+    python_cmd = [uv_bin, "run", "python"]
 
     # 1. Build Master Markdown handbook into build/book.md
     run_command(python_cmd + ["tools/build_project_book.py"])

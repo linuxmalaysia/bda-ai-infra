@@ -23,6 +23,19 @@ topics:
 
 # 📜 DSOM Execution Walkthrough & Mental Anchors
 
+## Session Anchor: 2026-09-16 — BDA Data Plane Evolution (WildFly to Laravel, Wasm/WebGPU Web AI) & DSOM EOD Sync
+
+- **Context:** Formulated and published the technical proposal `docs/proposals/nre-bda-pipeline-upgrade.md` detailing the transition from WildFly application servers to Laravel and architecting client-side WebAssembly (Memory64, Relaxed SIMD) and WebGPU (`f16`, `DP4a`) Web AI acceleration within the HITL quarantine workflow under DSOM protocol.
+- **Actions Taken:**
+  1. Authored `docs/proposals/nre-bda-pipeline-upgrade.md` following Diátaxis framework, OKF v0.2 frontmatter header, and UK English conventions.
+  2. Documented As-Is legacy footprint (WildFly application servers, monolithic direct execution scripts) and To-Be Laravel HITL 3-stage quarantine pipeline.
+  3. Architected client-side Web AI acceleration: Wasm Memory64 executable compilation probes (`WebAssembly.compile()`, `instantiate()`), Relaxed SIMD, WebGPU `f16` float precision, `DP4a` quantized INT8 math, and GPUBuffer memory chunking (`writeBuffer()`).
+  4. Implemented PR review updates: role-based storage descriptions, untouched raw file staging, advisory client metrics, 14-day retention across failed/rejected directories, single-use JWT sign-off replay protection (record ID, tenant, approver, audience, nonce, 5-min TTL), sanitized IP addresses/hostnames, and `HEX_RAW_64_BYTE` 128 uppercase hex character signature specification.
+  5. Updated `docs/IT-MANAGEMENT-PROPOSAL.md` Section 2.4 and sanitized host labels in `docs/proposals/nre-bda-astro-migration.md`.
+  6. Registered proposal in `SUMMARY.md` and `_data/navigation.yml` via `tools/generate_summary.py`, and assembled `build/book.md`.
+  7. Executed `uv run ruff check .` (0 errors) and `uv run pytest` -> 326/326 tests passed cleanly (100% pass rate).
+  8. Executed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory files.
+
 ## Session Anchor: 2026-09-16 — NRE BDA Astro 7.3.2 Technical Migration Proposal & Spatial Memory Sync
 
 - **Context:** Formulated and published the technical migration proposal `docs/proposals/nre-bda-astro-migration.md` transitioning `https://bda.nres.gov.my/` from a legacy stateful Joomla 3 monolith to a decoupled, high-availability, static-first Astro 7.3.2 architecture under the DSOM protocol.

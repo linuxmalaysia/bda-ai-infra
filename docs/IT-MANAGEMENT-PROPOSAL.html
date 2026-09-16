@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="description" content="Executive proposal for transitioning from Tableau to an open, Podman-based, API-First, and MCP-Ready architecture with Fine-Grained Access Control (FGAC)." />
+  <title>IT Management Proposal: Enterprise Data Infrastructure Modernisation</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">IT Management Proposal: Enterprise Data Infrastructure
+Modernisation</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a
+href="#executive-proposal-enterprise-data-infrastructure-modernisation"
+id="toc-executive-proposal-enterprise-data-infrastructure-modernisation">Executive
+Proposal: Enterprise Data Infrastructure Modernisation</a>
+<ul>
+<li><a href="#executive-summary" id="toc-executive-summary">1. Executive
+Summary</a></li>
+<li><a href="#core-strategic-pillars-api-ready-mcp-ready"
+id="toc-core-strategic-pillars-api-ready-mcp-ready">2. Core Strategic
+Pillars: API-Ready &amp; MCP-Ready</a>
+<ul>
+<li><a href="#dual-render-infrastructure-architecture-blueprint"
+id="toc-dual-render-infrastructure-architecture-blueprint">2.1
+Dual-Render Infrastructure Architecture Blueprint</a></li>
+<li><a href="#api-ready-universal-data-exchange"
+id="toc-api-ready-universal-data-exchange">2.2 API-Ready: Universal Data
+Exchange</a></li>
+<li><a href="#mcp-ready-native-ai-llm-capability"
+id="toc-mcp-ready-native-ai-llm-capability">2.3 MCP-Ready: Native AI
+&amp; LLM Capability</a></li>
+<li><a href="#fine-grained-access-control-fgac-data-tagging-governance"
+id="toc-fine-grained-access-control-fgac-data-tagging-governance">2.4
+Fine-Grained Access Control (FGAC) &amp; Data Tagging
+Governance</a></li>
+</ul></li>
+<li><a href="#financial-operational-roi"
+id="toc-financial-operational-roi">3. Financial &amp; Operational
+ROI</a></li>
+<li><a href="#tableau-migration-modernisation-strategy"
+id="toc-tableau-migration-modernisation-strategy">4. Tableau Migration
+&amp; Modernisation Strategy</a>
+<ul>
+<li><a href="#phase-1-workbook-audit-inventory"
+id="toc-phase-1-workbook-audit-inventory">Phase 1: Workbook Audit &amp;
+Inventory</a></li>
+<li><a href="#phase-2-data-logic-consolidation"
+id="toc-phase-2-data-logic-consolidation">Phase 2: Data &amp; Logic
+Consolidation</a></li>
+<li><a href="#phase-3-open-source-bi-deployment"
+id="toc-phase-3-open-source-bi-deployment">Phase 3: Open-Source BI
+Deployment</a></li>
+<li><a href="#phase-4-api-mcp-enablement"
+id="toc-phase-4-api-mcp-enablement">Phase 4: API &amp; MCP
+Enablement</a></li>
+</ul></li>
+<li><a href="#podman-infrastructure-container-blueprint"
+id="toc-podman-infrastructure-container-blueprint">5. Podman
+Infrastructure &amp; Container Blueprint</a></li>
+<li><a href="#next-steps-execution-plan"
+id="toc-next-steps-execution-plan">6. Next Steps &amp; Execution
+Plan</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1
+id="executive-proposal-enterprise-data-infrastructure-modernisation">Executive
+Proposal: Enterprise Data Infrastructure Modernisation</h1>
+<p><strong>Document Version:</strong> 1.0<br />
+<strong>Author:</strong> Lead Systems Architect<br />
+<strong>Target Audience:</strong> IT Management &amp; Steering
+Committee<br />
+<strong>Infrastructure Scope:</strong> <code>bda-ai-infra</code></p>
+<hr />
+<h2 id="executive-summary">1. Executive Summary</h2>
+<p>This proposal outlines the strategic modernisation of our Big Data
+Analytics &amp; AI Infrastructure (<code>bda-ai-infra</code>). We are
+transitioning from a legacy, static visualisation-dependent architecture
+(Tableau) to an <strong>API-First</strong> and <strong>Model Context
+Protocol (MCP)-Ready</strong> ecosystem powered by
+<strong>Podman</strong> containers.</p>
+<p>By replacing proprietary dashboard tools with an open, containerised
+integration layer, we eliminate recurring licensing costs while
+transforming our data warehouse into a <strong>bidirectional,
+intelligent data hub</strong>. Any enterprise software, open-source
+application, or AI agent can securely ingest, transform, query, and
+share data with strict <strong>Fine-Grained Access Control
+(FGAC)</strong>.</p>
+<p>Human-generated data remains the sole authoritative <strong>Single
+Source of Truth (SSoT)</strong>. All operational data modified or
+enriched by AI agents is explicitly tagged and segregated within our big
+data repository using cryptographic provenance contracts
+(<code>bda_provenance</code>).</p>
+<hr />
+<h2 id="core-strategic-pillars-api-ready-mcp-ready">2. Core Strategic
+Pillars: API-Ready &amp; MCP-Ready</h2>
+<h3 id="dual-render-infrastructure-architecture-blueprint">2.1
+Dual-Render Infrastructure Architecture Blueprint</h3>
+<h4 id="standalone-production-ready-svg-vector-graphic-.svg">1.
+Standalone Production-Ready SVG Vector Graphic (<code>.svg</code>)</h4>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" height="100%">
+<p><defs>
+<marker id="arrow-prop" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+<path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" /> </marker>
+<filter id="shadow-prop" x="-4%" y="-4%" width="108%" height="108%">
+<feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.2"/>
+</filter> </defs></p>
+<!-- Canvas Background -->
+<p><rect width="960" height="480" fill="#0F172A" rx="10"/></p>
+<!-- Ingestion Layer -->
+<p><rect x="30" y="20" width="900" height="70" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/>
+<rect x="30" y="20" width="900" height="24" fill="#0369A1" rx="8"/>
+<text x="45" y="36" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#E0F2FE">BIDIRECTIONAL
+INGESTION &amp; HUMAN QUARANTINE LAYER</text>
+<text x="45" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">External
+Systems / IoT / Partner APIs / User Feeds / Laravel Human Verification
+Gate</text></p>
+<!-- Central Data Store -->
+<p><rect x="30" y="125" width="900" height="85" fill="#1E293B" stroke="#A855F7" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/>
+<rect x="30" y="125" width="900" height="24" fill="#581C87" rx="8"/>
+<text x="45" y="141" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#E9D5FF">CENTRAL
+DATA &amp; VECTOR ENGINE (TIER 0 GOLDEN SSoT)</text>
+<text x="45" y="167" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#C084FC">Percona
+Patroni PostgreSQL 18 + pgvector (NiFi 2.0 Single Authoritative
+Writer)</text>
+<text x="45" y="187" font-family="Consolas, Monaco, monospace" font-size="10" fill="#E9D5FF">Metadata
+Tagging: Human Verified Golden SSoT vs AI-Enriched RAG Provenance
+(bda_provenance)</text></p>
+<!-- API Gateway Box -->
+<p><rect x="30" y="245" width="430" height="95" fill="#1E293B" stroke="#3B82F6" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/>
+<rect x="30" y="245" width="430" height="24" fill="#1E3A8A" rx="8"/>
+<text x="45" y="261" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#93C5FD">OPEN
+REST / gRPC APIs</text>
+<text x="45" y="287" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">Programmatic
+Data Sharing Gateway</text>
+<text x="45" y="307" font-family="Consolas, Monaco, monospace" font-size="10" fill="#93C5FD">Fine-Grained
+Access Control (Row &amp; Column Policies)</text>
+<text x="45" y="323" font-family="Consolas, Monaco, monospace" font-size="10" fill="#93C5FD">Fusio
+API Gateway Ingress (Port 8080/443)</text></p>
+<!-- MCP Server Box -->
+<p><rect x="500" y="245" width="430" height="95" fill="#1E293B" stroke="#10B981" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/>
+<rect x="500" y="245" width="430" height="24" fill="#065F46" rx="8"/>
+<text x="515" y="261" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#A7F3D0">MCP
+SERVER (MODEL CONTEXT PROTOCOL)</text>
+<text x="515" y="287" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#34D399">Native
+AI Tooling &amp; Context Gateway</text>
+<text x="515" y="307" font-family="Consolas, Monaco, monospace" font-size="10" fill="#A7F3D0">Fine-Grained
+Access Control (Tool Execution &amp; Scope Limits)</text>
+<text x="515" y="323" font-family="Consolas, Monaco, monospace" font-size="10" fill="#A7F3D0">Python/Node.js
+MCP Gateway (Port 8443 / Stdio / SSE)</text></p>
+<!-- Consumers Box Left -->
+<p><rect x="30" y="375" width="430" height="75" fill="#1E293B" stroke="#F59E0B" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/>
+<rect x="30" y="375" width="430" height="22" fill="#78350F" rx="8"/>
+<text x="45" y="390" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#FDE68A">ENTERPRISE
+&amp; OPEN-SOURCE CONSUMERS</text>
+<text x="45" y="414" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#FBBF24">Apache
+Superset, Metabase, Web Applications, ERP Systems</text></p>
+<!-- Consumers Box Right -->
+<p><rect x="500" y="375" width="430" height="75" fill="#1E293B" stroke="#EC4899" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/>
+<rect x="500" y="375" width="430" height="22" fill="#831843" rx="8"/>
+<text x="515" y="390" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#FBCFE8">LLMS
+&amp; AUTONOMOUS AI AGENTIC SYSTEMS</text>
+<text x="515" y="414" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#F472B6">Context-Aware
+Inquiries, Retrieval-Augmented Generation (RAG)</text></p>
+<!-- Flow Lines -->
+<line x1="480" y1="90" x2="480" y2="125" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/>
+<line x1="245" y1="210" x2="245" y2="245" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/>
+<line x1="715" y1="210" x2="715" y2="245" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/>
+<line x1="245" y1="340" x2="245" y2="375" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/>
+<line x1="715" y1="340" x2="715" y2="375" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/>
+</svg>
+<h4 id="git-native-mermaid-topology-.mmd">2. Git-Native Mermaid Topology
+(<code>.mmd</code>)</h4>
+<pre class="mermaid"><code>flowchart TD
+    subgraph Ingestion [&quot;Bidirectional Ingestion &amp; Quarantine Layer&quot;]
+        Ext[&quot;External Systems / IoT / User Feeds&quot;]
+        Laravel[&quot;Laravel Web Portal (Human Verification Gate)&quot;]
+    end
+
+    subgraph Core [&quot;Central Data &amp; Vector Engine&quot;]
+        NiFi[&quot;Apache NiFi 2.0 (Single Authoritative DB Writer)&quot;]
+        Postgres[(&quot;Percona Patroni PostgreSQL 18 + pgvector\n(Tier 0 Golden SSoT &amp; AI Provenance Tagging)&quot;)]
+    end
+
+    subgraph Integration [&quot;Integration &amp; API Layer (Fine-Grained Access Control)&quot;]
+        REST[&quot;Open REST / gRPC APIs\n(Fusio API Server)&quot;]
+        MCP[&quot;MCP Server\n(Model Context Protocol Tools)&quot;]
+    end
+
+    subgraph Consumers [&quot;Consumers &amp; Autonomous Agents&quot;]
+        BI[&quot;Open BI (Apache Superset)&quot;]
+        AI[&quot;LLMs &amp; AI Agentic Systems&quot;]
+    end
+
+    Ext --&gt;|&quot;Ingress Payload&quot;| Laravel
+    Laravel --&gt;|&quot;Verified Human Sign-off&quot;| NiFi
+    NiFi --&gt;|&quot;Cryptographic Persistence&quot;| Postgres
+    Postgres --&gt;|&quot;FGAC SQL Views&quot;| REST
+    Postgres --&gt;|&quot;FGAC Vector &amp; Tool Context&quot;| MCP
+    REST --&gt;|&quot;Programmatic Inquiries&quot;| BI
+    MCP --&gt;|&quot;Native Tool Execution&quot;| AI</code></pre>
+<h4 id="summary-interface-routing-table">3. Summary Interface &amp;
+Routing Table</h4>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Source Component</th>
+<th style="text-align: left;">Target Component</th>
+<th style="text-align: left;">Port / Protocol / API Ingress</th>
+<th style="text-align: left;">Security Boundary / Access Key</th>
+<th style="text-align: left;">Operational Significance / Flow
+Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>External Systems /
+Users</strong></td>
+<td style="text-align: left;"><strong>Laravel Verification
+Gate</strong></td>
+<td style="text-align: left;"><code>HTTPS (443)</code> / REST</td>
+<td style="text-align: left;">Keycloak OAuth2 / Session Auth</td>
+<td style="text-align: left;">Ingests non-IT user feeds and telemetry
+into quarantine staging directory.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Laravel Verification
+Gate</strong></td>
+<td style="text-align: left;"><strong>Apache NiFi 2.0 Ingest
+Gate</strong></td>
+<td style="text-align: left;">Staging Spool / Internal Event</td>
+<td style="text-align: left;">Human Signature / Audit Log</td>
+<td style="text-align: left;">Triggers approval workflow upon explicit
+human verification.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Apache NiFi 2.0 Ingest
+Gate</strong></td>
+<td style="text-align: left;"><strong>PostgreSQL 18 SSoT
+Store</strong></td>
+<td style="text-align: left;"><code>TCP 5432</code> / Native
+PostgreSQL</td>
+<td style="text-align: left;"><code>nifi_ingest_writer</code> DB
+Role</td>
+<td style="text-align: left;">Sole authoritative writer committing Tier
+0 Golden SSoT data and <code>bda_provenance</code> metadata tags.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>PostgreSQL 18 SSoT
+Store</strong></td>
+<td style="text-align: left;"><strong>Fusio REST / gRPC
+Gateway</strong></td>
+<td style="text-align: left;"><code>TCP 5432</code> / Read-Only
+Views</td>
+<td style="text-align: left;">PostgreSQL Row-Level Security (RLS)</td>
+<td style="text-align: left;">Exposes fine-grained SQL views and
+endpoints to web applications and BI dashboards.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>PostgreSQL 18 SSoT
+Store</strong></td>
+<td style="text-align: left;"><strong>MCP Tool Gateway</strong></td>
+<td style="text-align: left;"><code>TCP 5432</code> / Vector Search</td>
+<td style="text-align: left;">MCP Tool Scope &amp; Ed25519 Token</td>
+<td style="text-align: left;">Serves vector context and structured
+database tool capabilities to autonomous AI agents.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3 id="api-ready-universal-data-exchange">2.2 API-Ready: Universal Data
+Exchange</h3>
+<ul>
+<li>🔄 <strong>Bidirectional Data Flow:</strong> Data is no longer
+trapped inside static visual portals. Enterprise applications, IoT
+devices, and partner APIs can inject structured telemetry or
+transactional events directly into our core via REST or gRPC endpoints,
+as well as extract real-time datasets.</li>
+<li>🌐 <strong>System Interoperability:</strong> Enables zero-friction
+integration with any third-party, enterprise, or open-source application
+without requiring vendor-locked connectors.</li>
+</ul>
+<h3 id="mcp-ready-native-ai-llm-capability">2.3 MCP-Ready: Native AI
+&amp; LLM Capability</h3>
+<ul>
+<li>🤖 <strong>Direct Agent Integration:</strong> Implements the open
+standard <strong>Model Context Protocol (MCP)</strong>. Large Language
+Models (LLMs) and autonomous AI agents can directly query database
+metrics, trigger background transformations, and retrieve vector
+embeddings as native “Tools”.</li>
+<li>🧠 <strong>Contextual Grounding:</strong> Replaces static PDF/Excel
+exports with conversational, context-aware AI interactions connected
+directly to live database state.</li>
+</ul>
+<h3 id="fine-grained-access-control-fgac-data-tagging-governance">2.4
+Fine-Grained Access Control (FGAC) &amp; Data Tagging Governance</h3>
+<ul>
+<li>🛡️ <strong>Row and Column Level Security:</strong> Permissions are
+strictly enforced at the API gateway and PostgreSQL database layer using
+session context injection (<code>SET LOCAL</code>). An external
+application or AI agent accesses only the precise data slices authorised
+for its identity.</li>
+<li>🏷️ <strong>Human SSoT &amp; AI Provenance Metadata Tagging:</strong>
+To ensure total data authenticity and governance, all data within the
+Big Data Analytics Lakehouse is partitioned into two distinct
+categories:
+<ol type="1">
+<li><strong>Real Data &amp; Human Verification (Tier 0 SSoT):</strong>
+Human-entered data is validated through the Laravel human-in-the-loop
+portal. Apache NiFi 2.0 acts as the sole authoritative writer to Percona
+Patroni PostgreSQL 18.</li>
+<li><strong>AI Processes Enriched with RAG &amp; Generative
+Metadata:</strong> Any dataset touched, generated, or enriched by AI
+agents is explicitly tagged using <code>bda_provenance</code> metadata.
+This metadata records cryptographic signature contracts including
+<code>signature</code>, <code>key_id</code>,
+<code>verification_status</code>, <code>verification_timestamp</code>,
+<code>signature_algorithm</code> (Ed25519), and
+<code>signature_encoding</code> (HEX_RAW_64_BYTE), binding canonical RFC
+8785 byte streams.</li>
+</ol></li>
+<li>📋 <strong>Auditability &amp; Zero Trust:</strong> Every API call
+and MCP tool execution is logged, providing clear lineage and governance
+for regulatory compliance.</li>
+</ul>
+<hr />
+<h2 id="financial-operational-roi">3. Financial &amp; Operational
+ROI</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Area</th>
+<th style="text-align: left;">Legacy Architecture (Tableau-based)</th>
+<th style="text-align: left;">Proposed Architecture (API/MCP on
+Podman)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Licensing Costs</strong></td>
+<td style="text-align: left;">High recurring per-user and per-core
+licensing fees.</td>
+<td style="text-align: left;"><strong>Zero proprietary licensing
+fees</strong> (100% Open-Source).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Data Accessibility</strong></td>
+<td style="text-align: left;">Locked inside proprietary
+<code>.twb</code> workbooks and visual dashboards.</td>
+<td style="text-align: left;"><strong>Universal API &amp; MCP
+endpoints</strong> accessible by any tool or agent.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Ingestion Capability</strong></td>
+<td style="text-align: left;">Primarily unidirectional read-only
+reporting.</td>
+<td style="text-align: left;"><strong>Fully bidirectional</strong>
+(Ingest, Transform, Export, Query).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>AI Integration</strong></td>
+<td style="text-align: left;">None (Manual exports required for AI
+context).</td>
+<td style="text-align: left;"><strong>Native MCP support</strong> for
+autonomous AI workflows.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Security Granularity</strong></td>
+<td style="text-align: left;">Dashboard-level / Workbook-level
+permissions.</td>
+<td style="text-align: left;"><strong>Fine-Grained Access
+Control</strong> (Row/Column/Tool level).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tableau-migration-modernisation-strategy">4. Tableau Migration
+&amp; Modernisation Strategy</h2>
+<p>To ensure zero downtime and manage operational risk, legacy Tableau
+workbooks will be systematically decommissioned using a four-phase
+migration roadmap:</p>
+<pre><code>[ Phase 1: Audit ] ──► [ Phase 2: Logic Transfer ] ──► [ Phase 3: Open BI ] ──► [ Phase 4: MCP/API ]</code></pre>
+<h3 id="phase-1-workbook-audit-inventory">Phase 1: Workbook Audit &amp;
+Inventory</h3>
+<ul>
+<li>Catalogue all active Tableau workbooks
+(<code>.twb</code>/<code>.twbx</code>), calculated fields, custom SQL
+scripts, and user access lists.</li>
+<li>Identify redundant reports and mark high-value dashboards for
+migration.</li>
+</ul>
+<h3 id="phase-2-data-logic-consolidation">Phase 2: Data &amp; Logic
+Consolidation</h3>
+<ul>
+<li>Migrate complex Tableau calculations and data blending logic into
+<strong>PostgreSQL Materialised Views</strong> and stored
+functions.</li>
+<li>Ensure Apache NiFi orchestrates data pipelines directly into clean
+PostgreSQL schemas.</li>
+</ul>
+<h3 id="phase-3-open-source-bi-deployment">Phase 3: Open-Source BI
+Deployment</h3>
+<ul>
+<li>Deploy containerised <strong>Apache Superset</strong> (or Metabase)
+on Podman to replicate essential executive dashboards.</li>
+<li>Connect directly to the PostgreSQL layer, restoring visual reporting
+capabilities with zero user-license overhead.</li>
+</ul>
+<h3 id="phase-4-api-mcp-enablement">Phase 4: API &amp; MCP
+Enablement</h3>
+<ul>
+<li>Expose underlying business calculations as REST/gRPC API
+endpoints.</li>
+<li>Wrap PostgreSQL metrics and vector searches into standardised
+<strong>MCP Tools</strong> for internal AI agent consumption.</li>
+</ul>
+<hr />
+<h2 id="podman-infrastructure-container-blueprint">5. Podman
+Infrastructure &amp; Container Blueprint</h2>
+<p>The target infrastructure relies on rootless <strong>Podman</strong>
+pods to enforce high availability, zero vendor lock-in, and full
+Kubernetes compatibility.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Conceptual Architecture Blueprint: podman-pod.yaml</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">apiVersion</span><span class="kw">:</span><span class="at"> v1</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">kind</span><span class="kw">:</span><span class="at"> Pod</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">metadata</span><span class="kw">:</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> bda-ai-infra-pod</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span><span class="kw">:</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">containers</span><span class="kw">:</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> postgres-engine</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">image</span><span class="kw">:</span><span class="at"> docker.io/pgvector/pgvector:pg16</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Central database store equipped with vector search capabilities.&quot;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> nifi-orchestrator</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">image</span><span class="kw">:</span><span class="at"> docker.io/apache/nifi:latest</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Low-latency data ingestion, batch processing, and ETL orchestrator.&quot;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> mcp-api-gateway</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">image</span><span class="kw">:</span><span class="at"> localhost/bda-mcp-server:v1</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Custom Python/Node.js gateway delivering Open APIs, MCP Tools, and FGAC enforcement.&quot;</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="fu">name</span><span class="kw">:</span><span class="at"> open-bi-superset</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">image</span><span class="kw">:</span><span class="at"> docker.io/apache/superset:latest</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">description</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;Open-source business intelligence platform replacing Tableau.&quot;</span></span></code></pre></div>
+<hr />
+<h2 id="next-steps-execution-plan">6. Next Steps &amp; Execution
+Plan</h2>
+<p>Upon approval of this proposal, execution will proceed as follows via
+automated code and configuration updates:</p>
+<ol type="1">
+<li><strong>Commit Proposal Document:</strong> Save
+<code>docs/IT-MANAGEMENT-PROPOSAL.md</code> into the main branch.</li>
+<li><strong>Deploy Podman Pod Spec:</strong> Add
+<code>docker/podman-pod.yaml</code> containing the complete container
+definition.</li>
+<li><strong>Build MCP Server Skeleton:</strong> Commit the Python-based
+MCP server in <code>src/mcp-server/</code> with initial PostgreSQL tool
+connections and FGAC middleware.</li>
+<li><strong>Initiate Phase 1 Migration:</strong> Begin Tableau workbook
+audit and SQL logic extraction.</li>
+</ol>
+</body>
+</html>

@@ -40,6 +40,7 @@ topics:
 * [AI Cognitive Twin Protocol & Infrastructure Topology](docs/AI-COGNITIVE-TWIN-PROTOCOL.md)
 * [BDA Lakehouse Baseline Documentation Index](docs/README.md)
 * [GitHub Pages Setup & Deployment Guide](docs/github-pages-setup.md)
+* [IT Management Proposal: Enterprise Data Infrastructure Modernisation](docs/IT-MANAGEMENT-PROPOSAL.md)
 * [Multi-Platform Hosting Guide (GitLab, GitBook, ReadTheDocs)](docs/multi-platform-hosting.md)
 
 ## Governance

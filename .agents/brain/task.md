@@ -1,18 +1,21 @@
 ---
 okf_version: "0.2"
 type: spatial_memory
-title: "Task Registry - Enforcement of OKF Scope Policy & EOD Palace Sync"
-description: "EOD Palace Sync task registry documenting the restriction of OKF frontmatter to Markdown files and positive scope policy verification."
+title: "Task Registry - Executive IT Management Proposal & EOD Palace Sync"
+description: "EOD Palace Sync task registry documenting the IT Management Proposal, PDF & eBook compilation pipeline, and 100% test pass rate."
 status: active
-timestamp: "2026-09-13T16:00:00Z"
-stale_after: "2027-09-13T16:00:00Z"
+timestamp: "2026-09-16T02:00:00Z"
+stale_after: "2027-09-16T02:00:00Z"
 generated: false
 verified: true
 sources:
-  - id: "okf_scope_policy_test"
-    path: "tests/test_okf_scope_policy.py"
+  - id: "it_management_proposal"
+    path: "docs/IT-MANAGEMENT-PROPOSAL.md"
+  - id: "book_compiler_script"
+    path: ".agents/skills/dsom-technical-book-compiler/scripts/compile-book.py"
 topics:
-  - okf-scope-policy
+  - proposal
+  - pdf-compilation
   - eod-sync
   - spatial-memory
   - dsom
@@ -22,34 +25,23 @@ topics:
 
 ## 🟢 Completed Objectives
 
-1. **Consumption & Integration Layer Refactoring (Fusio API Server & MCP Gateway)**:
-   - Replaced legacy FastAPI gateway references across architecture specifications, SVG vector graphics, Mermaid topologies, and summary routing tables with **Fusio API Server** and self-hosted **Model Context Protocol (MCP)** gateway nodes.
-   - Published `fusio_app.json` TypeSchema and OpenAPI definitions for `HybridSearchRequest`, `HybridSearchResponse`, `SearchResultItem`, `IngestPayloadRequest`, and `IngestPayloadResponse`.
-   - Implemented `HybridSearchAction` (`fusio_hybrid_search.php`) and `IngestAction` (`fusio_nifi_ingest.php`) featuring WGS84 coordinate bounds validation, full-text search (`ts_rank` / `plainto_tsquery`), unique PDO parameter names, transaction-isolated PostgreSQL Row-Level Security (RLS) context binding, and HTTPS mTLS client certificate authentication.
-   - Added Section 1.1 "Architectural Bridge: REST/OpenAPI to MCP Transition via Fusio" in UK English explaining token context bloat, protocol differences, instant schema generation, schema thinning, and data sovereignty.
+1. **IT Management Proposal Creation (`docs/IT-MANAGEMENT-PROPOSAL.md`)**:
+   - Authored the executive proposal for Enterprise Data Infrastructure Modernisation (`bda-ai-infra`) in UK English.
+   - Detailed the transition from Tableau to an open, Podman-based, API-First, and MCP-Ready ecosystem with Fine-Grained Access Control (FGAC).
+   - Specified Human Data as Single Source of Truth (Tier 0 Golden SSoT verified in Laravel, written via NiFi 2.0 into PostgreSQL 18) and AI-enriched metadata provenance tagging (`bda_provenance`).
+   - Embedded a complete Dual-Render Architecture Diagram suite (raw SVG vector graphic, Mermaid topology, and summary routing table).
 
-2. **100% Test Suite & Linter Compliance**:
-   - Executed `markdownlint-cli` -> 0 errors.
-   - Executed `ruff check .` -> 0 violations.
-   - Executed `pytest` -> 292/292 tests passed cleanly (100% pass rate).
-   - Completed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory files.
+2. **Documentation Site Navigation Indexing**:
+   - Executed `tools/generate_summary.py` to register `docs/IT-MANAGEMENT-PROPOSAL.md` in `SUMMARY.md` and `_data/navigation.yml`.
 
-3. **Enforcement of OKF Scope Policy (.md Files Only)**:
-   - Updated `.agents/AGENTS.md`, `AGENTS.md`, `CLAUDE.md`, `.cursorrules`, `.github/copilot-instructions.md`, and `.agents/skills/okf-v02-adoption-engineer/SKILL.md`.
-   - Explicitly mandated that Open Knowledge Format (OKF v0.2 YAML frontmatter) applies strictly to Markdown (`.md`) files, while all non-markdown files follow standard protocols/syntax suitable for their respective file types.
+3. **Multi-Format Technical Book Compiler Upgrade**:
+   - Refactored `tools/build_project_book.py` and `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py` to synthesize `build/book.md` with `okf_version: "0.2"` frontmatter.
+   - Updated `compile-book.py` to run helper scripts via `uv run python` (`shutil.which("uv")`) and pass `-V lang=en` to Pandoc.
+   - Compiled `build/book.md` and `docs/IT-MANAGEMENT-PROPOSAL.md` into publication-grade HTML, PDF, EPUB, and ODT deliverables (`docs/IT-MANAGEMENT-PROPOSAL.pdf`, `handbook.pdf`, `handbook.epub`, etc.) using Pandoc and Headless Chromium.
 
-4. **Positive OKF Scope Policy Unit Tests**:
-   - Implemented `tests/test_okf_scope_policy.py` to assert that agent rules and constitutions positively link OKF YAML frontmatter to Markdown (`.md`) files.
-   - Guaranteed that policies prohibiting OKF frontmatter on `.md` files fail the test suite.
-
-5. **Code Health, Linters & Full Test Suite Pass Rate**:
-   - Executed `uv run pytest` -> 292/292 tests passed cleanly (100% pass rate).
-   - Executed `uv run ruff check .` -> All checks passed cleanly.
-   - Executed dynamic navigation synchronization via `tools/generate_summary.py`.
-   - Executed End of Day (EOD) Palace Sync across spatial memory in `.agents/brain/`.
-
-6. **Adoption of Technical Book Compiler Skill & Master Prompt Guide**:
-   - Adopted complete OKF v0.2 `dsom-technical-book-compiler` skill specification in `.agents/skills/dsom-technical-book-compiler/SKILL.md`.
-   - Created `docs/governance/TECHNICAL-BOOK-DESIGN-AND-PDF-COMPILER-PROMPT-GUIDE.md` master prompt guide.
-   - Updated `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py` with headless browser compositor flags (`--disable-gpu`, `--run-all-compositor-stages-before-draw`, `--virtual-time-budget=8000`) and a 60-second subprocess execution timeout.
-   - Executed `npx markdownlint-cli`, `uv run ruff check .`, and `uv run pytest` -> 297/297 tests passed cleanly (100% pass rate).
+4. **Code Health, Linter & Full Test Suite Pass Rate**:
+   - Configured `.markdownlintignore` and updated `.gitignore` to exclude `build/` artifacts from linter scans.
+   - Executed `uv run ruff check .` -> 0 violations (all Python docstrings PEP 257 & Google-style compliant).
+   - Executed `npx markdownlint-cli --config .markdownlint.json "**/*.md"` -> 0 linting errors.
+   - Executed `uv run pytest` -> 302/302 tests passed cleanly (100% pass rate).
+   - Performed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory files.

@@ -1,16 +1,23 @@
 DSOM EOD Palace Sync Checkpoint Summary
 =======================================
-Timestamp: 2026-09-15T14:00:00Z
+Timestamp: 2026-09-16T02:00:00Z
 Author: Jules (Senior AI Systems Engineer & Technical Documentation Architect)
 
-1. Skill & Prompt Guide Adoption:
-   - Adopted full OKF v0.2 `dsom-technical-book-compiler` skill specification in `.agents/skills/dsom-technical-book-compiler/SKILL.md`.
-   - Created `docs/governance/TECHNICAL-BOOK-DESIGN-AND-PDF-COMPILER-PROMPT-GUIDE.md` master prompt guide and updated site navigation (`SUMMARY.md`, `_data/navigation.yml`).
-   - Updated `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py` with headless browser compositor flags (`--disable-gpu`, `--run-all-compositor-stages-before-draw`, `--virtual-time-budget=8000`) and a 60s execution timeout.
+1. Executive Proposal & Architecture Modernisation:
+   - Formulated `docs/IT-MANAGEMENT-PROPOSAL.md` with full OKF v0.2 frontmatter, Podman container blueprint, API-First, and MCP-Ready specification in UK English.
+   - Detailed Human Data as Single Source of Truth (Tier 0 Golden SSoT in Percona Patroni PostgreSQL 18 written via NiFi 2.0 upon Laravel human verification) and AI-enriched metadata provenance tagging (`bda_provenance`).
+   - Embedded Dual-Render Architecture Diagram (SVG, Mermaid, summary routing table).
+   - Updated site navigation indexes (`SUMMARY.md` and `_data/navigation.yml`).
 
-2. Verification & Full Test Pass Matrix:
-   - Executed `uv run pytest` -> 297/297 passed cleanly (100% pass rate).
+2. Multi-Format Technical Book Compiler Upgrade:
+   - Refactored `tools/build_project_book.py` and `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py` to assemble `build/book.md` with `okf_version: "0.2"` frontmatter.
+   - Updated `compile-book.py` to run helper scripts via `uv run python` (`shutil.which("uv")`) and pass `-V lang=en` to Pandoc.
+   - Configured `.markdownlintignore` and `.gitignore` to exclude `build/` output artifacts from linter scans.
+   - Compiled `build/book.md` and `docs/IT-MANAGEMENT-PROPOSAL.md` into PDF, HTML, EPUB, and ODT deliverables (`docs/IT-MANAGEMENT-PROPOSAL.pdf`, `handbook.pdf`, `handbook.epub`, etc.) using Pandoc and Headless Chromium.
+
+3. Verification & Full Test Pass Matrix:
+   - Executed `uv run pytest` -> 302/302 passed cleanly (100% pass rate).
    - Executed `uv run ruff check .` -> All checks passed cleanly (0 errors).
    - Executed `npx markdownlint-cli --config .markdownlint.json "**/*.md"` -> 0 linting errors.
    - Executed dynamic navigation synchronization via `tools/generate_summary.py`.
-   - Performed DSOM EOD Palace Sync across `.agents/brain/` spatial memory.
+   - Performed DSOM EOD Palace Sync across `.agents/brain/` spatial memory files.

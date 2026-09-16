@@ -4,8 +4,8 @@ type: spatial_memory
 title: "DSOM Execution Walkthrough & Session Logs"
 description: "Historical session log and mental anchors for project bootstrap, setup, governance adoption, and LLM-WIKI integration."
 status: active
-timestamp: "2026-09-10T00:00:00Z"
-stale_after: "2027-09-08T00:00:00Z"
+timestamp: "2026-09-16T02:00:00Z"
+stale_after: "2027-09-16T02:00:00Z"
 generated: false
 verified: true
 sources:
@@ -21,6 +21,21 @@ topics:
 ---
 
 # 📜 DSOM Execution Walkthrough & Mental Anchors
+
+## Session Anchor: 2026-09-16 — IT Management Proposal, PDF/eBook Compiler Pipeline & DSOM EOD Palace Sync
+
+- **Context:** Formulated and published the IT Management Proposal (`docs/IT-MANAGEMENT-PROPOSAL.md`), upgraded the technical book compilation pipeline (`compile-book.py` and `tools/build_project_book.py`), generated PDF/eBook deliverables (`docs/IT-MANAGEMENT-PROPOSAL.pdf`, `handbook.pdf`, `handbook.epub`), resolved all PR review comments, and completed End of Day (EOD) Palace Sync under the Deep State of Mind (DSOM) Protocol.
+- **Actions Taken:**
+  1. Authored `docs/IT-MANAGEMENT-PROPOSAL.md` with full OKF v0.2 frontmatter, Podman container blueprint, API-First and MCP-Ready architecture in UK English.
+  2. Detailed Human Data as Single Source of Truth (Tier 0 Golden SSoT in Percona Patroni PostgreSQL 18 written via NiFi 2.0 upon Laravel human verification) and AI-enriched metadata provenance tagging (`bda_provenance`).
+  3. Embedded Dual-Render Architecture Diagram (SVG vector graphic, Mermaid topology, summary routing table).
+  4. Updated `SUMMARY.md` and `_data/navigation.yml` via `tools/generate_summary.py`.
+  5. Refactored `tools/build_project_book.py` to assemble `build/book.md` with `okf_version: "0.2"` frontmatter.
+  6. Updated `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py` to run helper scripts via `uv run python` (`shutil.which("uv")`) and pass `-V lang=en` to Pandoc for valid HTML lang attributes (`<html lang="en" xml:lang="en">`).
+  7. Created `.markdownlintignore` and updated `.gitignore` to ignore build output artifacts (`build/`).
+  8. Compiled `build/book.md` and `docs/IT-MANAGEMENT-PROPOSAL.md` into PDF, HTML, EPUB, and ODT deliverables using Pandoc and Headless Chromium.
+  9. Executed and passed all static linter checks (`ruff check .`, `markdownlint-cli`) and 302 unit tests in `pytest` with a 100% pass rate.
+  10. Executed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory files.
 
 ## Session Anchor: 2026-09-14 — Consumption & Integration Layer: Fusio API Server, TypeSchema, OpenAPI & Self-Hosted MCP Integration
 

@@ -4,8 +4,8 @@ type: spatial_memory
 title: "Sovereign Markdown Palace Registry"
 description: "Spatial registry index mapping wings, halls, and rooms within the DSOM Spatial Memory Engine."
 status: active
-timestamp: "2026-09-07T11:45:00Z"
-stale_after: "2027-09-07T11:45:00Z"
+timestamp: "2026-09-16T04:00:00Z"
+stale_after: "2027-09-16T04:00:00Z"
 generated: false
 verified: true
 sources:
@@ -22,6 +22,7 @@ topics:
 | Room ID | Wing / Sector | Description | Key Assets |
 | :--- | :--- | :--- | :--- |
 | `room_clean_architecture` | Reference Wing | Technical specifications, BDA Lakehouse target architecture, and domain analytical modules. | `docs/reference/` |
+| `room_proposals` | Governance & Proposal Wing | Strategic proposals for infrastructure modernisation, migration blueprints, and decoupled portal frameworks. | `docs/IT-MANAGEMENT-PROPOSAL.md`, `docs/proposals/` |
 | `room_crisp_strategy` | How-To & Tutorial Wing | Practical problem-solving, phased migration strategies, and developer onboarding. | `docs/tutorials/`, `docs/how-to-guides/` |
 | `room_dsom_protocol` | Governance & Protocol Wing | Sovereign AI Constitution, AI Cognitive Twin Protocol, Dual-Render Diagram skill, and Universal Gateway Matrix rules. | `AGENTS.md`, `.agents/`, `.agents/skills/`, `docs/AI-COGNITIVE-TWIN-PROTOCOL.md`, `docs/explanation/` |
 | `room_openwiki` | OpenWiki & SSoT Wing | OpenWiki knowledge base, CLI emulator, offline canvas graph visualizer, and open-source software relationship matrix. | `openwiki/`, `tools/openwiki_emulator.py`, `tests/test_openwiki.py` |

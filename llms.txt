@@ -9,6 +9,10 @@
 - [Master Onboarding Map](START-HERE.md)
 - [Root Documentation Index](README.md)
 
+## Strategic Proposals & Migration Blueprints
+- [NRE BDA Astro 7.3.2 Migration Proposal](docs/proposals/nre-bda-astro-migration.md)
+- [IT Management Proposal](docs/IT-MANAGEMENT-PROPOSAL.md)
+
 ## Spatial Memory
 - [Task Progress](.agents/brain/task.md)
 - [Walkthrough Logs](.agents/brain/walkthrough.md)
@@ -19,6 +23,7 @@
 - [Tutorials](docs/tutorials/onboarding-and-setup.md)
 - [How-To: Ingestion Modernization](docs/how-to-guides/ingestion-pipeline-modernization.md)
 - [How-To: Phased Migration Strategy](docs/how-to-guides/phased-migration-strategy.md)
+- [How-To: DSOM 4-Phase Migration Blueprint Execution Guide](docs/how-to-guides/dsom-migration-blueprint-execution-guide.md)
 - [Reference: Legacy Architecture](docs/reference/legacy-architecture.md)
 - [Reference: Lakehouse Architecture](docs/reference/lakehouse-architecture.md)
 - [Reference: Business Applications](docs/reference/business-applications.md)

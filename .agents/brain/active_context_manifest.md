@@ -4,8 +4,8 @@ type: spatial_memory
 title: "Active Context Manifest"
 description: "Live tracking manifest of files currently in active engineering scope under the DSOM protocol and LLM-WIKI framework."
 status: active
-timestamp: "2026-09-12T00:00:00Z"
-stale_after: "2027-09-12T00:00:00Z"
+timestamp: "2026-09-16T04:00:00Z"
+stale_after: "2027-09-16T04:00:00Z"
 generated: false
 verified: true
 sources:
@@ -32,6 +32,8 @@ The following assets are currently in active development or audit scope under th
 - `CLAUDE.md`
 - `.github/copilot-instructions.md`
 - `docs/AI-COGNITIVE-TWIN-PROTOCOL.md`
+- `docs/IT-MANAGEMENT-PROPOSAL.md`
+- `docs/proposals/nre-bda-astro-migration.md`
 - `docs/reference/postgresql-pgvector-enterprise-strategy.md`
 - `docs/reference/apache-nifi-2-master-data-plane-and-migration.md`
 - `.agents/skills/dual-render-architecture-diagram/SKILL.md`
@@ -52,11 +54,14 @@ The following assets are currently in active development or audit scope under th
 ## 🛡️ Human-AI Quarantine Architecture Assets
 
 - `README.md`
+- `docs/README.md`
+- `START-HERE.md`
 - `docs/explanation/human-ai-quarantine-model.md`
 - `CHANGELOG.md`
 - `HISTORY.md`
 - `SUMMARY.md`
 - `_data/navigation.yml`
+- `llms.txt`
 - `tests/test_okf_and_links.py`
 
 ## 🌐 OpenWiki & BDA SSoT Knowledge Base

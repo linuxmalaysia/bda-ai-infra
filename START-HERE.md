@@ -141,8 +141,9 @@ flowchart TD
 
 ### 📚 Documentation Quadrants (Diátaxis)
 
+- **Proposals:** [docs/proposals/nre-bda-astro-migration.html](docs/proposals/nre-bda-astro-migration.html) | [docs/IT-MANAGEMENT-PROPOSAL.html](docs/IT-MANAGEMENT-PROPOSAL.html)
 - **Tutorials:** [docs/tutorials/onboarding-and-setup.html](docs/tutorials/onboarding-and-setup.html)
-- **How-To Guides:** [docs/how-to-guides/phased-migration-strategy.html](docs/how-to-guides/phased-migration-strategy.html)
+- **How-To Guides:** [docs/how-to-guides/phased-migration-strategy.html](docs/how-to-guides/phased-migration-strategy.html) | [docs/how-to-guides/dsom-migration-blueprint-execution-guide.html](docs/how-to-guides/dsom-migration-blueprint-execution-guide.html)
 - **Reference Material:** [docs/reference/lakehouse-architecture.html](docs/reference/lakehouse-architecture.html) | [docs/reference/postgresql-pgvector-enterprise-strategy.html](docs/reference/postgresql-pgvector-enterprise-strategy.html) | [docs/reference/consumption-and-integration-layer.html](docs/reference/consumption-and-integration-layer.html) | [docs/reference/next-technology-roadmap-stack.html](docs/reference/next-technology-roadmap-stack.html)
 - **Explanation:** [docs/explanation/governance-and-compliance.html](docs/explanation/governance-and-compliance.html)
 

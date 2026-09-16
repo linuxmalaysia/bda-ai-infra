@@ -1,20 +1,21 @@
 DSOM EOD Palace Sync Checkpoint Summary
 =======================================
-Timestamp: 2026-09-16T03:30:00Z
+Timestamp: 2026-09-16T05:00:00Z
 Author: Jules (Senior AI Systems Engineer & Technical Documentation Architect)
 
-[MENTAL ANCHOR]: DSOM 4-Phase Migration Blueprint & AI Skills Readiness fully operationalized with Warp Skills and OpenViking Skills specifications, print-safe white canvas diagrams, unit tests, dynamic navigation, and 100% test pass rate.
+[MENTAL ANCHOR]: Technical migration proposal `docs/proposals/nre-bda-astro-migration.md` fully published, addressing legacy Joomla 3 stateful monolith decoupling to Astro 7.3.2 static-first architecture on K3s/RKE2 and Podman Quadlets. All PR comments resolved, spatial memory synchronized, and 100% test suite pass rate verified across 321 tests.
 
-1. DSOM 4-Phase Migration & Skills Execution Readiness:
-   - Registered `.agents/skills/dsom-migration-blueprint/SKILL.md` conforming to Warp Skills (`name`, `description`, `$ARGUMENTS`) and OpenViking Skills (`allowed-tools`, `tags`, `metadata`) standards with OKF v0.2 frontmatter.
-   - Added executable local script `.agents/skills/dsom-migration-blueprint/scripts/compile-migration-book.py` with PEP-257 docstrings.
-   - Authored `docs/how-to-guides/dsom-migration-blueprint-execution-guide.md` in UK English complete with print-safe `#FFFFFF` white canvas Dual-Render Architecture Diagram pipeline.
-   - Integrated Rule 32 ("DSOM 4-Phase Migration & Documentation Blueprint") into `.agents/AGENTS.md` and root `AGENTS.md`.
+1. NRE BDA Technical Migration Proposal (`docs/proposals/nre-bda-astro-migration.md`):
+   - Authored technical migration proposal following Diátaxis framework, OKF v0.2 frontmatter header, and UK English conventions.
+   - Documented As-Is legacy footprint (Joomla 3.9.19 on `Portal-node01` and 3.9.14 on `Main-nahrim`, 5-node MariaDB Galera cluster with ClusterControl, GlusterFS, WildFly, Tableau, CentOS 8 VMs on Proxmox VE 6.2-4, exposed `/administrator/` endpoints).
+   - Specified To-Be fabric (Astro 7.3.2 SSG/SSR Islands Architecture, K3s/RKE2, Podman Quadlets, Headless REST/GraphQL APIs in Flask/PHP 8.4+, Percona PostgreSQL 18 with Patroni HA, Ceph/MinIO S3 storage, Elastic Observability, mTLS 1.3, TDE).
+   - Embedded complete Dual-Render Architecture Diagram suite (raw inline SVG vector graphic, Git-native Mermaid topology, and 5-column summary routing table).
+   - Resolved line-specific PR feedback: explicitly listed all 3 legacy schemas (`bdaketsa_portal`, `bdaketsa_portal2`, `bda_dashboard_main`) in Phase 1 and Mermaid topology; scoped Zero-Trust security guarantees strictly to removing PHP execution from the static frontend.
 
-2. Test Suite & Code Health Compliance:
-   - Added unit test suite `tests/test_migration_book_compiler.py` verifying script path existence and main execution paths.
-   - Executed `uv run pytest` -> 313/313 passed cleanly (100% pass rate).
+2. Test Suite, Linters & Spatial Memory Compliance:
+   - Executed `uv run pytest` -> 321/321 passed cleanly (100% pass rate).
    - Executed `uv run ruff check .` -> All checks passed cleanly (0 violations).
    - Executed `npx markdownlint-cli --config .markdownlint.json "**/*.md"` -> 0 linting errors.
-   - Synchronised navigation index (`SUMMARY.md` & `_data/navigation.yml`) via `tools/generate_summary.py`.
-   - Updated sovereign ledgers (`CHANGELOG.md`, `HISTORY.md`) and spatial memory (`.agents/brain/`).
+   - Synchronised navigation indexes (`SUMMARY.md` & `_data/navigation.yml`) via `tools/generate_summary.py`.
+   - Updated root gateways and ledgers (`README.md`, `START-HERE.md`, `docs/README.md`, `llms.txt`, `CHANGELOG.md`, `HISTORY.md`).
+   - Synchronized spatial memory engine in `.agents/brain/` (`task.md`, `walkthrough.md`, `palace_registry.md`, `active_context_manifest.md`, `checkpoint_summary.txt`).

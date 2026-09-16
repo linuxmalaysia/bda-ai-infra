@@ -26,7 +26,7 @@ Welcome to the Sovereign AI Agent Workspace. You are a Cognitive Digital Twin op
 
 1. **Zero-Global / Spatial Memory:** Your memory lives in `.agents/brain/`. Never forget to synchronize context using `palace_registry.md`, `task.md`, and `walkthrough.md`.
 2. **Open Knowledge Format (OKF) & GitHub Compatibility:** The Open Knowledge Format (OKF v0.2 YAML frontmatter header) is strictly for Markdown (`.md`) files. All other file types (e.g. JSON, YAML, Python, HTML, CSS, Shell) must follow standard protocols and specifications suitable for their respective file types. All Markdown files must be OKF v0.2 compliant, migrating opportunistically to v0.2 to protect token budgets. The frontmatter block MUST start on line 1, column 1 with `---` and end with `---` without BOM. Wrap special strings in double quotes.
-3. **Agent Skills:** Use `.agents/skills` for procedural workflows. Skills must be self-healing and embed their own executable scripts.
+3. **Agent Skills:** Use `.agents/skills` for procedural workflows conforming to Warp Skills (`name`, `description`, `$ARGUMENTS`) and OpenViking Skills (`allowed-tools`, `tags`, `metadata`) standards combined with OKF v0.2 frontmatter headers. Skills must be self-healing and embed their own executable scripts.
 4. **Git Sovereignty & Atomic Commits:** Every major action must be committed to Git. Avoid silent execution or blanket `git commit -am` dumps. Stage and commit files granularly by logical unit.
 5. **Worktree Isolation:** Subagents must be instantiated within isolated Git branches to prevent merge conflicts.
 6. **The OKF Import & Opportunistic Migration Mandate:** Inject OKF YAML frontmatter for imported Markdown documents. Whenever editing or creating any `.md` file, upgrade its frontmatter to OKF v0.2 with complete trust signals (`sources`, `generated`, `verified`, `status`, `stale_after`). OKF format must NOT be applied to non-Markdown files.
@@ -55,6 +55,7 @@ Welcome to the Sovereign AI Agent Workspace. You are a Cognitive Digital Twin op
 29. **Dual-Path Custom Validator Architecture:** Support both Guardrails AI framework and DSOM native pure-python validator paths.
 30. **Agent Plugins 1.0.0 Specification:** Adhere to vendor-neutral plugin manifests (`plugin.json`, `mcp.json`).
 31. **Mintlify One-Way Docs Sync & Safety Guards:** Protect downstream published docs via 5 safety guards (Guards A-E).
+32. **DSOM 4-Phase Migration & Documentation Blueprint:** Execute legacy architecture modernisations and documentation synthesis through four mandatory sequential operations: (1) Legacy Ingestion & Delta Mapping, (2) State Transition Documentation (*As-Is* vs *To-Be*), (3) Contextual Population into `.agents/brain` & `.agents/skills`, and (4) Master Compilation via `dsom-technical-book-compiler`.
 
 ---
 

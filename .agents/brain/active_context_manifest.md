@@ -36,6 +36,8 @@ The following assets are currently in active development or audit scope under th
 - `docs/reference/apache-nifi-2-master-data-plane-and-migration.md`
 - `.agents/skills/dual-render-architecture-diagram/SKILL.md`
 - `.agents/skills/dsom-technical-book-compiler/SKILL.md`
+- `.agents/skills/dsom-migration-blueprint/SKILL.md`
+- `docs/how-to-guides/dsom-migration-blueprint-execution-guide.md`
 - `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py`
 - `docs/governance/TECHNICAL-BOOK-DESIGN-AND-PDF-COMPILER-PROMPT-GUIDE.md`
 

@@ -40,6 +40,8 @@
     url: /docs/governance/TECHNICAL-BOOK-DESIGN-AND-PDF-COMPILER-PROMPT-GUIDE.html
 - title: How To Guides
   items:
+  - title: DSOM 4-Phase Migration Blueprint & AI Skills Execution Guide
+    url: /docs/how-to-guides/dsom-migration-blueprint-execution-guide.html
   - title: 'How-To Guide: Onboarding and Scaling New AI/ML Business Cases'
     url: /docs/how-to-guides/onboarding-new-ai-business-cases.html
   - title: Ingestion Pipeline, Application Portal, and Superset Modernization

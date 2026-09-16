@@ -60,9 +60,9 @@ topics:
 
 ### Phase 4: Master Compilation
 1. **Aggregate Fragmented Intelligence:** Synthesise all Markdown documentation into `build/book.md`.
-2. **Invoke Book Compiler:** Run the `dsom-technical-book-compiler` skill script:
+2. **Invoke Book Compiler:** Run the local compilation script:
    ```bash
-   uv run python .agents/skills/dsom-technical-book-compiler/scripts/compile-book.py
+   uv run python .agents/skills/dsom-migration-blueprint/scripts/compile-migration-book.py
    ```
 3. **Generate Publication Deliverables:** Produce print-optimized PDF, standalone HTML, portable EPUB, and editable ODT deliverables (`handbook.pdf`, `handbook.epub`, etc.).
 

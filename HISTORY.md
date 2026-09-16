@@ -23,16 +23,6 @@ This document maintains a chronological record of execution milestones, governan
 
 ## Milestone History
 
-### 2026-09-16 — DSOM 4-Phase Migration Blueprint & AI Skills Readiness
-
-- **Author:** Cognitive Twin (Jules / LinuxMalaysia)
-- **Scope:** Operational readiness for DSOM 4-Phase Migration Blueprint adopting Warp Skills & OpenViking Skills specifications.
-- **Deliverables:**
-  - Dedicated AI Skill `.agents/skills/dsom-migration-blueprint/SKILL.md` compliant with Warp Skills and OpenViking Skills standards.
-  - How-To Guide `docs/how-to-guides/dsom-migration-blueprint-execution-guide.md` featuring Dual-Render Architecture Diagram pipeline.
-  - Integrated Rule 32 into Sovereign Constitution (`.agents/AGENTS.md`) and updated root `AGENTS.md`.
-  - Updated spatial memory (`.agents/brain/`), navigation indexes (`SUMMARY.md`, `_data/navigation.yml`), and triple-ledgers (`CHANGELOG.md`, `HISTORY.md`).
-
 ### 2026-09-05 — Initial DSOM Documentation Baseline
 
 - **Author:** Cognitive Twin / System Architect
@@ -100,3 +90,13 @@ This document maintains a chronological record of execution milestones, governan
   - Comprehensive update to `README.md` and `docs/explanation/human-ai-quarantine-model.md` reflecting Percona Patroni PostgreSQL 18, Apache NiFi 2.0 + OpenMetadata, Apache Superset, AIOps (Ansible + Gitea + ARA + SemaphoreUI), RustFS, Ceph S3, Proxmox VE HCI, Podman rootless pods, Laravel file quarantine workflow, REST API / MCP interfaces, 2-tier data tagging strategy (`REAL_DATA_AI_PROCESSED` vs `AI_PROCESS_RAG_ENRICHED`), and 5-year roadmap (2028–2032).
   - Dual-Render Architecture Diagrams (SVG, Mermaid `.mmd`, Summary Routing Tables) across documentation files.
   - Navigation indexes and triple-ledgers (`SUMMARY.md`, `_data/navigation.yml`, `CHANGELOG.md`, `HISTORY.md`) updated and verified.
+
+### 2026-09-16 — DSOM 4-Phase Migration Blueprint & AI Skills Readiness
+
+- **Author:** Cognitive Twin (Jules / LinuxMalaysia)
+- **Scope:** Operational readiness for DSOM 4-Phase Migration Blueprint adopting Warp Skills & OpenViking Skills specifications.
+- **Deliverables:**
+  - Dedicated AI Skill `.agents/skills/dsom-migration-blueprint/SKILL.md` compliant with Warp Skills and OpenViking Skills standards.
+  - How-To Guide `docs/how-to-guides/dsom-migration-blueprint-execution-guide.md` featuring Dual-Render Architecture Diagram pipeline.
+  - Integrated Rule 32 into Sovereign Constitution (`.agents/AGENTS.md`) and updated root `AGENTS.md`.
+  - Updated spatial memory (`.agents/brain/`), navigation indexes (`SUMMARY.md`, `_data/navigation.yml`), and triple-ledgers (`CHANGELOG.md`, `HISTORY.md`).

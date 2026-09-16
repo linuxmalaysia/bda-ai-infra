@@ -51,7 +51,7 @@ By adhering to the **Deep State of Mind (DSOM)** protocol, execution follows fou
 
 The legacy `bda.ketsa.gov.my` environment relies on a stateful, tightly coupled LAMP-stack architecture hosted on CentOS 8 virtual machines within a Proxmox VE 6.2-4 hypervisor cluster:
 
-* **Application Core:** Serves the primary portal on Joomla! 3.9.19 (`Portal-node01`, IP `172.16.21.90`, port `443`) and the main portal on Joomla! 3.9.14 (`Main-nahrim`, IP `172.16.21.200`, port `443`).
+* **Application Core:** Serves the primary portal on Joomla! 3.9.19 (`Portal-node01`, HTTPS port `443`) and the main portal on Joomla! 3.9.14 (`Main-portal-node`, HTTPS port `443`).
 * **Ingress Routing:** Nginx 1.18.0 reverse proxy gateway filtering incoming web traffic over HTTP/HTTPS.
 * **Database Dependency:** Maintains persistent connections to a 5-node MariaDB Galera cluster (version 10.5.9) managed via ClusterControl, hosting `bdaketsa_portal`, `bdaketsa_portal2`, and `bda_dashboard_main`.
 * **Storage & Redundancy:** Heavy infrastructure redundancy relying on GlusterFS shared file storage to synchronise media assets across application nodes.
@@ -98,7 +98,7 @@ The target architecture shifts from reactive server-side dynamic rendering to pr
   <!-- As-Is Sub-components -->
   <rect x="35" y="60" width="420" height="65" fill="#FEF2F2" stroke="#DC2626" stroke-width="1" rx="6"/>
   <text x="45" y="80" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#991B1B">Joomla 3.9 CMS Portals (PHP-FPM + Nginx 1.18)</text>
-  <text x="45" y="98" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7F1D1D">Portal-node01 (172.16.21.90) | Main-nahrim (172.16.21.200)</text>
+  <text x="45" y="98" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7F1D1D">Portal-node01 (Primary) | Main-portal-node (Secondary)</text>
   <text x="45" y="114" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#991B1B">Public /administrator/ Exposed | Manual SSL &amp; Log Cleanup Toil</text>
 
   <rect x="35" y="140" width="420" height="65" fill="#FEF2F2" stroke="#DC2626" stroke-width="1" rx="6"/>

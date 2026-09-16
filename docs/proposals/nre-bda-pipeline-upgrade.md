@@ -47,7 +47,7 @@ This multi-phase evolution drastically reduces Mean Time to Detect (MTTD) and Me
 
 ### 2.1 The Legacy State (WildFly Application Server Footprint)
 
-In the baseline infrastructure footprint (`prod-pipeline-node01` at IP `172.16.21.92`), backend application processing and ingestion workflows relied heavily on **WildFly** application servers (version 1.12.1-RC2 baseline integration) and tightly coupled monolithic frontend modules:
+In the legacy infrastructure footprint (`prod-pipeline-node01` application host), backend application processing and ingestion workflows relied heavily on **WildFly** application servers (version 1.12.1-RC2 baseline integration) and tightly coupled monolithic frontend modules:
 
 * **Tightly Coupled Ingestion:** Non-IT user uploads were processed via direct script execution (`ExecuteStreamCommand` processors in NiFi calling local Python scripts located in `/opt/nifi-1.12.1/logs` and script directories).
 * **Operational Toil & Bottlenecks:** System operations required manual log inspection (`nifi-app.log` and Bulletin Board monitoring for processor errors) and manual intervention when PHP-FPM processes or Java virtual machines encountered resource exhaustion.

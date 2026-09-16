@@ -115,7 +115,7 @@ The **WebGPU API** grants web applications direct low-level access to the client
 Before engaging hardware-accelerated shaders, the browser engine executes explicit capability detection:
 * **Feature Detection:** The client checks `adapter.features.has('shader-f16')` for 16-bit float support and `navigator.gpu.wgslLanguageFeatures.has('packed_4x8_integer_dot_product')` for `DP4a` instructions.
 * **Memory Transfer Contract & Chunking:** AI weights move from `WebAssembly.Memory` linear array buffers to GPU `GPUBuffer` storage bindings via `device.queue.writeBuffer()`. Payload streams are chunked to fit within device hardware limits (`maxBufferSize` and `maxStorageBufferBindingSize`).
-* **Memory64 Instantiation & Fallbacks:** Client initialization verifies `WebAssembly.validate()` for Memory64 support (indexing >4GB memory) across modern Chromium (v120+), Firefox (v120+), and Safari (v17.4+) browser engines. If Memory64 instantiation fails or is unsupported, execution falls back to a 32-bit chunked Wasm execution path or defers pre-processing entirely to server-side Apache NiFi validation.
+* **Memory64 Executable Probe & Fallbacks:** Client initialization executes an executable Wasm compilation and instantiation probe (`WebAssembly.compile()` and `WebAssembly.instantiate()`) targeting a Memory64 module with 64-bit linear memory allocation (`(memory i64 1)`). The engine verifies that 64-bit memory pages can be dynamically allocated. Any failure during compilation, instantiation, or allocation treats Memory64 as unsupported. If unsupported, execution seamlessly falls back to a 32-bit chunked Wasm execution path or defers pre-processing entirely to server-side Apache NiFi validation.
 
 ### 4.5 Pre-Processed Payload Staging Integration Flow
 Within the upgraded Laravel interface, Wasm and WebGPU operate as an edge pre-processing filter prior to server upload:
@@ -246,13 +246,14 @@ flowchart TD
 
     User -->|"1. Selects Payload"| Laravel
     Laravel -->|"2. Edge AI Validation"| WasmAI
-    WasmAI -->|"3. Pre-Processed Write"| RawStaging
-    RawStaging -->|"4. POSIX Watcher Ingress"| NiFiWatcher
-    NiFiWatcher -->|"5. Extract & Validate"| VerifyStaging
-    VerifyStaging -->|"6. Render Summary Preview"| HumanReview
-    HumanReview -->|"7. Approve Record"| SignoffEvent
-    SignoffEvent -->|"8. Trigger Persistence Gate"| NiFiGate
-    NiFiGate -->|"9. Commit Golden SSoT"| PostgresSSoT
+    WasmAI -->|"3. Advisory Metrics"| Laravel
+    Laravel -->|"4. Authenticated Upload"| RawStaging
+    RawStaging -->|"5. POSIX Watcher Ingress"| NiFiWatcher
+    NiFiWatcher -->|"6. Extract & Validate"| VerifyStaging
+    VerifyStaging -->|"7. Render Summary Preview"| HumanReview
+    HumanReview -->|"8. Approve Record"| SignoffEvent
+    SignoffEvent -->|"9. Trigger Persistence Gate"| NiFiGate
+    NiFiGate -->|"10. Commit Golden SSoT"| PostgresSSoT
 ```
 
 ### 5.3 Summary Interface & Routing Table

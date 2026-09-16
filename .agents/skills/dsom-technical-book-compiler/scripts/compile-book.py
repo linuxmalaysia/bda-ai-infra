@@ -11,7 +11,11 @@ License: GNU General Public License v3.0
 
 import shutil
 import subprocess
-import sys
+from pathlib import Path
+
+REPO_ROOT: Path = Path(__file__).parent.parent.parent.parent.parent
+BUILD_DIR: Path = REPO_ROOT / "build"
+BOOK_MD: Path = BUILD_DIR / "book.md"
 
 
 def run_command(cmd: list[str], timeout: float = 60.0) -> None:
@@ -34,33 +38,41 @@ def main() -> None:
     """Orchestrate the complete technical book compilation pipeline.
 
     Executes sequential build stages:
-    1. Assembles master markdown document via tools/build_project_book.py.
-    2. Compiles standalone interactive HTML using Pandoc.
+    1. Assembles master markdown document via tools/build_project_book.py into build/book.md.
+    2. Compiles standalone interactive HTML using Pandoc with lang=en.
     3. Bakes native vector SVGs and inline CSS styling via tools/bake_native_svg.py.
     4. Compiles publication-grade PDF using headless Chromium/Chrome/Edge.
     5. Compiles EPUB 3 ebook using Pandoc.
     6. Compiles ODT document using Pandoc.
+    7. Compiles standalone IT Management Proposal PDF and HTML deliverables.
     """
     print("Executing Technical Book Compiler Workflow...")
 
-    # 1. Build Master Markdown handbook
-    run_command([sys.executable, "tools/build_project_book.py"])
+    uv_bin = shutil.which("uv")
+    if not uv_bin:
+        raise RuntimeError("Required dependency 'uv' executable not found in PATH.")
+    python_cmd = [uv_bin, "run", "python"]
+
+    # 1. Build Master Markdown handbook into build/book.md
+    run_command(python_cmd + ["tools/build_project_book.py"])
 
     # 2. Compile Standalone Interactive HTML
-    if shutil.which("pandoc"):
+    if shutil.which("pandoc") and BOOK_MD.exists():
         run_command([
             "pandoc",
-            "book.md",
+            str(BOOK_MD),
             "-o",
             "handbook.html",
             "--standalone",
             "--toc",
+            "-V",
+            "lang=en",
         ])
     else:
-        print("Pandoc not found; skipping HTML build in dry-run environment.")
+        print("Pandoc not found or build/book.md missing; skipping HTML build.")
 
     # 3. Bake Native Vector SVGs & Inline CSS
-    run_command([sys.executable, "tools/bake_native_svg.py"])
+    run_command(python_cmd + ["tools/bake_native_svg.py"])
 
     # 4. Compile Publication-Grade PDF using available browser engine
     browser_bin = (
@@ -84,19 +96,51 @@ def main() -> None:
             " dry-run environment."
         )
 
-    # 5. Compile EPUB 3 Ebook
-    if shutil.which("pandoc"):
+    # 5. Compile EPUB 3 Ebook & ODT Document
+    if shutil.which("pandoc") and BOOK_MD.exists():
         run_command([
             "pandoc",
-            "book.md",
+            str(BOOK_MD),
             "-o",
             "handbook.epub",
             "-t",
             "epub3",
             "--toc",
+            "-V",
+            "lang=en",
         ])
-        # 6. Compile ODT Document
-        run_command(["pandoc", "book.md", "-o", "handbook.odt", "--toc"])
+        run_command(["pandoc", str(BOOK_MD), "-o", "handbook.odt", "--toc"])
+
+    # 6. Compile Standalone IT Management Proposal HTML and PDF Deliverables
+    proposal_md = "docs/IT-MANAGEMENT-PROPOSAL.md"
+    proposal_html = "docs/IT-MANAGEMENT-PROPOSAL.html"
+    proposal_pdf = "docs/IT-MANAGEMENT-PROPOSAL.pdf"
+    if shutil.which("pandoc") and Path(proposal_md).exists():
+        run_command([
+            "pandoc",
+            proposal_md,
+            "-o",
+            proposal_html,
+            "--standalone",
+            "--toc",
+            "-V",
+            "lang=en",
+        ])
+        if browser_bin:
+            run_command([
+                browser_bin,
+                "--headless=new",
+                "--disable-gpu",
+                "--run-all-compositor-stages-before-draw",
+                "--virtual-time-budget=8000",
+                f"--print-to-pdf={proposal_pdf}",
+                proposal_html,
+            ])
+
+    # Clean up root book.md if leftover
+    root_book = REPO_ROOT / "book.md"
+    if root_book.exists():
+        root_book.unlink()
 
     print("Compilation workflow executed successfully.")
 

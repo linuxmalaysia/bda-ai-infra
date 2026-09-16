@@ -28,6 +28,10 @@ and this project adheres to Semantic Versioning.
 
 ### Added
 
+- Added DSOM 4-Phase Migration Blueprint & AI Skills Readiness (`.agents/skills/dsom-migration-blueprint/SKILL.md`) conforming to Warp Skills and OpenViking Skills specifications.
+- Published `docs/how-to-guides/dsom-migration-blueprint-execution-guide.md` in UK English detailing the 4-phase execution pipeline (Legacy Ingestion & Delta Mapping, State Transition Documentation As-Is vs To-Be, Contextual Population into `.agents/brain` & `.agents/skills`, and Master Compilation) complete with Dual-Render Architecture Diagram.
+- Integrated Rule 32 ("DSOM 4-Phase Migration & Documentation Blueprint") into `.agents/AGENTS.md` and updated `AGENTS.md`.
+
 - Adopted new Human-AI Quarantine & Data Processing Architecture across `README.md` and `docs/explanation/human-ai-quarantine-model.md`.
 - Integrated specified technology stack components: Percona Patroni PostgreSQL 18, Apache NiFi 2.0 + OpenMetadata, Apache Superset, AIOps (Ansible + Gitea + ARA + SemaphoreUI), RustFS shared directory file staging, Ceph S3 object storage baseline, and Proxmox VE HCI with Podman rootless pods.
 - Documented human-in-the-loop file quarantine workflow using Laravel web application (user authentication, file upload to RustFS staging, NiFi extraction/processing, Laravel human verification review, and secondary NiFi load into Percona Patroni PostgreSQL 18).

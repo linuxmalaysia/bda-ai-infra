@@ -23,6 +23,16 @@ This document maintains a chronological record of execution milestones, governan
 
 ## Milestone History
 
+### 2026-09-16 — DSOM 4-Phase Migration Blueprint & AI Skills Readiness
+
+- **Author:** Cognitive Twin (Jules / LinuxMalaysia)
+- **Scope:** Operational readiness for DSOM 4-Phase Migration Blueprint adopting Warp Skills & OpenViking Skills specifications.
+- **Deliverables:**
+  - Dedicated AI Skill `.agents/skills/dsom-migration-blueprint/SKILL.md` compliant with Warp Skills and OpenViking Skills standards.
+  - How-To Guide `docs/how-to-guides/dsom-migration-blueprint-execution-guide.md` featuring Dual-Render Architecture Diagram pipeline.
+  - Integrated Rule 32 into Sovereign Constitution (`.agents/AGENTS.md`) and updated root `AGENTS.md`.
+  - Updated spatial memory (`.agents/brain/`), navigation indexes (`SUMMARY.md`, `_data/navigation.yml`), and triple-ledgers (`CHANGELOG.md`, `HISTORY.md`).
+
 ### 2026-09-05 — Initial DSOM Documentation Baseline
 
 - **Author:** Cognitive Twin / System Architect

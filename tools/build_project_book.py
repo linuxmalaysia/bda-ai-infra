@@ -29,14 +29,9 @@ EXCLUDED_DIRS: set[str] = {
 
 
 def strip_frontmatter(content: str) -> str:
-    """Strip OKF YAML frontmatter header if present.
+    """Return stripped Markdown without a complete leading frontmatter block.
 
-    Args:
-        content (str): Raw Markdown content.
-
-    Returns:
-        str: Content with YAML frontmatter removed.
-
+    Leading and trailing whitespace is removed even when no frontmatter is found.
     """
     if content.startswith("---\n"):
         parts = content.split("---\n", 2)
@@ -46,7 +41,12 @@ def strip_frontmatter(content: str) -> str:
 
 
 def main() -> None:
-    """Assemble repository documentation into a master Markdown manuscript (build/book.md)."""
+    """Write the consolidated handbook to ``build/book.md``.
+
+    Source frontmatter is removed before available priority documents and the
+    remaining Markdown files under ``docs`` are appended. Any legacy repository-root
+    ``book.md`` is deleted after the handbook is written.
+    """
     BUILD_DIR.mkdir(parents=True, exist_ok=True)
 
     sections: list[str] = [

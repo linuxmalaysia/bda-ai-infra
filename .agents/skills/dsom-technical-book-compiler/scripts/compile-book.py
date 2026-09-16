@@ -36,16 +36,17 @@ def run_command(cmd: list[str], timeout: float = 60.0) -> None:
 
 
 def main() -> None:
-    """Orchestrate the complete technical book compilation pipeline.
+    """Build handbook and proposal deliverables with available local compilers.
 
-    Executes sequential build stages:
-    1. Assembles master markdown document via tools/build_project_book.py into build/book.md.
-    2. Compiles standalone interactive HTML using Pandoc with lang=en.
-    3. Bakes native vector SVGs and inline CSS styling via tools/bake_native_svg.py.
-    4. Compiles publication-grade PDF using headless Chromium/Chrome/Edge.
-    5. Compiles EPUB 3 ebook using Pandoc.
-    6. Compiles ODT document using Pandoc.
-    7. Compiles standalone IT Management Proposal PDF and HTML deliverables.
+    The workflow assembles the handbook Markdown, bakes assets, and conditionally
+    generates HTML, PDF, EPUB, and ODT outputs. Pandoc conversions require Pandoc and
+    their Markdown input; PDF rendering also requires a supported browser. The workflow
+    removes any legacy repository-root ``book.md``.
+
+    Raises:
+        subprocess.CalledProcessError: If an invoked build command fails.
+        subprocess.TimeoutExpired: If an invoked build command exceeds its timeout.
+
     """
     print("Executing Technical Book Compiler Workflow...")
 

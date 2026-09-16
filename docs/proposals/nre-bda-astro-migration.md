@@ -159,7 +159,7 @@ The target architecture shifts from reactive server-side dynamic rendering to pr
 ```mermaid
 flowchart TD
     subgraph AsIs ["Legacy Stateful Monolith (As-Is Footprint)"]
-        AS_Joomla["Joomla! 3.9 (Portal-node01 & Main-nahrim)"]
+        AS_Joomla["Joomla! 3.9 (Portal-node01 & Main-portal-node)"]
         AS_MariaDB[("5-Node MariaDB Galera 10.5 ClusterControl\n(bdaketsa_portal, bdaketsa_portal2, bda_dashboard_main)")]
         AS_Gluster["GlusterFS Shared File Storage"]
         AS_Tableau["WildFly & Tableau Visual Analytics"]

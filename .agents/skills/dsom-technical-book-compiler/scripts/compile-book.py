@@ -36,22 +36,24 @@ def run_command(cmd: list[str], timeout: float = 60.0) -> None:
 
 
 def main() -> None:
-    """Build handbook and proposal deliverables with available local compilers.
+    """Orchestrate the complete technical book compilation pipeline.
 
-    The workflow assembles the handbook Markdown, bakes assets, and conditionally
-    generates HTML, PDF, EPUB, and ODT outputs. Pandoc conversions require Pandoc and
-    their Markdown input; PDF rendering also requires a supported browser. The workflow
-    removes any legacy repository-root ``book.md``.
-
-    Raises:
-        subprocess.CalledProcessError: If an invoked build command fails.
-        subprocess.TimeoutExpired: If an invoked build command exceeds its timeout.
-
+    Executes sequential build stages:
+    1. Assembles master markdown document via tools/build_project_book.py into build/book.md.
+    2. Compiles standalone interactive HTML using Pandoc with lang=en.
+    3. Bakes native vector SVGs and inline CSS styling via tools/bake_native_svg.py.
+    4. Compiles publication-grade PDF using headless Chromium/Chrome/Edge.
+    5. Compiles EPUB 3 ebook using Pandoc.
+    6. Compiles ODT document using Pandoc.
+    7. Compiles standalone IT Management Proposal PDF and HTML deliverables.
     """
     print("Executing Technical Book Compiler Workflow...")
 
+    uv_bin = shutil.which("uv")
+    python_cmd = [uv_bin, "run", "python"] if uv_bin else [sys.executable]
+
     # 1. Build Master Markdown handbook into build/book.md
-    run_command([sys.executable, "tools/build_project_book.py"])
+    run_command(python_cmd + ["tools/build_project_book.py"])
 
     # 2. Compile Standalone Interactive HTML
     if shutil.which("pandoc") and BOOK_MD.exists():
@@ -69,7 +71,7 @@ def main() -> None:
         print("Pandoc not found or build/book.md missing; skipping HTML build.")
 
     # 3. Bake Native Vector SVGs & Inline CSS
-    run_command([sys.executable, "tools/bake_native_svg.py"])
+    run_command(python_cmd + ["tools/bake_native_svg.py"])
 
     # 4. Compile Publication-Grade PDF using available browser engine
     browser_bin = (

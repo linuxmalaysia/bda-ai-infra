@@ -82,7 +82,7 @@ The quarantine architecture enforces strict physical and logical boundaries betw
 * **Verification Staging & Lifecycle Management:**
   * Processed preview payloads are written to `/data/staging/verify/` awaiting human review.
   * **Parser Failure:** Payloads failing structural verification are routed to `/data/staging/failed/` with error audit logs; notification alerts are dispatched to the submitting user.
-  * **Lifecycle & Retention:** Staging directories (`/data/staging/raw/`, `/data/staging/verify/`, `/data/staging/failed/`) enforce explicit 14-day retention rules managed by automated NiFi cleanup processors, preventing storage accumulation.
+  * **Lifecycle & Retention:** Staging directories (`/data/staging/raw/`, `/data/staging/verify/`, `/data/staging/failed/`, `/data/staging/rejected/`) enforce explicit 14-day retention rules managed by automated NiFi cleanup processors, preventing storage accumulation.
 
 ### 3.3 Stage 3: Human Sign-off, Replay Protection, & SSoT Persistence
 * **Laravel UI Review:** Domain experts review extracted records, server-verified data quality flags, and schema diff previews within the Laravel dashboard.
@@ -115,7 +115,7 @@ The **WebGPU API** grants web applications direct low-level access to the client
 Before engaging hardware-accelerated shaders, the browser engine executes explicit capability detection:
 * **Feature Detection:** The client checks `adapter.features.has('shader-f16')` for 16-bit float support and `navigator.gpu.wgslLanguageFeatures.has('packed_4x8_integer_dot_product')` for `DP4a` instructions.
 * **Memory Transfer Contract & Chunking:** AI weights move from `WebAssembly.Memory` linear array buffers to GPU `GPUBuffer` storage bindings via `device.queue.writeBuffer()`. Payload streams are chunked to fit within device hardware limits (`maxBufferSize` and `maxStorageBufferBindingSize`).
-* **Fallback Behavior:** If WebGPU or requested hardware features are unavailable or fail allocation, execution gracefully falls back to Wasm CPU execution using standard SIMD, or defers pre-processing entirely to server-side Apache NiFi validation.
+* **Memory64 Instantiation & Fallbacks:** Client initialization verifies `WebAssembly.validate()` for Memory64 support (indexing >4GB memory) across modern Chromium (v120+), Firefox (v120+), and Safari (v17.4+) browser engines. If Memory64 instantiation fails or is unsupported, execution falls back to a 32-bit chunked Wasm execution path or defers pre-processing entirely to server-side Apache NiFi validation.
 
 ### 4.5 Pre-Processed Payload Staging Integration Flow
 Within the upgraded Laravel interface, Wasm and WebGPU operate as an edge pre-processing filter prior to server upload:

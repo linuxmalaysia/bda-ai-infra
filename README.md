@@ -412,6 +412,11 @@ Implementation and operational rollout are structured across a 5-year strategic 
 
 Following the **Diátaxis Framework**, documentation is categorized into four distinct quadrants:
 
+### 🏛️ Strategic Proposals & Blueprints
+
+* [NRE BDA Astro 7.3.2 Technical Migration Proposal](docs/proposals/nre-bda-astro-migration.html)
+* [IT Management Proposal: Enterprise Data Infrastructure Modernisation](docs/IT-MANAGEMENT-PROPOSAL.html)
+
 ### 🎓 1. Tutorials (Practical Learning)
 
 * [Onboarding and Developer Setup Guide](docs/tutorials/onboarding-and-setup.html)

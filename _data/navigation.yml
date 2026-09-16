@@ -48,6 +48,11 @@
     url: /docs/how-to-guides/ingestion-pipeline-modernization.html
   - title: Phased Migration Strategy and Implementation Roadmap
     url: /docs/how-to-guides/phased-migration-strategy.html
+- title: Proposals
+  items:
+  - title: 'NRE BDA Technical Migration Proposal: Legacy Joomla 3 to Decoupled Astro
+      7.3.2'
+    url: /docs/proposals/nre-bda-astro-migration.html
 - title: Reference
   items:
   - title: "5-Year Strategic BDA & AI Roadmap & Master Business Case Specification\

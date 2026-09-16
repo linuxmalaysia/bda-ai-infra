@@ -4,8 +4,8 @@ type: ledger
 title: "Sovereign Execution History Ledger"
 description: "Chronological record of execution milestones, governance shifts, and spatial brain synchronizations."
 status: active
-timestamp: "2026-09-12T00:00:00Z"
-stale_after: "2027-09-12T00:00:00Z"
+timestamp: "2026-09-16T04:00:00Z"
+stale_after: "2027-09-16T04:00:00Z"
 generated: false
 verified: true
 sources:
@@ -100,3 +100,13 @@ This document maintains a chronological record of execution milestones, governan
   - How-To Guide `docs/how-to-guides/dsom-migration-blueprint-execution-guide.md` featuring Dual-Render Architecture Diagram pipeline.
   - Integrated Rule 32 into Sovereign Constitution (`.agents/AGENTS.md`) and updated root `AGENTS.md`.
   - Updated spatial memory (`.agents/brain/`), navigation indexes (`SUMMARY.md`, `_data/navigation.yml`), and triple-ledgers (`CHANGELOG.md`, `HISTORY.md`).
+
+### 2026-09-16 — NRE BDA Astro 7.3.2 Technical Migration Proposal
+
+- **Author:** Cognitive Twin (Jules / LinuxMalaysia)
+- **Scope:** Technical Migration Proposal for BDA Portal Architecture Modernisation (Joomla 3 to Astro 7.3.2)
+- **Deliverables:**
+  - Published proposal `docs/proposals/nre-bda-astro-migration.md` following Diátaxis framework, OKF v0.2 frontmatter header, and UK English conventions.
+  - Documented legacy As-Is footprint (Joomla 3.9.19/3.9.14, 5-node MariaDB Galera cluster with ClusterControl, GlusterFS, WildFly, Tableau, CentOS 8 VMs on Proxmox VE 6.2-4) and target To-Be fabric (Astro 7.3.2 SSG/SSR Islands Architecture, K3s/RKE2, Podman Quadlets, Headless APIs, Patroni PostgreSQL 18 HA, Ceph/MinIO S3 storage, Elastic Observability).
+  - Complete Dual-Render Architecture Diagram (inline SVG, Mermaid topology, summary routing table).
+  - Spatial memory synchronization (`.agents/brain/`) and omni-documentation index updates (`SUMMARY.md`, `START-HERE.md`, `README.md`, `docs/README.md`, `llms.txt`, `CHANGELOG.md`, `HISTORY.md`).

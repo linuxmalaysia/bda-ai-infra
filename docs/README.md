@@ -4,8 +4,8 @@ title: BDA Lakehouse Baseline Documentation Index
 description: Main index and navigation hub for the Modernizing Big Data Analytics Architecture baseline documentation, structured following Diátaxis and DSOM standards.
 type: reference
 status: verified
-timestamp: "2026-09-06T00:00:00Z"
-stale_after: "2027-09-06T00:00:00Z"
+timestamp: "2026-09-16T00:00:00Z"
+stale_after: "2027-09-16T00:00:00Z"
 topics:
   - bda
   - diataxis
@@ -148,6 +148,11 @@ Following the **Diátaxis Documentation Framework**, this suite is organized int
 
 ## Master Directory Index
 
+### 🏛️ Strategic Proposals & Migration Blueprints
+
+- **[NRE BDA Technical Migration Proposal](proposals/nre-bda-astro-migration.html):** Transition proposal from legacy stateful Joomla 3 monolith to decoupled Astro 7.3.2 static-first architecture.
+- **[IT Management Proposal](IT-MANAGEMENT-PROPOSAL.html):** Executive proposal for Enterprise Data Infrastructure Modernisation (Tableau to Podman, API-First, MCP-Ready).
+
 ### 🎓 1. Tutorials (Practical Learning for Onboarding)
 
 - **[Onboarding and Setup Guide](tutorials/onboarding-and-setup.html):** Getting started with the modernized BDA lakehouse baseline documentation.
@@ -156,7 +161,8 @@ Following the **Diátaxis Documentation Framework**, this suite is organized int
 
 - **[Ingestion Pipeline Modernization](how-to-guides/ingestion-pipeline-modernization.html):** Implementing Apache NiFi, Apache Airflow, Next.js web application, and Apache Superset visual analytics.
 - **[Phased Migration Strategy & Roadmap](how-to-guides/phased-migration-strategy.html):** Detailed 4-phase implementation roadmap over 12 months with risk mitigation and fallback procedures.
-- [Onboarding and Scaling New AI/ML Business Cases](how-to-guides/onboarding-new-ai-business-cases.html)
+- **[DSOM 4-Phase Migration Blueprint Execution Guide](how-to-guides/dsom-migration-blueprint-execution-guide.html):** Complete operational guide for executing legacy ingestion, delta mapping, state transition, and book compilation.
+- **[Onboarding and Scaling New AI/ML Business Cases](how-to-guides/onboarding-new-ai-business-cases.html)**
 
 ### 📚 3. Reference Material (Factual Technical Specifications)
 

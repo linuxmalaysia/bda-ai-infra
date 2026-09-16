@@ -54,6 +54,10 @@ topics:
 * [Ingestion Pipeline, Application Portal, and Superset Modernization](docs/how-to-guides/ingestion-pipeline-modernization.md)
 * [Phased Migration Strategy and Implementation Roadmap](docs/how-to-guides/phased-migration-strategy.md)
 
+## Proposals
+
+* [NRE BDA Technical Migration Proposal: Legacy Joomla 3 to Decoupled Astro 7.3.2](docs/proposals/nre-bda-astro-migration.md)
+
 ## Reference
 
 * [5-Year Strategic BDA & AI Roadmap & Master Business Case Specification (2026–2030)](docs/reference/5-year-bda-ai-roadmap-and-business-case.md)

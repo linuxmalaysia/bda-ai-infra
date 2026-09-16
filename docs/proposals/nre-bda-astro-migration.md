@@ -68,7 +68,7 @@ The target architecture shifts from reactive server-side dynamic rendering to pr
 * **Compute Overhead Eradication:** Astro 7.3.2 utilizes Static Site Generation (SSG) with Islands Architecture or lightweight hybrid Server-Side Rendering (SSR). Pre-rendered HTML/CSS eliminates continuous PHP-FPM processing and database queries for page views.
 * **Decoupled Intelligence:** Frontend rendering is severed from direct database access. Content is consumed via headless REST/GraphQL APIs (Python Flask or PHP 8.4+).
 * **Storage Modernisation:** Complex GlusterFS shared storage is deprecated. Astro static build assets are packaged as immutable container images or served directly from S3-compatible object storage (e.g., Ceph or MinIO).
-* **Zero-Trust Security Posture:** Compiling presentation layers to static HTML/CSS/JS removes PHP execution vectors, form injection risks, and public `/administrator/` endpoints.
+* **Zero-Trust Security Posture:** Compiling presentation layers to static HTML/CSS/JS removes PHP execution vectors from the frontend. Secure API authentication, strict input validation, and administrative-surface access controls are implemented separately as required security measures.
 * **Deployment Resiliency:** The frontend becomes an immutable artifact, enabling zero-downtime deployments and instantaneous atomic rollbacks across Kubernetes nodes without database locking risks.
 
 ---
@@ -160,7 +160,7 @@ The target architecture shifts from reactive server-side dynamic rendering to pr
 flowchart TD
     subgraph AsIs ["Legacy Stateful Monolith (As-Is Footprint)"]
         AS_Joomla["Joomla! 3.9 (Portal-node01 & Main-nahrim)"]
-        AS_MariaDB[("5-Node MariaDB Galera 10.5 ClusterControl\n(bdaketsa_portal, bda_dashboard_main)")]
+        AS_MariaDB[("5-Node MariaDB Galera 10.5 ClusterControl\n(bdaketsa_portal, bdaketsa_portal2, bda_dashboard_main)")]
         AS_Gluster["GlusterFS Shared File Storage"]
         AS_Tableau["WildFly & Tableau Visual Analytics"]
         AS_Admin["Public Administrative Gateway (/administrator/)"]
@@ -246,7 +246,7 @@ Day 2 operations default to **Elastic Observability** (Elasticsearch, Kibana, El
 Following the Deep State of Mind (DSOM) framework, execution proceeds through four sequential operations:
 
 1. **Phase 1: Legacy Ingestion & Delta Mapping**
-   * Dissect `bdaketsa_portal` and `bdaketsa_portal2` MariaDB schemas.
+   * Dissect `bdaketsa_portal`, `bdaketsa_portal2`, and `bda_dashboard_main` MariaDB schemas.
    * Extract GlusterFS media assets and map endpoints to S3 bucket structures.
 2. **Phase 2: State Transition Documentation (As-Is vs To-Be)**
    * Formalise state comparison within `docs/proposals/nre-bda-astro-migration.md`.

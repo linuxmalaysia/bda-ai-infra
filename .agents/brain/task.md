@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: spatial_memory
 title: "Task Registry - Executive Proposals, NRE BDA Astro Migration & DSOM Palace Sync"
-description: "DSOM Task Registry documenting the NRE BDA Astro Migration Proposal (docs/proposals/nre-bda-astro-migration.md), IT Management Proposal, PDF & eBook compilation pipeline, and 100% test pass rate."
+description: "DSOM Task Registry documenting the NRE BDA Astro Migration Proposal (docs/proposals/nre-bda-astro-migration.md), IT Management Proposal, and 100% test pass rate."
 status: active
 timestamp: "2026-09-16T04:00:00Z"
 stale_after: "2027-09-16T04:00:00Z"
@@ -13,13 +13,10 @@ sources:
     path: "docs/proposals/nre-bda-astro-migration.md"
   - id: "it_management_proposal"
     path: "docs/IT-MANAGEMENT-PROPOSAL.md"
-  - id: "book_compiler_script"
-    path: ".agents/skills/dsom-technical-book-compiler/scripts/compile-book.py"
 topics:
   - proposal
   - astro
   - joomla-migration
-  - pdf-compilation
   - eod-sync
   - spatial-memory
   - dsom

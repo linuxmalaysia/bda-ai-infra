@@ -212,12 +212,12 @@ flowchart TD
 To guarantee strict regulatory compliance and total data authenticity, all data within the `bda-ai-infra` platform is partitioned into two strict operational categories:
 
 1. **Category 1: Real Data & Human Execution (Tier 0 SSoT):**
-   - Human-entered data is validated through the decoupled Laravel human-in-the-loop portal.
-   - Raw client uploads are stored in an immutable quarantine storage volume prior to processing.
-   - Apache NiFi 2.0 acts as the sole authoritative database writer, committing approved payloads to Percona Patroni PostgreSQL 18.
+   * Human-entered data is validated through the decoupled Laravel human-in-the-loop portal.
+   * Raw client uploads are stored in an immutable quarantine storage volume prior to processing.
+   * Apache NiFi 2.0 acts as the sole authoritative database writer, committing approved payloads to Percona Patroni PostgreSQL 18.
 2. **Category 2: AI Processes Enriched with RAG & Generative Metadata:**
-   - Any dataset created, modified, or enriched by AI agents is explicitly tagged with `bda_provenance` metadata.
-   - Cryptographic signature contracts record `signature`, `key_id`, `verification_status`, `verification_timestamp`, `signature_algorithm` (**Ed25519**), and `signature_encoding` (**HEX_RAW_64_BYTE**), binding canonical **RFC 8785** byte streams.
+   * Any dataset created, modified, or enriched by AI agents is explicitly tagged with `bda_provenance` metadata.
+   * Cryptographic signature contracts record `signature`, `key_id`, `verification_status`, `verification_timestamp`, `signature_algorithm` (**Ed25519**), and `signature_encoding` (**HEX_RAW_64_BYTE**), binding canonical **RFC 8785** byte streams.
 
 ---
 

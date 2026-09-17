@@ -363,35 +363,35 @@
 
 <pre class="mermaid">
 flowchart TD
-    subgraph Ingestion ["Bidirectional Ingestion & Human Quarantine Layer"]
+    subgraph Ingestion ["Bidirectional Ingestion &amp; Human Quarantine Layer"]
         Ext["External Systems / IoT / User Feeds"]
-        Laravel["Laravel Web Portal (HITL Verification Gate & Wasm/WebGPU Edge Pre-Processing)"]
+        Laravel["Laravel Web Portal (HITL Verification Gate &amp; Wasm/WebGPU Edge Pre-Processing)"]
     end
 
-    subgraph Core ["Central Data Engine & Lakehouse Catalog"]
+    subgraph Core ["Central Data Engine &amp; Lakehouse Catalog"]
         NiFi["Apache NiFi 2.0 (Single Authoritative DB Writer)"]
-        Postgres[("Percona Patroni PostgreSQL 18 + pgvector + PostGIS\n(Tier 0 Golden SSoT & AI Provenance Tagging)")]
+        Postgres[("Percona Patroni PostgreSQL 18 + pgvector + PostGIS\n(Tier 0 Golden SSoT &amp; AI Provenance Tagging)")]
         Polaris["Apache Polaris (Multi-Engine Iceberg REST Catalog)"]
     end
 
-    subgraph Integration ["Integration & API Layer (Fine-Grained Access Control)"]
+    subgraph Integration ["Integration &amp; API Layer (Fine-Grained Access Control)"]
         REST["Open REST / gRPC APIs\n(Fusio API Gateway)"]
         MCP["MCP Server\n(Model Context Protocol Tools)"]
     end
 
-    subgraph Consumers ["Consumers & Autonomous Agents"]
+    subgraph Consumers ["Consumers &amp; Autonomous Agents"]
         BI["Open BI (Apache Superset / Metabase / Astro)"]
-        AI["LLMs & AI Agentic Systems (Cognitive Twins)"]
+        AI["LLMs &amp; AI Agentic Systems (Cognitive Twins)"]
     end
 
-    Ext -->|"Raw Telemetry / Files"| Laravel
-    Laravel -->|"Human Sign-off & Clean Payload"| NiFi
-    NiFi -->|"Cryptographic Commit"| Postgres
-    Postgres <-->|"Metadata Sync"| Polaris
-    Postgres -->|"FGAC SQL Views (SET LOCAL)"| REST
-    Postgres -->|"Vector Context & Tool Scopes"| MCP
-    REST -->|"Programmatic Inquiries"| BI
-    MCP -->|"Native Tool Execution"| AI
+    Ext --&gt;|"Raw Telemetry / Files"| Laravel
+    Laravel --&gt;|"Human Sign-off &amp; Clean Payload"| NiFi
+    NiFi --&gt;|"Cryptographic Commit"| Postgres
+    Postgres &lt;--&gt;|"Metadata Sync"| Polaris
+    Postgres --&gt;|"FGAC SQL Views (SET LOCAL)"| REST
+    Postgres --&gt;|"Vector Context &amp; Tool Scopes"| MCP
+    REST --&gt;|"Programmatic Inquiries"| BI
+    MCP --&gt;|"Native Tool Execution"| AI
 </pre>
 
 <h5>3. Summary Interface & Routing Table</h5>

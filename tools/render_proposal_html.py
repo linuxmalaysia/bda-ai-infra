@@ -49,7 +49,7 @@ def md_to_html_basic(md_text: str) -> str:
         # Escape HTML entities in code
         code_escaped = code.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
         if lang.strip() == "mermaid":
-            return f'<pre class="mermaid">\n{code.strip()}\n</pre>'
+            return f'<pre class="mermaid">\n{code_escaped.strip()}\n</pre>'
         return f'<pre><code class="language-{lang.strip()}">{code_escaped}</code></pre>'
 
     text = re.sub(r'```(\w*)\n(.*?)```', replace_code_fence, md_text, flags=re.DOTALL)

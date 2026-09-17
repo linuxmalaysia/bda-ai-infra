@@ -422,7 +422,7 @@ Following the research patterns established in Percona's technical guidance (*Cr
   </text>
 
   <rect x="515" y="130" width="210" height="120" fill="#0F172A" stroke="#22C55E" stroke-width="1" rx="6"/>
-  <text x="525" y="152" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#86EFAC">PostgreSQL 17 Cluster</text>
+  <text x="525" y="152" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#86EFAC">Percona PostgreSQL 18</text>
   <text x="525" y="172" font-family="Consolas, Monaco, monospace" font-size="10" fill="#E2E8F0">bda-pgvector-master:5432</text>
   <text x="525" y="192" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#4ADE80">Patroni HA + PostGIS + pgvector</text>
   <text x="525" y="212" font-family="Consolas, Monaco, monospace" font-size="10" fill="#94A3B8">sslmode=verify-full</text>
@@ -489,7 +489,7 @@ flowchart TD
     end
 
     subgraph PgVectorStore ["3. Master Operational Database Store"]
-        LocalEmbed -->|"TCP 5432 / TLS (sslmode=verify-full)"| PgDB[("PostgreSQL 17 HA Cluster<br/>bda-pgvector-master:5432<br/>(Patroni + pgvector + PostGIS)")]
+        LocalEmbed -->|"TCP 5432 / TLS (sslmode=verify-full)"| PgDB[("Percona Distribution for PostgreSQL 18 HA Cluster<br/>bda-pgvector-master:5432<br/>(Patroni + pgvector + PostGIS)")]
         PgDB --> HNSWIdx["HNSW Index<br/>(m=16, ef_construction=64, cosine)"]
     end
 

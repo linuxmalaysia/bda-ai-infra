@@ -112,17 +112,18 @@ def main() -> None:
         run_command(["pandoc", str(BOOK_MD), "-o", "handbook.odt", "--toc"])
 
     # 6. Compile Standalone IT Management Proposal HTML and PDF Deliverables
-    proposal_md = "docs/IT-MANAGEMENT-PROPOSAL.md"
-    proposal_html = "docs/IT-MANAGEMENT-PROPOSAL.html"
-    proposal_pdf = "docs/IT-MANAGEMENT-PROPOSAL.pdf"
-    if shutil.which("pandoc") and Path(proposal_md).exists():
+    proposal_md = REPO_ROOT / "docs" / "IT-MANAGEMENT-PROPOSAL.md"
+    proposal_html = BUILD_DIR / "IT-MANAGEMENT-PROPOSAL.html"
+    proposal_pdf = BUILD_DIR / "IT-MANAGEMENT-PROPOSAL.pdf"
+    if shutil.which("pandoc") and proposal_md.exists():
         run_command([
             "pandoc",
-            proposal_md,
+            str(proposal_md),
             "-o",
-            proposal_html,
+            str(proposal_html),
             "--standalone",
             "--toc",
+            "--highlight-style=tango",
             "-V",
             "lang=en",
         ])
@@ -134,7 +135,7 @@ def main() -> None:
                 "--run-all-compositor-stages-before-draw",
                 "--virtual-time-budget=8000",
                 f"--print-to-pdf={proposal_pdf}",
-                proposal_html,
+                str(proposal_html),
             ])
 
     # Clean up root book.md if leftover

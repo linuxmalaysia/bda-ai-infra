@@ -28,6 +28,12 @@ topics:
 
 ## 🟢 Completed Objectives
 
+0. **OpenMetadata & Percona PostgreSQL Enterprise Strategy (`docs/explanation/governance-and-compliance.md`, `docs/reference/postgresql-pgvector-enterprise-strategy.md`)**:
+   - Expanded OpenMetadata governance details: lightweight architecture, native OpenLineage tracking for Spark/Airflow runtime facets, separate Apache NiFi metadata events over HTTPS on TCP 8443 with mTLS, Bitol ODCS CLI execution, and `mcp-catalog-context` read-only views with PostgreSQL RLS.
+   - Expanded Percona Distribution for PostgreSQL 18 managed by Patroni as Tier 0 Golden SSoT, PostGIS/pgvector extensions, explicit ownership across RustFS quarantine, Iceberg Parquet lakehouse, OpenSearch, and DuckDB vss.
+   - Added dual-render SVG pipeline architecture diagrams and addressed all PR review comments.
+   - Added unit tests in `tests/test_openmetadata_postgresql_strategy.py` passing 100% (328/328 tests).
+
 0. **BDA Data Plane Upgrade Technical Proposal (`docs/proposals/nre-bda-pipeline-upgrade.md`)**:
    - Authored technical migration proposal detailing the transition from legacy WildFly application servers to a decoupled Laravel Human-in-the-Loop (HITL) file quarantine workflow and client-side Wasm/WebGPU Web AI acceleration.
    - Documented 3-stage quarantine workflow: Stage 1 (User Ingress & Edge Staging via Laravel), Stage 2 (Automated Apache NiFi 2.0 ETL with re-parsing and verification), and Stage 3 (Human Review, Replay-Protected JWT Sign-off, and Patroni PostgreSQL 18 SSoT write with `bda_provenance` Ed25519 metadata).

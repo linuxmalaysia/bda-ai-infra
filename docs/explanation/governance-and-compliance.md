@@ -139,7 +139,7 @@ Operating an authoritative Single Source of Truth across BDA and Enterprise AI r
    - OpenMetadata uses a clean, modern REST/JSON Schema architecture powered by **Percona PostgreSQL 18** for relational state and **OpenSearch / Elasticsearch** for full-text search indexing and discovery.
    - Eliminates the operational debt of legacy Hadoop/Java governance platforms (e.g., Apache Atlas) that require distributed graph databases (JanusGraph/HBase) and ZooKeeper clusters.
 2. **Automated End-to-End Lineage Tracking (OpenLineage Standard):**
-   - Ingests runtime execution facets emitted by **Apache Airflow** and **Apache Spark** (and custom NiFi REST metadata ingestion events over `TCP 8585` using Bearer API tokens), constructing interactive column-level lineage graphs.
+   - Ingests runtime execution facets emitted by **Apache Airflow** and **Apache Spark**, as well as metadata events from **Apache NiFi** pipelines over HTTPS on `TCP 8443` using mutual TLS (mTLS) certificate authentication, constructing interactive column-level lineage graphs.
    - Traces data provenance from edge file ingestion (RustFS / SFTP) through Human-in-the-Loop (HITL) quarantine verification down to Tier 0 SSoT PostgreSQL tables, Iceberg lakehouse Parquet files, and Apache Superset analytical dashboards.
 3. **Linux Foundation Open Data Contract Standard (ODCS) Integration:**
    - Serves as the central catalog and integration hub for data contract specifications.
@@ -156,7 +156,7 @@ Operating an authoritative Single Source of Truth across BDA and Enterprise AI r
 | Governance Dimension | Apache Atlas | DataHub | **OpenMetadata (Selected BDA Standard)** |
 | :--- | :--- | :--- | :--- |
 | **Backend Architecture** | Complex (JanusGraph, HBase, Solr, ZooKeeper) | Event-Driven (Kafka, MySQL, Elasticsearch) | **Lightweight & Robust (PostgreSQL 18 + OpenSearch)** |
-| **Lineage Standard** | Custom Atlas entities | Custom Kafka topics & SQLGlot | **Native OpenLineage (Spark/Airflow) & NiFi REST** |
+| **Lineage Standard** | Custom Atlas entities | Custom Kafka topics & SQLGlot | **Native OpenLineage (Spark/Airflow) & NiFi HTTPS** |
 | **Data Contracts** | Manual / Third-party | Custom schema assertions | **ODCS Catalog Hub (Bitol CLI Pipeline Validation)** |
 | **AI & MCP Integration** | Limited / Legacy APIs | REST / GraphQL APIs | **Metadata Context Provider & Read-Only Views** |
 | **Operational Overhead** | Very High | High | **Low–Medium (Fits Podman / K3s Stack)** |

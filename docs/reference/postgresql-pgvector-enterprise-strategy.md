@@ -91,11 +91,11 @@ Percona Distribution for PostgreSQL 18 managed by Patroni operates as the single
   <rect x="400" y="70" width="165" height="220" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
   <rect x="400" y="70" width="165" height="30" fill="#0F172A" rx="8"/>
   <text x="410" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#A855F7">3. ATTESTATION</text>
-  <text x="410" y="125" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">RFC 8785 Ed25519</text>
-  <text x="410" y="145" font-family="Consolas, Monaco, monospace" font-size="10" fill="#94A3B8">Canonical JSON</text>
-  <text x="410" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#CBD5E1">Crypto Signatures</text>
-  <text x="410" y="195" font-family="Consolas, Monaco, monospace" font-size="10" fill="#C084FC">HEX_RAW_64_BYTE</text>
-  <text x="410" y="215" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#64748B">key_id &amp; status</text>
+  <text x="410" y="120" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">RFC 8785 Canonical JSON</text>
+  <text x="410" y="140" font-family="Consolas, Monaco, monospace" font-size="10" fill="#94A3B8">Ed25519 Signatures</text>
+  <text x="410" y="165" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#CBD5E1">HEX_RAW_64_BYTE</text>
+  <text x="410" y="185" font-family="Consolas, Monaco, monospace" font-size="9" fill="#C084FC">128-Hex-Char String</text>
+  <text x="410" y="210" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#64748B">key_id &amp; status</text>
 
   <!-- Connection 3 -> 4 -->
   <line x1="565" y1="180" x2="585" y2="180" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-pipe)"/>
@@ -113,15 +113,15 @@ Percona Distribution for PostgreSQL 18 managed by Patroni operates as the single
   <!-- Connection 4 -> 5 -->
   <line x1="755" y1="180" x2="775" y2="180" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-pipe)"/>
 
-  <!-- Node 5: Unified Serving -->
+  <!-- Node 5: Operational & Downstream Access -->
   <rect x="780" y="70" width="150" height="220" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
   <rect x="780" y="70" width="150" height="30" fill="#0F172A" rx="8"/>
-  <text x="790" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#38BDF8">5. UNIFIED SERVING</text>
-  <text x="790" y="125" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">PostGIS &amp; pgvector</text>
-  <text x="790" y="145" font-family="Consolas, Monaco, monospace" font-size="10" fill="#38BDF8">Superset &amp; MCP</text>
-  <text x="790" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#CBD5E1">Iceberg Lakehouse</text>
-  <text x="790" y="195" font-family="Consolas, Monaco, monospace" font-size="10" fill="#94A3B8">DuckDB vss &amp; Search</text>
-  <text x="790" y="215" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#64748B">Row-Level Security</text>
+  <text x="790" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#38BDF8">5. OPERATIONAL SERVING</text>
+  <text x="790" y="120" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F8FAFC">PostGIS &amp; pgvector</text>
+  <text x="790" y="140" font-family="Consolas, Monaco, monospace" font-size="10" fill="#38BDF8">PostgreSQL Extensions</text>
+  <text x="790" y="165" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#CBD5E1">Iceberg Lakehouse</text>
+  <text x="790" y="185" font-family="Consolas, Monaco, monospace" font-size="10" fill="#94A3B8">Superset &amp; MCP Clients</text>
+  <text x="790" y="210" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#64748B">Row-Level Security</text>
 </svg>
 
 #### 2. Git-Native Mermaid Diagram (`.mmd`)
@@ -129,9 +129,11 @@ Percona Distribution for PostgreSQL 18 managed by Patroni operates as the single
 ```mermaid
 flowchart LR
     Ingestion["1. Ingestion Boundary<br/>(NiFi / SFTP / RustFS)"] -->|"Extract SHA-256 Metadata"| HITL["2. HITL Quarantine<br/>(Laravel Web Portal)"]
-    HITL -->|"Domain User Verification"| Attest["3. Cryptographic Attestation<br/>(RFC 8785 Ed25519)"]
+    HITL -->|"Domain User Verification"| Attest["3. Cryptographic Attestation<br/>(RFC 8785 Canonical JSON &amp; Ed25519)"]
     Attest -->|"Single Authoritative Writer"| Tier0["4. Tier 0 Golden SSoT<br/>(Percona Distribution PostgreSQL 18)"]
-    Tier0 -->|"Unified SQL & Extensions"| Serving["5. Operational & Semantic Serving<br/>(PostGIS / pgvector / Iceberg / Superset)"]
+    Tier0 -->|"PostgreSQL Extensions"| ExtServ["PostGIS &amp; pgvector Extensions"]
+    Tier0 -->|"CDC / Snapshot Sync"| Iceberg["Apache Iceberg Lakehouse"]
+    ExtServ -->|"SQL &amp; RLS Queries"| Clients["Superset &amp; MCP Clients"]
 ```
 
 #### 3. Summary Interface & Routing Table

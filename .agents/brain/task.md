@@ -1,23 +1,25 @@
 ---
 okf_version: "0.2"
 type: spatial_memory
-title: "Task Registry - Executive Proposals, NRE BDA Astro Migration & DSOM Palace Sync"
-description: "DSOM Task Registry documenting the NRE BDA Astro Migration Proposal (docs/proposals/nre-bda-astro-migration.md), IT Management Proposal, and 100% test pass rate."
+title: "Task Registry - BDA Data Plane Upgrade & Client-Side Web AI Acceleration"
+description: "DSOM Task Registry documenting the BDA Data Plane Upgrade Proposal (docs/proposals/nre-bda-pipeline-upgrade.md), IT Management Proposal update, sanitization, and PR resolution."
 status: active
-timestamp: "2026-09-16T04:00:00Z"
-stale_after: "2027-09-16T04:00:00Z"
+timestamp: "2026-09-16T18:00:00Z"
+stale_after: "2027-09-16T18:00:00Z"
 generated: false
 verified: true
 sources:
-  - id: "nre_bda_astro_migration_proposal"
-    path: "docs/proposals/nre-bda-astro-migration.md"
+  - id: "nre_bda_pipeline_upgrade_proposal"
+    path: "docs/proposals/nre-bda-pipeline-upgrade.md"
   - id: "it_management_proposal"
     path: "docs/IT-MANAGEMENT-PROPOSAL.md"
 topics:
   - proposal
-  - astro
-  - joomla-migration
-  - eod-sync
+  - laravel
+  - wildfly
+  - webassembly
+  - webgpu
+  - quarantine
   - spatial-memory
   - dsom
 ---
@@ -26,28 +28,20 @@ topics:
 
 ## 🟢 Completed Objectives
 
-0. **NRE BDA Astro Migration Technical Proposal (`docs/proposals/nre-bda-astro-migration.md`)**:
-   - Authored technical migration proposal transitioning `https://bda.nres.gov.my/` from legacy stateful Joomla 3 monolith to a decoupled, high-availability, static-first Astro 7.3.2 architecture following Diátaxis framework and UK English.
-   - Documented As-Is legacy footprint (Joomla 3.9.19 on `Portal-node01` and 3.9.14 on `Main-nahrim`, 5-node MariaDB Galera cluster with ClusterControl, GlusterFS, WildFly, Tableau, CentOS 8 VMs on Proxmox VE 6.2-4, exposed `/administrator/` endpoints).
-   - Specified To-Be fabric (Astro 7.3.2 Islands SSG/SSR, K3s/RKE2, Podman Quadlets, Headless REST/GraphQL APIs in Flask/PHP 8.4+, Percona PostgreSQL 18 with Patroni HA, Ceph/MinIO S3 storage, Elastic Observability, mTLS 1.3, TDE).
-   - Embedded complete Dual-Render Architecture Diagram suite (raw inline SVG vector graphic, Git-native Mermaid topology, and 5-column summary routing table).
-   - Performed spatial memory synchronization and omni-documentation indexing.
+0. **BDA Data Plane Upgrade Technical Proposal (`docs/proposals/nre-bda-pipeline-upgrade.md`)**:
+   - Authored technical migration proposal detailing the transition from legacy WildFly application servers to a decoupled Laravel Human-in-the-Loop (HITL) file quarantine workflow and client-side Wasm/WebGPU Web AI acceleration.
+   - Documented 3-stage quarantine workflow: Stage 1 (User Ingress & Edge Staging via Laravel), Stage 2 (Automated Apache NiFi 2.0 ETL with re-parsing and verification), and Stage 3 (Human Review, Replay-Protected JWT Sign-off, and Patroni PostgreSQL 18 SSoT write with `bda_provenance` Ed25519 metadata).
+   - Detailed client-side Web AI acceleration: Wasm Memory64 executable compilation/instantiation probes with 32-bit chunked Wasm fallbacks, Relaxed SIMD, WebGPU `f16` float math, `DP4a` quantized INT8 tensor dot products, and GPU memory transfer contracts (`writeBuffer()`).
+   - Addressed all PR review requirements: untreated raw file persistence into raw quarantine storage, advisory client metrics, 14-day retention across failed-validation and rejected-payload quarantine storage, single-use JWT replay protection (record ID, tenant, approver, audience, nonce, 5-min TTL), sanitized IP addresses and hostnames, and `HEX_RAW_64_BYTE` 128 uppercase hex character signature specification.
+   - Embedded complete Dual-Render Architecture Diagram suite (raw inline SVG vector graphic, Git-native Mermaid topology with Laravel upload boundary, and summary routing table).
 
-1. **DSOM 4-Phase Migration Blueprint & AI Skills Readiness**:
-   - Registered `.agents/skills/dsom-migration-blueprint/SKILL.md` compliant with Warp Skills and OpenViking Skills specifications.
-   - Added executable compiler script `.agents/skills/dsom-migration-blueprint/scripts/compile-migration-book.py` and unit test `tests/test_migration_book_compiler.py`.
-   - Authored `docs/how-to-guides/dsom-migration-blueprint-execution-guide.md` with print-safe `#FFFFFF` Dual-Render Architecture Diagram pipeline.
-   - Integrated Rule 32 into `.agents/AGENTS.md` and updated root `AGENTS.md`.
+1. **IT Management Proposal Update (`docs/IT-MANAGEMENT-PROPOSAL.md`)**:
+   - Updated Section 2.4 to describe Wasm/WebGPU client-side Web AI pre-processing as a target-state capability, specified sub-500ms latency targets, role-based immutable raw-upload quarantine storage, advisory metadata, and Wasm/NiFi fallbacks.
 
-2. **IT Management Proposal Creation (`docs/IT-MANAGEMENT-PROPOSAL.md`)**:
-   - Authored the executive proposal for Enterprise Data Infrastructure Modernisation (`bda-ai-infra`) in UK English.
-   - Detailed transition from Tableau to an open, Podman-based, API-First, and MCP-Ready ecosystem with Fine-Grained Access Control (FGAC).
-   - Specified Human Data as Single Source of Truth (Tier 0 Golden SSoT verified in Laravel, written via NiFi 2.0 into PostgreSQL 18) and AI-enriched metadata provenance tagging (`bda_provenance`).
+2. **Documentation Indexing & Master Manuscript Compilation**:
+   - Executed `tools/generate_summary.py` to register `docs/proposals/nre-bda-pipeline-upgrade.md` in `SUMMARY.md` and `_data/navigation.yml`.
+   - Executed `tools/build_project_book.py` and `tools/bake_native_svg.py` to compile `build/book.md`.
 
-3. **Documentation Site Navigation Indexing**:
-   - Executed `tools/generate_summary.py` to register `docs/proposals/nre-bda-astro-migration.md` in `SUMMARY.md` and `_data/navigation.yml`.
-
-4. **Code Health, Linter & Full Test Suite Pass Rate**:
+3. **Code Health, Linter & Full Test Suite Pass Rate**:
    - Executed `uv run ruff check .` -> 0 violations.
-   - Executed `npx markdownlint-cli --config .markdownlint.json "**/*.md"` -> 0 linting errors.
-   - Executed `uv run pytest` -> 321/321 tests passed cleanly (100% pass rate).
+   - Executed `uv run pytest` -> 326/326 tests passed cleanly (100% pass rate).

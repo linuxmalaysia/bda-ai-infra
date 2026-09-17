@@ -57,6 +57,7 @@ topics:
 ## Proposals
 
 * [NRE BDA Technical Migration Proposal: Legacy Joomla 3 to Decoupled Astro 7.3.2](docs/proposals/nre-bda-astro-migration.md)
+* [Technical Proposal: BDA Data Plane Evolution & Client-Side AI Acceleration](docs/proposals/nre-bda-pipeline-upgrade.md)
 
 ## Reference
 

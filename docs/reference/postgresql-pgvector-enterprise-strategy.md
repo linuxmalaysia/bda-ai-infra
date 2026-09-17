@@ -28,41 +28,131 @@ sources:
 
 # PostgreSQL, PostGIS & pgvector Enterprise Strategy Specification
 
-This master specification establishes **Percona Patroni PostgreSQL 18** and its native extensions—**`PostGIS`** for spatial intelligence and **`pgvector`** for semantic similarity search—as the primary, master operational database and persistent backbone across the entire **Big Data Analytics (BDA) and Enterprise AI** pipeline lifecycle.
+This master specification establishes **Percona Distribution for PostgreSQL 18 managed by Patroni** and its core PostgreSQL extensions—**`PostGIS`** for spatial intelligence and **`pgvector`** for semantic similarity search—as the primary, master operational database and persistent backbone across the entire **Big Data Analytics (BDA) and Enterprise AI** pipeline lifecycle.
 
-From initial edge ingestion and Human-in-the-Loop (HITL) quarantine staging through to Tier 0 Golden Single Source of Truth (SSoT) persistence and RAG inference, anchoring the enterprise platform on Percona Patroni PostgreSQL 18 eliminates database sprawl, prevents proprietary cloud SaaS vendor lock-in, and guarantees strict data sovereignty, cryptographic attestation, ACID transactional consistency, and sub-10ms unified spatial-vector querying.
+From initial edge ingestion and Human-in-the-Loop (HITL) quarantine staging through to Tier 0 Golden Single Source of Truth (SSoT) persistence and RAG inference, anchoring the enterprise platform on Percona Distribution for PostgreSQL 18 managed by Patroni eliminates database sprawl, prevents proprietary cloud SaaS vendor lock-in, and guarantees strict data sovereignty, cryptographic attestation, transactional consistency, and bounded sub-10ms PostGIS spatial-index lookup performance under warm-cache conditions on dedicated hardware (e.g., 100k spatial points/polygons using GIST spatial indexes and HNSW vector candidate scans with <= 16 concurrent query workers).
 
 ---
 
 ## 1. Pipeline Lifecycle: Percona PostgreSQL 18 from Ingestion to SSoT
 
-Percona Patroni PostgreSQL 18 operates as the single authoritative persistence engine throughout every tier of the BDA pipeline:
+Percona Distribution for PostgreSQL 18 managed by Patroni operates as the single authoritative persistence engine for **Tier 0 Golden SSoT operational records**. Downstream analytical and specialized access tiers maintain dedicated storage stores: raw ingestion file payloads reside in **RustFS quarantine**, analytical lakehouse historical Parquet tables are owned by **Apache Iceberg**, full-text discovery index state is maintained in **OpenSearch**, and embedded ephemeral vector analytics are executed via **DuckDB vss**.
 
+### Dual-Render Pipeline Architecture Specification
+
+#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 950 320" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-pipe" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="950" height="320" fill="#0F172A" rx="10"/>
+
+  <!-- Title Header -->
+  <rect x="20" y="15" width="910" height="36" fill="#1E293B" stroke="#334155" stroke-width="1" rx="6"/>
+  <text x="35" y="38" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="bold" fill="#F8FAFC">
+    PERCONA DISTRIBUTION FOR POSTGRESQL 18 END-TO-END PIPELINE ARCHITECTURE
+  </text>
+  <text x="750" y="38" font-family="Consolas, Monaco, monospace" font-size="11" fill="#38BDF8">
+    TIER 0 GOLDEN SSoT
+  </text>
+
+  <!-- Node 1: Ingestion Boundary -->
+  <rect x="20" y="70" width="165" height="220" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="20" y="70" width="165" height="30" fill="#0F172A" rx="8"/>
+  <text x="30" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#60A5FA">1. INGESTION BOUNDARY</text>
+  <text x="30" y="125" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Apache NiFi / SFTP</text>
+  <text x="30" y="145" font-family="Consolas, Monaco, monospace" font-size="10" fill="#94A3B8">RustFS Quarantine</text>
+  <text x="30" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#CBD5E1">Raw Payload Isolation</text>
+  <text x="30" y="195" font-family="Consolas, Monaco, monospace" font-size="10" fill="#38BDF8">TIER_1_STAGING</text>
+  <text x="30" y="215" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#64748B">SHA-256 Metadata</text>
+
+  <!-- Connection 1 -> 2 -->
+  <line x1="185" y1="180" x2="205" y2="180" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-pipe)"/>
+
+  <!-- Node 2: HITL Quarantine -->
+  <rect x="210" y="70" width="165" height="220" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="210" y="70" width="165" height="30" fill="#0F172A" rx="8"/>
+  <text x="220" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#FBBF24">2. HITL QUARANTINE</text>
+  <text x="220" y="125" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">Laravel Web Portal</text>
+  <text x="220" y="145" font-family="Consolas, Monaco, monospace" font-size="10" fill="#94A3B8">Human Verification</text>
+  <text x="220" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#CBD5E1">Domain Approval</text>
+  <text x="220" y="195" font-family="Consolas, Monaco, monospace" font-size="10" fill="#F59E0B">Unverified Tagging</text>
+  <text x="220" y="215" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#64748B">Non-IT Review Loop</text>
+
+  <!-- Connection 2 -> 3 -->
+  <line x1="375" y1="180" x2="395" y2="180" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-pipe)"/>
+
+  <!-- Node 3: Attestation -->
+  <rect x="400" y="70" width="165" height="220" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="400" y="70" width="165" height="30" fill="#0F172A" rx="8"/>
+  <text x="410" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#A855F7">3. ATTESTATION</text>
+  <text x="410" y="125" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">RFC 8785 Ed25519</text>
+  <text x="410" y="145" font-family="Consolas, Monaco, monospace" font-size="10" fill="#94A3B8">Canonical JSON</text>
+  <text x="410" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#CBD5E1">Crypto Signatures</text>
+  <text x="410" y="195" font-family="Consolas, Monaco, monospace" font-size="10" fill="#C084FC">HEX_RAW_64_BYTE</text>
+  <text x="410" y="215" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#64748B">key_id &amp; status</text>
+
+  <!-- Connection 3 -> 4 -->
+  <line x1="565" y1="180" x2="585" y2="180" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-pipe)"/>
+
+  <!-- Node 4: Tier 0 PostgreSQL SSoT -->
+  <rect x="590" y="70" width="165" height="220" fill="#1E293B" stroke="#22C55E" stroke-width="1.5" rx="8"/>
+  <rect x="590" y="70" width="165" height="30" fill="#0F172A" rx="8"/>
+  <text x="600" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#4ADE80">4. TIER 0 GOLDEN SSoT</text>
+  <text x="600" y="125" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">PostgreSQL 18</text>
+  <text x="600" y="145" font-family="Consolas, Monaco, monospace" font-size="10" fill="#86EFAC">Patroni Managed</text>
+  <text x="600" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#CBD5E1">Transactional Commit</text>
+  <text x="600" y="195" font-family="Consolas, Monaco, monospace" font-size="10" fill="#4ADE80">OpenMetadata Hub</text>
+  <text x="600" y="215" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#64748B">NiFi Single Writer</text>
+
+  <!-- Connection 4 -> 5 -->
+  <line x1="755" y1="180" x2="775" y2="180" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-pipe)"/>
+
+  <!-- Node 5: Unified Serving -->
+  <rect x="780" y="70" width="150" height="220" fill="#1E293B" stroke="#334155" stroke-width="1.5" rx="8"/>
+  <rect x="780" y="70" width="150" height="30" fill="#0F172A" rx="8"/>
+  <text x="790" y="90" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#38BDF8">5. UNIFIED SERVING</text>
+  <text x="790" y="125" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#F8FAFC">PostGIS &amp; pgvector</text>
+  <text x="790" y="145" font-family="Consolas, Monaco, monospace" font-size="10" fill="#38BDF8">Superset &amp; MCP</text>
+  <text x="790" y="175" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#CBD5E1">Iceberg Lakehouse</text>
+  <text x="790" y="195" font-family="Consolas, Monaco, monospace" font-size="10" fill="#94A3B8">DuckDB vss &amp; Search</text>
+  <text x="790" y="215" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#64748B">Row-Level Security</text>
+</svg>
+
+#### 2. Git-Native Mermaid Diagram (`.mmd`)
+
+```mermaid
+flowchart LR
+    Ingestion["1. Ingestion Boundary<br/>(NiFi / SFTP / RustFS)"] -->|"Extract SHA-256 Metadata"| HITL["2. HITL Quarantine<br/>(Laravel Web Portal)"]
+    HITL -->|"Domain User Verification"| Attest["3. Cryptographic Attestation<br/>(RFC 8785 Ed25519)"]
+    Attest -->|"Single Authoritative Writer"| Tier0["4. Tier 0 Golden SSoT<br/>(Percona Distribution PostgreSQL 18)"]
+    Tier0 -->|"Unified SQL & Extensions"| Serving["5. Operational & Semantic Serving<br/>(PostGIS / pgvector / Iceberg / Superset)"]
 ```
-+---------------------------------------------------------------------------------------------------------+
-|                  PERCONA PATRONI POSTGRESQL 18 END-TO-END PIPELINE ARCHITECTURE                        |
-+---------------------------------------------------------------------------------------------------------+
-|  [ Ingestion Boundary ] ---> [ HITL Quarantine Staging ] ---> [ Cryptographic Verification ]           |
-|  * Apache NiFi 2.0 / RustFS   * Laravel Web Verification      * RFC 8785 Ed25519 Attestation            |
-|                                                                                                         |
-|  [ Tier 0 Golden SSoT Persistence ] ------------------------> [ Unified Operational & Semantic Serving ]|
-|  * Percona Patroni PostgreSQL 18                              * PostGIS (EPSG:3168/3169/4326)           |
-|  * ACID Serialized Transactions                               * pgvector (HNSW Sub-10ms Cosine)         |
-|  * OpenMetadata Lineage & Cataloging                          * DuckDB vss / Iceberg / OpenSearch       |
-+---------------------------------------------------------------------------------------------------------+
-```
+
+#### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone / Access Key | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **RustFS Quarantine** | **Staging Metadata (`TIER_1_STAGING`)** | Ingest Pipeline API | Zone 1 -> Zone 2 (SFTP / S3 Upload) | Stores raw binary payloads in RustFS quarantine while writing SHA-256 metadata to PostgreSQL. |
+| **Laravel Portal** | **Attestation Engine** | `TCP 443` (HTTPS / OIDC) | Zone 2 Internal (Laravel Session Auth) | Domain user verifies quarantine payload and triggers RFC 8785 Ed25519 canonical JSON signature creation. |
+| **Apache NiFi 2.0** | **Tier 0 Golden SSoT PostgreSQL** | `TCP 5432` / TLS | Zone 2 -> Zone 3 (`sslmode=verify-full`, Patroni Writer Role) | Single authoritative database writer persisting verified records into Percona Distribution for PostgreSQL 18. |
+| **Tier 0 PostgreSQL** | **Downstream Serving (APISIX / Superset / MCP)** | `TCP 5432` / `TCP 443` | Zone 3 -> Serving Zone (PostgreSQL RLS) | Exposes relational, spatial (PostGIS), and vector (pgvector) queries under tenant-aware Row-Level Security policies. |
 
 ### Pipeline Execution Phases
 1. **Ingestion Staging & Stream Boundary:**
-   - Raw payloads ingested via Apache NiFi 2.0, point-to-point SFTP, or shared RustFS file directories enter `TIER_1_STAGING` schema in PostgreSQL.
-   - Initial metadata extraction records file hashes, MIME types, and pipeline execution tokens without writing to Tier 0 persistence.
+   - Raw payload binary bytes remain securely isolated in RustFS quarantine storage; initial metadata extraction records payload SHA-256 hashes, MIME types, and pipeline execution tokens within `TIER_1_STAGING` PostgreSQL metadata tables without writing raw payload bytes into PostgreSQL or Tier 0 persistence.
 2. **Human-in-the-Loop Quarantine & Attestation:**
    - Payloads tagged with unverified or AI-generated metadata enter the Human-AI Quarantine layer.
    - Non-IT domain reviewers verify payload integrity using the Laravel Web Application interface.
    - Attested computations bind RFC 8785 canonical JSON byte streams to Ed25519 cryptographic signatures (`signature`, `key_id`, `verification_status`, `verification_timestamp`, `payload_sha256`).
 3. **Tier 0 Golden SSoT Write Persistence:**
-   - Apache NiFi 2.0 acts as the single authoritative writer to the Tier 0 Golden SSoT in Percona Patroni PostgreSQL 18 upon successful Laravel human verification.
-   - ACID serialized transactions ensure relational, spatial (`PostGIS`), and vector (`pgvector`) embeddings are committed atomically.
+   - Apache NiFi 2.0 acts as the single authoritative writer to the Tier 0 Golden SSoT in Percona Distribution for PostgreSQL 18 managed by Patroni upon successful Laravel human verification.
+   - Transactional guarantees ensure relational, spatial (`PostGIS`), and vector (`pgvector`) embeddings are committed atomically (or under explicit `SERIALIZABLE` isolation with application-level retry handling).
 4. **Unified Operational & Semantic Serving:**
    - Exposes master spatial-vector datasets to downstream analytics (Apache Superset, APISIX API Gateway, Model Context Protocol endpoints) with Row-Level Security (RLS) enforcement.
 

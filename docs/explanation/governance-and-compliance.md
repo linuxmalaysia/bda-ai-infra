@@ -139,26 +139,26 @@ Operating an authoritative Single Source of Truth across BDA and Enterprise AI r
    - OpenMetadata uses a clean, modern REST/JSON Schema architecture powered by **Percona PostgreSQL 18** for relational state and **OpenSearch / Elasticsearch** for full-text search indexing and discovery.
    - Eliminates the operational debt of legacy Hadoop/Java governance platforms (e.g., Apache Atlas) that require distributed graph databases (JanusGraph/HBase) and ZooKeeper clusters.
 2. **Automated End-to-End Lineage Tracking (OpenLineage Standard):**
-   - Ingests runtime execution facets emitted by **Apache NiFi 2.0**, **Apache Airflow**, and **Apache Spark**, constructing interactive column-level lineage graphs.
+   - Ingests runtime execution facets emitted by **Apache Airflow** and **Apache Spark** (and custom NiFi REST metadata ingestion events over `TCP 8585` using Bearer API tokens), constructing interactive column-level lineage graphs.
    - Traces data provenance from edge file ingestion (RustFS / SFTP) through Human-in-the-Loop (HITL) quarantine verification down to Tier 0 SSoT PostgreSQL tables, Iceberg lakehouse Parquet files, and Apache Superset analytical dashboards.
-3. **Linux Foundation Open Data Contract Standard (ODCS) Enforcement:**
-   - Governs schema structure, data types, nullability constraints, and SLAs directly inside the catalog.
-   - When upstream pipelines produce unexpected schema changes or breaking structural alterations, OpenMetadata triggers automated Bitol contract violation alerts, preventing bad data from contaminating Tier 0 SSoT.
-4. **Tag-Based Access Control (TBAC) & Security Policy Propagation:**
-   - Security tags attached to upstream data assets (e.g., `Classification.Restricted`, `Provenance.HumanVerified`, `Domain.Spatial`) automatically propagate along downstream lineage edges.
-   - Integrates with **Apache APISIX** and **Keycloak OIDC** to enforce fine-grained access policies and Row-Level Security (RLS) across Model Context Protocol (MCP) AI endpoints.
-5. **Business Glossary & Semantic Discovery for AI Models:**
-   - Exposes structured metadata, table schemas, and domain glossaries via read-only REST endpoints (`mcp-catalog-context`).
-   - Enables local AI agents and RAG pipelines to discover data context without granting direct read access to raw underlying sensitive database tables.
+3. **Linux Foundation Open Data Contract Standard (ODCS) Integration:**
+   - Serves as the central catalog and integration hub for data contract specifications.
+   - Active payload validation and rejection of non-compliant writes before persistence are executed by the configured Bitol ODCS CLI embedded within Apache NiFi and Apache Airflow pipelines, while OpenMetadata records catalog state, column metadata, and schema drift alerts.
+4. **Tag-Based Access Control (TBAC) & Security Policy Scope:**
+   - Configured security tags attached to upstream data assets (e.g., `Classification.Restricted`, `Provenance.HumanVerified`, `Domain.Spatial`) propagate across catalog metadata.
+   - Row-Level Security (RLS) policies are configured directly in PostgreSQL (`SET LOCAL app.current_tenant_id`) and enforce isolation across documented Model Context Protocol (MCP) endpoints and data store views.
+5. **Business Glossary & Semantic Context for AI Models (`mcp-catalog-context`):**
+   - Exposes structured metadata, table schemas, and domain glossaries via read-only REST interfaces provided by `mcp-catalog-context` (distinct from OpenMetadata's stateless `openmetadata-mcp-stateless` server).
+   - Enforces raw-table isolation through dedicated read-only database grants (`GRANT SELECT ON bda_public_schema_views TO mcp_reader`), sanitized database views, and PostgreSQL RLS context, preventing AI agents from executing unverified queries or accessing raw Tier 0 persistence tables directly.
 
 ### Enterprise Data Catalog Evaluation Matrix
 
 | Governance Dimension | Apache Atlas | DataHub | **OpenMetadata (Selected BDA Standard)** |
 | :--- | :--- | :--- | :--- |
 | **Backend Architecture** | Complex (JanusGraph, HBase, Solr, ZooKeeper) | Event-Driven (Kafka, MySQL, Elasticsearch) | **Lightweight & Robust (PostgreSQL 18 + OpenSearch)** |
-| **Lineage Standard** | Custom Atlas entities | Custom Kafka topics & SQLGlot | **Native OpenLineage & SQL Parsing** |
-| **Data Contracts** | Manual / Third-party | Custom schema assertions | **Linux Foundation ODCS Standard Native** |
-| **AI & MCP Integration** | Limited / Legacy APIs | REST / GraphQL APIs | **First-Class MCP Context & Tag Propagation** |
+| **Lineage Standard** | Custom Atlas entities | Custom Kafka topics & SQLGlot | **Native OpenLineage (Spark/Airflow) & NiFi REST** |
+| **Data Contracts** | Manual / Third-party | Custom schema assertions | **ODCS Catalog Hub (Bitol CLI Pipeline Validation)** |
+| **AI & MCP Integration** | Limited / Legacy APIs | REST / GraphQL APIs | **Metadata Context Provider & Read-Only Views** |
 | **Operational Overhead** | Very High | High | **Low–Medium (Fits Podman / K3s Stack)** |
 
 ---

@@ -270,25 +270,13 @@
 <ol><li><strong>Proprietary Tableau Lock-In:</strong> Data visualisations and business calculations are trapped inside proprietary <code>.twb</code> / <code>.twbx</code> workbooks. Expanding access to operational teams or external applications requires recurring per-user and per-core license fees.</li><li><strong>WildFly Application Monoliths:</strong> Ingestion and file processing rely on heavy, stateful Java EE WildFly application servers that are difficult to scale horizontally, slow to start, and prone to memory overhead under heavy batch uploads.</li><li><strong>Monolithic Script Ingestion:</strong> Ingestion workflows use custom batch scripts and cron jobs lacking unified lineage, real-time error handling, or token-aware AST chunking required for multi-modal text and vector processing.</li><li><strong>Unidirectional Data Silos:</strong> Data flows strictly from the database to visual reports. Third-party applications and automated software agents cannot interactively feed telemetry or invoke bidirectional data services without manual, error-prone CSV/Excel exports.</li><li><strong>Lack of Native AI Context Gateways:</strong> Large Language Models (LLMs) and autonomous AI systems cannot query live database state or vector indices safely without exposing raw database credentials or risking unmonitored SQL injection.</li></ol>
 
 <pre><code class="language-">+-----------------------------------------------------------------------------------+
-<table>
-<thead>
-<tr><th>LEGACY AS-IS ARCHITECTURE</th></tr>
-</thead>
-<tbody>
-</tbody>
-</table>
-<p>+-----------------------------------------------------------------------------------+</p>
-<table>
-<thead>
-<tr><th>Monolithic WildFly Application Server  --&gt;  Legacy Batch Scripts &amp; Cron Jobs</th></tr>
-</thead>
-<tbody>
-<tr><td>Proprietary Tableau Workbooks (.twb)   --&gt;  Unidirectional Static Dashboards</td></tr>
-<tr><td>Manual Excel / CSV Email Exports       --&gt;  Siloed &amp; Unaudited Business Units</td></tr>
-</tbody>
-</table>
-<p>+-----------------------------------------------------------------------------------+</p>
-<p></code></pre></p>
+|                            LEGACY AS-IS ARCHITECTURE                              |
++-----------------------------------------------------------------------------------+
+|  Monolithic WildFly Application Server  --&gt;  Legacy Batch Scripts &amp; Cron Jobs    |
+|  Proprietary Tableau Workbooks (.twb)   --&gt;  Unidirectional Static Dashboards    |
+|  Manual Excel / CSV Email Exports       --&gt;  Siloed &amp; Unaudited Business Units   |
++-----------------------------------------------------------------------------------+
+</code></pre>
 
 <hr />
 
@@ -308,102 +296,102 @@
 <h5>1. Standalone Production-Ready SVG Vector Graphic (<code>.svg</code>)</h5>
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="100%" height="100%">
-<p>  <defs></p>
-<p>    <marker id="arrow-prop" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"></p>
-<p>      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" /></p>
-<p>    </marker></p>
-<p>    <filter id="shadow-prop" x="-4%" y="-4%" width="108%" height="108%"></p>
-<p>      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.2"/></p>
-<p>    </filter></p>
-<p>  </defs></p>
+  <defs>
+    <marker id="arrow-prop" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+    <filter id="shadow-prop" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
 
-<p>  <!-- Canvas Background --></p>
-<p>  <rect width="960" height="520" fill="#0F172A" rx="10"/></p>
+  <!-- Canvas Background -->
+  <rect width="960" height="520" fill="#0F172A" rx="10"/>
 
-<p>  <!-- Ingestion Layer --></p>
-<p>  <rect x="30" y="20" width="900" height="75" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/></p>
-<p>  <rect x="30" y="20" width="900" height="24" fill="#0369A1" rx="8"/></p>
-<p>  <text x="45" y="36" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#E0F2FE">BIDIRECTIONAL INGESTION &amp; HUMAN QUARANTINE LAYER</text></p>
-<p>  <text x="45" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">External Systems / IoT / Partner APIs / User Feeds / Laravel HITL Portal (Wasm / WebGPU Edge Pre-Processing)</text></p>
+  <!-- Ingestion Layer -->
+  <rect x="30" y="20" width="900" height="75" fill="#1E293B" stroke="#38BDF8" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/>
+  <rect x="30" y="20" width="900" height="24" fill="#0369A1" rx="8"/>
+  <text x="45" y="36" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#E0F2FE">BIDIRECTIONAL INGESTION &amp; HUMAN QUARANTINE LAYER</text>
+  <text x="45" y="62" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#38BDF8">External Systems / IoT / Partner APIs / User Feeds / Laravel HITL Portal (Wasm / WebGPU Edge Pre-Processing)</text>
 
-<p>  <!-- Central Data Store --></p>
-<p>  <rect x="30" y="130" width="900" height="95" fill="#1E293B" stroke="#A855F7" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/></p>
-<p>  <rect x="30" y="130" width="900" height="24" fill="#581C87" rx="8"/></p>
-<p>  <text x="45" y="146" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#E9D5FF">CENTRAL DATA &amp; VECTOR ENGINE (TIER 0 GOLDEN SSoT &amp; ICEBERG LAKEHOUSE)</text></p>
-<p>  <text x="45" y="172" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#C084FC">Percona Patroni PostgreSQL 18 + pgvector + PostGIS &amp; Apache Polaris Iceberg Catalog</text></p>
-<p>  <text x="45" y="192" font-family="Consolas, Monaco, monospace" font-size="10" fill="#E9D5FF">Single Authoritative Writer: Apache NiFi 2.0 | Cryptographic Tagging: bda_provenance (Ed25519 Signatures)</text></p>
+  <!-- Central Data Store -->
+  <rect x="30" y="130" width="900" height="95" fill="#1E293B" stroke="#A855F7" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/>
+  <rect x="30" y="130" width="900" height="24" fill="#581C87" rx="8"/>
+  <text x="45" y="146" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#E9D5FF">CENTRAL DATA &amp; VECTOR ENGINE (TIER 0 GOLDEN SSoT &amp; ICEBERG LAKEHOUSE)</text>
+  <text x="45" y="172" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="bold" fill="#C084FC">Percona Patroni PostgreSQL 18 + pgvector + PostGIS &amp; Apache Polaris Iceberg Catalog</text>
+  <text x="45" y="192" font-family="Consolas, Monaco, monospace" font-size="10" fill="#E9D5FF">Single Authoritative Writer: Apache NiFi 2.0 | Cryptographic Tagging: bda_provenance (Ed25519 Signatures)</text>
 
-<p>  <!-- API Gateway Box --></p>
-<p>  <rect x="30" y="260" width="430" height="105" fill="#1E293B" stroke="#3B82F6" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/></p>
-<p>  <rect x="30" y="260" width="430" height="24" fill="#1E3A8A" rx="8"/></p>
-<p>  <text x="45" y="276" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#93C5FD">OPEN REST / gRPC APIs (FUSIO GATEWAY)</text></p>
-<p>  <text x="45" y="302" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">Programmatic Data Sharing &amp; Integration Ingress</text></p>
-<p>  <text x="45" y="322" font-family="Consolas, Monaco, monospace" font-size="10" fill="#93C5FD">Fine-Grained Access Control (Row-Level Security SET LOCAL)</text></p>
-<p>  <text x="45" y="338" font-family="Consolas, Monaco, monospace" font-size="10" fill="#93C5FD">TypeSchema / OpenAPI Specs (Port 8080/443)</text></p>
+  <!-- API Gateway Box -->
+  <rect x="30" y="260" width="430" height="105" fill="#1E293B" stroke="#3B82F6" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/>
+  <rect x="30" y="260" width="430" height="24" fill="#1E3A8A" rx="8"/>
+  <text x="45" y="276" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#93C5FD">OPEN REST / gRPC APIs (FUSIO GATEWAY)</text>
+  <text x="45" y="302" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#60A5FA">Programmatic Data Sharing &amp; Integration Ingress</text>
+  <text x="45" y="322" font-family="Consolas, Monaco, monospace" font-size="10" fill="#93C5FD">Fine-Grained Access Control (Row-Level Security SET LOCAL)</text>
+  <text x="45" y="338" font-family="Consolas, Monaco, monospace" font-size="10" fill="#93C5FD">TypeSchema / OpenAPI Specs (Port 8080/443)</text>
 
-<p>  <!-- MCP Server Box --></p>
-<p>  <rect x="500" y="260" width="430" height="105" fill="#1E293B" stroke="#10B981" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/></p>
-<p>  <rect x="500" y="260" width="430" height="24" fill="#065F46" rx="8"/></p>
-<p>  <text x="515" y="276" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#A7F3D0">MCP SERVER (MODEL CONTEXT PROTOCOL)</text></p>
-<p>  <text x="515" y="302" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#34D399">Native AI Tooling &amp; Context Gateway</text></p>
-<p>  <text x="515" y="322" font-family="Consolas, Monaco, monospace" font-size="10" fill="#A7F3D0">Fine-Grained Tool Execution &amp; Vector Scope Limits</text></p>
-<p>  <text x="515" y="338" font-family="Consolas, Monaco, monospace" font-size="10" fill="#A7F3D0">Python/Node.js MCP Server Gateway (Port 8443 / Stdio / SSE)</text></p>
+  <!-- MCP Server Box -->
+  <rect x="500" y="260" width="430" height="105" fill="#1E293B" stroke="#10B981" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/>
+  <rect x="500" y="260" width="430" height="24" fill="#065F46" rx="8"/>
+  <text x="515" y="276" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#A7F3D0">MCP SERVER (MODEL CONTEXT PROTOCOL)</text>
+  <text x="515" y="302" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#34D399">Native AI Tooling &amp; Context Gateway</text>
+  <text x="515" y="322" font-family="Consolas, Monaco, monospace" font-size="10" fill="#A7F3D0">Fine-Grained Tool Execution &amp; Vector Scope Limits</text>
+  <text x="515" y="338" font-family="Consolas, Monaco, monospace" font-size="10" fill="#A7F3D0">Python/Node.js MCP Server Gateway (Port 8443 / Stdio / SSE)</text>
 
-<p>  <!-- Consumers Box Left --></p>
-<p>  <rect x="30" y="400" width="430" height="85" fill="#1E293B" stroke="#F59E0B" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/></p>
-<p>  <rect x="30" y="400" width="430" height="22" fill="#78350F" rx="8"/></p>
-<p>  <text x="45" y="415" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#FDE68A">ENTERPRISE &amp; OPEN-SOURCE CONSUMERS</text></p>
-<p>  <text x="45" y="439" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#FBBF24">Apache Superset, Metabase, Astro Portals, ERP &amp; Business Apps</text></p>
-<p>  <text x="45" y="457" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FDE68A">Zero Proprietary License Overhead</text></p>
+  <!-- Consumers Box Left -->
+  <rect x="30" y="400" width="430" height="85" fill="#1E293B" stroke="#F59E0B" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/>
+  <rect x="30" y="400" width="430" height="22" fill="#78350F" rx="8"/>
+  <text x="45" y="415" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#FDE68A">ENTERPRISE &amp; OPEN-SOURCE CONSUMERS</text>
+  <text x="45" y="439" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#FBBF24">Apache Superset, Metabase, Astro Portals, ERP &amp; Business Apps</text>
+  <text x="45" y="457" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FDE68A">Zero Proprietary License Overhead</text>
 
-<p>  <!-- Consumers Box Right --></p>
-<p>  <rect x="500" y="400" width="430" height="85" fill="#1E293B" stroke="#EC4899" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/></p>
-<p>  <rect x="500" y="400" width="430" height="22" fill="#831843" rx="8"/></p>
-<p>  <text x="515" y="415" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#FBCFE8">LLMS &amp; AUTONOMOUS AI AGENTIC SYSTEMS</text></p>
-<p>  <text x="515" y="439" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#F472B6">Context-Aware Inquiries, Vector Retrieval (RAG), AI Cognitive Twins</text></p>
-<p>  <text x="515" y="457" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBCFE8">Cryptographic Provenance Auditing (bda_provenance)</text></p>
+  <!-- Consumers Box Right -->
+  <rect x="500" y="400" width="430" height="85" fill="#1E293B" stroke="#EC4899" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/>
+  <rect x="500" y="400" width="430" height="22" fill="#831843" rx="8"/>
+  <text x="515" y="415" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#FBCFE8">LLMS &amp; AUTONOMOUS AI AGENTIC SYSTEMS</text>
+  <text x="515" y="439" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" fill="#F472B6">Context-Aware Inquiries, Vector Retrieval (RAG), AI Cognitive Twins</text>
+  <text x="515" y="457" font-family="Consolas, Monaco, monospace" font-size="10" fill="#FBCFE8">Cryptographic Provenance Auditing (bda_provenance)</text>
 
-<p>  <!-- Flow Lines --></p>
-<p>  <line x1="480" y1="95" x2="480" y2="130" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/></p>
-<p>  <line x1="245" y1="225" x2="245" y2="260" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/></p>
-<p>  <line x1="715" y1="225" x2="715" y2="260" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/></p>
-<p>  <line x1="245" y1="365" x2="245" y2="400" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/></p>
-<p>  <line x1="715" y1="365" x2="715" y2="400" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/></p>
+  <!-- Flow Lines -->
+  <line x1="480" y1="95" x2="480" y2="130" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/>
+  <line x1="245" y1="225" x2="245" y2="260" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/>
+  <line x1="715" y1="225" x2="715" y2="260" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/>
+  <line x1="245" y1="365" x2="245" y2="400" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/>
+  <line x1="715" y1="365" x2="715" y2="400" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/>
 </svg>
 
 <h5>2. Git-Native Mermaid Topology (<code>.mmd</code>)</h5>
 
 <pre class="mermaid">
-<p>flowchart TD</p>
-<p>    subgraph Ingestion ["Bidirectional Ingestion & Human Quarantine Layer"]</p>
-<p>        Ext["External Systems / IoT / User Feeds"]</p>
-<p>        Laravel["Laravel Web Portal (HITL Verification Gate & Wasm/WebGPU Edge Pre-Processing)"]</p>
-<p>    end</p>
+flowchart TD
+    subgraph Ingestion ["Bidirectional Ingestion & Human Quarantine Layer"]
+        Ext["External Systems / IoT / User Feeds"]
+        Laravel["Laravel Web Portal (HITL Verification Gate & Wasm/WebGPU Edge Pre-Processing)"]
+    end
 
-<p>    subgraph Core ["Central Data Engine & Lakehouse Catalog"]</p>
-<p>        NiFi["Apache NiFi 2.0 (Single Authoritative DB Writer)"]</p>
-<p>        Postgres[("Percona Patroni PostgreSQL 18 + pgvector + PostGIS\n(Tier 0 Golden SSoT & AI Provenance Tagging)")]</p>
-<p>        Polaris["Apache Polaris (Multi-Engine Iceberg REST Catalog)"]</p>
-<p>    end</p>
+    subgraph Core ["Central Data Engine & Lakehouse Catalog"]
+        NiFi["Apache NiFi 2.0 (Single Authoritative DB Writer)"]
+        Postgres[("Percona Patroni PostgreSQL 18 + pgvector + PostGIS\n(Tier 0 Golden SSoT & AI Provenance Tagging)")]
+        Polaris["Apache Polaris (Multi-Engine Iceberg REST Catalog)"]
+    end
 
-<p>    subgraph Integration ["Integration & API Layer (Fine-Grained Access Control)"]</p>
-<p>        REST["Open REST / gRPC APIs\n(Fusio API Gateway)"]</p>
-<p>        MCP["MCP Server\n(Model Context Protocol Tools)"]</p>
-<p>    end</p>
+    subgraph Integration ["Integration & API Layer (Fine-Grained Access Control)"]
+        REST["Open REST / gRPC APIs\n(Fusio API Gateway)"]
+        MCP["MCP Server\n(Model Context Protocol Tools)"]
+    end
 
-<p>    subgraph Consumers ["Consumers & Autonomous Agents"]</p>
-<p>        BI["Open BI (Apache Superset / Metabase / Astro)"]</p>
-<p>        AI["LLMs & AI Agentic Systems (Cognitive Twins)"]</p>
-<p>    end</p>
+    subgraph Consumers ["Consumers & Autonomous Agents"]
+        BI["Open BI (Apache Superset / Metabase / Astro)"]
+        AI["LLMs & AI Agentic Systems (Cognitive Twins)"]
+    end
 
-<p>    Ext -->|"Raw Telemetry / Files"| Laravel</p>
-<p>    Laravel -->|"Human Sign-off & Clean Payload"| NiFi</p>
-<p>    NiFi -->|"Cryptographic Commit"| Postgres</p>
-<p>    Postgres <-->|"Metadata Sync"| Polaris</p>
-<p>    Postgres -->|"FGAC SQL Views (SET LOCAL)"| REST</p>
-<p>    Postgres -->|"Vector Context & Tool Scopes"| MCP</p>
-<p>    REST -->|"Programmatic Inquiries"| BI</p>
-<p>    MCP -->|"Native Tool Execution"| AI</p>
+    Ext -->|"Raw Telemetry / Files"| Laravel
+    Laravel -->|"Human Sign-off & Clean Payload"| NiFi
+    NiFi -->|"Cryptographic Commit"| Postgres
+    Postgres <-->|"Metadata Sync"| Polaris
+    Postgres -->|"FGAC SQL Views (SET LOCAL)"| REST
+    Postgres -->|"Vector Context & Tool Scopes"| MCP
+    REST -->|"Programmatic Inquiries"| BI
+    MCP -->|"Native Tool Execution"| AI
 </pre>
 
 <h5>3. Summary Interface & Routing Table</h5>
@@ -447,25 +435,13 @@
 <p>To accommodate different operational constraints, sovereign data requirements, and cloud policies, the proposed architecture supports three standardized deployment topologies:</p>
 
 <pre><code class="language-">+-----------------------------------------------------------------------------------+
-<table>
-<thead>
-<tr><th>DEPLOYMENT TOPOLOGY OPTIONS</th></tr>
-</thead>
-<tbody>
-</tbody>
-</table>
-<p>+-----------------------------------------------------------------------------------+</p>
-<table>
-<thead>
-<tr><th>Option 1: Sovereign On-Premise Proxmox VE (HCI) + Podman Quadlets + K3s</th></tr>
-</thead>
-<tbody>
-<tr><td>Option 2: Hybrid AI (On-Premise Core + Cloud Bursting to AWS / Azure)</td></tr>
-<tr><td>Option 3: AWS Native Infrastructure (EKS, Aurora PostgreSQL 18, AWS S3)</td></tr>
-</tbody>
-</table>
-<p>+-----------------------------------------------------------------------------------+</p>
-<p></code></pre></p>
+|                            DEPLOYMENT TOPOLOGY OPTIONS                            |
++-----------------------------------------------------------------------------------+
+|  Option 1: Sovereign On-Premise Proxmox VE (HCI) + Podman Quadlets + K3s          |
+|  Option 2: Hybrid AI (On-Premise Core + Cloud Bursting to AWS / Azure)            |
+|  Option 3: AWS Native Infrastructure (EKS, Aurora PostgreSQL 18, AWS S3)          |
++-----------------------------------------------------------------------------------+
+</code></pre>
 
 <h3>Option 1: Sovereign On-Premise Proxmox VE (HCI) + Podman Quadlets + K3s (Recommended)</h3>
 <ul><li><strong>Compute & Storage:</strong> Proxmox VE Hyper-Converged Infrastructure running rootless Podman Quadlets for core microservices and K3s / RKE2 Kubernetes clusters for dynamic AI container workloads.</li><li><strong>Storage Fabric:</strong> RustFS for shared file staging and Ceph S3 object storage for raw document landing and Iceberg lakehouse tables.</li><li><strong>Key Benefit:</strong> Complete data sovereignty, zero recurring cloud bandwidth egress fees, and 100% compliance with strict local regulatory guidelines.</li></ul>
@@ -502,7 +478,7 @@
 <p>To eliminate operational risk and guarantee zero business disruption, legacy Tableau workbooks and WildFly servers will be systematically decommissioned using a four-phase migration roadmap:</p>
 
 <pre><code class="language-">[ Phase 1: Audit &amp; Inventory ] ──► [ Phase 2: Logic Transfer ] ──► [ Phase 3: Open BI Deployment ] ──► [ Phase 4: API &amp; MCP Enablement ]
-<p></code></pre></p>
+</code></pre>
 
 <ul><li><strong>Phase 1: Audit & Inventory:</strong> Catalogue all active Tableau workbooks (<code>.twb</code>/<code>.twbx</code>), calculated fields, custom SQL scripts, and user access matrices. Mark redundant reports for immediate retirement.</li><li><strong>Phase 2: Data & Logic Consolidation:</strong> Migrate complex Tableau calculated fields and data blending logic into <strong>PostgreSQL Materialised Views</strong> and stored functions. Configure Apache NiFi to orchestrate data pipelines directly into clean PostgreSQL schemas.</li><li><strong>Phase 3: Open BI Deployment:</strong> Deploy containerised <strong>Apache Superset</strong> and Metabase on Podman Quadlets to replicate executive visual dashboards. Connect directly to PostgreSQL, restoring visual reporting with zero license fees.</li><li><strong>Phase 4: API & MCP Enablement:</strong> Wrap underlying business calculations into Fusio REST/gRPC endpoints and standard <strong>MCP Tools</strong> for internal AI agent consumption.</li></ul>
 

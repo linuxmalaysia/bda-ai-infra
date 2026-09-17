@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S uv run --script
 """Render Executive IT Management Proposal Markdown to Standalone HTML.
 
 This script parses the IT management proposal Markdown document, converts code fences,
@@ -58,9 +58,36 @@ def md_to_html_basic(md_text: str) -> str:
     lines = text.split("\n")
     html_lines = []
     in_table = False
+    raw_block_tag = None
 
     for line in lines:
         stripped = line.strip()
+
+        # If inside a raw block (e.g. pre, svg, or div), pass line through unchanged
+        if raw_block_tag:
+            html_lines.append(line)
+            if f"</{raw_block_tag}>" in stripped:
+                raw_block_tag = None
+            continue
+
+        # Enter raw block if tag opens on this line
+        if stripped.startswith("<pre") or "<pre " in stripped or "<pre>" in stripped:
+            html_lines.append(line)
+            if "</pre>" not in stripped:
+                raw_block_tag = "pre"
+            continue
+
+        if stripped.startswith("<svg") or "<svg " in stripped or "<svg>" in stripped:
+            html_lines.append(line)
+            if "</svg>" not in stripped:
+                raw_block_tag = "svg"
+            continue
+
+        if stripped.startswith("<div") or "<div " in stripped or "<div>" in stripped:
+            html_lines.append(line)
+            if "</div>" not in stripped:
+                raw_block_tag = "div"
+            continue
 
         # Headers
         if stripped.startswith("# "):
@@ -112,11 +139,6 @@ def md_to_html_basic(md_text: str) -> str:
         if re.match(r'^\d+\.\s', stripped):
             item_text = re.sub(r'^\d+\.\s', '', stripped)
             html_lines.append(f'<ol><li>{item_text}</li></ol>')
-            continue
-
-        # Preserve SVG / pre tags as raw
-        if stripped.startswith("<svg") or stripped.startswith("</svg>") or stripped.startswith("<pre") or stripped.startswith("</pre>") or stripped.startswith("<div") or stripped.startswith("</div>"):
-            html_lines.append(line)
             continue
 
         if stripped:

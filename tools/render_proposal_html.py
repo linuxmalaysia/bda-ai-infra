@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+"""Render Executive IT Management Proposal Markdown to Standalone HTML.
+
+This script parses the IT management proposal Markdown document, converts code fences,
+tables, headers, and SVG blocks into clean HTML structure, and embeds the output into
+a Jekyll-compatible publication template.
+"""
+
 import re
 from pathlib import Path
 
@@ -6,14 +13,35 @@ REPO_ROOT = Path(__file__).parent.parent
 MD_PATH = REPO_ROOT / "docs" / "IT-MANAGEMENT-PROPOSAL.md"
 HTML_PATH = REPO_ROOT / "docs" / "IT-MANAGEMENT-PROPOSAL.html"
 
+
 def strip_yaml_frontmatter(text: str) -> str:
+    """Strip OKF YAML frontmatter header if present.
+
+    Args:
+        text: Raw Markdown content.
+
+    Returns:
+        Content string with YAML frontmatter removed.
+
+    """
     if text.startswith("---\n"):
         parts = text.split("---\n", 2)
         if len(parts) >= 3:
             return parts[2].strip()
     return text.strip()
 
+
 def md_to_html_basic(md_text: str) -> str:
+    """Convert basic Markdown elements into HTML.
+
+    Args:
+        md_text: Markdown content string.
+
+    Returns:
+        Formatted HTML string.
+
+    """
+
     # Convert code fences
     def replace_code_fence(match):
         lang = match.group(1) or ""
@@ -30,7 +58,6 @@ def md_to_html_basic(md_text: str) -> str:
     lines = text.split("\n")
     html_lines = []
     in_table = False
-    table_has_header = False
 
     for line in lines:
         stripped = line.strip()
@@ -66,7 +93,6 @@ def md_to_html_basic(md_text: str) -> str:
             if not in_table:
                 html_lines.append('<table>\n<thead>')
                 in_table = True
-                table_has_header = True
                 html_lines.append('<tr>' + ''.join(f'<th>{c}</th>' for c in cells) + '</tr>')
                 html_lines.append('</thead>\n<tbody>')
             else:
@@ -114,7 +140,9 @@ def md_to_html_basic(md_text: str) -> str:
 
     return content
 
+
 def generate_full_html():
+    """Generate complete standalone HTML document from the proposal Markdown source."""
     raw_md = MD_PATH.read_text(encoding="utf-8")
     body_md = strip_yaml_frontmatter(raw_md)
     html_body = md_to_html_basic(body_md)
@@ -373,6 +401,7 @@ def generate_full_html():
 """
     HTML_PATH.write_text(full_html, encoding="utf-8")
     print(f"Generated {HTML_PATH}")
+
 
 if __name__ == "__main__":
     generate_full_html()

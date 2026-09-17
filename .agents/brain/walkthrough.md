@@ -23,6 +23,17 @@ topics:
 
 # 📜 DSOM Execution Walkthrough & Mental Anchors
 
+## Session Anchor: 2026-09-17 — OpenMetadata & Percona PostgreSQL Enterprise Strategy Refinement & EOD Palace Sync
+
+- **Context:** Refined OpenMetadata catalog architecture (`docs/explanation/governance-and-compliance.md`) and Percona Distribution for PostgreSQL 18 managed by Patroni strategy (`docs/reference/postgresql-pgvector-enterprise-strategy.md`).
+- **Actions Taken:**
+  1. Detailed OpenMetadata lightweight architecture, OpenLineage tracking (Airflow/Spark + HTTPS TCP 8443 mTLS for NiFi), Bitol ODCS CLI execution, and `mcp-catalog-context` read-only views with RLS.
+  2. Documented Percona Distribution for PostgreSQL 18 managed by Patroni as Tier 0 Golden SSoT, PostGIS/pgvector extensions, explicit ownership across RustFS quarantine, Iceberg Parquet lakehouse, OpenSearch, and DuckDB vss.
+  3. Added production dual-render SVG pipeline architecture diagrams and addressed all inline PR review feedback.
+  4. Created `tests/test_openmetadata_postgresql_strategy.py` with 100% test pass rate (328/328 tests passed).
+  5. Updated `SUMMARY.md` and `_data/navigation.yml` via `tools/generate_summary.py`.
+  6. Executed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory files.
+
 ## Session Anchor: 2026-09-16 — BDA Data Plane Evolution (WildFly to Laravel, Wasm/WebGPU Web AI) & DSOM EOD Sync
 
 - **Context:** Formulated and published the technical proposal `docs/proposals/nre-bda-pipeline-upgrade.md` detailing the transition from WildFly application servers to Laravel and architecting client-side WebAssembly (Memory64, Relaxed SIMD) and WebGPU (`f16`, `DP4a`) Web AI acceleration within the HITL quarantine workflow under DSOM protocol.

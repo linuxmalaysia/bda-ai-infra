@@ -43,18 +43,38 @@ def test_postgresql_lifecycle_section_tier0_scoping() -> None:
     assert "DuckDB vss" in lifecycle_section, "Missing DuckDB vss ownership assertion"
 
 
+import re
+
 def test_governance_openmetadata_transport_and_contracts() -> None:
-    """Verify OpenMetadata, NiFi transport, and Bitol ODCS CLI assertions in governance doc."""
+    """Verify OpenMetadata, NiFi transport, and Bitol ODCS CLI relationship assertions in governance doc."""
     gov_doc: Path = REPO_ROOT / "docs" / "explanation" / "governance-and-compliance.md"
     assert gov_doc.exists(), "governance-and-compliance.md missing"
 
     content: str = gov_doc.read_text(encoding="utf-8")
 
-    # Verify HTTPS TCP 8443 mTLS claim for NiFi
-    assert "TCP 8443" in content, "Missing TCP 8443 transport claim in governance doc"
-    assert "mTLS" in content or "mutual TLS" in content, "Missing mTLS claim in governance doc"
+    # Bind Apache NiFi to HTTPS on TCP 8443 with mTLS
+    nifi_transport_pattern = re.compile(
+        r"Apache NiFi.*HTTPS.*TCP 8443.*mTLS|Apache NiFi.*TCP 8443.*mTLS",
+        re.DOTALL | re.IGNORECASE,
+    )
+    assert nifi_transport_pattern.search(content), (
+        "Governance doc must bind Apache NiFi metadata events to HTTPS on TCP 8443 with mTLS"
+    )
 
-    # Verify mcp-catalog-context isolation and grants
-    assert "mcp-catalog-context" in content, "Missing mcp-catalog-context reference"
-    assert "bda_public_schema_views" in content, "Missing bda_public_schema_views grant reference"
-    assert "Bitol ODCS CLI" in content, "Missing Bitol ODCS CLI reference"
+    # Bind mcp-catalog-context to read-only access and exact database grant
+    mcp_grant_pattern = re.compile(
+        r"mcp-catalog-context.*GRANT SELECT ON bda_public_schema_views TO mcp_reader|GRANT SELECT ON bda_public_schema_views TO mcp_reader.*mcp-catalog-context",
+        re.DOTALL,
+    )
+    assert mcp_grant_pattern.search(content), (
+        "Governance doc must bind mcp-catalog-context to GRANT SELECT ON bda_public_schema_views TO mcp_reader"
+    )
+
+    # Bind Bitol ODCS CLI to active payload validation and rejection before persistence
+    bitol_validation_pattern = re.compile(
+        r"(validation|rejection).*before persistence.*Bitol ODCS CLI|Bitol ODCS CLI.*(validation|rejection).*before persistence",
+        re.DOTALL | re.IGNORECASE,
+    )
+    assert bitol_validation_pattern.search(content), (
+        "Governance doc must bind Bitol ODCS CLI to payload validation and rejection before persistence"
+    )

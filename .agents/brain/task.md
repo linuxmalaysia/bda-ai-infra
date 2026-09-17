@@ -29,7 +29,7 @@ topics:
 ## 🟢 Completed Objectives
 
 0. **OpenMetadata & Percona PostgreSQL Enterprise Strategy (`docs/explanation/governance-and-compliance.md`, `docs/reference/postgresql-pgvector-enterprise-strategy.md`)**:
-   - Expanded OpenMetadata governance details: lightweight architecture, native OpenLineage tracking (Spark/Airflow + HTTPS TCP 8443 mTLS for NiFi), Bitol ODCS CLI execution, and `mcp-catalog-context` read-only views with PostgreSQL RLS.
+   - Expanded OpenMetadata governance details: lightweight architecture, native OpenLineage tracking for Spark/Airflow runtime facets, separate Apache NiFi metadata events over HTTPS on TCP 8443 with mTLS, Bitol ODCS CLI execution, and `mcp-catalog-context` read-only views with PostgreSQL RLS.
    - Expanded Percona Distribution for PostgreSQL 18 managed by Patroni as Tier 0 Golden SSoT, PostGIS/pgvector extensions, explicit ownership across RustFS quarantine, Iceberg Parquet lakehouse, OpenSearch, and DuckDB vss.
    - Added dual-render SVG pipeline architecture diagrams and addressed all PR review comments.
    - Added unit tests in `tests/test_openmetadata_postgresql_strategy.py` passing 100% (328/328 tests).

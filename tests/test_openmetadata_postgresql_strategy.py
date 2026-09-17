@@ -6,6 +6,7 @@ License: GNU General Public License v3.0
 """
 
 from pathlib import Path
+import re
 
 REPO_ROOT: Path = Path(__file__).parent.parent
 
@@ -42,8 +43,6 @@ def test_postgresql_lifecycle_section_tier0_scoping() -> None:
     assert "OpenSearch" in lifecycle_section, "Missing OpenSearch ownership assertion"
     assert "DuckDB vss" in lifecycle_section, "Missing DuckDB vss ownership assertion"
 
-
-import re
 
 def test_governance_openmetadata_transport_and_contracts() -> None:
     """Verify OpenMetadata, NiFi transport, and Bitol ODCS CLI relationship assertions in governance doc."""

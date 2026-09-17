@@ -26,15 +26,49 @@ sources:
     description: "Percona Enterprise Strategy: pgvector - The Critical PostgreSQL Component for Your Enterprise AI Strategy."
 ---
 
-# PostgreSQL & pgvector Enterprise Strategy Specification
+# PostgreSQL, PostGIS & pgvector Enterprise Strategy Specification
 
-This master specification establishes **PostgreSQL** and its native **`pgvector`** extension as the primary, master operational database and vector processing backbone for the entire **Big Data Analytics (BDA) and Artificial Intelligence (AI)** infrastructure.
+This master specification establishes **Percona Patroni PostgreSQL 18** and its native extensions—**`PostGIS`** for spatial intelligence and **`pgvector`** for semantic similarity search—as the primary, master operational database and persistent backbone across the entire **Big Data Analytics (BDA) and Enterprise AI** pipeline lifecycle.
 
-By anchoring enterprise AI strategy around PostgreSQL, the platform eliminates unnecessary database sprawl, avoids proprietary cloud SaaS vector lock-in, and guarantees strict data sovereignty, ACID transactional consistency, and enterprise-grade security across relational, spatial, and vector workloads.
+From initial edge ingestion and Human-in-the-Loop (HITL) quarantine staging through to Tier 0 Golden Single Source of Truth (SSoT) persistence and RAG inference, anchoring the enterprise platform on Percona Patroni PostgreSQL 18 eliminates database sprawl, prevents proprietary cloud SaaS vendor lock-in, and guarantees strict data sovereignty, cryptographic attestation, ACID transactional consistency, and sub-10ms unified spatial-vector querying.
 
 ---
 
-## 1. Master Strategic Rationale: Unified Database Architecture
+## 1. Pipeline Lifecycle: Percona PostgreSQL 18 from Ingestion to SSoT
+
+Percona Patroni PostgreSQL 18 operates as the single authoritative persistence engine throughout every tier of the BDA pipeline:
+
+```
++---------------------------------------------------------------------------------------------------------+
+|                  PERCONA PATRONI POSTGRESQL 18 END-TO-END PIPELINE ARCHITECTURE                        |
++---------------------------------------------------------------------------------------------------------+
+|  [ Ingestion Boundary ] ---> [ HITL Quarantine Staging ] ---> [ Cryptographic Verification ]           |
+|  * Apache NiFi 2.0 / RustFS   * Laravel Web Verification      * RFC 8785 Ed25519 Attestation            |
+|                                                                                                         |
+|  [ Tier 0 Golden SSoT Persistence ] ------------------------> [ Unified Operational & Semantic Serving ]|
+|  * Percona Patroni PostgreSQL 18                              * PostGIS (EPSG:3168/3169/4326)           |
+|  * ACID Serialized Transactions                               * pgvector (HNSW Sub-10ms Cosine)         |
+|  * OpenMetadata Lineage & Cataloging                          * DuckDB vss / Iceberg / OpenSearch       |
++---------------------------------------------------------------------------------------------------------+
+```
+
+### Pipeline Execution Phases
+1. **Ingestion Staging & Stream Boundary:**
+   - Raw payloads ingested via Apache NiFi 2.0, point-to-point SFTP, or shared RustFS file directories enter `TIER_1_STAGING` schema in PostgreSQL.
+   - Initial metadata extraction records file hashes, MIME types, and pipeline execution tokens without writing to Tier 0 persistence.
+2. **Human-in-the-Loop Quarantine & Attestation:**
+   - Payloads tagged with unverified or AI-generated metadata enter the Human-AI Quarantine layer.
+   - Non-IT domain reviewers verify payload integrity using the Laravel Web Application interface.
+   - Attested computations bind RFC 8785 canonical JSON byte streams to Ed25519 cryptographic signatures (`signature`, `key_id`, `verification_status`, `verification_timestamp`, `payload_sha256`).
+3. **Tier 0 Golden SSoT Write Persistence:**
+   - Apache NiFi 2.0 acts as the single authoritative writer to the Tier 0 Golden SSoT in Percona Patroni PostgreSQL 18 upon successful Laravel human verification.
+   - ACID serialized transactions ensure relational, spatial (`PostGIS`), and vector (`pgvector`) embeddings are committed atomically.
+4. **Unified Operational & Semantic Serving:**
+   - Exposes master spatial-vector datasets to downstream analytics (Apache Superset, APISIX API Gateway, Model Context Protocol endpoints) with Row-Level Security (RLS) enforcement.
+
+---
+
+## 2. Master Strategic Rationale: Unified Database Architecture
 
 ### The Problem of Vector Database Sprawl
 Many enterprise AI implementations default to introducing specialized standalone vector databases (e.g., Pinecone, Qdrant Cloud, Milvus, Weaviate). This practice introduces severe operational hazards:

@@ -129,22 +129,37 @@ flowchart TD
 
 ---
 
-## 1. Enterprise Data Catalog Evaluation & Selection
+## 1. OpenMetadata Architecture & Infrastructure Rationale
 
-In evaluating modern open-source governance platforms to modernize BDA, three primary candidates were assessed: **Apache Atlas**, **DataHub**, and **OpenMetadata**.
+Operating an authoritative Single Source of Truth across BDA and Enterprise AI requires an integrated metadata engine capable of real-time schema discovery, runtime lineage tracking, data quality assertion monitoring, and automated policy propagation.
 
-### Comparison & Selection Rationale
+### Why OpenMetadata is Necessary in Overall BDA & Infra
 
-- **Apache Atlas:** Has historical roots in legacy Hadoop ecosystems and integrates with Apache Ranger. However, its architecture requires substantial infrastructure maintenance—relying on JanusGraph, HBase, Apache Solr, and Apache ZooKeeper—and shows slow upstream development with limited native support for modern table formats (Apache Iceberg) and the OpenLineage standard.
-- **DataHub:** Provides a modular, event-driven metadata architecture using Apache Kafka, Elasticsearch, and a graph store, with native OpenLineage ingestion and SQLGlot-based column-level lineage parsing. However, its multi-component distributed footprint presents considerable operational complexity for mid-scale enterprise deployments.
-- **OpenMetadata (Selected Standard):** Selected as the primary enterprise catalog and governance engine for BDA. Built under the Apache 2.0 license, OpenMetadata features a lightweight, maintainable architecture powered by PostgreSQL for metadata storage and Elasticsearch/OpenSearch for search indexing, eliminating the need to maintain distributed graph databases or Kafka clusters.
+1. **Unified Metadata Hub & Zero Infrastructure Sprawl:**
+   - OpenMetadata uses a clean, modern REST/JSON Schema architecture powered by **Percona PostgreSQL 18** for relational state and **OpenSearch / Elasticsearch** for full-text search indexing and discovery.
+   - Eliminates the operational debt of legacy Hadoop/Java governance platforms (e.g., Apache Atlas) that require distributed graph databases (JanusGraph/HBase) and ZooKeeper clusters.
+2. **Automated End-to-End Lineage Tracking (OpenLineage Standard):**
+   - Ingests runtime execution facets emitted by **Apache NiFi 2.0**, **Apache Airflow**, and **Apache Spark**, constructing interactive column-level lineage graphs.
+   - Traces data provenance from edge file ingestion (RustFS / SFTP) through Human-in-the-Loop (HITL) quarantine verification down to Tier 0 SSoT PostgreSQL tables, Iceberg lakehouse Parquet files, and Apache Superset analytical dashboards.
+3. **Linux Foundation Open Data Contract Standard (ODCS) Enforcement:**
+   - Governs schema structure, data types, nullability constraints, and SLAs directly inside the catalog.
+   - When upstream pipelines produce unexpected schema changes or breaking structural alterations, OpenMetadata triggers automated Bitol contract violation alerts, preventing bad data from contaminating Tier 0 SSoT.
+4. **Tag-Based Access Control (TBAC) & Security Policy Propagation:**
+   - Security tags attached to upstream data assets (e.g., `Classification.Restricted`, `Provenance.HumanVerified`, `Domain.Spatial`) automatically propagate along downstream lineage edges.
+   - Integrates with **Apache APISIX** and **Keycloak OIDC** to enforce fine-grained access policies and Row-Level Security (RLS) across Model Context Protocol (MCP) AI endpoints.
+5. **Business Glossary & Semantic Discovery for AI Models:**
+   - Exposes structured metadata, table schemas, and domain glossaries via read-only REST endpoints (`mcp-catalog-context`).
+   - Enables local AI agents and RAG pipelines to discover data context without granting direct read access to raw underlying sensitive database tables.
 
-### Core OpenMetadata Capabilities Delivered
+### Enterprise Data Catalog Evaluation Matrix
 
-1. **Native OpenLineage Consumption:** Processes pipeline lineage events from Apache Airflow and Apache Spark into end-to-end lineage graphs that trace data elements from edge ingestion to analytical dashboards.
-2. **In-Catalog Data Contract Management:** Native support for the Linux Foundation ODCS specification, allowing administrators to attach machine-readable contracts to tables and receive real-time alerts on schema drift or SLA violations.
-3. **Extensible Metadata Schemas:** Easily incorporates standardized profiles, such as mapping geospatial attributes to MS ISO 19115:2003 (Geographic Information - Metadata).
-4. **Tag-Based Access Control (TBAC):** Security classifications (such as `Classification.Secret`, `Provenance.Tier0_SSoT`, or `Domain.Environmental`) automatically propagate along lineage edges to govern downstream query access.
+| Governance Dimension | Apache Atlas | DataHub | **OpenMetadata (Selected BDA Standard)** |
+| :--- | :--- | :--- | :--- |
+| **Backend Architecture** | Complex (JanusGraph, HBase, Solr, ZooKeeper) | Event-Driven (Kafka, MySQL, Elasticsearch) | **Lightweight & Robust (PostgreSQL 18 + OpenSearch)** |
+| **Lineage Standard** | Custom Atlas entities | Custom Kafka topics & SQLGlot | **Native OpenLineage & SQL Parsing** |
+| **Data Contracts** | Manual / Third-party | Custom schema assertions | **Linux Foundation ODCS Standard Native** |
+| **AI & MCP Integration** | Limited / Legacy APIs | REST / GraphQL APIs | **First-Class MCP Context & Tag Propagation** |
+| **Operational Overhead** | Very High | High | **Low–Medium (Fits Podman / K3s Stack)** |
 
 ---
 

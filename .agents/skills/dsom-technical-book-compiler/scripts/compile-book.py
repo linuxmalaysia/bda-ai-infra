@@ -13,6 +13,7 @@ import argparse
 import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 REPO_ROOT: Path = Path(__file__).parent.parent.parent.parent.parent
@@ -60,17 +61,17 @@ def main() -> None:
     print("Executing Technical Book Compiler Workflow...")
 
     uv_bin = shutil.which("uv")
-    if not uv_bin:
+    if not uv_bin and not dry_run:
         raise RuntimeError("Required dependency 'uv' executable not found in PATH.")
-    python_cmd = [uv_bin, "run", "python"]
+    python_cmd = [uv_bin, "run", "python"] if uv_bin else [sys.executable]
 
     # 1. Build Master Markdown handbook into build/book.md
-    run_command(python_cmd + ["tools/build_project_book.py"])
-    if not BOOK_MD.exists():
-        if dry_run:
-            print("Handbook manuscript build/book.md missing; skipping in dry-run mode.")
-        else:
+    if not dry_run:
+        run_command(python_cmd + ["tools/build_project_book.py"])
+        if not BOOK_MD.exists():
             raise RuntimeError("Handbook source manuscript build/book.md is missing or failed to generate.")
+    else:
+        print("Dry-run mode active; skipping handbook manuscript build preparation.")
 
     # 2. Compile Standalone Interactive HTML
     pandoc_bin = shutil.which("pandoc")
@@ -96,7 +97,10 @@ def main() -> None:
         raise RuntimeError("Required dependency 'pandoc' not found in PATH for handbook HTML compilation.")
 
     # 3. Bake Native Vector SVGs & Inline CSS
-    run_command(python_cmd + ["tools/bake_native_svg.py"])
+    if not dry_run:
+        run_command(python_cmd + ["tools/bake_native_svg.py"])
+    else:
+        print("Dry-run mode active; skipping SVG baking preparation.")
 
     # 4. Compile Publication-Grade PDF using available browser engine
     browser_bin = (

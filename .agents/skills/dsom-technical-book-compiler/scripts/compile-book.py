@@ -66,9 +66,15 @@ def main() -> None:
 
     # 1. Build Master Markdown handbook into build/book.md
     run_command(python_cmd + ["tools/build_project_book.py"])
+    if not BOOK_MD.exists():
+        if dry_run:
+            print("Handbook manuscript build/book.md missing; skipping in dry-run mode.")
+        else:
+            raise RuntimeError("Handbook source manuscript build/book.md is missing or failed to generate.")
 
     # 2. Compile Standalone Interactive HTML
     pandoc_bin = shutil.which("pandoc")
+    handbook_html = REPO_ROOT / "handbook.html"
     if pandoc_bin and BOOK_MD.exists():
         run_command([
             "pandoc",
@@ -80,8 +86,12 @@ def main() -> None:
             "-V",
             "lang=en",
         ])
+        if not dry_run and not handbook_html.exists():
+            raise RuntimeError(f"Handbook HTML output failed to generate at {handbook_html}")
     elif dry_run:
         print("Pandoc not found or build/book.md missing; skipping HTML build in dry-run mode.")
+    elif not BOOK_MD.exists():
+        raise RuntimeError("Handbook source manuscript build/book.md is missing.")
     else:
         raise RuntimeError("Required dependency 'pandoc' not found in PATH for handbook HTML compilation.")
 
@@ -94,6 +104,7 @@ def main() -> None:
         or shutil.which("google-chrome")
         or shutil.which("msedge")
     )
+    handbook_pdf = REPO_ROOT / "handbook.pdf"
     if browser_bin and pandoc_bin:
         run_command([
             browser_bin,
@@ -104,6 +115,8 @@ def main() -> None:
             "--print-to-pdf=handbook.pdf",
             "handbook.html",
         ])
+        if not dry_run and not handbook_pdf.exists():
+            raise RuntimeError(f"Handbook PDF output failed to generate at {handbook_pdf}")
     elif dry_run:
         print("Browser engine or pandoc missing; skipping PDF compilation in dry-run mode.")
     else:
@@ -112,6 +125,8 @@ def main() -> None:
         )
 
     # 5. Compile EPUB 3 Ebook & ODT Document
+    handbook_epub = REPO_ROOT / "handbook.epub"
+    handbook_odt = REPO_ROOT / "handbook.odt"
     if pandoc_bin and BOOK_MD.exists():
         run_command([
             "pandoc",
@@ -125,8 +140,17 @@ def main() -> None:
             "lang=en",
         ])
         run_command(["pandoc", str(BOOK_MD), "-o", "handbook.odt", "--toc"])
+        if not dry_run:
+            if not handbook_epub.exists():
+                raise RuntimeError(f"Handbook EPUB output failed to generate at {handbook_epub}")
+            if not handbook_odt.exists():
+                raise RuntimeError(f"Handbook ODT output failed to generate at {handbook_odt}")
     elif dry_run:
         print("Pandoc missing; skipping EPUB and ODT builds in dry-run mode.")
+    elif not BOOK_MD.exists():
+        raise RuntimeError("Handbook source manuscript build/book.md is missing.")
+    else:
+        raise RuntimeError("Required dependency 'pandoc' not found in PATH for EPUB/ODT compilation.")
 
     # 6. Compile Standalone IT Management Proposal HTML and PDF Deliverables
     proposal_md = REPO_ROOT / "docs" / "IT-MANAGEMENT-PROPOSAL.md"

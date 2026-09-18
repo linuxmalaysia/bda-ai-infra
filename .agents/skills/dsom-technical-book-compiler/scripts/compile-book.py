@@ -115,28 +115,39 @@ def main() -> None:
     proposal_md = REPO_ROOT / "docs" / "IT-MANAGEMENT-PROPOSAL.md"
     proposal_html = BUILD_DIR / "IT-MANAGEMENT-PROPOSAL.html"
     proposal_pdf = BUILD_DIR / "IT-MANAGEMENT-PROPOSAL.pdf"
-    if shutil.which("pandoc") and proposal_md.exists():
-        run_command([
-            "pandoc",
-            str(proposal_md),
-            "-o",
-            str(proposal_html),
-            "--standalone",
-            "--toc",
-            "--highlight-style=tango",
-            "-V",
-            "lang=en",
-        ])
-        if browser_bin:
+    if proposal_md.exists():
+        if shutil.which("pandoc"):
             run_command([
-                browser_bin,
-                "--headless=new",
-                "--disable-gpu",
-                "--run-all-compositor-stages-before-draw",
-                "--virtual-time-budget=8000",
-                f"--print-to-pdf={proposal_pdf}",
+                "pandoc",
+                str(proposal_md),
+                "-o",
                 str(proposal_html),
+                "--standalone",
+                "--toc",
+                "--highlight-style=tango",
+                "-V",
+                "lang=en",
             ])
+            if browser_bin:
+                run_command([
+                    browser_bin,
+                    "--headless=new",
+                    "--disable-gpu",
+                    "--run-all-compositor-stages-before-draw",
+                    "--virtual-time-budget=8000",
+                    f"--print-to-pdf={proposal_pdf}",
+                    str(proposal_html),
+                ])
+            else:
+                print(
+                    "Browser engine missing; skipping proposal PDF compilation"
+                    " in dry-run environment."
+                )
+        else:
+            print(
+                "Pandoc missing; skipping proposal HTML/PDF compilation in"
+                " dry-run environment."
+            )
 
     # Clean up root book.md if leftover
     root_book = REPO_ROOT / "book.md"

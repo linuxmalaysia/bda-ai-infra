@@ -26,7 +26,7 @@ def test_compile_book_script_execution() -> None:
     assert script_path.exists(), "compile-book.py script does not exist"
 
     result = subprocess.run(
-        [sys.executable, str(script_path)],
+        [sys.executable, str(script_path), "--dry-run"],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,

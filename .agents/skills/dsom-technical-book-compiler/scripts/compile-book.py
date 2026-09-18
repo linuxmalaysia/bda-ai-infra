@@ -44,8 +44,7 @@ def main() -> None:
     4. Compiles publication-grade PDF using headless Chromium/Chrome/Edge.
     5. Compiles EPUB 3 ebook using Pandoc.
     6. Compiles ODT document using Pandoc.
-    7. When Pandoc and its source are available, compiles the IT Management Proposal
-       into build/ as standalone HTML and, when a browser is available, PDF.
+    7. Compiles standalone IT Management Proposal PDF and HTML deliverables.
     """
     print("Executing Technical Book Compiler Workflow...")
 

@@ -63,27 +63,27 @@ Standardizes the automated generation and validation of two-tier visual delivera
 
 ### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 Generate a self-contained, fully compliant raw inline SVG vector block (`<svg ...> ... </svg>`) directly without ````xml` code fences so browsers and site builders (Jekyll/GitHub Pages) render the visual graphic image inline instead of showing raw XML text code blocks, matching these styling constraints:
-* **Canvas Hygiene:** Explicit `xmlns="http://www.w3.org/2000/svg"`, explicit `viewBox`, `width="100%"`, and `height="100%"`.
-* **Adaptive Light / Dark / Print System (`assets/css/style.scss`):** All inline SVGs automatically adapt via global CSS rules when rendered in Light Mode or printed (`@media print`). The outer canvas transitions to white (`#FFFFFF`), container cards to light slate (`#F8FAFC`) or soft pastel fills, borders to crisp colored strokes, and text/accent titles to crisp dark tones (`#0F172A`, `#1E40AF`, `#15803D`, `#991B1B`, `#7E22CE`, `#B45309`) to maximize legibility and save ink when printing.
-* **Structural Precision:**
-  * Define explicit arrow markers (`<marker>`) inside `<defs>`.
-  * Group logical subnets, tiers, or security boundaries into distinct container rectangles with uppercase section headers.
-  * Every card must contain: entity title (bold), primary network/system identifier (IP, FQDN, or ID), and key functional metadata (ports, daemons, or roles).
-  * Direct all connection paths (`<path>` or `<line>`) with explicit coordinates and distinct port/protocol callout pill badges.
-  * Include a centered figure caption label below the diagram (`Figure X.Y: ...`).
+- **Canvas Hygiene:** Explicit `xmlns="http://www.w3.org/2000/svg"`, explicit `viewBox`, `width="100%"`, and `height="100%"`.
+- **Adaptive Light / Dark / Print System (`assets/css/style.scss`):** All inline SVGs automatically adapt via global CSS rules when rendered in Light Mode or printed (`@media print`). The outer canvas transitions to white (`#FFFFFF`), container cards to light slate (`#F8FAFC`) or soft pastel fills, borders to crisp colored strokes, and text/accent titles to crisp dark tones (`#0F172A`, `#1E40AF`, `#15803D`, `#991B1B`, `#7E22CE`, `#B45309`) to maximize legibility and save ink when printing.
+- **Structural Precision:**
+  - Define explicit arrow markers (`<marker>`) inside `<defs>`.
+  - Group logical subnets, tiers, or security boundaries into distinct container rectangles with uppercase section headers.
+  - Every card must contain: entity title (bold), primary network/system identifier (IP, FQDN, or ID), and key functional metadata (ports, daemons, or roles).
+  - Direct all connection paths (`<path>` or `<line>`) with explicit coordinates and distinct port/protocol callout pill badges.
+  - Include a centered figure caption label below the diagram (`Figure X.Y: ...`).
 
 ### 2. Git-Native Mermaid Diagram (`.mmd` / Mermaid Block)
-Directly beneath the SVG block, generate an equivalent, character-exact Mermaid diagram inside a single ````mermaid ... ```` code fence:
-* **Orientation:** Choose the most readable layout (`graph TD`, `graph LR`, or `sequenceDiagram`).
-* **Grouping:** Enclose security tiers, VLANs, clusters, or operational domains inside explicit `subgraph` blocks.
-* **Label Precision:** Display clear port bindings, protocol indicators, and service actions along link connectors (e.g., `-->|"TCP 5432 / mTLS"|` or `-->|"SSH Port 22"|`).
-* **Readability & Theme Support:** Break long node labels across multiple lines using HTML break tags (`<br/>`). Mermaid blocks dynamically render with white background and dark text in Light Mode and Print Mode.
-* **Mermaid Multi-Diagram Isolation Protocol:** Prohibit reusing identical node IDs across diagrams. Prefix node IDs with unique namespaces (e.g., `TB_`, `PA_`, `PB_`) to prevent global symbol collisions.
+Directly beneath the SVG block, generate an equivalent, character-exact Mermaid diagram inside a single ````mermaid```` code fence:
+- **Orientation:** Choose the most readable layout (`graph TD`, `graph LR`, or `sequenceDiagram`).
+- **Grouping:** Enclose security tiers, VLANs, clusters, or operational domains inside explicit `subgraph` blocks.
+- **Label Precision:** Display clear port bindings, protocol indicators, and service actions along link connectors (e.g., `-->|"TCP 5432 / mTLS"|` or `-->|"SSH Port 22"|`).
+- **Readability & Theme Support:** Break long node labels across multiple lines using HTML break tags (`<br/>`). Mermaid blocks dynamically render with white background and dark text in Light Mode and Print Mode.
+- **Mermaid Multi-Diagram Isolation Protocol:** Prohibit reusing identical node IDs across diagrams. Prefix node IDs with unique namespaces (e.g., `TB_`, `PA_`, `PB_`).
 
 ### 3. Summary Interface & Routing Table
 Conclude with a clean Markdown comparison table summarizing:
-* Source Component
-* Target Component
-* Port / Protocol / API Ingress
-* Security Boundary / Trust Zone / Access Key
-* Operational Significance / Flow Description
+- Source Component
+- Target Component
+- Port / Protocol / API Ingress
+- Security Boundary / Trust Zone / Access Key
+- Operational Significance / Flow Description

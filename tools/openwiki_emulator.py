@@ -68,7 +68,7 @@ sources:
     description: "Master platform index."
 topics: ["openwiki", "skeleton", "bda", "inventory", "ssot"]
 description: "Authoritative inventory ranking, planned page tree, and evidence briefs for BDA SSoT."
-resource: "{(target_dir / '_skeleton.md').as_uri()}"
+resource: "{(target_dir / "_skeleton.md").as_uri()}"
 ---
 # OpenWiki Documentation Skeleton & BDA Subsystem Index
 
@@ -796,7 +796,14 @@ sequenceDiagram
             },
             "governance/governance-and-lineage.md": {
                 "title": "Governance, Catalog & Lineage Matrix: OpenMetadata & OpenLineage",
-                "topics": ["openwiki", "governance", "openmetadata", "openlineage", "odcs", "iso19115"],
+                "topics": [
+                    "openwiki",
+                    "governance",
+                    "openmetadata",
+                    "openlineage",
+                    "odcs",
+                    "iso19115",
+                ],
                 "description": desc_gov,
                 "content": """
 # Governance, Catalog & Lineage Matrix: OpenMetadata & OpenLineage
@@ -1220,12 +1227,8 @@ def cmd_update(target_dir: pathlib.Path = OPENWIKI_DIR):
     """Compile recent git status and run full initialization."""
     print("[OpenWiki Emulator] Compiling recent Git status into evidence blocks...")
     try:
-        diff_output = subprocess.check_output(
-            ["git", "status", "--porcelain"], text=True
-        )
-        print(
-            f"[Git Status]:\n{diff_output if diff_output.strip() else 'No uncommitted changes.'}"
-        )
+        diff_output = subprocess.check_output(["git", "status", "--porcelain"], text=True)
+        print(f"[Git Status]:\n{diff_output if diff_output.strip() else 'No uncommitted changes.'}")
     except Exception as e:
         print(f"[Git Status Warning]: {e}")
     cmd_init(target_dir)
@@ -1251,7 +1254,9 @@ def cmd_search(query: str, target_dir: pathlib.Path = OPENWIKI_DIR):
                     if query.lower() in searchable.lower():
                         results.append(
                             (
-                                md_file.relative_to(REPO_ROOT) if REPO_ROOT in md_file.parents else md_file,
+                                md_file.relative_to(REPO_ROOT)
+                                if REPO_ROOT in md_file.parents
+                                else md_file,
                                 meta.get("title"),
                                 meta.get("description"),
                             )
@@ -1279,81 +1284,288 @@ def cmd_export_graph(timestamp: str = None, target_dir: pathlib.Path = OPENWIKI_
         f"{graph_path} with timestamp {timestamp}..."
     )
 
-    nodes_json = json.dumps([
-        {"id": 1, "label": "Quickstart & Map", "group": "navigation", "title": "Master navigation map", "x": 100, "y": 100},
-        {"id": 2, "label": "Proxmox VE Hypervisor", "group": "infra", "title": "Bare-metal KVM virtualization", "x": 200, "y": 250},
-        {"id": 3, "label": "RKE2 Kubernetes", "group": "infra", "title": "FIPS-compliant K8s cluster", "x": 350, "y": 250},
-        {"id": 4, "label": "Ceph SDS / CSI", "group": "infra", "title": "Distributed block & file storage", "x": 200, "y": 380},
-        {"id": 5, "label": "MinIO / Ceph S3", "group": "storage", "title": "S3-compatible object store", "x": 380, "y": 380},
-        {"id": 6, "label": "Apache Iceberg", "group": "storage", "title": "ACID open table format", "x": 550, "y": 380},
-        {"id": 24, "label": "Delta Lake", "group": "storage", "title": "ACID open table format", "x": 670, "y": 380},
-        {"id": 21, "label": "Apache Polaris Catalog", "group": "storage", "title": "Multi-engine Iceberg REST catalog", "x": 550, "y": 250},
-        {"id": 22, "label": "DuckDB vss Extension", "group": "compute", "title": "In-process vector similarity search on fixed-size ARRAY columns", "x": 750, "y": 500},
-        {"id": 29, "label": "PostgreSQL pgvector", "group": "storage", "title": "Persistent HNSW operational vector similarity search", "x": 870, "y": 500},
-        {"id": 23, "label": "OpenTelemetry Collector", "group": "orchestration", "title": "Unified OTLP traces, metrics, logs", "x": 650, "y": 250},
-        {"id": 25, "label": "Prometheus", "group": "orchestration", "title": "Time-series metrics store", "x": 650, "y": 380},
-        {"id": 26, "label": "Grafana Tempo", "group": "orchestration", "title": "Distributed tracing store", "x": 770, "y": 250},
-        {"id": 27, "label": "Grafana Loki", "group": "orchestration", "title": "Log aggregation store", "x": 770, "y": 380},
-        {"id": 28, "label": "Grafana Dashboards", "group": "analytics", "title": "Unified visualization dashboards", "x": 900, "y": 100},
-        {"id": 7, "label": "Apache NiFi", "group": "ingestion", "title": "Visual data flow routing", "x": 200, "y": 100},
-        {"id": 8, "label": "Apache Kafka", "group": "ingestion", "title": "Distributed event streaming bus", "x": 350, "y": 100},
-        {"id": 9, "label": "Lakehouse Writer", "group": "ingestion", "title": "Spark / Iceberg commit writer", "x": 500, "y": 100},
-        {"id": 10, "label": "Apache Airflow", "group": "orchestration", "title": "DAG pipeline orchestrator", "x": 650, "y": 100},
-        {"id": 11, "label": "Trino SQL Engine", "group": "compute", "title": "Distributed SQL query engine", "x": 750, "y": 250},
-        {"id": 12, "label": "Apache Spark", "group": "compute", "title": "Large-scale batch & streaming ETL", "x": 600, "y": 250},
-        {"id": 13, "label": "DuckDB Analytics", "group": "compute", "title": "Embedded fast OLAP analytics", "x": 750, "y": 380},
-        {"id": 14, "label": "OpenMetadata Catalog", "group": "governance", "title": "Centralized metadata catalog", "x": 550, "y": 500},
-        {"id": 15, "label": "OpenLineage Standard", "group": "governance", "title": "Column-level operational lineage", "x": 700, "y": 500},
-        {"id": 16, "label": "Keycloak IAM", "group": "security", "title": "Unified OIDC/OAuth2/MFA", "x": 200, "y": 500},
-        {"id": 17, "label": "Apache APISIX Gateway", "group": "security", "title": "Perimeter API gateway", "x": 380, "y": 500},
-        {"id": 18, "label": "Apache Superset BI", "group": "analytics", "title": "Spatial BI & deck.gl analytics", "x": 900, "y": 250},
-        {"id": 19, "label": "MLflow Registry", "group": "analytics", "title": "ML model registry & tracking", "x": 900, "y": 380},
-        {"id": 20, "label": "Ray / Kubeflow", "group": "analytics", "title": "Distributed AI model training", "x": 900, "y": 500},
-    ])
+    nodes_json = json.dumps(
+        [
+            {
+                "id": 1,
+                "label": "Quickstart & Map",
+                "group": "navigation",
+                "title": "Master navigation map",
+                "x": 100,
+                "y": 100,
+            },
+            {
+                "id": 2,
+                "label": "Proxmox VE Hypervisor",
+                "group": "infra",
+                "title": "Bare-metal KVM virtualization",
+                "x": 200,
+                "y": 250,
+            },
+            {
+                "id": 3,
+                "label": "RKE2 Kubernetes",
+                "group": "infra",
+                "title": "FIPS-compliant K8s cluster",
+                "x": 350,
+                "y": 250,
+            },
+            {
+                "id": 4,
+                "label": "Ceph SDS / CSI",
+                "group": "infra",
+                "title": "Distributed block & file storage",
+                "x": 200,
+                "y": 380,
+            },
+            {
+                "id": 5,
+                "label": "MinIO / Ceph S3",
+                "group": "storage",
+                "title": "S3-compatible object store",
+                "x": 380,
+                "y": 380,
+            },
+            {
+                "id": 6,
+                "label": "Apache Iceberg",
+                "group": "storage",
+                "title": "ACID open table format",
+                "x": 550,
+                "y": 380,
+            },
+            {
+                "id": 24,
+                "label": "Delta Lake",
+                "group": "storage",
+                "title": "ACID open table format",
+                "x": 670,
+                "y": 380,
+            },
+            {
+                "id": 21,
+                "label": "Apache Polaris Catalog",
+                "group": "storage",
+                "title": "Multi-engine Iceberg REST catalog",
+                "x": 550,
+                "y": 250,
+            },
+            {
+                "id": 22,
+                "label": "DuckDB vss Extension",
+                "group": "compute",
+                "title": "In-process vector similarity search on fixed-size ARRAY columns",
+                "x": 750,
+                "y": 500,
+            },
+            {
+                "id": 29,
+                "label": "PostgreSQL pgvector",
+                "group": "storage",
+                "title": "Persistent HNSW operational vector similarity search",
+                "x": 870,
+                "y": 500,
+            },
+            {
+                "id": 23,
+                "label": "OpenTelemetry Collector",
+                "group": "orchestration",
+                "title": "Unified OTLP traces, metrics, logs",
+                "x": 650,
+                "y": 250,
+            },
+            {
+                "id": 25,
+                "label": "Prometheus",
+                "group": "orchestration",
+                "title": "Time-series metrics store",
+                "x": 650,
+                "y": 380,
+            },
+            {
+                "id": 26,
+                "label": "Grafana Tempo",
+                "group": "orchestration",
+                "title": "Distributed tracing store",
+                "x": 770,
+                "y": 250,
+            },
+            {
+                "id": 27,
+                "label": "Grafana Loki",
+                "group": "orchestration",
+                "title": "Log aggregation store",
+                "x": 770,
+                "y": 380,
+            },
+            {
+                "id": 28,
+                "label": "Grafana Dashboards",
+                "group": "analytics",
+                "title": "Unified visualization dashboards",
+                "x": 900,
+                "y": 100,
+            },
+            {
+                "id": 7,
+                "label": "Apache NiFi",
+                "group": "ingestion",
+                "title": "Visual data flow routing",
+                "x": 200,
+                "y": 100,
+            },
+            {
+                "id": 8,
+                "label": "Apache Kafka",
+                "group": "ingestion",
+                "title": "Distributed event streaming bus",
+                "x": 350,
+                "y": 100,
+            },
+            {
+                "id": 9,
+                "label": "Lakehouse Writer",
+                "group": "ingestion",
+                "title": "Spark / Iceberg commit writer",
+                "x": 500,
+                "y": 100,
+            },
+            {
+                "id": 10,
+                "label": "Apache Airflow",
+                "group": "orchestration",
+                "title": "DAG pipeline orchestrator",
+                "x": 650,
+                "y": 100,
+            },
+            {
+                "id": 11,
+                "label": "Trino SQL Engine",
+                "group": "compute",
+                "title": "Distributed SQL query engine",
+                "x": 750,
+                "y": 250,
+            },
+            {
+                "id": 12,
+                "label": "Apache Spark",
+                "group": "compute",
+                "title": "Large-scale batch & streaming ETL",
+                "x": 600,
+                "y": 250,
+            },
+            {
+                "id": 13,
+                "label": "DuckDB Analytics",
+                "group": "compute",
+                "title": "Embedded fast OLAP analytics",
+                "x": 750,
+                "y": 380,
+            },
+            {
+                "id": 14,
+                "label": "OpenMetadata Catalog",
+                "group": "governance",
+                "title": "Centralized metadata catalog",
+                "x": 550,
+                "y": 500,
+            },
+            {
+                "id": 15,
+                "label": "OpenLineage Standard",
+                "group": "governance",
+                "title": "Column-level operational lineage",
+                "x": 700,
+                "y": 500,
+            },
+            {
+                "id": 16,
+                "label": "Keycloak IAM",
+                "group": "security",
+                "title": "Unified OIDC/OAuth2/MFA",
+                "x": 200,
+                "y": 500,
+            },
+            {
+                "id": 17,
+                "label": "Apache APISIX Gateway",
+                "group": "security",
+                "title": "Perimeter API gateway",
+                "x": 380,
+                "y": 500,
+            },
+            {
+                "id": 18,
+                "label": "Apache Superset BI",
+                "group": "analytics",
+                "title": "Spatial BI & deck.gl analytics",
+                "x": 900,
+                "y": 250,
+            },
+            {
+                "id": 19,
+                "label": "MLflow Registry",
+                "group": "analytics",
+                "title": "ML model registry & tracking",
+                "x": 900,
+                "y": 380,
+            },
+            {
+                "id": 20,
+                "label": "Ray / Kubeflow",
+                "group": "analytics",
+                "title": "Distributed AI model training",
+                "x": 900,
+                "y": 500,
+            },
+        ]
+    )
 
-    edges_json = json.dumps([
-        {"from": 2, "to": 3, "label": "hosts K8s"},
-        {"from": 2, "to": 4, "label": "manages storage"},
-        {"from": 3, "to": 4, "label": "attaches PVCs"},
-        {"from": 3, "to": 5, "label": "hosts S3 pods"},
-        {"from": 5, "to": 6, "label": "stores Iceberg/Parquet"},
-        {"from": 7, "to": 8, "label": "publishes events"},
-        {"from": 8, "to": 9, "label": "streams to writer"},
-        {"from": 9, "to": 5, "label": "commits Parquet"},
-        {"from": 10, "to": 9, "label": "orchestrates commits"},
-        {"from": 11, "to": 6, "label": "queries in place"},
-        {"from": 12, "to": 6, "label": "processes batch"},
-        {"from": 13, "to": 6, "label": "embedded query"},
-        {"from": 14, "to": 6, "label": "crawls schema"},
-        {"from": 15, "to": 14, "label": "pushes lineage"},
-        {"from": 16, "to": 17, "label": "validates JWT"},
-        {"from": 17, "to": 18, "label": "HTTPS / mTLS"},
-        {"from": 17, "to": 11, "label": "HTTPS / mTLS"},
-        {"from": 17, "to": 14, "label": "HTTPS / mTLS"},
-        {"from": 11, "to": 18, "label": "SQL queries"},
-        {"from": 12, "to": 19, "label": "registers models"},
-        {"from": 20, "to": 19, "label": "trains & tracks"},
-        {"from": 5, "to": 24, "label": "stores Delta tables"},
-        {"from": 12, "to": 24, "label": "processes Delta batch"},
-        {"from": 21, "to": 6, "label": "manages catalog"},
-        {"from": 11, "to": 21, "label": "REST catalog API"},
-        {"from": 12, "to": 21, "label": "REST catalog API"},
-        {"from": 13, "to": 21, "label": "REST catalog API"},
-        {"from": 14, "to": 22, "label": "indexes Parquet vectors"},
-        {"from": 14, "to": 29, "label": "stores operational vectors"},
-        {"from": 13, "to": 22, "label": "executes vss queries"},
-        {"from": 17, "to": 29, "label": "API vector lookups"},
-        {"from": 10, "to": 23, "label": "StatsD metrics & filelog logs"},
-        {"from": 12, "to": 23, "label": "OTLP traces/metrics & filelog logs"},
-        {"from": 17, "to": 23, "label": "OTLP traces & filelog logs"},
-        {"from": 25, "to": 17, "label": "scrapes Prometheus metrics"},
-        {"from": 23, "to": 25, "label": "exports metrics"},
-        {"from": 23, "to": 26, "label": "exports traces"},
-        {"from": 23, "to": 27, "label": "exports logs"},
-        {"from": 25, "to": 28, "label": "visualize metrics"},
-        {"from": 26, "to": 28, "label": "visualize traces"},
-        {"from": 27, "to": 28, "label": "visualize logs"},
-    ])
+    edges_json = json.dumps(
+        [
+            {"from": 2, "to": 3, "label": "hosts K8s"},
+            {"from": 2, "to": 4, "label": "manages storage"},
+            {"from": 3, "to": 4, "label": "attaches PVCs"},
+            {"from": 3, "to": 5, "label": "hosts S3 pods"},
+            {"from": 5, "to": 6, "label": "stores Iceberg/Parquet"},
+            {"from": 7, "to": 8, "label": "publishes events"},
+            {"from": 8, "to": 9, "label": "streams to writer"},
+            {"from": 9, "to": 5, "label": "commits Parquet"},
+            {"from": 10, "to": 9, "label": "orchestrates commits"},
+            {"from": 11, "to": 6, "label": "queries in place"},
+            {"from": 12, "to": 6, "label": "processes batch"},
+            {"from": 13, "to": 6, "label": "embedded query"},
+            {"from": 14, "to": 6, "label": "crawls schema"},
+            {"from": 15, "to": 14, "label": "pushes lineage"},
+            {"from": 16, "to": 17, "label": "validates JWT"},
+            {"from": 17, "to": 18, "label": "HTTPS / mTLS"},
+            {"from": 17, "to": 11, "label": "HTTPS / mTLS"},
+            {"from": 17, "to": 14, "label": "HTTPS / mTLS"},
+            {"from": 11, "to": 18, "label": "SQL queries"},
+            {"from": 12, "to": 19, "label": "registers models"},
+            {"from": 20, "to": 19, "label": "trains & tracks"},
+            {"from": 5, "to": 24, "label": "stores Delta tables"},
+            {"from": 12, "to": 24, "label": "processes Delta batch"},
+            {"from": 21, "to": 6, "label": "manages catalog"},
+            {"from": 11, "to": 21, "label": "REST catalog API"},
+            {"from": 12, "to": 21, "label": "REST catalog API"},
+            {"from": 13, "to": 21, "label": "REST catalog API"},
+            {"from": 14, "to": 22, "label": "indexes Parquet vectors"},
+            {"from": 14, "to": 29, "label": "stores operational vectors"},
+            {"from": 13, "to": 22, "label": "executes vss queries"},
+            {"from": 17, "to": 29, "label": "API vector lookups"},
+            {"from": 10, "to": 23, "label": "StatsD metrics & filelog logs"},
+            {"from": 12, "to": 23, "label": "OTLP traces/metrics & filelog logs"},
+            {"from": 17, "to": 23, "label": "OTLP traces & filelog logs"},
+            {"from": 25, "to": 17, "label": "scrapes Prometheus metrics"},
+            {"from": 23, "to": 25, "label": "exports metrics"},
+            {"from": 23, "to": 26, "label": "exports traces"},
+            {"from": 23, "to": 27, "label": "exports logs"},
+            {"from": 25, "to": 28, "label": "visualize metrics"},
+            {"from": 26, "to": 28, "label": "visualize traces"},
+            {"from": 27, "to": 28, "label": "visualize logs"},
+        ]
+    )
 
     b1 = '<span class="badge">'
     b2 = "</span>"
@@ -1687,7 +1899,9 @@ def process_markdown_file(filepath: pathlib.Path):
                 i += 1
 
         if modified:
-            temp_fd, temp_path = tempfile.mkstemp(dir=str(filepath.parent), suffix=".tmp", text=True)
+            temp_fd, temp_path = tempfile.mkstemp(
+                dir=str(filepath.parent), suffix=".tmp", text=True
+            )
             try:
                 with os.fdopen(temp_fd, "w", encoding="utf-8") as f:
                     f.write("\n".join(output_lines) + "\n")
@@ -1816,11 +2030,7 @@ def validate_mermaid_diagram(code: str) -> tuple[bool, str]:
 
     if matched_type == "sequenceDiagram":
         for idx, line in enumerate(lines):
-            if (
-                line.startswith("%%")
-                or line == "sequenceDiagram"
-                or line.startswith("autonumber")
-            ):
+            if line.startswith("%%") or line == "sequenceDiagram" or line.startswith("autonumber"):
                 continue
             if "->" in line or "-->" in line or "-)" in line or "--)" in line:
                 pass
@@ -1848,13 +2058,7 @@ def validate_mermaid_diagram(code: str) -> tuple[bool, str]:
         for line in lines:
             if line == "erDiagram" or line.startswith("%%"):
                 continue
-            if (
-                "||" in line
-                or "o{" in line
-                or "}o" in line
-                or "}|" in line
-                or "|{" in line
-            ):
+            if "||" in line or "o{" in line or "}o" in line or "}|" in line or "|{" in line:
                 has_rel_or_block = True
             if "{" in line or "}" in line:
                 has_rel_or_block = True

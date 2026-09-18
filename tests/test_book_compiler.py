@@ -27,7 +27,11 @@ def test_compile_book_script_execution() -> None:
     assert script_path.exists(), "compile-book.py script does not exist"
 
     uv_bin = shutil.which("uv")
-    cmd = [uv_bin, "run", "python", str(script_path), "--dry-run"] if uv_bin else [sys.executable, str(script_path), "--dry-run"]
+    cmd = (
+        [uv_bin, "run", "python", str(script_path), "--dry-run"]
+        if uv_bin
+        else [sys.executable, str(script_path), "--dry-run"]
+    )
 
     result = subprocess.run(
         cmd,
@@ -68,8 +72,7 @@ def test_quarantine_workflow_routing_table() -> None:
         (
             row
             for row in quarantine_table
-            if "Human Reviewer" in row["source"]
-            and "Apache NiFi Ingest Gate" in row["target"]
+            if "Human Reviewer" in row["source"] and "Apache NiFi Ingest Gate" in row["target"]
         ),
         None,
     )

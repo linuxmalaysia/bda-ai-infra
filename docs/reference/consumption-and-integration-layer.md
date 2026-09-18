@@ -356,6 +356,7 @@ DB_DSN = os.getenv("DATABASE_URL")
 if not DB_DSN:
     raise RuntimeError("DATABASE_URL environment variable must be set in deployment secret store.")
 
+
 @mcp.on_startup()
 async def startup():
     """Initialize database connection pool and local embedding model on startup."""
@@ -364,8 +365,13 @@ async def startup():
     db_pool = await asyncpg.create_pool(dsn=DB_DSN, min_size=2, max_size=10)
 
     logger.info(f"Loading local SentenceTransformer model from {LOCAL_MODEL_PATH}...")
-    embedding_model = SentenceTransformer(LOCAL_MODEL_PATH, device="cuda" if os.path.exists("/dev/nvidia0") else "cpu", local_files_only=True)
+    embedding_model = SentenceTransformer(
+        LOCAL_MODEL_PATH,
+        device="cuda" if os.path.exists("/dev/nvidia0") else "cpu",
+        local_files_only=True,
+    )
     logger.info("MCP Server successfully initialized.")
+
 
 @mcp.on_shutdown()
 async def shutdown():
@@ -375,13 +381,14 @@ async def shutdown():
         await db_pool.close()
         logger.info("PostgreSQL Connection Pool closed.")
 
+
 @mcp.tool()
 async def semantic_spatial_search(
     query_text: str,
     longitude: float,
     latitude: float,
     radius_meters: float = 5000.0,
-    limit: int = 5
+    limit: int = 5,
 ) -> str:
     """Executes a hybrid spatial (PostGIS) and semantic vector (pgvector) query with strict session context injection.
 
@@ -434,20 +441,25 @@ async def semantic_spatial_search(
             await conn.execute("SELECT set_config('app.current_user_role', $1, true);", user_role)
             await conn.execute("SELECT set_config('app.current_tenant_id', $1, true);", tenant_id)
 
-            records = await conn.fetch(sql_query, longitude, latitude, embedding_str, radius_meters, limit)
+            records = await conn.fetch(
+                sql_query, longitude, latitude, embedding_str, radius_meters, limit
+            )
 
         results = []
         for r in records:
-            results.append({
-                "uuid": str(r["uuid"]),
-                "source_origin": r["source_origin"],
-                "content": r["payload_content"],
-                "location_wkt": r["location_wkt"],
-                "distance_meters": round(r["distance_meters"], 2),
-                "similarity_score": round(r["cosine_similarity"], 4)
-            })
+            results.append(
+                {
+                    "uuid": str(r["uuid"]),
+                    "source_origin": r["source_origin"],
+                    "content": r["payload_content"],
+                    "location_wkt": r["location_wkt"],
+                    "distance_meters": round(r["distance_meters"], 2),
+                    "similarity_score": round(r["cosine_similarity"], 4),
+                }
+            )
 
         return json.dumps(results, indent=2)
+
 
 if __name__ == "__main__":
     mcp.run()
@@ -812,13 +824,14 @@ License: Apache-2.0
 import pgpy
 from nifiapi.flowfiletransform import FlowFileTransform, FlowFileTransformResult
 
+
 class PGPEncryptAndPackage(FlowFileTransform):
     class Java:
-        implements = ['org.apache.nifi.python.processor.FlowFileTransform']
+        implements = ["org.apache.nifi.python.processor.FlowFileTransform"]
 
     class ProcessorDetails:
-        version = '2.0.0'
-        description = 'Encrypts extracted FlowFile CSV data using enterprise PGP public key before SFTP egress.'
+        version = "2.0.0"
+        description = "Encrypts extracted FlowFile CSV data using enterprise PGP public key before SFTP egress."
 
     PGP_PUBLIC_KEY_PATH = "/var/private/keys/partner_public_key.asc"
 
@@ -830,19 +843,19 @@ class PGPEncryptAndPackage(FlowFileTransform):
         message = pgpy.PGPMessage.new(raw_data)
         encrypted_message = key.encrypt(message)
 
-        encrypted_bytes = str(encrypted_message).encode('utf-8')
+        encrypted_bytes = str(encrypted_message).encode("utf-8")
 
         filename = flowfile.getAttribute("filename") or "extract.csv"
         encrypted_filename = f"{filename}.pgp"
 
         return FlowFileTransformResult(
-            relationship='success',
+            relationship="success",
             contents=encrypted_bytes,
             attributes={
-                'filename': encrypted_filename,
-                'mime.type': 'application/pgp-encrypted',
-                'pgp.encrypted': 'true'
-            }
+                "filename": encrypted_filename,
+                "mime.type": "application/pgp-encrypted",
+                "pgp.encrypted": "true",
+            },
         )
 ```
 

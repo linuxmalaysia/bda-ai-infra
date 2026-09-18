@@ -28,8 +28,7 @@ def get_all_markdown_files() -> List[Path]:
     md_files: List[Path] = []
     for root, dirs, files in os.walk(REPO_ROOT):
         dirs[:] = [
-            d for d in dirs
-            if (not d.startswith(".") or d == ".agents") and d not in EXCLUDED_DIRS
+            d for d in dirs if (not d.startswith(".") or d == ".agents") and d not in EXCLUDED_DIRS
         ]
         for file in files:
             if file.endswith(".md"):
@@ -263,9 +262,9 @@ def test_zero_link_decay(md_path: Path) -> None:
         if fragment and target_path.is_file() and target_path.suffix == ".md":
             headings: List[str] = _get_markdown_headings(target_path)
             rel_target: Path = target_path.relative_to(REPO_ROOT)
-            assert (
-                fragment in headings or fragment.lower() in headings
-            ), f"Heading anchor '{fragment}' missing in {rel_target} from {rel_file}"
+            assert fragment in headings or fragment.lower() in headings, (
+                f"Heading anchor '{fragment}' missing in {rel_target} from {rel_file}"
+            )
 
 
 @pytest.mark.parametrize(
@@ -401,30 +400,26 @@ def test_tier_0_cryptographic_signature_contract_mutations() -> None:
 
     def secret_to_public(sk):
         h = hash_sha512(sk)
-        a = 2 ** (b_len - 2) + sum(
-            2**i * (h[i // 8] >> (i % 8) & 1) for i in range(3, b_len - 2)
-        )
+        a = 2 ** (b_len - 2) + sum(2**i * (h[i // 8] >> (i % 8) & 1) for i in range(3, b_len - 2))
         return scalarmult(b_point, a)
 
     def sign_ed25519(m, sk, pk):
         h = hash_sha512(sk)
-        a = 2 ** (b_len - 2) + sum(
-            2**i * (h[i // 8] >> (i % 8) & 1) for i in range(3, b_len - 2)
-        )
+        a = 2 ** (b_len - 2) + sum(2**i * (h[i // 8] >> (i % 8) & 1) for i in range(3, b_len - 2))
         r = sum(
             2**i * (hash_sha512(h[b_len // 8 :] + m)[i // 8] >> (i % 8) & 1)
             for i in range(0, 2 * b_len)
         )
         R = scalarmult(b_point, r)
 
-        encoded_r = sum(
-            2**i * (R[1] >> i & 1) for i in range(0, b_len - 1)
-        ) + 2 ** (b_len - 1) * (R[0] & 1)
+        encoded_r = sum(2**i * (R[1] >> i & 1) for i in range(0, b_len - 1)) + 2 ** (b_len - 1) * (
+            R[0] & 1
+        )
         encoded_r_bytes = encoded_r.to_bytes(32, "little")
 
-        encoded_a = sum(
-            2**i * (pk[1] >> i & 1) for i in range(0, b_len - 1)
-        ) + 2 ** (b_len - 1) * (pk[0] & 1)
+        encoded_a = sum(2**i * (pk[1] >> i & 1) for i in range(0, b_len - 1)) + 2 ** (b_len - 1) * (
+            pk[0] & 1
+        )
         encoded_a_bytes = encoded_a.to_bytes(32, "little")
 
         s_val = (
@@ -494,21 +489,25 @@ def test_tier_0_cryptographic_signature_contract_mutations() -> None:
 
     # Verify signature over valid canonical payload using resolved key
     raw_sig = bytes.fromhex(sig_hex)
-    assert verify_signature(
-        canonical_bytes, raw_sig, resolved_pk
-    ), "Tier 0 valid Ed25519 signature verification failed"
+    assert verify_signature(canonical_bytes, raw_sig, resolved_pk), (
+        "Tier 0 valid Ed25519 signature verification failed"
+    )
 
     # Verify RFC 8785 canonicalization with non-ASCII test vector
     non_ascii_payload = dict(canonical_payload)
     non_ascii_payload["human_author_id"] = "usr_domain_specialist_8842_Kuala_Lumpur_—_Taman_Negara"
     non_ascii_bytes = rfc8785_canonical_encode(non_ascii_payload)
-    assert "—".encode("utf-8") in non_ascii_bytes, "RFC 8785 canonical bytes must contain raw UTF-8 non-ASCII characters"
-    assert b"\\u2014" not in non_ascii_bytes, "RFC 8785 canonical bytes must not contain escaped Unicode"
+    assert "—".encode("utf-8") in non_ascii_bytes, (
+        "RFC 8785 canonical bytes must contain raw UTF-8 non-ASCII characters"
+    )
+    assert b"\\u2014" not in non_ascii_bytes, (
+        "RFC 8785 canonical bytes must not contain escaped Unicode"
+    )
 
     non_ascii_sig = sign_ed25519(non_ascii_bytes, sk_secops, pk_secops)
-    assert verify_signature(
-        non_ascii_bytes, non_ascii_sig, resolved_pk
-    ), "Ed25519 verification failed for non-ASCII RFC 8785 canonical bytes"
+    assert verify_signature(non_ascii_bytes, non_ascii_sig, resolved_pk), (
+        "Ed25519 verification failed for non-ASCII RFC 8785 canonical bytes"
+    )
 
     # Assert that mutating ANY bound field invalidates the signature
     for mutated_field in bound_fields:
@@ -516,6 +515,6 @@ def test_tier_0_cryptographic_signature_contract_mutations() -> None:
         mutated_payload[mutated_field] = mutated_payload[mutated_field] + "_mutated"
         mutated_bytes = rfc8785_canonical_encode(mutated_payload)
 
-        assert not verify_signature(
-            mutated_bytes, raw_sig, resolved_pk
-        ), f"Signature verification unexpectedly succeeded for mutated field: {mutated_field}"
+        assert not verify_signature(mutated_bytes, raw_sig, resolved_pk), (
+            f"Signature verification unexpectedly succeeded for mutated field: {mutated_field}"
+        )

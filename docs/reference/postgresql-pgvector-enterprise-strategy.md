@@ -622,17 +622,17 @@ from langchain_text_splitters import MarkdownTextSplitter
 # 1. Initialize pre-staged local embedding model (Zero WAN Egress & Local Cache Only)
 # Staged model directory integrity verified via SHA-256 checksum manifest prior to load
 LOCAL_MODEL_DIR = os.getenv("EMBEDDING_MODEL_PATH", "/opt/models/WhereIsAI/UAE-Large-V1")
-model = SentenceTransformer(LOCAL_MODEL_DIR, device='cuda', local_files_only=True)
+model = SentenceTransformer(LOCAL_MODEL_DIR, device="cuda", local_files_only=True)
 
 # 2. Connect to Master PostgreSQL DB using verified TLS and Secret Manager credentials
-db_password = os.getenv("DB_PASSWORD") # Loaded from Kubernetes Secret
+db_password = os.getenv("DB_PASSWORD")  # Loaded from Kubernetes Secret
 conn = psycopg2.connect(
     host=os.getenv("DB_HOST", "bda-pgvector-master"),
     dbname=os.getenv("DB_NAME", "bdadb"),
     user=os.getenv("DB_USER", "vector"),
     password=db_password,
     sslmode="verify-full",
-    sslrootcert="/etc/ssl/certs/pg-ca.crt"
+    sslrootcert="/etc/ssl/certs/pg-ca.crt",
 )
 register_vector(conn)
 cur = conn.cursor()
@@ -642,8 +642,9 @@ text_splitter = MarkdownTextSplitter(chunk_size=1000, chunk_overlap=100)
 chunks = text_splitter.split_text(raw_document_markdown)
 
 for idx, chunk in enumerate(chunks):
-    embedding = model.encode(chunk, device='cuda').tolist()
-    cur.execute("""
+    embedding = model.encode(chunk, device="cuda").tolist()
+    cur.execute(
+        """
         INSERT INTO enterprise_knowledge_base
         (document_uri, chunk_index, chunk_content, embedding)
         VALUES (%s, %s, %s, %s)
@@ -651,7 +652,9 @@ for idx, chunk in enumerate(chunks):
             chunk_content = EXCLUDED.chunk_content,
             embedding = EXCLUDED.embedding,
             created_at = CURRENT_TIMESTAMP
-    """, ("s3://bda-docs/ref-01.md", idx, chunk, embedding))
+    """,
+        ("s3://bda-docs/ref-01.md", idx, chunk, embedding),
+    )
 
 conn.commit()
 ```

@@ -38,7 +38,9 @@ def test_okf_scope_policy_positive_markdown_rule(policy_file: Path) -> None:
             ".md" in line or "markdown" in line.lower()
         ):
             # Ensure line expresses a positive rule (not prohibiting OKF on .md)
-            if not re.search(r"\b(?:prohibit|forbid|disallow|no|never)\b.*?\bOKF\b", line, re.IGNORECASE):
+            if not re.search(
+                r"\b(?:prohibit|forbid|disallow|no|never)\b.*?\bOKF\b", line, re.IGNORECASE
+            ):
                 positive_md_rule = True
                 break
 

@@ -426,13 +426,14 @@ import json
 from nifiapi.flowfiletransform import FlowFileTransform, FlowFileTransformResult
 from nifiapi.processor import ProcessorDetails
 
+
 class ChunkAndEmbedText(FlowFileTransform):
     class Java:
-        implements = ['org.apache.nifi.python.processor.FlowFileTransform']
+        implements = ["org.apache.nifi.python.processor.FlowFileTransform"]
 
     class ProcessorDetails:
-        version = '2.0.0'
-        description = 'Splits raw FlowFile text into chunks and emits JSON vector payload.'
+        version = "2.0.0"
+        description = "Splits raw FlowFile text into chunks and emits JSON vector payload."
 
     MAX_SIZE_BYTES = 10 * 1024 * 1024  # Enforce 10MB memory safeguard threshold
 
@@ -450,24 +451,26 @@ class ChunkAndEmbedText(FlowFileTransform):
 
     def transform(self, context, flowfile):
         if flowfile.getSize() > self.MAX_SIZE_BYTES:
-            raise ValueError(f"FlowFile size exceeds maximum threshold of {self.MAX_SIZE_BYTES} bytes")
+            raise ValueError(
+                f"FlowFile size exceeds maximum threshold of {self.MAX_SIZE_BYTES} bytes"
+            )
 
         raw_bytes = flowfile.getContentsAsBytes()
-        text_content = raw_bytes.decode('utf-8')
+        text_content = raw_bytes.decode("utf-8")
 
         # Apply text splitting logic and emit structured payload
         chunks = self.split_text(text_content)
         payload = {
             "source": flowfile.getAttribute("filename") or "unknown",
             "chunks": chunks,
-            "chunk_count": len(chunks)
+            "chunk_count": len(chunks),
         }
 
-        output_bytes = json.dumps(payload).encode('utf-8')
+        output_bytes = json.dumps(payload).encode("utf-8")
         return FlowFileTransformResult(
-            relationship='success',
+            relationship="success",
             contents=output_bytes,
-            attributes={'chunk.count': str(len(chunks)), 'mime.type': 'application/json'}
+            attributes={"chunk.count": str(len(chunks)), "mime.type": "application/json"},
         )
 ```
 

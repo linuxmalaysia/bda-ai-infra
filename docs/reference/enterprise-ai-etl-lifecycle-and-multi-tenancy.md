@@ -247,6 +247,7 @@ import json
 import tiktoken
 from nifiapi.flowfiletransform import FlowFileTransform, FlowFileTransformResult
 
+
 class TokenAwareChunker(FlowFileTransform):
     def __init__(self):
         self.tokenizer = tiktoken.get_encoding("cl100k_base")
@@ -265,7 +266,7 @@ class TokenAwareChunker(FlowFileTransform):
         return chunks
 
     def transform(self, context, flowfile):
-        content = flowfile.getContentsAsBytes().decode('utf-8')
+        content = flowfile.getContentsAsBytes().decode("utf-8")
         metadata_str = flowfile.getAttribute("custom.metadata") or "{}"
         parent_meta = json.loads(metadata_str)
 
@@ -281,15 +282,15 @@ class TokenAwareChunker(FlowFileTransform):
                     "page_number": flowfile.getAttribute("page.number") or 1,
                     "author": parent_meta.get("author", "unknown"),
                     "creation_date": parent_meta.get("creation_date", ""),
-                    "token_count": len(self.tokenizer.encode(chunk_text))
-                }
+                    "token_count": len(self.tokenizer.encode(chunk_text)),
+                },
             }
             enriched_records.append(record)
 
         return FlowFileTransformResult(
-            relationship='success',
-            contents=json.dumps(enriched_records).encode('utf-8'),
-            attributes={'mime.type': 'application/json'}
+            relationship="success",
+            contents=json.dumps(enriched_records).encode("utf-8"),
+            attributes={"mime.type": "application/json"},
         )
 ```
 
@@ -458,10 +459,7 @@ When an AI agent or external client queries the infrastructure, the **MCP Server
 # Session Context Injection in FastMCP Tool Invocation
 @mcp.tool()
 async def secure_tenant_vector_search(
-    query_text: str,
-    longitude: float,
-    latitude: float,
-    radius_meters: float = 5000.0
+    query_text: str, longitude: float, latitude: float, radius_meters: float = 5000.0
 ) -> str:
     """Executes multi-tenant hybrid search with strict session context binding."""
     # Derive identity parameters from authenticated server context rather than caller inputs
@@ -490,7 +488,9 @@ async def secure_tenant_vector_search(
                 ORDER BY semantic_embedding <=> $4::vector
                 LIMIT 5;
             """
-            records = await conn.fetch(sql, longitude, latitude, radius_meters, str(embedding_vector))
+            records = await conn.fetch(
+                sql, longitude, latitude, radius_meters, str(embedding_vector)
+            )
             return json.dumps([dict(r) for r in records])
 ```
 

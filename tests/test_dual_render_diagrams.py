@@ -12,7 +12,16 @@ from typing import List, Dict
 import pytest
 
 REPO_ROOT: Path = Path(__file__).parent.parent
-EXCLUDED_DIRS: set[str] = {"node_modules", "dist", "build", ".venv", ".git", ".pytest_cache", "_site", ".agents"}
+EXCLUDED_DIRS: set[str] = {
+    "node_modules",
+    "dist",
+    "build",
+    ".venv",
+    ".git",
+    ".pytest_cache",
+    "_site",
+    ".agents",
+}
 
 
 def get_all_markdown_files() -> List[Path]:
@@ -68,13 +77,13 @@ def extract_routing_tables(content: str) -> List[List[Dict[str, str]]]:
 
     """
     tables: List[List[Dict[str, str]]] = []
-    table_pattern = re.compile(
-        r"(\|[^\n]+\|\n\|[ :\-|]+\|\n(?:\|[^\n]+\|\n?)+)", re.MULTILINE
-    )
+    table_pattern = re.compile(r"(\|[^\n]+\|\n\|[ :\-|]+\|\n(?:\|[^\n]+\|\n?)+)", re.MULTILINE)
     for match in table_pattern.finditer(content):
         full_table = match.group(1).strip()
         header_line = full_table.splitlines()[0].lower()
-        if not any(kw in header_line for kw in ["source", "target", "ingress", "boundary", "operational"]):
+        if not any(
+            kw in header_line for kw in ["source", "target", "ingress", "boundary", "operational"]
+        ):
             continue
 
         rows_str = "\n".join(full_table.splitlines()[2:]).strip()
@@ -82,13 +91,15 @@ def extract_routing_tables(content: str) -> List[List[Dict[str, str]]]:
         for line in rows_str.splitlines():
             cols = [c.strip() for c in line.strip().strip("|").split("|")]
             if len(cols) >= 5:
-                table_records.append({
-                    "source": re.sub(r"\*\*|\*", "", cols[0]),
-                    "target": re.sub(r"\*\*|\*", "", cols[1]),
-                    "ingress": cols[2],
-                    "boundary": cols[3],
-                    "description": cols[4],
-                })
+                table_records.append(
+                    {
+                        "source": re.sub(r"\*\*|\*", "", cols[0]),
+                        "target": re.sub(r"\*\*|\*", "", cols[1]),
+                        "ingress": cols[2],
+                        "boundary": cols[3],
+                        "description": cols[4],
+                    }
+                )
         if table_records:
             tables.append(table_records)
     return tables

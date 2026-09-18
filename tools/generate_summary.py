@@ -84,11 +84,13 @@ def discover_markdown_files() -> Tuple[List[Dict[str, str]], List[Dict[str, str]
     for item in sorted(REPO_ROOT.glob("*.md")):
         if item.name not in seen_root_paths and item.name != "index.md":
             title, _ = parse_frontmatter(item)
-            root_files.append({
-                "title": title,
-                "path": item.name,
-                "url": f"/{item.name.replace('.md', '.html')}",
-            })
+            root_files.append(
+                {
+                    "title": title,
+                    "path": item.name,
+                    "url": f"/{item.name.replace('.md', '.html')}",
+                }
+            )
 
     if DOCS_DIR.exists():
         for root, dirs, files in os.walk(DOCS_DIR):
@@ -106,12 +108,14 @@ def discover_markdown_files() -> Tuple[List[Dict[str, str]], List[Dict[str, str]
                     else:
                         section = "General Documentation"
 
-                    docs_files.append({
-                        "title": title,
-                        "path": str(rel_path),
-                        "url": rel_url,
-                        "section": section,
-                    })
+                    docs_files.append(
+                        {
+                            "title": title,
+                            "path": str(rel_path),
+                            "url": rel_url,
+                            "section": section,
+                        }
+                    )
 
     return root_files, docs_files
 
@@ -145,21 +149,21 @@ def main() -> None:
     summary_lines: List[str] = [
         "---",
         'okf_version: "0.2"',
-        'type: reference',
+        "type: reference",
         'title: "Table of Contents & Documentation Index"',
         'description: "Auto-generated index of all documentation files in the repository."',
-        'status: active',
+        "status: active",
         'timestamp: "2026-09-06T00:00:00Z"',
         'stale_after: "2027-09-06T00:00:00Z"',
-        'generated: true',
-        'verified: true',
-        'sources:',
+        "generated: true",
+        "verified: true",
+        "sources:",
         '  - url: "https://linuxmalaysia.github.io/bda-ai-infra/SUMMARY.html"',
         '    description: "Documentation summary index."',
-        'topics:',
-        '  - index',
-        '  - summary',
-        '  - navigation',
+        "topics:",
+        "  - index",
+        "  - summary",
+        "  - navigation",
         "---",
         "",
         "# Table of Contents",

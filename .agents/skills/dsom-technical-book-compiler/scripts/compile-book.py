@@ -9,8 +9,11 @@ Protocol: Deep State of Mind (DSOM) Protocol
 License: GNU General Public License v3.0
 """
 
+import argparse
+import os
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 REPO_ROOT: Path = Path(__file__).parent.parent.parent.parent.parent
@@ -46,18 +49,34 @@ def main() -> None:
     6. Compiles ODT document using Pandoc.
     7. Compiles standalone IT Management Proposal PDF and HTML deliverables.
     """
+    parser = argparse.ArgumentParser(description="Orchestrate technical book compilation pipeline.")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Allow skipping compilation steps when external binaries (pandoc, browser) are missing.",
+    )
+    args = parser.parse_args()
+    dry_run: bool = args.dry_run or os.environ.get("DRY_RUN", "").lower() in ("1", "true", "yes")
+
     print("Executing Technical Book Compiler Workflow...")
 
     uv_bin = shutil.which("uv")
-    if not uv_bin:
+    if not uv_bin and not dry_run:
         raise RuntimeError("Required dependency 'uv' executable not found in PATH.")
-    python_cmd = [uv_bin, "run", "python"]
+    python_cmd = [uv_bin, "run", "python"] if uv_bin else [sys.executable]
 
     # 1. Build Master Markdown handbook into build/book.md
-    run_command(python_cmd + ["tools/build_project_book.py"])
+    if not dry_run:
+        run_command(python_cmd + ["tools/build_project_book.py"])
+        if not BOOK_MD.exists():
+            raise RuntimeError("Handbook source manuscript build/book.md is missing or failed to generate.")
+    else:
+        print("Dry-run mode active; skipping handbook manuscript build preparation.")
 
     # 2. Compile Standalone Interactive HTML
-    if shutil.which("pandoc") and BOOK_MD.exists():
+    pandoc_bin = shutil.which("pandoc")
+    handbook_html = REPO_ROOT / "handbook.html"
+    if pandoc_bin and BOOK_MD.exists():
         run_command([
             "pandoc",
             str(BOOK_MD),
@@ -68,11 +87,20 @@ def main() -> None:
             "-V",
             "lang=en",
         ])
+        if not dry_run and not handbook_html.exists():
+            raise RuntimeError(f"Handbook HTML output failed to generate at {handbook_html}")
+    elif dry_run:
+        print("Pandoc not found or build/book.md missing; skipping HTML build in dry-run mode.")
+    elif not BOOK_MD.exists():
+        raise RuntimeError("Handbook source manuscript build/book.md is missing.")
     else:
-        print("Pandoc not found or build/book.md missing; skipping HTML build.")
+        raise RuntimeError("Required dependency 'pandoc' not found in PATH for handbook HTML compilation.")
 
     # 3. Bake Native Vector SVGs & Inline CSS
-    run_command(python_cmd + ["tools/bake_native_svg.py"])
+    if not dry_run:
+        run_command(python_cmd + ["tools/bake_native_svg.py"])
+    else:
+        print("Dry-run mode active; skipping SVG baking preparation.")
 
     # 4. Compile Publication-Grade PDF using available browser engine
     browser_bin = (
@@ -80,7 +108,8 @@ def main() -> None:
         or shutil.which("google-chrome")
         or shutil.which("msedge")
     )
-    if browser_bin and shutil.which("pandoc"):
+    handbook_pdf = REPO_ROOT / "handbook.pdf"
+    if browser_bin and pandoc_bin:
         run_command([
             browser_bin,
             "--headless=new",
@@ -90,14 +119,19 @@ def main() -> None:
             "--print-to-pdf=handbook.pdf",
             "handbook.html",
         ])
+        if not dry_run and not handbook_pdf.exists():
+            raise RuntimeError(f"Handbook PDF output failed to generate at {handbook_pdf}")
+    elif dry_run:
+        print("Browser engine or pandoc missing; skipping PDF compilation in dry-run mode.")
     else:
-        print(
-            "Browser engine or pandoc missing; skipping PDF compilation in"
-            " dry-run environment."
+        raise RuntimeError(
+            "Required browser executable or pandoc not found in PATH for handbook PDF compilation."
         )
 
     # 5. Compile EPUB 3 Ebook & ODT Document
-    if shutil.which("pandoc") and BOOK_MD.exists():
+    handbook_epub = REPO_ROOT / "handbook.epub"
+    handbook_odt = REPO_ROOT / "handbook.odt"
+    if pandoc_bin and BOOK_MD.exists():
         run_command([
             "pandoc",
             str(BOOK_MD),
@@ -110,32 +144,64 @@ def main() -> None:
             "lang=en",
         ])
         run_command(["pandoc", str(BOOK_MD), "-o", "handbook.odt", "--toc"])
+        if not dry_run:
+            if not handbook_epub.exists():
+                raise RuntimeError(f"Handbook EPUB output failed to generate at {handbook_epub}")
+            if not handbook_odt.exists():
+                raise RuntimeError(f"Handbook ODT output failed to generate at {handbook_odt}")
+    elif dry_run:
+        print("Pandoc missing; skipping EPUB and ODT builds in dry-run mode.")
+    elif not BOOK_MD.exists():
+        raise RuntimeError("Handbook source manuscript build/book.md is missing.")
+    else:
+        raise RuntimeError("Required dependency 'pandoc' not found in PATH for EPUB/ODT compilation.")
 
     # 6. Compile Standalone IT Management Proposal HTML and PDF Deliverables
-    proposal_md = "docs/IT-MANAGEMENT-PROPOSAL.md"
-    proposal_html = "docs/IT-MANAGEMENT-PROPOSAL.html"
-    proposal_pdf = "docs/IT-MANAGEMENT-PROPOSAL.pdf"
-    if shutil.which("pandoc") and Path(proposal_md).exists():
-        run_command([
-            "pandoc",
-            proposal_md,
-            "-o",
-            proposal_html,
-            "--standalone",
-            "--toc",
-            "-V",
-            "lang=en",
-        ])
-        if browser_bin:
+    proposal_md = REPO_ROOT / "docs" / "IT-MANAGEMENT-PROPOSAL.md"
+    proposal_html = BUILD_DIR / "IT-MANAGEMENT-PROPOSAL.html"
+    proposal_pdf = BUILD_DIR / "IT-MANAGEMENT-PROPOSAL.pdf"
+
+    if not proposal_md.exists():
+        if dry_run:
+            print(f"Proposal source file missing: {proposal_md}; skipping proposal build in dry-run mode.")
+        else:
+            raise RuntimeError(f"Proposal source file missing: {proposal_md}")
+    else:
+        if pandoc_bin:
             run_command([
-                browser_bin,
-                "--headless=new",
-                "--disable-gpu",
-                "--run-all-compositor-stages-before-draw",
-                "--virtual-time-budget=8000",
-                f"--print-to-pdf={proposal_pdf}",
-                proposal_html,
+                "pandoc",
+                str(proposal_md),
+                "-o",
+                str(proposal_html),
+                "--standalone",
+                "--toc",
+                "--highlight-style=tango",
+                "-V",
+                "lang=en",
             ])
+            if not proposal_html.exists():
+                raise RuntimeError(f"Proposal HTML output failed to generate at {proposal_html}")
+
+            if browser_bin:
+                run_command([
+                    browser_bin,
+                    "--headless=new",
+                    "--disable-gpu",
+                    "--run-all-compositor-stages-before-draw",
+                    "--virtual-time-budget=8000",
+                    f"--print-to-pdf={proposal_pdf}",
+                    str(proposal_html),
+                ])
+                if not proposal_pdf.exists():
+                    raise RuntimeError(f"Proposal PDF output failed to generate at {proposal_pdf}")
+            elif dry_run:
+                print("Browser engine missing; skipping proposal PDF compilation in dry-run mode.")
+            else:
+                raise RuntimeError("Required browser executable not found in PATH for proposal PDF compilation.")
+        elif dry_run:
+            print("Pandoc missing; skipping proposal HTML/PDF compilation in dry-run mode.")
+        else:
+            raise RuntimeError("Required dependency 'pandoc' not found in PATH for proposal compilation.")
 
     # Clean up root book.md if leftover
     root_book = REPO_ROOT / "book.md"

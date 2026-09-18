@@ -4,6 +4,7 @@ Protocol: Deep State of Mind (DSOM) Protocol
 License: GNU General Public License v3.0
 """
 
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -25,8 +26,11 @@ def test_compile_book_script_execution() -> None:
     )
     assert script_path.exists(), "compile-book.py script does not exist"
 
+    uv_bin = shutil.which("uv")
+    cmd = [uv_bin, "run", "python", str(script_path), "--dry-run"] if uv_bin else [sys.executable, str(script_path), "--dry-run"]
+
     result = subprocess.run(
-        [sys.executable, str(script_path)],
+        cmd,
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,

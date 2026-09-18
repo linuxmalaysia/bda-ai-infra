@@ -107,6 +107,8 @@ Human-generated data remains the sole authoritative **Single Source of Truth (SS
   <line x1="715" y1="340" x2="715" y2="375" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/>
 </svg>
 
+<p align="center"><em>Figure 2.1: Dual-Render Architecture Diagram — API-First &amp; MCP-Ready Data Platform Topology</em></p>
+
 #### 2. Git-Native Mermaid Topology (`.mmd`)
 
 ```mermaid

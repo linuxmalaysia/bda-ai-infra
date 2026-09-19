@@ -32,7 +32,8 @@
     url: /docs/README.html
   - title: GitHub Pages Setup & Deployment Guide
     url: /docs/github-pages-setup.html
-  - title: 'IT Management Proposal: Enterprise Data Infrastructure Modernisation'
+  - title: 'IT Management Proposal: Enterprise Data Architecture & Infrastructure
+      Modernisation'
     url: /docs/IT-MANAGEMENT-PROPOSAL.html
   - title: Multi-Platform Hosting Guide (GitLab, GitBook, ReadTheDocs)
     url: /docs/multi-platform-hosting.html

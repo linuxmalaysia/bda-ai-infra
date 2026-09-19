@@ -1,7 +1,8 @@
 DSOM EOD Palace Checkpoint Summary (2026-09-18)
 ===================================================
-1. Fixed OKF frontmatter display issue on HTML homepage by applying Liquid split/offset filter in index.md.
-2. Updated test subprocess runners in tests/test_book_compiler.py and tests/test_openwiki.py to enforce explicit uv runner and assert shutil.which("uv").
-3. Formatted python files via Ruff and validated markdownlint compliance (0 errors).
-4. Regenerated navigation data via tools/generate_summary.py.
-5. All 328 unit and compliance tests pass cleanly (100% pass rate).
+1. Integrated Chapter 2: Modernised Infrastructure Fabric into docs/IT-MANAGEMENT-PROPOSAL.md with sections 2.1 (K3s embedded etcd HA), 2.2 (rootless Podman Quadlets & systemd user units), 2.3 (Zero-Trust mTLS 1.3 with per-node SPIRE agent sockets and Cilium/Nginx sidecars), and 2.4 (Dual-Render Diagram).
+2. Resolved all CodeRabbit PR review comments on Quadlet configuration paths (~/.config/containers/systemd/), systemctl --user commands, Podman Auto-Update Engine digest rollbacks, SPIFFE/SPIRE workload Unix sockets, mTLS sidecars, and K3s routing table source/target alignment.
+3. Updated document TOC and renumbered all subsequent sections (3 through 7) and figures (Figure 3.1).
+4. Sanitized all credentials, IP addresses (using RFC 5737 203.0.113.x test IPs), and hostnames (example.gov.my) with 100% UK English spelling compliance.
+5. Synthesized master project book manuscript in build/book.md using tools/build_project_book.py.
+6. Verified Python code health with ruff (0 errors) and executed full test suite via uv run pytest (362/362 passed, 100% pass rate).

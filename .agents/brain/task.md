@@ -1,31 +1,28 @@
 ---
 okf_version: "0.2"
 type: spatial_memory
-title: "Task Registry - Diagram Design Standards, Attested Computations & Native SVG Pre-Rendering"
-description: "DSOM Task Registry documenting Cathryn Lavery diagram design standards, OKF v0.2 attested computations, Warp/OpenViking skills, and native SVG pre-rendering."
+title: "Task Registry - Modernised Infrastructure Fabric & Proposal Expansion"
+description: "DSOM Task Registry documenting Chapter 2 Modernised Infrastructure Fabric proposal expansion, dual-render diagrams, and PR feedback resolutions."
 status: active
-timestamp: "2026-09-18T19:30:00Z"
-stale_after: "2027-09-18T19:30:00Z"
+timestamp: "2026-09-18T22:00:00Z"
+stale_after: "2027-09-18T22:00:00Z"
 generated: false
 verified: true
 sources:
-  - id: "diagram_skills"
-    path: ".agents/skills/diagram-design-standards/SKILL.md"
-  - id: "attested_computations"
-    path: ".agents/skills/attested-computations/SKILL.md"
-  - id: "warp_skills"
-    path: ".agents/skills/warp-agent-skills/SKILL.md"
-  - id: "explanation_doc"
-    path: "docs/explanation/attested-computations-and-warp-skills.md"
-  - id: "bake_native_svg"
-    path: "tools/bake_native_svg.py"
+  - id: "proposal_doc"
+    path: "docs/IT-MANAGEMENT-PROPOSAL.md"
+  - id: "dual_render_skill"
+    path: ".agents/skills/dual-render-architecture-diagram/SKILL.md"
+  - id: "book_compiler"
+    path: "tools/build_project_book.py"
 topics:
-  - cathryn-lavery
-  - diagram-design
-  - attested-computations
-  - warp-skills
-  - openviking
-  - bake-native-svg
+  - proposal
+  - modernised-infrastructure-fabric
+  - k3s
+  - podman-quadlets
+  - mtls
+  - spiffe-spire
+  - dual-render-diagrams
   - spatial-memory
   - dsom
 ---
@@ -34,24 +31,22 @@ topics:
 
 ## 🟢 Completed Objectives
 
-1. **Cathryn Lavery Diagram Design Principles & Standards (`diagram-design-standards`)**:
-   - Integrated Cathryn Lavery visual design principles (grid alignment, typography hierarchy, visual rhythm, WCAG >= 4.5:1 contrast ratios) into `.agents/skills/diagram-design-standards/SKILL.md` (and `skills/diagram-design-standards/SKILL.md`).
-   - Updated `dual-render-architecture-diagram` skill to align with Cathryn Lavery standards.
+1. **IT Management Proposal Chapter 2 Expansion (`docs/IT-MANAGEMENT-PROPOSAL.md`)**:
+   - Integrated Chapter 2: "Modernised Infrastructure Fabric" covering:
+     - **2.1 Container Orchestration:** K3s with embedded etcd HA control plane, Raft consensus ($Q = \lfloor N/2 \rfloor + 1 = 2$), and Proxmox VE / Ubuntu 24.04 LTS deployment.
+     - **2.2 Immutable Workloads:** Rootless Podman Quadlets (`~/.config/containers/systemd/bda-astro.container`), systemctl `--user` management, and Podman Auto-Update Engine digest rollbacks with `Notify=healthy` readiness gates.
+     - **2.3 Zero-Trust Networking:** mTLS 1.3 encryption with per-node SPIRE Agent local Unix domain socket SVID handoffs (`$XDG_RUNTIME_DIR/spire/agent.sock`), TCP 8443 node attestation, and Cilium/Nginx mTLS sidecar policy enforcement.
+     - **2.4 Dual-Render Architecture Diagram:** Standalone SVG vector graphic with light/print mode CSS support, Git-native Mermaid topology (`MIF_` namespace), and summary routing table.
+   - Updated document TOC and renumbered all subsequent sections (3 through 7) and figures (`Figure 3.1`).
+   - Enforced RFC 5737 public-safe test IP addresses (`203.0.113.x`), generic domain names (`example.gov.my`), and UK English spelling throughout.
 
-2. **OKF v0.2 Attested Computations & Warp/OpenViking Skills (`attested-computations`, `warp-agent-skills`)**:
-   - Added `attested-computations` skill defining parameter commitments, runtime argument binding ($ARGUMENTS, $0, $1), and pre-insertion byte domain Ed25519 signatures.
-   - Added `warp-agent-skills` skill defining Warp/OpenViking skill discovery, $ARGUMENTS substitution, and OpenViking URI/MCP mappings. Explicitly exempted declarative policy skills from requiring executable binaries.
+2. **Master Project Handbook Manuscript Build (`build/book.md`)**:
+   - Executed `tools/build_project_book.py` to synthesize all platform documentation into `build/book.md`.
 
-3. **Diátaxis Architectural Explanation Guide (`attested-computations-and-warp-skills.md`)**:
-   - Authored `docs/explanation/attested-computations-and-warp-skills.md` under Diátaxis Explanation quadrant with dual-render diagrams and summary routing tables.
+3. **PR Feedback Resolutions & Code Health Verification**:
+   - Resolved all CodeRabbit PR inline and diff review comments.
+   - Executed `uv run ruff check .` -> 0 errors.
+   - Executed full pytest suite (`uv run pytest`) -> 362/362 tests passed (100% pass rate).
 
-4. **Native Vector SVG Pre-Rendering & HTML Baking (`tools/bake_native_svg.py`)**:
-   - Enhanced `tools/bake_native_svg.py` to pre-render inline vector SVGs, transform Pandoc-escaped Mermaid blocks into clean vector graphics wrapped in `<div class="mermaid-svg-container">`, and inject `@media print` light/pure white canvas styles.
-   - Added unit tests `test_bake_native_svg_transformation` and `test_bake_native_svg_unrelated_preceding_svg` in `tests/test_book_compiler.py`.
-
-5. **Codebase Quality & Test Suite Execution**:
-   - Executed full test suite (`uv run pytest`) -> 362/362 tests passed cleanly (100% pass rate).
-   - Validated Python linter (`uv run ruff check .`) -> 0 errors.
-
-6. **EOD Palace Sync & Spatial Memory Update**:
-   - Synchronized spatial memory manifests in `.agents/brain/` (`task.md`, `palace_registry.md`, `walkthrough.md`, `active_context_manifest.md`, `checkpoint_summary.txt`).
+4. **EOD Palace Sync & Spatial Memory Update**:
+   - Synchronized spatial memory manifests in `.agents/brain/` (`task.md`, `checkpoint_summary.txt`).

@@ -222,18 +222,23 @@ The compute layer distributes High-Availability (HA) fabrics at scale using K3s,
 
 ## 2.2 Immutable Workloads: Podman Quadlets and systemd Integration
 
-For strict workload isolation and deterministic execution, the platform packages the Astro 7.3.2 frontend presentation layer and backend API microservices as immutable container images managed via Podman 5+ Quadlets.
+For strict workload isolation, non-root security boundaries, and deterministic host execution, the platform packages stand-alone frontend presentation services (such as Astro 7.3.2) and host microservices as immutable container images managed via Podman 5+ Quadlets.
 
-* **Declarative Infrastructure:** Podman Quadlets function as a native systemd generator, translating declarative `.container` unit files directly into native systemd service units at boot time.
-* **Seamless Lifecycle Management:** By integrating container lifecycles tightly with systemd, the operating system supervises pod execution, auto-starts dependencies in the correct sequence, and ensures predictable process recovery upon crash.
-* **Atomic Rollbacks:** Instantiating an image creates a completely new container filesystem rather than modifying existing state. Application upgrades are executed by simply swapping immutable image tags; if a health check fails, systemd instantly reverts the service unit to the previous known-good image, driving deployment MTTR near zero.
+* **Declarative Infrastructure:** Podman Quadlets function as a native systemd generator. Placing declarative `.container` files inside the rootless user configuration path `~/.config/containers/systemd/` allows the Podman generator to automatically create corresponding user systemd service units without requiring root privileges.
+* **Seamless Lifecycle Management:** Systemd supervises user container lifecycles via the user manager (`systemctl --user`). Administrators manage service execution using standard commands:
+  ```bash
+  systemctl --user daemon-reload
+  systemctl --user start bda-astro.service
+  systemctl --user status bda-astro.service
+  ```
+* **Atomic Rollbacks & Auto-Updates:** `AutoUpdate=registry` integrates with `podman auto-update` timers. When a new image tag is detected in the registry, Podman pulls the image and restarts the systemd unit. If the updated container fails to start or fails health-gated readiness checks (`Type=notify` paired with `Notify=healthy`), systemd detects the unit startup failure and automatically rolls back execution to the previous known-good image version, driving deployment MTTR near zero.
 
-### Technical Briefing: Declarative Podman Quadlet Service Unit Example
+### Technical Briefing: Declarative Rootless Podman Quadlet Service Unit Example
 
 ```ini
-# /etc/containers/systemd/bda-astro.container
+# ~/.config/containers/systemd/bda-astro.container
 [Unit]
-Description=BDA Astro 7.3.2 Presentation Frontend Service
+Description=BDA Astro 7.3.2 Presentation Frontend Rootless Service
 After=network-online.target
 Wants=network-online.target
 
@@ -246,15 +251,17 @@ HealthCmd=curl -f http://localhost:8080/health || exit 1
 HealthInterval=10s
 HealthRetries=3
 HealthTimeout=5s
+Notify=healthy
 AutoUpdate=registry
 
 [Service]
-Restart=always
+Type=notify
+Restart=on-failure
 RestartSec=5s
 TimeoutStartSec=60
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
 ```
 
 ## 2.3 Zero-Trust Networking: Mutual TLS (mTLS) 1.3
@@ -310,29 +317,29 @@ To secure data-in-transit across the distributed cluster, the network fabric def
   <!-- Zone 2: Podman Quadlets & systemd -->
   <rect x="335" y="20" width="290" height="440" fill="#1E293B" stroke="#16A34A" stroke-width="1.5" rx="8" filter="url(#shadow-mif)"/>
   <rect x="335" y="20" width="290" height="26" fill="#15803D" rx="8"/>
-  <text x="345" y="37" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#DCFCE7">2. PODMAN QUADLETS &amp; SYSTEMD SUPERVISION</text>
+  <text x="345" y="37" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#DCFCE7">2. HOST PODMAN QUADLETS &amp; SYSTEMD USER UNITS</text>
 
   <rect x="350" y="60" width="260" height="110" fill="#F0FDF4" stroke="#16A34A" stroke-width="1" rx="6"/>
   <text x="360" y="78" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#15803D">bda-astro.container Unit</text>
-  <text x="360" y="96" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Image: bda-astro-frontend:7.3.2</text>
-  <text x="360" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• systemd Service Unit Generation</text>
-  <text x="360" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Declarative Boot Lifecycle</text>
-  <text x="360" y="144" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#166534">• Automated Health Retries &amp; Checks</text>
+  <text x="360" y="96" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Path: ~/.config/containers/systemd/</text>
+  <text x="360" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• systemctl --user Generator</text>
+  <text x="360" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Rootless Execution Sandbox</text>
+  <text x="360" y="144" font-family="Consolas, Monaco, monospace" font-size="9" fill="#166534">Notify=healthy Readiness Gate</text>
 
   <rect x="350" y="185" width="260" height="110" fill="#F0FDF4" stroke="#16A34A" stroke-width="1" rx="6"/>
   <text x="360" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#15803D">bda-api.container Unit</text>
   <text x="360" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Image: bda-api-microservice:v2</text>
-  <text x="360" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Rootless Execution Isolation</text>
-  <text x="360" y="253" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Immutable Filesystem Layers</text>
+  <text x="360" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Non-Root Host Service Unit</text>
+  <text x="360" y="253" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Immutable Container Image</text>
   <text x="360" y="269" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#166534">• Fast In-Memory State Handling</text>
 
   <rect x="350" y="310" width="260" height="130" fill="#FAF5FF" stroke="#9333EA" stroke-width="1" rx="6"/>
   <text x="360" y="328" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">Atomic Rollback Supervisor</text>
-  <text x="360" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6B21A8">• Failed Health Check Detection</text>
-  <text x="360" y="362" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6B21A8">• Automatic Known-Good Tag Swap</text>
-  <text x="360" y="378" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7E22CE">systemctl revert &lt;unit&gt;</text>
-  <text x="360" y="394" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#581C87">• Drives Deployment MTTR near Zero</text>
-  <text x="360" y="410" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Zero-Downtime Service Recovery</text>
+  <text x="360" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6B21A8">• podman auto-update Trigger</text>
+  <text x="360" y="362" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6B21A8">• Startup / Health Failure Fallback</text>
+  <text x="360" y="378" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7E22CE">systemctl --user revert &lt;unit&gt;</text>
+  <text x="360" y="394" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#581C87">• Reverts to Known-Good Image</text>
+  <text x="360" y="410" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Near-Zero MTTR Recovery</text>
 
   <!-- Zone 3: Zero-Trust mTLS 1.3 Mesh -->
   <rect x="650" y="20" width="285" height="440" fill="#1E293B" stroke="#9333EA" stroke-width="1.5" rx="8" filter="url(#shadow-mif)"/>
@@ -380,10 +387,10 @@ flowchart TD
         MIF_Quorum{"Raft Consensus Quorum\n(N=3, Q=2 Active)"}
     end
 
-    subgraph MIF_QuadletTier ["Immutable Workload Layer (Podman 5+ Quadlets & systemd)"]
-        MIF_AstroPod["Astro 7.3.2 Frontend\n(bda-astro.container)"]
-        MIF_APIPod["Backend API Services\n(bda-api.container)"]
-        MIF_Systemd["systemd Lifecycle Supervision\n& Auto-Rollback Engine"]
+    subgraph MIF_QuadletTier ["Host Immutable Workload Layer (Podman 5+ Quadlets & User systemd)"]
+        MIF_AstroPod["Astro 7.3.2 Frontend\n(~/.config/containers/systemd/bda-astro.container)"]
+        MIF_APIPod["Backend API Services\n(~/.config/containers/systemd/bda-api.container)"]
+        MIF_Systemd["systemctl --user Manager\n& Auto-Update Rollback Engine"]
     end
 
     subgraph MIF_mTLSMesh ["Zero-Trust Networking Layer (mTLS 1.3)"]
@@ -400,9 +407,9 @@ flowchart TD
     MIF_Node2 --> MIF_Quorum
     MIF_Node3 --> MIF_Quorum
 
-    MIF_Quorum -->|"K3s API Server (TCP 6443)"| MIF_Systemd
-    MIF_Systemd -->|"Supervises Service Units"| MIF_AstroPod
-    MIF_Systemd -->|"Supervises Service Units"| MIF_APIPod
+    MIF_Quorum -->|"Kube-API State Orchestration"| MIF_APIPod
+    MIF_Systemd -->|"Supervises User Service Units"| MIF_AstroPod
+    MIF_Systemd -->|"Supervises User Service Units"| MIF_APIPod
 
     MIF_SPIFFE -->|"Issues X.509 SVIDs"| MIF_AstroPod
     MIF_SPIFFE -->|"Issues X.509 SVIDs"| MIF_APIPod
@@ -416,8 +423,8 @@ flowchart TD
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **k3s-control-01..03** | **Embedded etcd Cluster** | `TCP 2379 / 2380` / Raft Protocol | Intra-Control-Plane Network | Maintains distributed state consensus and quorum across 3 control plane nodes. |
-| **K3s Control Plane** | **systemd Service Manager** | `TCP 6443` / Kube-API | Proxmox Host Hypervisor | Orchestrates Podman Quadlet `.container` unit lifecycles and health monitors. |
-| **systemd Supervisor** | **Astro 7.3.2 Frontend Pod** | Local Socket / systemctl | Rootless Container Sandbox | Supervises frontend application process with automated health checks and atomic rollbacks. |
+| **K3s Control Plane** | **Kubernetes Agent Nodes** | `TCP 6443` / Kube-API | Proxmox Host Hypervisor | Orchestrates clustered container pods and Kubernetes state across nodes. |
+| **systemd User Manager** | **Astro 7.3.2 Frontend Pod** | Local Socket / `systemctl --user` | Rootless User Container Sandbox | Supervises host container service unit (`~/.config/containers/systemd/bda-astro.container`) with health-gated readiness. |
 | **SPIFFE/SPIRE Authority** | **Astro & API Workloads** | `TCP 8443` / SPIFFE Workload API | Cryptographic Identity Domain | Issues short-lived X.509 SVID certificates for workload-to-workload mutual authentication. |
 | **Backend API Pods** | **PostgreSQL 18 Core** | `TCP 5432` / mTLS 1.3 | Zero-Trust Database Network Boundary | Enforces encrypted intra-cluster communication and prevents unauthenticated lateral movement. |
 

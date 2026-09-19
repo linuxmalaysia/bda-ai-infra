@@ -49,11 +49,11 @@ Our primary mandate is to establish a verified **Single Source of Truth (SSoT)**
   * **2.4 Dual-Render Architecture Blueprint:** Modernised Infrastructure Fabric Topology.
 * **3. Presentation Layer Decoupling & Edge Inference**
   * **3.1 Next-Generation Frontend:** Astro 7.3.2 SSG/SSR & Laravel HITL Portal.
-  * **3.2 Client-Side AI Acceleration:** Offloading compute to the browser for zero latency and data privacy.
+  * **3.2 Client-Side AI Acceleration:** Offloading compute to the browser for sub-500ms validation and data privacy.
   * **3.3 WebAssembly (Wasm) Integration:** Memory64 proposal & Relaxed SIMD vector operations.
   * **3.4 WebGPU Hardware Acceleration:** 16-bit floating point (`f16`) & packed integer dot products (`DP4a`).
-  * **3.5 Apache NiFi 2.0 Authoritative Writer Persistence Gate:** Ingestion quarantine & human approval loop.
-  * **3.6 Python/Node.js MCP Gateway & FGAC for LLM Agents:** Fine-Grained Access Control for AI agentic systems.
+  * **3.5 Apache NiFi 2.0 Authoritative Writer Persistence Gate:** Ingestion quarantine, MFA verification, & digital signature validation.
+  * **3.6 Python/Node.js MCP Gateway & FGAC for LLM Agents:** Fine-Grained Access Control and Streamable HTTP for AI agentic systems.
   * **3.7 Dual-Render Architecture Blueprint:** Presentation Layer Decoupling & Edge Inference Topology.
 * **4. Core Strategic Pillars: API-Ready, MCP-Ready & Human-AI Quarantine**
 * **5. Financial & Operational ROI Analysis**
@@ -450,7 +450,7 @@ Operating in tandem with the Astro frontend is the Laravel Web Portal, which act
 
 ## 3.2 Client-Side AI Acceleration
 
-To eliminate server-side compute overhead during data ingestion, AI pre-processing and validation tasks are offloaded directly to the client's browser. By executing schema normalization and Data Quality (DQ) assertions locally on the user's machine, the architecture guarantees zero-latency feedback and protects data privacy by preventing raw, unvalidated records from traversing the Wide Area Network (WAN).
+To eliminate server-side compute overhead during data ingestion, AI pre-processing and validation tasks are offloaded directly to the client's browser. By executing schema normalization and Data Quality (DQ) assertions locally on the user's machine, the architecture guarantees sub-500ms validation feedback (SLO) and protects data privacy by executing local client-side pre-processing prior to network transmission.
 
 ## 3.3 WebAssembly (Wasm) Integration
 
@@ -468,15 +468,15 @@ For massively parallel AI execution, the platform integrates the WebGPU API to u
 
 ## 3.5 Apache NiFi 2.0 Authoritative Writer Persistence Gate
 
-Upon completion of the client-side validation, the payload is transmitted to the RustFS shared staging directory (`/data/staging/raw/`) as an isolated POSIX spool. Apache NiFi 2.0 operates as the definitive data plane, picking up the file via POSIX directory watchers for structural sanitization.
+Upon completion of client-side pre-processing, normalized payloads and original files are transmitted to a dedicated local POSIX staging directory (`/data/staging/raw/`) managed by directory watchers, or directly to Ceph S3 object storage buckets with S3 event notifications. Apache NiFi 2.0 operates as the definitive data plane, ingesting the staged payloads for structural sanitization.
 
-Crucially, NiFi 2.0 functions as a strict persistence gate. It halts downstream propagation at the `/data/staging/verify/` directory until a human domain user reviews the extracted diffs within the Laravel dashboard. Triggered exclusively by a digital approval sign-off event, Apache NiFi uses the `nifi_ingest_writer` role to commit the golden records into the Percona Patroni PostgreSQL 18 SSoT, appending cryptographic `bda_provenance` metadata to ensure total auditability.
+Crucially, NiFi 2.0 functions as a strict persistence gate. It halts downstream propagation at the `/data/staging/verify/` directory until a human domain user reviews the extracted diffs within the Laravel dashboard. Triggered exclusively by an approving human sign-off event requiring multi-factor authentication (MFA) verification of the approving human identity and cryptographic digital-signature validation, Apache NiFi uses the `nifi_ingest_writer` role to commit the golden records into the Percona Patroni PostgreSQL 18 SSoT, appending cryptographic `bda_provenance` metadata to ensure total auditability.
 
 ## 3.6 Python/Node.js MCP Gateway & FGAC for LLM Agents
 
-To securely expose this pristine SSoT to autonomous AI systems, the architecture implements a Python/Node.js Model Context Protocol (MCP) server. Operating over JSON-RPC 2.0 via standard I/O (stdio) or Server-Sent Events (SSE), the MCP gateway completely sandboxes LLM interactions.
+To securely expose this pristine SSoT to autonomous AI systems, the architecture implements a Python/Node.js Model Context Protocol (MCP) server. Operating over stdio for local processes and Streamable HTTP (over TCP port 8443, supporting SSE response streaming and legacy HTTP+SSE compatibility mode), the MCP gateway completely sandboxes LLM interactions.
 
-* **Fine-Grained Access Control (FGAC):** The MCP server intercepts LLM prompts and enforces PostgreSQL Row-Level Security (RLS) by dynamically injecting session context parameters (e.g., `set_config('app.current_user_role')`).
+* **Fine-Grained Access Control (FGAC):** The MCP server intercepts LLM prompts and enforces PostgreSQL Row-Level Security (RLS) by executing `SELECT set_config('app.current_user_role', $1, true)` within each request transaction, binding `$1` to the authenticated principal.
 * **Tool Execution Guardrails:** AI agents are restricted to predefined, read-only tools (such as `semantic_spatial_search`). By enforcing the `bda_readonly_agent` database role, the MCP gateway ensures that LLMs can generate insights and retrieve vector context but are cryptographically barred from executing arbitrary writes or altering the Golden SSoT.
 
 ## 3.7 Dual-Render Architecture Blueprint — Presentation Layer & Edge Inference
@@ -516,11 +516,11 @@ To securely expose this pristine SSoT to autonomous AI systems, the architecture
   <text x="50" y="260" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#166534">• Sub-500ms Edge DQ Assertions</text>
 
   <rect x="40" y="310" width="255" height="130" fill="#FEF3C7" stroke="#D97706" stroke-width="1" rx="6"/>
-  <text x="50" y="328" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#B45309">Zero-Latency Privacy Boundary</text>
+  <text x="50" y="328" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#B45309">Sub-500ms Privacy Boundary</text>
   <text x="50" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#78350F">• Local Normalization &amp; Validation</text>
   <text x="50" y="362" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#78350F">• Offloads Server Dynamic Compute</text>
   <text x="50" y="378" font-family="Consolas, Monaco, monospace" font-size="10" fill="#B45309">HTTPS / Wasm Isolated Canvas</text>
-  <text x="50" y="394" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#92400E">• Prevents WAN Raw Payload Leaks</text>
+  <text x="50" y="394" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#92400E">• Pre-Processing Prior to Transmission</text>
 
   <!-- Zone 2: Quarantine & NiFi Gate -->
   <rect x="335" y="20" width="290" height="440" fill="#1E293B" stroke="#16A34A" stroke-width="1.5" rx="8" filter="url(#shadow-ple)"/>
@@ -528,22 +528,22 @@ To securely expose this pristine SSoT to autonomous AI systems, the architecture
   <text x="345" y="37" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#DCFCE7">2. INGESTION QUARANTINE &amp; PERSISTENCE GATE</text>
 
   <rect x="350" y="60" width="260" height="110" fill="#F0FDF4" stroke="#16A34A" stroke-width="1" rx="6"/>
-  <text x="360" y="78" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#15803D">RustFS Shared Staging Spool</text>
+  <text x="360" y="78" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#15803D">Dedicated Staging Spool</text>
   <text x="360" y="96" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Path: /data/staging/raw/</text>
-  <text x="360" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Isolated POSIX Spool Volume</text>
-  <text x="360" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• POSIX Directory Watcher Trigger</text>
-  <text x="360" y="144" font-family="Consolas, Monaco, monospace" font-size="9" fill="#166534">Structural Sanitization Ingestion</text>
+  <text x="360" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Isolated Staging Volume</text>
+  <text x="360" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Local Directory Watcher Trigger</text>
+  <text x="360" y="144" font-family="Consolas, Monaco, monospace" font-size="9" fill="#166534">Ceph S3 Event Notification Option</text>
 
   <rect x="350" y="185" width="260" height="110" fill="#FEF2F2" stroke="#DC2626" stroke-width="1" rx="6"/>
   <text x="360" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#991B1B">Apache NiFi 2.0 Persistence Gate</text>
   <text x="360" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#B91C1C">Path: /data/staging/verify/</text>
   <text x="360" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#991B1B">• Strictly Halts Auto Propagation</text>
-  <text x="360" y="253" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#991B1B">• Extracted Diff Summary Preview</text>
-  <text x="360" y="269" font-family="Consolas, Monaco, monospace" font-size="10" fill="#B91C1C">Requires Explicit Human Sign-Off</text>
+  <text x="360" y="253" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#991B1B">• MFA &amp; Digital Signature Validation</text>
+  <text x="360" y="269" font-family="Consolas, Monaco, monospace" font-size="10" fill="#B91C1C">Extracted Diff Summary Approval</text>
 
   <rect x="350" y="310" width="260" height="130" fill="#FAF5FF" stroke="#9333EA" stroke-width="1" rx="6"/>
-  <text x="360" y="328" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">Human Sign-Off &amp; Commit</text>
-  <text x="360" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6B21A8">• Domain Expert Approval Event</text>
+  <text x="360" y="328" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">MFA Sign-Off &amp; Commit</text>
+  <text x="360" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6B21A8">• Domain Expert MFA Identity Check</text>
   <text x="360" y="362" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7E22CE">Role: nifi_ingest_writer</text>
   <text x="360" y="378" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#581C87">• Tier 0 Golden SSoT Commit</text>
   <text x="360" y="394" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7E22CE">bda_provenance Metadata Tagging</text>
@@ -562,9 +562,9 @@ To securely expose this pristine SSoT to autonomous AI systems, the architecture
 
   <rect x="665" y="185" width="255" height="110" fill="#FAF5FF" stroke="#9333EA" stroke-width="1" rx="6"/>
   <text x="675" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">Python/Node.js MCP Gateway</text>
-  <text x="675" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">JSON-RPC 2.0 (stdio / SSE)</text>
-  <text x="675" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• PostgreSQL RLS Injection</text>
-  <text x="675" y="253" font-family="Consolas, Monaco, monospace" font-size="10" fill="#581C87">set_config('app.current_user_role')</text>
+  <text x="675" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">stdio / Streamable HTTP (Port 8443)</text>
+  <text x="675" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Transaction RLS Context Injection</text>
+  <text x="675" y="253" font-family="Consolas, Monaco, monospace" font-size="10" fill="#581C87">set_config('app.current_user_role', $1, true)</text>
   <text x="675" y="269" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• FGAC Sandboxed Prompt Intercept</text>
 
   <rect x="665" y="310" width="255" height="130" fill="#FAF5FF" stroke="#9333EA" stroke-width="1" rx="6"/>
@@ -572,7 +572,7 @@ To securely expose this pristine SSoT to autonomous AI systems, the architecture
   <text x="675" y="346" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">Role: bda_readonly_agent</text>
   <text x="675" y="362" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Read-Only Tool Execution</text>
   <text x="675" y="378" font-family="Consolas, Monaco, monospace" font-size="10" fill="#581C87">semantic_spatial_search</text>
-  <text x="675" y="394" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Cryptographically Barred Writes</text>
+  <text x="675" y="394" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Barred SSoT Writes &amp; Mutations</text>
 
   <!-- Flow Connectors -->
   <line x1="310" y1="210" x2="335" y2="210" stroke="#0284C7" stroke-width="2" marker-end="url(#arrow-ple)"/>
@@ -594,14 +594,14 @@ flowchart TD
     end
 
     subgraph PLE_QuarantineGate ["Ingestion Quarantine & Verification Gate"]
-        PLE_RustFS["RustFS Shared Staging Spool (/data/staging/raw/)"]
+        PLE_RustFS["Local Staging Spool (/data/staging/raw/) & Ceph S3 Event"]
         PLE_NiFiGate["Apache NiFi 2.0 Persistence Gate (/data/staging/verify/)"]
-        PLE_HumanReview{"Laravel HITL Human Review & Digital Approval"}
+        PLE_HumanReview{"Laravel HITL MFA Review & Digital Signature Approval"}
     end
 
     subgraph PLE_PersistenceMCP ["Tier 0 SSoT & MCP Agentic Gateway"]
         PLE_Postgres[("Percona Patroni PostgreSQL 18 SSoT (nifi_ingest_writer + bda_provenance)")]
-        PLE_MCPGateway["Python/Node.js MCP Gateway (JSON-RPC 2.0 stdio/SSE)"]
+        PLE_MCPGateway["Python/Node.js MCP Gateway (stdio / Streamable HTTP)"]
         PLE_LLMAgents["LLM Agentic Systems (bda_readonly_agent Role & RLS)"]
     end
 
@@ -609,12 +609,12 @@ flowchart TD
     PLE_Laravel -->|"Local Pre-Processing"| PLE_Wasm
     PLE_Laravel -->|"GPU Shader Inference"| PLE_WebGPU
     PLE_Laravel -->|"Validated Spool Push"| PLE_RustFS
-    PLE_RustFS -->|"POSIX Directory Watcher"| PLE_NiFiGate
+    PLE_RustFS -->|"Directory Watcher / S3 Event"| PLE_NiFiGate
     PLE_NiFiGate <-->|"Diff Summary Preview"| PLE_HumanReview
-    PLE_HumanReview -->|"Human Approval Sign-Off"| PLE_NiFiGate
+    PLE_HumanReview -->|"MFA & Digital Signature Approval"| PLE_NiFiGate
     PLE_NiFiGate -->|"nifi_ingest_writer Commit"| PLE_Postgres
     PLE_Postgres <-->|"PostgreSQL RLS / SET LOCAL"| PLE_MCPGateway
-    PLE_MCPGateway <-->|"JSON-RPC 2.0 Tool Scope"| PLE_LLMAgents
+    PLE_MCPGateway <-->|"Streamable HTTP / stdio Tool Scope"| PLE_LLMAgents
 ```
 
 ### 3. Summary Interface & Routing Table
@@ -622,10 +622,11 @@ flowchart TD
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **Client Browser (Wasm/WebGPU)** | **Laravel HITL Portal** | `HTTPS (443)` / Keycloak OAuth2 | Untrusted WAN / Edge Browser | Pre-processes schema normalization and client-side vector embeddings before network transmission. |
-| **Laravel HITL Portal** | **RustFS Shared Staging** | POSIX / `/data/staging/raw/` | Isolated Staging Volume | Spools validated raw uploads into isolated staging directory for data plane consumption. |
-| **RustFS Shared Staging** | **Apache NiFi 2.0 Ingest Gate** | POSIX Directory Watcher | Ingestion Quarantine Zone | Monitors raw staging directory and halts downstream propagation at `/data/staging/verify/`. |
-| **Apache NiFi 2.0 Ingest Gate** | **PostgreSQL 18 SSoT Store** | `TCP 5432` / Native PostgreSQL | `nifi_ingest_writer` DB Role | Sole authoritative writer committing Tier 0 Golden SSoT records upon human approval with `bda_provenance` metadata. |
-| **Autonomous LLM Agents** | **Python/Node.js MCP Gateway** | `TCP 8443` / JSON-RPC 2.0 (stdio/SSE) | `bda_readonly_agent` DB Role & RLS | Intercepts LLM prompts, injecting dynamic RLS session parameters and enforcing read-only database tool execution. |
+| **Laravel HITL Portal** | **Staging Spool / Ceph S3** | Local Path / `/data/staging/raw/` or S3 | Isolated Staging Volume | Spools validated raw uploads into isolated staging directory for data plane consumption. |
+| **Staging Directory** | **Apache NiFi 2.0 Ingest Gate** | Local Directory Watcher / S3 Notification | Ingestion Quarantine Zone | Monitors staging directory and halts downstream propagation at `/data/staging/verify/`. |
+| **Apache NiFi 2.0 Ingest Gate** | **PostgreSQL 18 SSoT Store** | `TCP 5432` / Native PostgreSQL | `nifi_ingest_writer` DB Role | Sole authoritative writer committing Tier 0 Golden SSoT records upon human MFA and digital signature approval with `bda_provenance` metadata. |
+| **Autonomous LLM Agents (Remote)** | **Python/Node.js MCP Gateway** | `TCP 8443` / Streamable HTTP (SSE) | `bda_readonly_agent` DB Role & RLS | Intercepts remote LLM prompts over HTTP, injecting dynamic RLS session parameters and enforcing read-only database tool execution. |
+| **Autonomous LLM Agents (Local)** | **Python/Node.js MCP Gateway** | Stdio / Local Child Process IPC | Local Process Sandbox & RLS | Intercepts local LLM agent prompts via stdio child process IPC, enforcing transaction RLS context (`set_config('app.current_user_role', $1, true)`). |
 
 ---
 
@@ -677,7 +678,7 @@ To ensure total clarity across executive and technical reviews, the target archi
   <text x="515" y="261" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#A7F3D0">MCP SERVER (MODEL CONTEXT PROTOCOL)</text>
   <text x="515" y="287" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="12" font-weight="bold" fill="#34D399">Native AI Tooling &amp; Context Gateway</text>
   <text x="515" y="307" font-family="Consolas, Monaco, monospace" font-size="10" fill="#A7F3D0">Fine-Grained Access Control (Tool Execution &amp; Scope Limits)</text>
-  <text x="515" y="323" font-family="Consolas, Monaco, monospace" font-size="10" fill="#A7F3D0">Python/Node.js MCP Gateway (Port 8443 / Stdio / SSE)</text>
+  <text x="515" y="323" font-family="Consolas, Monaco, monospace" font-size="10" fill="#A7F3D0">Python/Node.js MCP Gateway (Port 8443 Streamable HTTP / Stdio)</text>
 
   <!-- Consumers Box Left -->
   <rect x="30" y="375" width="430" height="75" fill="#1E293B" stroke="#F59E0B" stroke-width="1.5" rx="8" filter="url(#shadow-prop)"/>
@@ -739,7 +740,7 @@ flowchart TD
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **External Systems / Users** | **Laravel Verification Gate** | `HTTPS (443)` / REST | Keycloak OAuth2 / Session Auth | Ingests non-IT user feeds and telemetry into quarantine staging directory. |
-| **Laravel Verification Gate** | **Apache NiFi 2.0 Ingest Gate** | Staging Spool / Internal Event | Human Signature / Audit Log | Triggers approval workflow upon explicit human verification. |
+| **Laravel Verification Gate** | **Apache NiFi 2.0 Ingest Gate** | Staging Spool / Internal Event | Human MFA Signature / Audit Log | Triggers approval workflow upon explicit human verification and MFA signature validation. |
 | **Apache NiFi 2.0 Ingest Gate** | **PostgreSQL 18 SSoT Store** | `TCP 5432` / Native PostgreSQL | `nifi_ingest_writer` DB Role | Sole authoritative writer committing Tier 0 Golden SSoT data and `bda_provenance` metadata tags. |
 | **PostgreSQL 18 SSoT Store** | **Fusio REST / gRPC Gateway** | `TCP 5432` / Read-Only Views | PostgreSQL Row-Level Security (RLS) | Exposes fine-grained SQL views and endpoints to web applications and BI dashboards. |
 | **PostgreSQL 18 SSoT Store** | **MCP Tool Gateway** | `TCP 5432` / Vector Search | MCP Tool Scope & Ed25519 Token | Serves vector context and structured database tool capabilities to autonomous AI agents. |
@@ -751,13 +752,13 @@ flowchart TD
 * 🌐 **System Interoperability:** Enables zero-friction integration with any third-party, enterprise, or open-source application without requiring vendor-locked connectors.
 
 ## 4.3 MCP-Ready: Native AI & LLM Capability
-* 🤖 **Direct Agent Integration:** Implements the open standard **Model Context Protocol (MCP)**. Large Language Models (LLMs) and autonomous AI agents can directly query database metrics, trigger background transformations, and retrieve vector embeddings as native "Tools".
+* 🤖 **Direct Agent Integration:** Implements the open standard **Model Context Protocol (MCP)** via stdio and Streamable HTTP. Large Language Models (LLMs) and autonomous AI agents can directly query database metrics, trigger background transformations strictly constrained to isolated Tier 2 scratch storage schemas (`scratch_*`) without mutating Tier 0/Tier 1 Golden SSoT schemas, and retrieve vector embeddings as native "Tools".
 * 🧠 **Contextual Grounding:** Replaces static PDF/Excel exports with conversational, context-aware AI interactions connected directly to live database state.
 
 ## 4.4 Fine-Grained Access Control (FGAC) & Data Tagging Governance
-* 🛡️ **Row and Column Level Security:** Permissions are strictly enforced at the API gateway and PostgreSQL database layer using session context injection (`SET LOCAL`). An external application or AI agent accesses only the precise data slices authorised for its identity.
+* 🛡️ **Row and Column Level Security:** Permissions are strictly enforced at the API gateway and PostgreSQL database layer using session context injection (`SELECT set_config('app.current_user_role', $1, true)` executed within each request transaction, binding `$1` to the authenticated principal). An external application or AI agent accesses only the precise data slices authorised for its identity.
 * 🏷️ **Human SSoT & AI Provenance Metadata Tagging:** To ensure total data authenticity and governance, all data within the Big Data Analytics Lakehouse is partitioned into two distinct categories:
-  1. **Real Data & Human Verification (Tier 0 SSoT):** Human-entered data is validated through the decoupled Laravel human-in-the-loop portal (replacing legacy WildFly application servers and monolithic script bottlenecks). As a target-state capability, the Laravel frontend supports client-side **WebAssembly (Wasm)** (Memory64 & Relaxed SIMD) and **WebGPU** (16-bit float `f16` and `DP4a` quantized INT8 math) for client-side Web AI pre-processing targeting sub-500ms latency. Untouched raw client uploads are persisted into an immutable raw-upload quarantine storage volume prior to client-side pre-processing. Normalised JSON/CSV outputs serve as derived advisory artifacts which are re-validated server-side by Apache NiFi 2.0. If client Wasm/WebGPU hardware acceleration features are unsupported or fail, execution seamlessly falls back to standard Wasm CPU or server-side NiFi validation. Apache NiFi 2.0 acts as the sole authoritative writer promoting validated derived data to Percona Patroni PostgreSQL 18, while retaining original raw files for audit and reprocessing.
+  1. **Real Data & Human Verification (Tier 0 SSoT):** Human-entered data is validated through the decoupled Laravel human-in-the-loop portal (replacing legacy WildFly application servers and monolithic script bottlenecks). As a target-state capability, the Laravel frontend supports client-side **WebAssembly (Wasm)** (Memory64 & Relaxed SIMD) and **WebGPU** (16-bit float `f16` and `DP4a` quantized INT8 math) for client-side Web AI pre-processing targeting sub-500ms latency. Normalised client outputs are spooled to quarantine storage prior to human MFA approval. Normalised JSON/CSV outputs serve as derived advisory artifacts which are re-validated server-side by Apache NiFi 2.0 upon human MFA and digital signature approval. If client Wasm/WebGPU hardware acceleration features are unsupported or fail, execution seamlessly falls back to standard Wasm CPU or server-side NiFi validation. Apache NiFi 2.0 acts as the sole authoritative writer promoting validated derived data to Percona Patroni PostgreSQL 18, while retaining original raw files for audit and reprocessing.
   2. **AI Processes Enriched with RAG & Generative Metadata:** Any dataset touched, generated, or enriched by AI agents is explicitly tagged using `bda_provenance` metadata. This metadata records cryptographic signature contracts including `signature` (a 64-byte Ed25519 signature encoded as 128 uppercase hexadecimal characters), `key_id`, `verification_status`, `verification_timestamp`, `signature_algorithm` (Ed25519), and `signature_encoding` (`HEX_RAW_64_BYTE`, indicating 128 hex characters representing the 64 raw signature bytes), binding canonical RFC 8785 byte streams.
 * 📋 **Auditability & Zero Trust:** Every API call and MCP tool execution is logged, providing clear lineage and governance for regulatory compliance.
 

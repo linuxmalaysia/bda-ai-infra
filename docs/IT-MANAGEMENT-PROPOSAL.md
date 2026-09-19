@@ -468,16 +468,16 @@ For massively parallel AI execution, the platform integrates the WebGPU API to u
 
 ## 3.5 Apache NiFi 2.0 Authoritative Writer Persistence Gate
 
-Upon completion of client-side pre-processing, normalized payloads and original files are transmitted to a dedicated local POSIX staging directory (`/data/staging/raw/`) managed by directory watchers, or directly to Ceph S3 object storage buckets with S3 event notifications. Apache NiFi 2.0 operates as the definitive data plane, ingesting the staged payloads for structural sanitization.
+Upon completion of client-side pre-processing, normalized payloads and original files are transmitted to a dedicated local POSIX staging directory (`/data/staging/raw/`) managed by directory watchers, or directly to Ceph S3 object storage buckets (`s3://bda-quarantine-staging/raw/`) with S3 event notifications (`s3:ObjectCreated:*`). Apache NiFi 2.0 operates as the definitive data plane, ingesting the staged payloads for structural sanitization.
 
-Crucially, NiFi 2.0 functions as a strict persistence gate. It halts downstream propagation at the `/data/staging/verify/` directory until a human domain user reviews the extracted diffs within the Laravel dashboard. Triggered exclusively by an approving human sign-off event requiring multi-factor authentication (MFA) verification of the approving human identity and cryptographic digital-signature validation, Apache NiFi uses the `nifi_ingest_writer` role to commit the golden records into the Percona Patroni PostgreSQL 18 SSoT, appending cryptographic `bda_provenance` metadata to ensure total auditability.
+Crucially, NiFi 2.0 functions as a strict persistence gate. It halts downstream propagation at the quarantine verification stage (`/data/staging/verify/` or Ceph S3 prefix `s3://bda-quarantine-staging/verify/` with custom object metadata `x-amz-meta-verification-status: pending_human_review`) until a human domain user reviews the extracted diffs within the Laravel dashboard. Triggered exclusively by an approving human sign-off event requiring multi-factor authentication (MFA) verification of the approving human identity and cryptographic digital-signature validation, Apache NiFi uses the `nifi_ingest_writer` role to commit the golden records into the Percona Patroni PostgreSQL 18 SSoT, appending cryptographic `bda_provenance` metadata to ensure total auditability.
 
 ## 3.6 Python/Node.js MCP Gateway & FGAC for LLM Agents
 
-To securely expose this pristine SSoT to autonomous AI systems, the architecture implements a Python/Node.js Model Context Protocol (MCP) server. Operating over stdio for local processes and Streamable HTTP (over TCP port 8443, supporting SSE response streaming and legacy HTTP+SSE compatibility mode), the MCP gateway completely sandboxes LLM interactions.
+To securely expose this pristine SSoT to autonomous AI systems, the architecture implements a Python/Node.js Model Context Protocol (MCP) server. Operating over stdio for local child processes and authenticated HTTPS/TLS Streamable HTTP (over TCP port 8443, supporting mutual TLS (mTLS) 1.3 or bearer tokens, SSE response streaming, and legacy HTTP+SSE compatibility mode), the MCP gateway completely sandboxes LLM interactions.
 
 * **Fine-Grained Access Control (FGAC):** The MCP server intercepts LLM prompts and enforces PostgreSQL Row-Level Security (RLS) by executing `SELECT set_config('app.current_user_role', $1, true)` within each request transaction, binding `$1` to the authenticated principal.
-* **Tool Execution Guardrails:** AI agents are restricted to predefined, read-only tools (such as `semantic_spatial_search`). By enforcing the `bda_readonly_agent` database role, the MCP gateway ensures that LLMs can generate insights and retrieve vector context but are cryptographically barred from executing arbitrary writes or altering the Golden SSoT.
+* **Tool Execution Guardrails:** AI agents are restricted to predefined, read-only tools (such as `semantic_spatial_search`). Standard read-only MCP tools cannot execute writes or mutations. Separately authorized transformation tools are strictly restricted to writing output artifacts into isolated Tier 2 scratch schemas (`scratch_*`), preventing writes or schema alterations to Tier 0 Golden SSoT and Tier 1 schemas.
 
 ## 3.7 Dual-Render Architecture Blueprint — Presentation Layer & Edge Inference
 
@@ -529,14 +529,14 @@ To securely expose this pristine SSoT to autonomous AI systems, the architecture
 
   <rect x="350" y="60" width="260" height="110" fill="#F0FDF4" stroke="#16A34A" stroke-width="1" rx="6"/>
   <text x="360" y="78" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#15803D">Dedicated Staging Spool</text>
-  <text x="360" y="96" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Path: /data/staging/raw/</text>
-  <text x="360" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Isolated Staging Volume</text>
-  <text x="360" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Local Directory Watcher Trigger</text>
-  <text x="360" y="144" font-family="Consolas, Monaco, monospace" font-size="9" fill="#166534">Ceph S3 Event Notification Option</text>
+  <text x="360" y="96" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">POSIX or Ceph S3 Bucket</text>
+  <text x="360" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Isolated Staging Volume/Bucket</text>
+  <text x="360" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Directory Watcher / S3 Event</text>
+  <text x="360" y="144" font-family="Consolas, Monaco, monospace" font-size="9" fill="#166534">s3://bda-quarantine-staging/raw/</text>
 
   <rect x="350" y="185" width="260" height="110" fill="#FEF2F2" stroke="#DC2626" stroke-width="1" rx="6"/>
   <text x="360" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#991B1B">Apache NiFi 2.0 Persistence Gate</text>
-  <text x="360" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#B91C1C">Path: /data/staging/verify/</text>
+  <text x="360" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#B91C1C">s3://bda-quarantine-staging/verify/</text>
   <text x="360" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#991B1B">• Strictly Halts Auto Propagation</text>
   <text x="360" y="253" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#991B1B">• MFA &amp; Digital Signature Validation</text>
   <text x="360" y="269" font-family="Consolas, Monaco, monospace" font-size="10" fill="#B91C1C">Extracted Diff Summary Approval</text>
@@ -562,17 +562,17 @@ To securely expose this pristine SSoT to autonomous AI systems, the architecture
 
   <rect x="665" y="185" width="255" height="110" fill="#FAF5FF" stroke="#9333EA" stroke-width="1" rx="6"/>
   <text x="675" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">Python/Node.js MCP Gateway</text>
-  <text x="675" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">stdio / Streamable HTTP (Port 8443)</text>
+  <text x="675" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">stdio / HTTPS Streamable HTTP</text>
   <text x="675" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Transaction RLS Context Injection</text>
   <text x="675" y="253" font-family="Consolas, Monaco, monospace" font-size="10" fill="#581C87">set_config('app.current_user_role', $1, true)</text>
-  <text x="675" y="269" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• FGAC Sandboxed Prompt Intercept</text>
+  <text x="675" y="269" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• mTLS 1.3 / Auth Bearer Security</text>
 
   <rect x="665" y="310" width="255" height="130" fill="#FAF5FF" stroke="#9333EA" stroke-width="1" rx="6"/>
   <text x="675" y="328" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">LLM Tool Guardrails</text>
   <text x="675" y="346" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">Role: bda_readonly_agent</text>
   <text x="675" y="362" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Read-Only Tool Execution</text>
-  <text x="675" y="378" font-family="Consolas, Monaco, monospace" font-size="10" fill="#581C87">semantic_spatial_search</text>
-  <text x="675" y="394" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Barred SSoT Writes &amp; Mutations</text>
+  <text x="675" y="378" font-family="Consolas, Monaco, monospace" font-size="10" fill="#581C87">writes -> Tier 2 scratch_* only</text>
+  <text x="675" y="394" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Barred Tier 0 SSoT Writes</text>
 
   <!-- Flow Connectors -->
   <line x1="310" y1="210" x2="335" y2="210" stroke="#0284C7" stroke-width="2" marker-end="url(#arrow-ple)"/>
@@ -594,27 +594,27 @@ flowchart TD
     end
 
     subgraph PLE_QuarantineGate ["Ingestion Quarantine & Verification Gate"]
-        PLE_RustFS["Local Staging Spool (/data/staging/raw/) & Ceph S3 Event"]
-        PLE_NiFiGate["Apache NiFi 2.0 Persistence Gate (/data/staging/verify/)"]
+        PLE_CephS3["Ceph S3 Quarantine Staging (s3://bda-quarantine-staging/raw/)"]
+        PLE_NiFiGate["Apache NiFi 2.0 Persistence Gate (s3://bda-quarantine-staging/verify/)"]
         PLE_HumanReview{"Laravel HITL MFA Review & Digital Signature Approval"}
     end
 
     subgraph PLE_PersistenceMCP ["Tier 0 SSoT & MCP Agentic Gateway"]
         PLE_Postgres[("Percona Patroni PostgreSQL 18 SSoT (nifi_ingest_writer + bda_provenance)")]
-        PLE_MCPGateway["Python/Node.js MCP Gateway (stdio / Streamable HTTP)"]
+        PLE_MCPGateway["Python/Node.js MCP Gateway (stdio / Authenticated HTTPS Streamable HTTP)"]
         PLE_LLMAgents["LLM Agentic Systems (bda_readonly_agent Role & RLS)"]
     end
 
     PLE_Astro <-->|"OAuth2 / REST Payload"| PLE_Laravel
     PLE_Laravel -->|"Local Pre-Processing"| PLE_Wasm
     PLE_Laravel -->|"GPU Shader Inference"| PLE_WebGPU
-    PLE_Laravel -->|"Validated Spool Push"| PLE_RustFS
-    PLE_RustFS -->|"Directory Watcher / S3 Event"| PLE_NiFiGate
+    PLE_Laravel -->|"Validated Spool Push"| PLE_CephS3
+    PLE_CephS3 -->|"S3 Event Notification (s3:ObjectCreated:*)"| PLE_NiFiGate
     PLE_NiFiGate <-->|"Diff Summary Preview"| PLE_HumanReview
     PLE_HumanReview -->|"MFA & Digital Signature Approval"| PLE_NiFiGate
     PLE_NiFiGate -->|"nifi_ingest_writer Commit"| PLE_Postgres
     PLE_Postgres <-->|"PostgreSQL RLS / SET LOCAL"| PLE_MCPGateway
-    PLE_MCPGateway <-->|"Streamable HTTP / stdio Tool Scope"| PLE_LLMAgents
+    PLE_MCPGateway <-->|"HTTPS Streamable HTTP / stdio Tool Scope"| PLE_LLMAgents
 ```
 
 ### 3. Summary Interface & Routing Table
@@ -622,11 +622,11 @@ flowchart TD
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **Client Browser (Wasm/WebGPU)** | **Laravel HITL Portal** | `HTTPS (443)` / Keycloak OAuth2 | Untrusted WAN / Edge Browser | Pre-processes schema normalization and client-side vector embeddings before network transmission. |
-| **Laravel HITL Portal** | **Staging Spool / Ceph S3** | Local Path / `/data/staging/raw/` or S3 | Isolated Staging Volume | Spools validated raw uploads into isolated staging directory for data plane consumption. |
-| **Staging Directory** | **Apache NiFi 2.0 Ingest Gate** | Local Directory Watcher / S3 Notification | Ingestion Quarantine Zone | Monitors staging directory and halts downstream propagation at `/data/staging/verify/`. |
+| **Laravel HITL Portal** | **Ceph S3 Quarantine Staging** | HTTPS (443) / S3 API | `s3://bda-quarantine-staging/raw/` Bucket | Spools validated raw uploads into isolated Ceph S3 quarantine bucket for data plane consumption. |
+| **Ceph S3 Quarantine Staging** | **Apache NiFi 2.0 Ingest Gate** | HTTPS (443) / S3 Event Notification | `s3://bda-quarantine-staging/verify/` Prefix | Monitors quarantine bucket and halts downstream propagation with `x-amz-meta-verification-status: pending_human_review`. |
 | **Apache NiFi 2.0 Ingest Gate** | **PostgreSQL 18 SSoT Store** | `TCP 5432` / Native PostgreSQL | `nifi_ingest_writer` DB Role | Sole authoritative writer committing Tier 0 Golden SSoT records upon human MFA and digital signature approval with `bda_provenance` metadata. |
-| **Autonomous LLM Agents (Remote)** | **Python/Node.js MCP Gateway** | `TCP 8443` / Streamable HTTP (SSE) | `bda_readonly_agent` DB Role & RLS | Intercepts remote LLM prompts over HTTP, injecting dynamic RLS session parameters and enforcing read-only database tool execution. |
-| **Autonomous LLM Agents (Local)** | **Python/Node.js MCP Gateway** | Stdio / Local Child Process IPC | Local Process Sandbox & RLS | Intercepts local LLM agent prompts via stdio child process IPC, enforcing transaction RLS context (`set_config('app.current_user_role', $1, true)`). |
+| **Autonomous LLM Agents (Remote)** | **Python/Node.js MCP Gateway** | `HTTPS (443/8443)` / TLS 1.3 mTLS Streamable HTTP | `bda_readonly_agent` DB Role & RLS | Intercepts remote LLM prompts over authenticated HTTPS Streamable HTTP (supporting mTLS 1.3/bearer tokens), injecting dynamic RLS session parameters and enforcing read-only database tool execution. |
+| **Autonomous LLM Agents (Local)** | **Python/Node.js MCP Gateway** | Stdio / Local Child Process IPC | Local Process Sandbox & RLS | Intercepts local LLM agent prompts via stdio child process IPC, enforcing transaction RLS context (`SELECT set_config('app.current_user_role', $1, true)`). |
 
 ---
 
@@ -752,7 +752,7 @@ flowchart TD
 * 🌐 **System Interoperability:** Enables zero-friction integration with any third-party, enterprise, or open-source application without requiring vendor-locked connectors.
 
 ## 4.3 MCP-Ready: Native AI & LLM Capability
-* 🤖 **Direct Agent Integration:** Implements the open standard **Model Context Protocol (MCP)** via stdio and Streamable HTTP. Large Language Models (LLMs) and autonomous AI agents can directly query database metrics, trigger background transformations strictly constrained to isolated Tier 2 scratch storage schemas (`scratch_*`) without mutating Tier 0/Tier 1 Golden SSoT schemas, and retrieve vector embeddings as native "Tools".
+* 🤖 **Direct Agent Integration:** Implements the open standard **Model Context Protocol (MCP)** via stdio and Streamable HTTP. Standard read-only MCP tools cannot execute writes or mutations. Separately authorized transformation tools are strictly restricted to writing output artifacts into isolated Tier 2 scratch storage schemas (`scratch_*`) without mutating Tier 0 Golden SSoT and Tier 1 schemas, and retrieve vector embeddings as native "Tools".
 * 🧠 **Contextual Grounding:** Replaces static PDF/Excel exports with conversational, context-aware AI interactions connected directly to live database state.
 
 ## 4.4 Fine-Grained Access Control (FGAC) & Data Tagging Governance

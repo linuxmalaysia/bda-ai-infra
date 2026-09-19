@@ -39,6 +39,64 @@ def test_compile_book_script_execution() -> None:
     assert "Compilation workflow executed successfully." in result.stdout
 
 
+def test_bake_native_svg_transformation(tmp_path: Path) -> None:
+    """Verify that tools/bake_native_svg.py transforms HTML mermaid blocks into vector SVGs."""
+    from tools.bake_native_svg import process_html_file
+
+    sample_html = tmp_path / "test_sample.html"
+    sample_html.write_text(
+        """<!DOCTYPE html>
+<html>
+<head><title>Test Book</title></head>
+<body>
+  <h1>Sample Diagram</h1>
+  <div class="sourceCode"><pre class="sourceCode mermaid"><code>flowchart TD
+    NodeA["Source Component"] --> NodeB["Target Component"]
+  </code></pre></div>
+</body>
+</html>""",
+        encoding="utf-8",
+    )
+
+    process_html_file(sample_html)
+    processed_content = sample_html.read_text(encoding="utf-8")
+
+    assert "mermaid-svg-container" in processed_content
+    assert "<svg" in processed_content
+    assert "</svg>" in processed_content
+    assert "baked-svg-print-styles" in processed_content
+
+
+def test_bake_native_svg_unrelated_preceding_svg(tmp_path: Path) -> None:
+    """Verify that fallback SVG generation occurs when an unrelated preceding SVG is separated by section headers."""
+    from tools.bake_native_svg import process_html_file
+
+    sample_html = tmp_path / "test_unrelated.html"
+    sample_html.write_text(
+        """<!DOCTYPE html>
+<html>
+<head><title>Test Book</title></head>
+<body>
+  <div class="mermaid-svg-container">
+    <svg viewBox="0 0 100 100"><rect width="100" height="100"/></svg>
+  </div>
+  <h2>New Unrelated Section Header</h2>
+  <div class="sourceCode"><pre class="sourceCode mermaid"><code>flowchart TD
+    NodeC["Unrelated Source"] --> NodeD["Unrelated Target"]
+  </code></pre></div>
+</body>
+</html>""",
+        encoding="utf-8",
+    )
+
+    process_html_file(sample_html)
+    processed_content = sample_html.read_text(encoding="utf-8")
+
+    # Should generate fallback vector SVG for NodeC / NodeD rather than omitting the block
+    assert "Unrelated Source" in processed_content or "NodeC" in processed_content
+    assert "baked-fallback-canvas" in processed_content
+
+
 def test_quarantine_workflow_routing_table() -> None:
     """Verify the Quarantine Workflow routing table entries in README.md."""
     readme_path = REPO_ROOT / "README.md"

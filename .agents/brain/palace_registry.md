@@ -1,31 +1,39 @@
 ---
 okf_version: "0.2"
 type: spatial_memory
-title: "Sovereign Markdown Palace Registry"
-description: "Spatial registry index mapping wings, halls, and rooms within the DSOM Spatial Memory Engine."
+title: "Palace Registry - Memory Index"
+description: "Master Palace index tracking spatial memory entries, skills, and documentation assets."
 status: active
-timestamp: "2026-09-16T04:00:00Z"
-stale_after: "2027-09-16T04:00:00Z"
+timestamp: "2026-09-18T19:30:00Z"
+stale_after: "2027-09-18T19:30:00Z"
 generated: false
 verified: true
 sources:
-  - url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/.agents/brain/"
-    description: "Official online spatial memory palace registry."
+  - id: "agents_constitution"
+    path: ".agents/AGENTS.md"
 topics:
-  - dsom
+  - spatial-memory
   - palace-registry
-  - spatial-index
+  - dsom
 ---
 
-# 🏰 Sovereign Markdown Palace Registry
+# 🏛️ Memory Palace Registry
 
-| Room ID | Wing / Sector | Description | Key Assets |
-| :--- | :--- | :--- | :--- |
-| `room_clean_architecture` | Reference Wing | Technical specifications, BDA Lakehouse target architecture, and domain analytical modules. | `docs/reference/` |
-| `room_proposals` | Governance & Proposal Wing | Strategic proposals for infrastructure modernisation, migration blueprints, and decoupled portal frameworks. | `docs/IT-MANAGEMENT-PROPOSAL.md`, `docs/proposals/` |
-| `room_crisp_strategy` | How-To & Tutorial Wing | Practical problem-solving, phased migration strategies, and developer onboarding. | `docs/tutorials/`, `docs/how-to-guides/` |
-| `room_dsom_protocol` | Governance & Protocol Wing | Sovereign AI Constitution, AI Cognitive Twin Protocol, Dual-Render Diagram skill, and Universal Gateway Matrix rules. | `AGENTS.md`, `.agents/`, `.agents/skills/`, `docs/AI-COGNITIVE-TWIN-PROTOCOL.md`, `docs/explanation/` |
-| `room_openwiki` | OpenWiki & SSoT Wing | OpenWiki knowledge base, CLI emulator, offline canvas graph visualizer, and open-source software relationship matrix. | `openwiki/`, `tools/openwiki_emulator.py`, `tests/test_openwiki.py` |
-| `room_tooling` | Automation & CI/CD Wing | Automated audit workflows, python pytest suites, ruff, markdownlint, Ansible Molecule, and Playwright tests. | `.github/workflows/`, `tests/`, `molecule/`, `playwright.config.ts`, `tools/` |
-| `room_jekyll_pages` | Hosting & Layout Wing | Jekyll site template, custom layouts/partials, responsive SCSS styling, theme toggle JS, and multi-platform hosting configs. | `_config.yml`, `_layouts/`, `_includes/`, `assets/`, `.gitlab-ci.yml`, `.gitbook.yaml`, `.readthedocs.yaml`, `mkdocs.yml` |
-| `room_ledger` | Sovereign Ledger Wing | Triple-ledger history, changelog, navigation compass, and llms sitemap. | `README.md`, `START-HERE.md`, `SUMMARY.md`, `_data/navigation.yml`, `llms.txt`, `CHANGELOG.md`, `HISTORY.md` |
+## 📂 Active Memory Nodes
+
+- **Task Registry:** `.agents/brain/task.md`
+- **Active Context Manifest:** `.agents/brain/active_context_manifest.md`
+- **Walkthrough Log:** `.agents/brain/walkthrough.md`
+- **Checkpoint Summary:** `.agents/brain/checkpoint_summary.txt`
+
+## 🛠️ Registered Agent Skills
+
+- `attested-computations`: Attested Computations in OKF v0.2 Skill
+- `diagram-design-standards`: Cathryn Lavery Diagram Design Principles & Standards Skill
+- `docstring`: Python Docstring Quality & Compliance Standard Skill
+- `dsom-downstream-compliance`: DSOM Protocol Downstream Compliance Skill
+- `dsom-migration-blueprint`: DSOM 4-Phase Migration Blueprint Execution Guide
+- `dsom-technical-book-compiler`: Technical Ebook & Handbook Multi-Format Compiler
+- `dual-render-architecture-diagram`: Dual-Render Architecture Diagram Specification Skill
+- `okf-v02-adoption-engineer`: Open Knowledge Format (OKF v0.2) Adoption Skill
+- `warp-agent-skills`: Warp & OpenViking Agent Skills Standard Skill

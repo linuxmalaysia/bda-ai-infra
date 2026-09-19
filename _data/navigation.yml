@@ -16,6 +16,8 @@
     url: /CLAUDE.html
 - title: Explanation
   items:
+  - title: Attested Computations and Warp Agent Skills Architecture
+    url: /docs/explanation/attested-computations-and-warp-skills.html
   - title: Governance, Security, and Compliance Framework
     url: /docs/explanation/governance-and-compliance.html
   - title: Model Context Protocol (MCP) and AI Sandboxing Architecture

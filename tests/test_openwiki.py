@@ -6,8 +6,8 @@ Protocol: Deep State of Mind (DSOM) For My AI Protocol
 import json
 from pathlib import Path
 import re
+import shutil
 import subprocess
-import sys
 
 import pytest
 import yaml
@@ -57,9 +57,19 @@ def exported_graph(tmp_path):
 
 def test_openwiki_emulator_init(tmp_path):
     """Verify python tools/openwiki_emulator.py --init with --output-dir isolates output."""
+    uv_bin = shutil.which("uv")
+    assert uv_bin is not None, "uv binary not found in PATH"
     output_dir = tmp_path / "openwiki_out"
     result = subprocess.run(
-        [sys.executable, "tools/openwiki_emulator.py", "--init", "--output-dir", str(output_dir)],
+        [
+            uv_bin,
+            "run",
+            "python",
+            "tools/openwiki_emulator.py",
+            "--init",
+            "--output-dir",
+            str(output_dir),
+        ],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
@@ -78,8 +88,17 @@ def test_openwiki_emulator_init(tmp_path):
 
 def test_openwiki_emulator_search():
     """Verify python tools/openwiki_emulator.py --search performs fast OKF frontmatter search."""
+    uv_bin = shutil.which("uv")
+    assert uv_bin is not None, "uv binary not found in PATH"
     result = subprocess.run(
-        [sys.executable, "tools/openwiki_emulator.py", "--search", "trino"],
+        [
+            uv_bin,
+            "run",
+            "python",
+            "tools/openwiki_emulator.py",
+            "--search",
+            "trino",
+        ],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
@@ -91,9 +110,19 @@ def test_openwiki_emulator_search():
 
 def test_openwiki_emulator_export_graph(tmp_path):
     """Verify python tools/openwiki_emulator.py --export-graph exports standalone graph HTML."""
+    uv_bin = shutil.which("uv")
+    assert uv_bin is not None, "uv binary not found in PATH"
     output_dir = tmp_path / "graph_out"
     result = subprocess.run(
-        [sys.executable, "tools/openwiki_emulator.py", "--export-graph", "--output-dir", str(output_dir)],
+        [
+            uv_bin,
+            "run",
+            "python",
+            "tools/openwiki_emulator.py",
+            "--export-graph",
+            "--output-dir",
+            str(output_dir),
+        ],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,

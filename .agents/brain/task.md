@@ -1,25 +1,25 @@
 ---
 okf_version: "0.2"
 type: spatial_memory
-title: "Task Registry - BDA Data Plane Upgrade & Client-Side Web AI Acceleration"
-description: "DSOM Task Registry documenting the BDA Data Plane Upgrade Proposal (docs/proposals/nre-bda-pipeline-upgrade.md), IT Management Proposal update, sanitization, and PR resolution."
+title: "Task Registry - BDA Data Plane Upgrade & Frontmatter Display Fix"
+description: "DSOM Task Registry documenting the frontmatter HTML display fix, test runner enforcement, code health, and EOD Palace sync."
 status: active
-timestamp: "2026-09-16T18:00:00Z"
-stale_after: "2027-09-16T18:00:00Z"
+timestamp: "2026-09-18T18:00:00Z"
+stale_after: "2027-09-18T18:00:00Z"
 generated: false
 verified: true
 sources:
-  - id: "nre_bda_pipeline_upgrade_proposal"
-    path: "docs/proposals/nre-bda-pipeline-upgrade.md"
-  - id: "it_management_proposal"
-    path: "docs/IT-MANAGEMENT-PROPOSAL.md"
+  - id: "index_homepage"
+    path: "index.md"
+  - id: "test_book_compiler"
+    path: "tests/test_book_compiler.py"
+  - id: "test_openwiki"
+    path: "tests/test_openwiki.py"
 topics:
-  - proposal
-  - laravel
-  - wildfly
-  - webassembly
-  - webgpu
-  - quarantine
+  - homepage
+  - okf-frontmatter
+  - liquid-templates
+  - subprocess-runner
   - spatial-memory
   - dsom
 ---
@@ -28,26 +28,21 @@ topics:
 
 ## 🟢 Completed Objectives
 
-1. **OpenMetadata & Percona PostgreSQL Enterprise Strategy (`docs/explanation/governance-and-compliance.md`, `docs/reference/postgresql-pgvector-enterprise-strategy.md`)**:
-   - Expanded OpenMetadata governance details: lightweight architecture, native OpenLineage tracking for Spark/Airflow runtime facets, separate Apache NiFi metadata events over HTTPS on TCP 8443 with mTLS, Bitol ODCS CLI execution, and `mcp-catalog-context` read-only views with PostgreSQL RLS.
-   - Expanded Percona Distribution for PostgreSQL 18 managed by Patroni as Tier 0 Golden SSoT, PostGIS/pgvector extensions, explicit ownership across RustFS quarantine, Iceberg Parquet lakehouse, OpenSearch, and DuckDB vss.
-   - Added dual-render SVG pipeline architecture diagrams and addressed all PR review comments.
-   - Added unit tests in `tests/test_openmetadata_postgresql_strategy.py` passing 100% (328/328 tests).
+1. **OKF Frontmatter Omission in HTML Homepage (`index.md`)**:
+   - Resolved issue where OKF YAML frontmatter from `README.md` was rendered as visible body text on the HTML homepage (`index.html`).
+   - Implemented Liquid template filtering (`split: "---"` and `offset: 2`) in `index.md` to strip the included `README.md` frontmatter while keeping `index.md`'s own frontmatter intact and preserving all Markdown body text and horizontal rules.
 
-2. **BDA Data Plane Upgrade Technical Proposal (`docs/proposals/nre-bda-pipeline-upgrade.md`)**:
-   - Authored technical migration proposal detailing the transition from legacy WildFly application servers to a decoupled Laravel Human-in-the-Loop (HITL) file quarantine workflow and client-side Wasm/WebGPU Web AI acceleration.
-   - Documented 3-stage quarantine workflow: Stage 1 (User Ingress & Edge Staging via Laravel), Stage 2 (Automated Apache NiFi 2.0 ETL with re-parsing and verification), and Stage 3 (Human Review, Replay-Protected JWT Sign-off, and Patroni PostgreSQL 18 SSoT write with `bda_provenance` Ed25519 metadata).
-   - Detailed client-side Web AI acceleration: Wasm Memory64 executable compilation/instantiation probes with 32-bit chunked Wasm fallbacks, Relaxed SIMD, WebGPU `f16` float math, `DP4a` quantized INT8 tensor dot products, and GPU memory transfer contracts (`writeBuffer()`).
-   - Addressed all PR review requirements: untreated raw file persistence into raw quarantine storage, advisory client metrics, 14-day retention across failed-validation and rejected-payload quarantine storage, single-use JWT replay protection (record ID, tenant, approver, audience, nonce, 5-min TTL), sanitized IP addresses and hostnames, and `HEX_RAW_64_BYTE` 128 uppercase hex character signature specification.
-   - Embedded complete Dual-Render Architecture Diagram suite (raw inline SVG vector graphic, Git-native Mermaid topology with Laravel upload boundary, and summary routing table).
+2. **Explicit UV Test Runner Subprocess Enforcement (`tests/test_book_compiler.py`, `tests/test_openwiki.py`)**:
+   - Enforced explicit `uv run python` subprocess invocation across test suites (`tests/test_book_compiler.py` and `tests/test_openwiki.py`).
+   - Asserted `shutil.which("uv")` exists, removed legacy `sys.executable` fallbacks and unused `sys` imports.
 
-3. **IT Management Proposal Update (`docs/IT-MANAGEMENT-PROPOSAL.md`)**:
-   - Updated Section 2.4 to describe Wasm/WebGPU client-side Web AI pre-processing as a target-state capability, specified sub-500ms latency targets, role-based immutable raw-upload quarantine storage, advisory metadata, and Wasm/NiFi fallbacks.
+3. **Codebase Health, Formatting & Linter Compliance**:
+   - Formatted all Python files using `uv run ruff format .` (15 files reformatted, 60 left unchanged).
+   - Validated Markdown files using `npx markdownlint-cli2` (62 files checked, 0 issues).
+   - Executed full test suite (`uv run pytest`) -> 328/328 tests passed cleanly (100% pass rate).
 
-4. **Documentation Indexing & Master Manuscript Compilation**:
-   - Executed `tools/generate_summary.py` to register `docs/proposals/nre-bda-pipeline-upgrade.md` in `SUMMARY.md` and `_data/navigation.yml`.
-   - Executed `tools/build_project_book.py` and `tools/bake_native_svg.py` to compile `build/book.md`.
+4. **Documentation Indexing & Navigation Summary**:
+   - Executed `tools/generate_summary.py` to regenerate `_data/navigation.yml` and `SUMMARY.md`.
 
-5. **Code Health, Linter & Full Test Suite Pass Rate**:
-   - Executed `uv run ruff check .` -> 0 violations.
-   - Executed `uv run pytest` -> 326/326 tests passed cleanly (100% pass rate).
+5. **EOD Palace Sync & Spatial Memory Update**:
+   - Synchronized spatial memory manifests in `.agents/brain/` (`task.md`, `active_context_manifest.md`, `checkpoint_summary.txt`).

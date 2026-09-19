@@ -231,19 +231,19 @@ For strict workload isolation, non-root security boundaries, and deterministic h
   systemctl --user start bda-astro.service
   systemctl --user status bda-astro.service
   ```
-* **Atomic Rollbacks & Auto-Updates:** `AutoUpdate=registry` integrates with `podman auto-update` timers. When a new image tag is detected in the registry, Podman pulls the image and restarts the systemd unit. If the updated container fails to start or fails health-gated readiness checks (`Type=notify` paired with `Notify=healthy`), systemd detects the unit startup failure and automatically rolls back execution to the previous known-good image version, driving deployment MTTR near zero.
+* **Atomic Rollbacks & Auto-Updates:** `AutoUpdate=registry` instructs the Podman Auto-Update Engine (`podman auto-update`) to track image digest changes for the configured image reference (e.g. `localhost/bda-astro-frontend:latest` or mutable release branches). Explicit immutable tag references (such as `:7.3.2`) require modifying the Quadlet `.container` file and running `systemctl --user daemon-reload`. When mutable tag references are configured, `podman auto-update` checks the registry for digest updates. If the newly pulled image fails during startup or fails health-gated readiness checks (`Type=notify` paired with `Notify=healthy`), the Podman Auto-Update Engine automatically aborts the update and rolls back execution to the previous known-good local image digest, driving deployment MTTR near zero.
 
 ### Technical Briefing: Declarative Rootless Podman Quadlet Service Unit Example
 
 ```ini
 # ~/.config/containers/systemd/bda-astro.container
 [Unit]
-Description=BDA Astro 7.3.2 Presentation Frontend Rootless Service
+Description=BDA Astro Presentation Frontend Rootless Service
 After=network-online.target
 Wants=network-online.target
 
 [Container]
-Image=localhost/bda-astro-frontend:7.3.2
+Image=localhost/bda-astro-frontend:latest
 ContainerName=bda-astro-frontend
 Environment=NODE_ENV=production PORT=8080
 PublishPort=8080:8080
@@ -266,10 +266,10 @@ WantedBy=default.target
 
 ## 2.3 Zero-Trust Networking: Mutual TLS (mTLS) 1.3
 
-To secure data-in-transit across the distributed cluster, the network fabric defaults to a zero-trust architecture enforcing mutual TLS (mTLS) 1.3 for all intra-cluster communication.
+To secure data-in-transit across the distributed cluster, the network fabric enforces a zero-trust architecture implementing mutual TLS (mTLS) 1.3 for all intra-cluster communication.
 
-* **Cryptographic Identity:** Every pod, microservice, and API endpoint is issued an ephemeral cryptographic identity (SPIFFE/SPIRE X.509 SVIDs). Connections are actively authenticated and encrypted using TLS 1.3 cipher suites (`TLS_AES_256_GCM_SHA384` and `TLS_CHACHA20_POLY1305_SHA256`) at the network edge before traffic is routed to the application layer.
-* **Lateral Movement Prevention:** By enforcing strict mTLS policies and default-deny network rules, the blast radius of any compromised node or application vulnerability is severely restricted. Unauthenticated lateral communication across the K3s cluster is cryptographically blocked, ensuring payload integrity as data moves from the headless API layer to the PostgreSQL persistence core.
+* **Cryptographic Identity & Local Socket Handoff:** Every pod, microservice, and API endpoint is issued an ephemeral cryptographic identity (SPIFFE/SPIRE X.509 SVIDs). In the target-state architecture, work-attestation and certificate issuance are handled by a per-node SPIRE Agent delivering SVIDs to rootless workloads via a local Unix domain socket (`$XDG_RUNTIME_DIR/spire/agent.sock` or `/tmp/spire-agent/public/api.sock`) exposing the SPIFFE Workload API. Control plane node attestation uses TCP port 8443 secured with mutual TLS and strict network-level caller ACLs.
+* **Concrete Enforcement Components & Lateral Movement Prevention:** Mutual TLS 1.3 termination and default-deny lateral movement policies are enforced by **Cilium Service Mesh / Envoy sidecars** for K3s Kubernetes workloads, and by **Nginx/HAProxy mTLS sidecar proxies** for rootless Podman Quadlet services. Connections are authenticated and encrypted using TLS 1.3 cipher suites (`TLS_AES_256_GCM_SHA384` and `TLS_CHACHA20_POLY1305_SHA256`), cryptographically blocking unauthenticated lateral movement as data moves from the API layer to the PostgreSQL persistence core.
 
 ## 2.4 Dual-Render Architecture Blueprint — Modernised Infrastructure Fabric
 
@@ -328,17 +328,17 @@ To secure data-in-transit across the distributed cluster, the network fabric def
 
   <rect x="350" y="185" width="260" height="110" fill="#F0FDF4" stroke="#16A34A" stroke-width="1" rx="6"/>
   <text x="360" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#15803D">bda-api.container Unit</text>
-  <text x="360" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Image: bda-api-microservice:v2</text>
+  <text x="360" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Image: bda-api-microservice:latest</text>
   <text x="360" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Non-Root Host Service Unit</text>
   <text x="360" y="253" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Immutable Container Image</text>
   <text x="360" y="269" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#166534">• Fast In-Memory State Handling</text>
 
   <rect x="350" y="310" width="260" height="130" fill="#FAF5FF" stroke="#9333EA" stroke-width="1" rx="6"/>
-  <text x="360" y="328" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">Atomic Rollback Supervisor</text>
-  <text x="360" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6B21A8">• podman auto-update Trigger</text>
+  <text x="360" y="328" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">Podman Auto-Update Engine</text>
+  <text x="360" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6B21A8">• podman auto-update Digest Track</text>
   <text x="360" y="362" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6B21A8">• Startup / Health Failure Fallback</text>
-  <text x="360" y="378" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7E22CE">systemctl --user revert &lt;unit&gt;</text>
-  <text x="360" y="394" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#581C87">• Reverts to Known-Good Image</text>
+  <text x="360" y="378" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7E22CE">podman auto-update --rollback</text>
+  <text x="360" y="394" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#581C87">• Reverts to Known-Good Digest</text>
   <text x="360" y="410" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Near-Zero MTTR Recovery</text>
 
   <!-- Zone 3: Zero-Trust mTLS 1.3 Mesh -->
@@ -348,17 +348,17 @@ To secure data-in-transit across the distributed cluster, the network fabric def
 
   <rect x="665" y="60" width="255" height="110" fill="#FAF5FF" stroke="#9333EA" stroke-width="1" rx="6"/>
   <text x="675" y="78" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">SPIFFE/SPIRE Identity Authority</text>
-  <text x="675" y="96" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">X.509 SVID Cryptographic Tokens</text>
-  <text x="675" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Ephemeral Cert Authority</text>
-  <text x="675" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Automated Workload Attestation</text>
+  <text x="675" y="96" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">Workload Socket: api.sock</text>
+  <text x="675" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Per-Node SPIRE Agent Attestation</text>
+  <text x="675" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Ephemeral X.509 SVID Tokens</text>
   <text x="675" y="144" font-family="Consolas, Monaco, monospace" font-size="10" fill="#581C87">spiffe://example.gov.my/ns/bda</text>
 
   <rect x="665" y="185" width="255" height="110" fill="#FAF5FF" stroke="#9333EA" stroke-width="1" rx="6"/>
-  <text x="675" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">mTLS 1.3 Enforced Pipelines</text>
-  <text x="675" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">Cipher: TLS_AES_256_GCM_SHA384</text>
-  <text x="675" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Bidirectional Mutual Auth</text>
-  <text x="675" y="253" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Active Network Edge Encryption</text>
-  <text x="675" y="269" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#581C87">• Strict Intra-Cluster Isolation</text>
+  <text x="675" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">mTLS 1.3 Enforced Sidecars</text>
+  <text x="675" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">Cilium / Nginx mTLS Sidecars</text>
+  <text x="675" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Active Network Edge Encryption</text>
+  <text x="675" y="253" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Default-Deny Policy Enforcement</text>
+  <text x="675" y="269" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#581C87">• Cipher: TLS_AES_256_GCM_SHA384</text>
 
   <rect x="665" y="310" width="255" height="130" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1" rx="6"/>
   <text x="675" y="328" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#4C1D95">PostgreSQL Persistence Core</text>
@@ -390,12 +390,12 @@ flowchart TD
     subgraph MIF_QuadletTier ["Host Immutable Workload Layer (Podman 5+ Quadlets & User systemd)"]
         MIF_AstroPod["Astro 7.3.2 Frontend\n(~/.config/containers/systemd/bda-astro.container)"]
         MIF_APIPod["Backend API Services\n(~/.config/containers/systemd/bda-api.container)"]
-        MIF_Systemd["systemctl --user Manager\n& Auto-Update Rollback Engine"]
+        MIF_Systemd["Podman Auto-Update Engine\n& Digest Rollback Manager"]
     end
 
     subgraph MIF_mTLSMesh ["Zero-Trust Networking Layer (mTLS 1.3)"]
-        MIF_SPIFFE["SPIFFE/SPIRE SVID Authority\n(X.509 Cryptographic Identity)"]
-        MIF_mTLSGate["mTLS 1.3 Intra-Cluster Encryption\n(TLS_AES_256_GCM_SHA384)"]
+        MIF_SPIFFE["SPIFFE/SPIRE Agent & Workload Socket\n(Local Unix Domain Socket Handoff)"]
+        MIF_mTLSGate["Cilium / Nginx mTLS 1.3 Sidecars\n(TLS_AES_256_GCM_SHA384)"]
         MIF_PostgresCore[("Percona Patroni PostgreSQL 18\n(Tier 0 Golden SSoT Core)")]
     end
 
@@ -408,11 +408,11 @@ flowchart TD
     MIF_Node3 --> MIF_Quorum
 
     MIF_Quorum -->|"Kube-API State Orchestration"| MIF_APIPod
-    MIF_Systemd -->|"Supervises User Service Units"| MIF_AstroPod
-    MIF_Systemd -->|"Supervises User Service Units"| MIF_APIPod
+    MIF_Systemd -->|"Podman Auto-Update Digest Rollback"| MIF_AstroPod
+    MIF_Systemd -->|"Podman Auto-Update Digest Rollback"| MIF_APIPod
 
-    MIF_SPIFFE -->|"Issues X.509 SVIDs"| MIF_AstroPod
-    MIF_SPIFFE -->|"Issues X.509 SVIDs"| MIF_APIPod
+    MIF_SPIFFE -->|"Workload Socket SVIDs"| MIF_AstroPod
+    MIF_SPIFFE -->|"Workload Socket SVIDs"| MIF_APIPod
     MIF_AstroPod -->|"mTLS 1.3 Encrypted REST"| MIF_APIPod
     MIF_APIPod -->|"TCP 5432 / mTLS 1.3"| MIF_mTLSGate
     MIF_mTLSGate -->|"Encrypted Database Persistence"| MIF_PostgresCore
@@ -423,10 +423,10 @@ flowchart TD
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **k3s-control-01..03** | **Embedded etcd Cluster** | `TCP 2379 / 2380` / Raft Protocol | Intra-Control-Plane Network | Maintains distributed state consensus and quorum across 3 control plane nodes. |
-| **K3s Control Plane** | **Kubernetes Agent Nodes** | `TCP 6443` / Kube-API | Proxmox Host Hypervisor | Orchestrates clustered container pods and Kubernetes state across nodes. |
+| **Kubernetes Agent Nodes** | **K3s Control Plane / Kube-API** | `TCP 6443` / Kube-API | Proxmox Host Hypervisor | Agent nodes connect to control plane API servers for workload state synchronization and cluster orchestration. |
 | **systemd User Manager** | **Astro 7.3.2 Frontend Pod** | Local Socket / `systemctl --user` | Rootless User Container Sandbox | Supervises host container service unit (`~/.config/containers/systemd/bda-astro.container`) with health-gated readiness. |
-| **SPIFFE/SPIRE Authority** | **Astro & API Workloads** | `TCP 8443` / SPIFFE Workload API | Cryptographic Identity Domain | Issues short-lived X.509 SVID certificates for workload-to-workload mutual authentication. |
-| **Backend API Pods** | **PostgreSQL 18 Core** | `TCP 5432` / mTLS 1.3 | Zero-Trust Database Network Boundary | Enforces encrypted intra-cluster communication and prevents unauthenticated lateral movement. |
+| **SPIRE Agent (Per-Node)** | **Astro & API Workloads** | Local Unix Socket / SPIFFE Workload API | Workload Socket Sandbox | Issues short-lived X.509 SVID certificates via `$XDG_RUNTIME_DIR/spire/agent.sock` with TCP 8443 reserved for SPIRE server-agent attestation. |
+| **Backend API Pods** | **PostgreSQL 18 Core** | `TCP 5432` / mTLS 1.3 | Cilium / Nginx mTLS Sidecar Boundary | Enforces encrypted intra-cluster communication and prevents unauthenticated lateral movement. |
 
 ---
 

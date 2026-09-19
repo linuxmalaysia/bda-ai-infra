@@ -61,8 +61,8 @@ Our primary mandate is to establish a verified **Single Source of Truth (SSoT)**
   * **4.3 Secondary AI Pipeline (n8n):** Decoupled RAG orchestration layer for embedding computation and `pgvector` persistence.
   * **4.4 Model Context Protocol (MCP):** Deploying n8n as MCP server exposing RAG capabilities and vector data to LLM agents.
   * **4.5 Dual-Render Architecture Blueprint:** Dual-Pipeline Big Data Architecture Topology.
-* **5. High-Availability Database & Storage Fabric**
-* **6. Day 2 Operations, Observability & AIOps**
+* **5. High-Availability Database & Storage Fabric** *(Stacked Release Dependency: To be integrated in Session 5)*
+* **6. Day 2 Operations, Observability & AIOps** *(Stacked Release Dependency: To be integrated in Session 6)*
 
 ---
 
@@ -639,7 +639,7 @@ By physically separating deterministic data ingestion from probabilistic AI oper
 
 ## 4.1 Human-in-the-Loop (HITL) Quarantine Workflow
 
-Through the deployment of a Laravel Web Portal, non-IT domain users are cryptographically isolated from the core data infrastructure.
+Through the deployment of a Laravel Web Portal, non-IT domain users are logically isolated from the core data infrastructure.
 
 * **Authentication & Ingress:** Users authenticate via Keycloak SSO and OAuth2 JWT session tokens before submitting raw payloads.
 * **Edge Staging:** Uploads bypass backend execution environments and are written directly to a shared POSIX isolated volume spool, mapped to the RustFS Staging Directory at the path `/data/staging/raw/`.
@@ -651,14 +651,16 @@ Apache NiFi 2.0 functions as the deterministic data plane and the sole authorita
 
 * **Automated ETL Execution:** Using a POSIX Directory Watcher, NiFi detects newly uploaded files in the RustFS staging volume and triggers a native Python process pool for text chunking, structural validation, and schema normalisation.
 * **Verification Halting:** Processed payloads are temporarily spooled to the `/data/staging/verify/` path to await human review.
-* **Master SSoT Persistence:** Upon receiving a digital approval sign-off event from the Laravel dashboard, the Apache NiFi Ingest Gate commits the golden records into the Percona Patroni PostgreSQL 18 database.
-* **Cryptographic Lineage:** NiFi executes these writes strictly under the `nifi_ingest_writer` role, appending `bda_provenance` cryptographic metadata—including Ed25519 signatures formatted as `HEX_RAW_64_BYTE`—to ensure total lineage auditability.
+* **Automated ETL Execution:** Using a POSIX Directory Watcher, NiFi detects newly uploaded files in the RustFS staging volume and triggers a native processing pool for text chunking, structural validation, and schema normalisation. In production, this processing pool executes via NiFi’s Python Processor API (a beta feature disabled by default requiring Python 3.10–3.12 and explicit `nifi.properties` configuration), or via an isolated containerised Python validation sidecar service.
+* **Verification Halting:** Processed payloads are temporarily spooled to the `/data/staging/verify/` path to await human review.
+* **Master SSoT Persistence:** Upon receiving a digital approval sign-off event from the Laravel dashboard, the Apache NiFi Ingest Gate commits the golden records into the Percona Patroni PostgreSQL 18 database. The NiFi Ingest Gate enforces strict approval validation, verifying that each approval signature covers both the normalized payload digest and the unique staged artifact version ID, while rejecting any expired, stale, or previously consumed approval tokens prior to database transaction commit.
+* **Cryptographic Lineage & Write Boundaries:** NiFi executes these writes strictly under the `nifi_ingest_writer` role, which holds explicit `INSERT`/`UPDATE` grants strictly limited to Tier 0 SSoT tables. Conversely, the secondary n8n pipeline operates under a read-only role with `SELECT` grants on Tier 0 SSoT tables and `INSERT`/`UPDATE` grants confined strictly to the `pgvector` schema. Every committed SSoT record is appended with `bda_provenance` cryptographic metadata—including Ed25519 digital signatures. The `bda_provenance` signature encoding is defined prior to database write as `HEX_RAW_64_BYTE`, stored in a PostgreSQL `VARCHAR(128)` or `TEXT` column as exactly 128 uppercase hexadecimal characters representing the 64 raw Ed25519 signature bytes.
 
 ## 4.3 Secondary AI Pipeline (n8n)
 
 To preserve the integrity of the primary Single Source of Truth (SSoT), all Retrieval-Augmented Generation (RAG) and AI enrichments are offloaded to n8n as a decoupled secondary pipeline.
 
-* **RAG Orchestration:** By separating ingestion from enrichment, n8n securely extracts validated records from the PostgreSQL 18 SSoT to generate vector embeddings. The n8n workflows orchestrate connections to local or external large language models (LLMs) to compute semantic representations of the structured data.
+* **RAG Orchestration & External LLM Egress Boundaries:** By separating ingestion from enrichment, n8n securely extracts validated records from the PostgreSQL 18 SSoT to generate vector embeddings. When interacting with external LLM providers, n8n enforces strict data boundary controls including automated PII field redaction, approved-provider domain allowlisting, and network egress proxy filtering. If these egress controls or approved providers are unavailable, n8n workflows are strictly restricted to on-premise local LLMs (e.g. Ollama / vLLM runtimes).
 * **Vector Persistence:** Once processed, n8n writes the computed embeddings back into the PostgreSQL instance, utilising the `pgvector` extension for high-dimensional semantic search and indexing.
 * **Data Purity:** This dual-pipeline structure guarantees that AI-generated synthetic records or vector representations never contaminate the original human-verified ground truth managed by NiFi.
 
@@ -668,7 +670,7 @@ To securely expose the RAG capabilities and `pgvector` data to external AI agent
 
 * **Workflow as a Tool:** Utilising n8n's native MCP Server Trigger nodes, internal RAG workflows and database queries are exposed as standardised, discoverable tools for autonomous LLM clients.
 * **Protocol Standardisation:** The n8n MCP server communicates via JSON-RPC over Server-Sent Events (SSE) or Streamable HTTP, standardising how AI assistants interact with the PostgreSQL vector data without requiring custom integration code.
-* **Fine-Grained Access Control (FGAC):** By routing agent inquiries through n8n's MCP interface, the infrastructure enforces strict access control, ensuring that external AI systems can query semantic context without obtaining direct database credentials or write permissions.
+* **Fine-Grained Access Control (FGAC) Authorization Binding:** By routing agent inquiries through n8n's MCP interface, the infrastructure enforces strict access control. Ingress traffic to the n8n MCP Server Trigger is mediated by an APISIX API Gateway integrated with Keycloak OAuth2 / mTLS authentication. The gateway authenticates the client principal, validates JWT scope claims, and injects session header context (`X-User-Role: bda_readonly_agent`), ensuring that external AI systems query semantic context under the restricted `bda_readonly_agent` database role without obtaining direct database credentials or write permissions.
 
 ## 4.5 Dual-Render Architecture Blueprint — Dual-Pipeline Big Data Architecture
 
@@ -817,11 +819,11 @@ flowchart TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **Laravel Web Portal** | **RustFS Staging Directory** | POSIX Spool / File I/O | `/data/staging/raw/` Volume | Cryptographically isolates user uploads, preventing direct execution on backend core. |
+| **Laravel Web Portal** | **RustFS Staging Directory** | POSIX Spool / File I/O | `/data/staging/raw/` Volume | Logically isolates user uploads, preventing direct execution on backend core. |
 | **RustFS Staging Volume** | **Apache NiFi 2.0 Engine** | POSIX Directory Watcher | Internal Data Plane Sandbox | Triggers Python processing pool for text chunking, structural validation, and schema normalisation. |
 | **Apache NiFi 2.0 Engine** | **Verification Staging Spool** | POSIX Spool / File I/O | `/data/staging/verify/` Path | Halts auto-propagation to master database until explicit human domain expert review and approval. |
 | **Laravel HITL Portal** | **Apache NiFi Ingest Gate** | HTTPS (443) / Approval Event | Human MFA & Digital Signature | Sends verified sign-off signal authorizing NiFi to promote staged payloads into Golden SSoT. |
-| **Apache NiFi Ingest Gate** | **PostgreSQL 18 SSoT Store** | `TCP 5432` / Native JDBC | `nifi_ingest_writer` DB Role | Commits Golden SSoT records while binding Ed25519 `HEX_RAW_64_BYTE` `bda_provenance` cryptographic signatures. |
+| **Apache NiFi Ingest Gate** | **PostgreSQL 18 SSoT Store** | `TCP 5432` / Native JDBC (TLS 1.3 Cert Verified) | `nifi_ingest_writer` DB Role | Commits Golden SSoT records over TLS 1.3 while binding Ed25519 `HEX_RAW_64_BYTE` (128 hex chars) `bda_provenance` signatures. |
 | **PostgreSQL 18 SSoT Store** | **n8n RAG Orchestrator** | `TCP 5432` / Read-Only Channel | Decoupled Secondary Pipeline | Extracts human-verified SSoT ground truth to calculate vector embeddings without write access to master tables. |
 | **n8n RAG Orchestrator** | **pgvector Persistence Index** | `TCP 5432` / Vector Write | PostgreSQL `pgvector` Schema | Persists high-dimensional vector embeddings for fast semantic similarity search. |
 | **n8n MCP Server Trigger** | **Autonomous LLM Agents** | HTTPS (443/8443) / JSON-RPC over SSE or Streamable HTTP | Fine-Grained Access Control (FGAC) | Standardises AI agent interaction, exposing RAG tools and vector data without granting direct database credentials. |

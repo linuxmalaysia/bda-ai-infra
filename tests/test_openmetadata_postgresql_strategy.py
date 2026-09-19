@@ -17,9 +17,7 @@ def test_postgresql_lifecycle_section_tier0_scoping() -> None:
     Ensures that Tier 0 SSoT operational records scoping is strictly asserted while preserving
     specialized-store ownership assertions for RustFS, Apache Iceberg, OpenSearch, and DuckDB vss.
     """
-    strategy_doc: Path = (
-        REPO_ROOT / "docs" / "reference" / "postgresql-pgvector-enterprise-strategy.md"
-    )
+    strategy_doc: Path = REPO_ROOT / "docs" / "reference" / "postgresql-pgvector-enterprise-strategy.md"
     assert strategy_doc.exists(), "postgresql-pgvector-enterprise-strategy.md missing"
 
     content: str = strategy_doc.read_text(encoding="utf-8")

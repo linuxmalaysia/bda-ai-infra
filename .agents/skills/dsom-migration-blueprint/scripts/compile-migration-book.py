@@ -17,7 +17,8 @@ from pathlib import Path
 REPO_ROOT: Path = Path(__file__).parent.parent.parent.parent.parent
 BUILD_DIR: Path = REPO_ROOT / "build"
 COMPILER_SCRIPT: Path = (
-    REPO_ROOT / ".agents/skills/dsom-technical-book-compiler/scripts/compile-book.py"
+    REPO_ROOT
+    / ".agents/skills/dsom-technical-book-compiler/scripts/compile-book.py"
 )
 
 

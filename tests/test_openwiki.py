@@ -6,8 +6,8 @@ Protocol: Deep State of Mind (DSOM) For My AI Protocol
 import json
 from pathlib import Path
 import re
+import shutil
 import subprocess
-import sys
 
 import pytest
 import yaml
@@ -57,9 +57,19 @@ def exported_graph(tmp_path):
 
 def test_openwiki_emulator_init(tmp_path):
     """Verify python tools/openwiki_emulator.py --init with --output-dir isolates output."""
+    uv_bin = shutil.which("uv")
+    assert uv_bin is not None, "uv binary not found in PATH"
     output_dir = tmp_path / "openwiki_out"
     result = subprocess.run(
-        [sys.executable, "tools/openwiki_emulator.py", "--init", "--output-dir", str(output_dir)],
+        [
+            uv_bin,
+            "run",
+            "python",
+            "tools/openwiki_emulator.py",
+            "--init",
+            "--output-dir",
+            str(output_dir),
+        ],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
@@ -78,8 +88,17 @@ def test_openwiki_emulator_init(tmp_path):
 
 def test_openwiki_emulator_search():
     """Verify python tools/openwiki_emulator.py --search performs fast OKF frontmatter search."""
+    uv_bin = shutil.which("uv")
+    assert uv_bin is not None, "uv binary not found in PATH"
     result = subprocess.run(
-        [sys.executable, "tools/openwiki_emulator.py", "--search", "trino"],
+        [
+            uv_bin,
+            "run",
+            "python",
+            "tools/openwiki_emulator.py",
+            "--search",
+            "trino",
+        ],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True,
@@ -91,10 +110,14 @@ def test_openwiki_emulator_search():
 
 def test_openwiki_emulator_export_graph(tmp_path):
     """Verify python tools/openwiki_emulator.py --export-graph exports standalone graph HTML."""
+    uv_bin = shutil.which("uv")
+    assert uv_bin is not None, "uv binary not found in PATH"
     output_dir = tmp_path / "graph_out"
     result = subprocess.run(
         [
-            sys.executable,
+            uv_bin,
+            "run",
+            "python",
             "tools/openwiki_emulator.py",
             "--export-graph",
             "--output-dir",
@@ -121,7 +144,9 @@ def test_openwiki_emulator_export_graph(tmp_path):
         "OpenTelemetry Collector, Prometheus, Grafana Tempo, Grafana Loki",
     ],
 )
-def test_generate_skeleton_includes_adopted_roadmap_stack(expected_inventory_entry, tmp_path):
+def test_generate_skeleton_includes_adopted_roadmap_stack(
+    expected_inventory_entry, tmp_path
+):
     """Verify the inventory advertises every newly adopted technology layer."""
     skeleton = generate_skeleton(timestamp=FIXED_TIMESTAMP, target_dir=tmp_path)
 
@@ -230,7 +255,9 @@ def test_export_graph_models_complete_telemetry_paths(exported_graph):
     nodes_by_id = {node["id"]: node for node in nodes}
     edge_tuples = {(edge["from"], edge["to"], edge["label"]) for edge in edges}
 
-    assert {nodes_by_id[node_id]["group"] for node_id in (23, 25, 26, 27)} == {"orchestration"}
+    assert {nodes_by_id[node_id]["group"] for node_id in (23, 25, 26, 27)} == {
+        "orchestration"
+    }
     assert nodes_by_id[28]["group"] == "analytics"
     assert {
         (10, 23, "StatsD metrics & filelog logs"),
@@ -252,7 +279,9 @@ def test_export_graph_has_unique_nodes_and_no_dangling_edges(exported_graph):
     node_ids = [node["id"] for node in nodes]
 
     assert len(node_ids) == len(set(node_ids))
-    assert {endpoint for edge in edges for endpoint in (edge["from"], edge["to"])} <= set(node_ids)
+    assert {endpoint for edge in edges for endpoint in (edge["from"], edge["to"])} <= set(
+        node_ids
+    )
 
 
 def test_export_graph_exposes_filter_for_every_node_group(exported_graph):

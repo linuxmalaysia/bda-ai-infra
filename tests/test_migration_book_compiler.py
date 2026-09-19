@@ -18,7 +18,9 @@ SCRIPT_PATH = (
 
 def load_compiler_module():
     """Dynamically load compile-migration-book module from path."""
-    spec = importlib.util.spec_from_file_location("compile_migration_book", SCRIPT_PATH)
+    spec = importlib.util.spec_from_file_location(
+        "compile_migration_book", SCRIPT_PATH
+    )
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
@@ -31,7 +33,9 @@ def test_compile_migration_book_script_exists() -> None:
 
 @patch("shutil.which", return_value="/usr/bin/uv")
 @patch("subprocess.run")
-def test_compile_migration_book_main_success(mock_run: MagicMock, mock_which: MagicMock) -> None:
+def test_compile_migration_book_main_success(
+    mock_run: MagicMock, mock_which: MagicMock
+) -> None:
     """Test main successful execution path of compile_migration_book script."""
     module = load_compiler_module()
     mock_run.return_value.returncode = 0
@@ -54,7 +58,9 @@ def test_compile_migration_book_main_failed_code(
 
 @patch("shutil.which", return_value="/usr/bin/uv")
 @patch("subprocess.run", side_effect=OSError("Execution error"))
-def test_compile_migration_book_main_os_error(mock_run: MagicMock, mock_which: MagicMock) -> None:
+def test_compile_migration_book_main_os_error(
+    mock_run: MagicMock, mock_which: MagicMock
+) -> None:
     """Test main execution path when subprocess raises OSError / FileNotFoundError."""
     module = load_compiler_module()
     with pytest.raises(SystemExit) as exc_info:

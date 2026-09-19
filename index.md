@@ -18,6 +18,4 @@ topics:
 layout: default
 ---
 
-{% capture raw_readme %}{% include_relative README.md %}{% endcapture %}
-{% assign parts = raw_readme | split: "---" %}
-{% for part in parts offset: 2 %}{% if forloop.first == false %}---{% endif %}{{ part }}{% endfor %}
+{% include_relative README.md %}

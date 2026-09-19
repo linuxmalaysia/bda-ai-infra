@@ -65,13 +65,17 @@ INLINE_CSS: str = """
 
 
 def parse_mermaid_nodes_and_arrows(mermaid_code: str) -> tuple[list[tuple[str, str]], list[tuple[str, str, str]]]:
-    """Parse node definitions and connection edges from a Mermaid flowchart or sequence diagram.
+    """Extract supported node definitions and directed edges from Mermaid source.
+
+    Bracketed node definitions and ``-->`` edges with optional quoted labels are
+    supported. HTML break tags in node labels are replaced with ``" - "``.
 
     Args:
-        mermaid_code (str): Unescaped raw Mermaid code.
+        mermaid_code: Mermaid source with any HTML entities already decoded.
 
     Returns:
-        tuple[list[tuple[str, str]], list[tuple[str, str, str]]]: (nodes, edges) tuples.
+        Ordered node and edge lists. Each edge contains its source identifier,
+        target identifier, and optional label.
 
     """
     nodes_dict: dict[str, str] = {}
@@ -101,13 +105,16 @@ def parse_mermaid_nodes_and_arrows(mermaid_code: str) -> tuple[list[tuple[str, s
 
 
 def generate_fallback_vector_svg(mermaid_code: str) -> str:
-    """Generate a clean, styled, inline vector SVG diagram from Mermaid code.
+    """Render supported Mermaid nodes and edges as inline SVG markup.
+
+    A two-node placeholder diagram is returned when no supported node definitions
+    are present.
 
     Args:
-        mermaid_code (str): Raw or unescaped Mermaid code block text.
+        mermaid_code: Mermaid source with any HTML entities already decoded.
 
     Returns:
-        str: Styled vector <svg> markup string.
+        A complete styled ``<svg>`` element.
 
     """
     nodes, edges = parse_mermaid_nodes_and_arrows(mermaid_code)
@@ -176,10 +183,14 @@ def generate_fallback_vector_svg(mermaid_code: str) -> str:
 
 
 def process_html_file(file_path: Path) -> None:
-    """Transform Mermaid code blocks in HTML output into baked inline vector SVGs.
+    """Rewrite an HTML file with print styles and baked SVG containers.
+
+    Mermaid blocks become generated SVGs unless a nearby sibling SVG already
+    represents the diagram. Standalone SVGs are wrapped in responsive containers.
+    A missing target is reported and left uncreated.
 
     Args:
-        file_path (Path): Path to target HTML document.
+        file_path: HTML document to rewrite in place.
 
     """
     if not file_path.exists():
@@ -204,6 +215,7 @@ def process_html_file(file_path: Path) -> None:
     )
 
     def replace_mermaid_block(match: re.Match) -> str:
+        """Replace a Mermaid block with SVG markup or an omission comment."""
         raw_matched = match.group(0)
 
         # Extract code content and unescape HTML entities
@@ -229,6 +241,7 @@ def process_html_file(file_path: Path) -> None:
     svg_wrapper_pattern = re.compile(r'(?<!<div class="mermaid-svg-container">\n)(<svg[\s\S]*?</svg>)(?!\n</div>)')
 
     def wrap_orphan_svg(match: re.Match) -> str:
+        """Wrap a standalone SVG match in a responsive container."""
         svg_content = match.group(1)
         return f'<div class="mermaid-svg-container">\n{svg_content}\n</div>'
 
@@ -239,7 +252,7 @@ def process_html_file(file_path: Path) -> None:
 
 
 def main() -> None:
-    """Inject inline CSS and vector SVG assets into HTML and PDF outputs."""
+    """Bake the configured handbook and any existing proposal HTML in place."""
     process_html_file(HANDBOOK_HTML)
     if PROPOSAL_HTML.exists():
         process_html_file(PROPOSAL_HTML)

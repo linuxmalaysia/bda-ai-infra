@@ -98,7 +98,7 @@ Within the baseline application layer, user interaction, content management, and
 
 Through long-term operational evaluation, this dual-monolith architecture accumulated critical technical debt:
 
-1. **Direct Surface Exposure & Zero-Day Vulnerability:** Both Joomla instances directly exposed public administrative login interfaces at `/administrator/`. Coupled with legacy PHP 7.x runtimes and End-of-Life (EOL) Joomla 3 codebases, this presented a persistent threat surface vulnerable to automated brute-forcing, remote code execution (RCE), and unpatched extension exploits.
+1. **Direct Surface Exposure & Unpatched Vulnerability Risks:** Both Joomla instances directly exposed public administrative login interfaces at `/administrator/`. Coupled with legacy PHP 7.x runtimes and End-of-Life (EOL) Joomla 3 codebases, this presented a persistent threat surface vulnerable to automated brute-forcing, remote code execution (RCE), and unpatched extension exploits.
 2. **Resource Exhaustion & Concurrency Freezes:** Serving page views via dynamic PHP-FPM processes and heavy Java Virtual Machine (JVM) threads required continuous synchronous rendering and runtime database querying. During traffic bursts or Denial of Service (DoS) attempts, Nginx worker pools and PHP-FPM processes regularly stalled, triggering cascading gateway 502/504 timeouts that mandated manual administrative restarts (`systemctl restart nginx`, `service wildfly restart`).
 3. **Fragile Lifecycle Maintenance:** Maintenance routines suffered from tight coupled dependencies. Corrupted local session locks or disk exhaustion caused by unrotated application logs (`/var/log/nginx/` and `/opt/wildfly/standalone/log/`) frequently halted entire services, creating significant operational toil for sysadmins.
 
@@ -188,8 +188,8 @@ With this modernisation blueprint, the overarching strategic objective is to ach
 |  Relational Storage        5-Node MariaDB Galera       Percona Patroni PG 18 HA   |
 |  Vector & Spatial Core     External Silos / None       PostGIS + pgvector Unified |
 |  Distributed File Store    GlusterFS Network Volumes   Ceph / MinIO S3 (WORM)     |
-|  Mean Time to Repair       Hours (Manual DB/FPM Sync)  < 10s (Automated Failover) |
-|  Mean Time to Detect       Minutes to Hours (Logs)     < 500ms (Edge Wasm/WebGPU) |
+|  Mean Time to Repair       Hours (Manual DB/FPM Sync)  < 10s Target RTO           |
+|  Validation Latency        Minutes to Hours (Logs)     < 500ms (Edge Wasm/WebGPU) |
 |  Horizontal Scalability    Constrained by Galera/FUSE  Stateless Podman / K3s     |
 |                                                                                   |
 +-----------------------------------------------------------------------------------+
@@ -197,8 +197,8 @@ With this modernisation blueprint, the overarching strategic objective is to ach
 
 The target architecture commits to the following quantifiable engineering benchmarks:
 
-* **Sub-500ms Mean Time to Detect (MTTD):** By migrating from server-side validation scripts to client-side WebAssembly (Wasm) and WebGPU primitives within the upgraded Laravel upload portal, schema validation errors, missing parameters, and formatting anomalies are captured and flagged directly in the browser during file selection prior to network transmission.
-* **85% Reduction in Mean Time to Repair (MTTR):** By deprecating monolithic VM state dependencies in favour of containerised Podman Quadlets and K3s orchestration, services recover automatically via systemd supervision and automated Kubernetes pod rescheduling. Database recovery, previously dependent on complex Galera SST rebuilds, is replaced by Patroni etcd consensus, guaranteeing automated master failover within 10 seconds without data corruption.
+* **Sub-500ms Client-Side Validation Latency:** By migrating from server-side validation scripts to client-side WebAssembly (Wasm) and WebGPU primitives within the upgraded Laravel upload portal, schema validation errors, missing parameters, and formatting anomalies are captured and flagged directly in the browser during file selection prior to network transmission.
+* **85% Reduction in Mean Time to Repair (MTTR):** By deprecating monolithic VM state dependencies in favour of containerised Podman Quadlets and K3s orchestration, services recover automatically via systemd supervision and automated Kubernetes pod rescheduling. Database recovery, previously dependent on complex Galera SST rebuilds, is replaced by Patroni etcd consensus targeting a Recovery Time Objective (RTO) of < 10 seconds for automated failover and zero data loss (RPO = 0).
 * **Zero-Overhead Horizontal Data Plane Scalability:** By establishing Apache NiFi 2.0 as a stateless, event-driven data plane decoupled from persistent storage, ingestion throughput scales horizontally across worker pods without lock contention. Data persistence routes exclusively into an immutable Ceph S3 lakehouse and a unified Percona Patroni PostgreSQL 18 instance with `pgvector`, scaling analytical queries across multiple read replicas while maintaining an authoritative, tamper-proof Single Source of Truth (SSoT).
 
 ---
@@ -332,7 +332,7 @@ flowchart TD
 * 🛡️ **Row and Column Level Security:** Permissions are strictly enforced at the API gateway and PostgreSQL database layer using session context injection (`SET LOCAL`). An external application or AI agent accesses only the precise data slices authorised for its identity.
 * 🏷️ **Human SSoT & AI Provenance Metadata Tagging:** To ensure total data authenticity and governance, all data within the Big Data Analytics Lakehouse is partitioned into two distinct categories:
   1. **Real Data & Human Verification (Tier 0 SSoT):** Human-entered data is validated through the decoupled Laravel human-in-the-loop portal (replacing legacy WildFly application servers and monolithic script bottlenecks). As a target-state capability, the Laravel frontend supports client-side **WebAssembly (Wasm)** (Memory64 & Relaxed SIMD) and **WebGPU** (16-bit float `f16` and `DP4a` quantized INT8 math) for client-side Web AI pre-processing targeting sub-500ms latency. Untouched raw client uploads are persisted into an immutable raw-upload quarantine storage volume prior to client-side pre-processing. Normalized JSON/CSV outputs serve as derived advisory artifacts which are re-validated server-side by Apache NiFi 2.0. If client Wasm/WebGPU hardware acceleration features are unsupported or fail, execution seamlessly falls back to standard Wasm CPU or server-side NiFi validation. Apache NiFi 2.0 acts as the sole authoritative writer promoting validated derived data to Percona Patroni PostgreSQL 18, while retaining original raw files for audit and reprocessing.
-  2. **AI Processes Enriched with RAG & Generative Metadata:** Any dataset touched, generated, or enriched by AI agents is explicitly tagged using `bda_provenance` metadata. This metadata records cryptographic signature contracts including `signature`, `key_id`, `verification_status`, `verification_timestamp`, `signature_algorithm` (Ed25519), and `signature_encoding` (HEX_RAW_64_BYTE), binding canonical RFC 8785 byte streams.
+  2. **AI Processes Enriched with RAG & Generative Metadata:** Any dataset touched, generated, or enriched by AI agents is explicitly tagged using `bda_provenance` metadata. This metadata records cryptographic signature contracts including `signature` (a 64-byte Ed25519 signature encoded as 128 uppercase hexadecimal characters), `key_id`, `verification_status`, `verification_timestamp`, `signature_algorithm` (Ed25519), and `signature_encoding` (`HEX_RAW_64_BYTE`, indicating 128 hex characters representing the 64 raw signature bytes), binding canonical RFC 8785 byte streams.
 * 📋 **Auditability & Zero Trust:** Every API call and MCP tool execution is logged, providing clear lineage and governance for regulatory compliance.
 
 ---
@@ -411,7 +411,7 @@ spec:
 Upon approval of this proposal, execution will proceed as follows via automated code and configuration updates:
 
 1. **Commit Proposal Document:** Save `docs/IT-MANAGEMENT-PROPOSAL.md` into the main branch.
-2. **Compile Technical Handbooks:** Run `tools/build_project_book.py` to regenerate `build/book.md` and compile `handbook.pdf`, `handbook.html`, `handbook.epub`, and `handbook.odt`.
+2. **Compile Technical Handbooks:** Run `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py` (or `tools/build_project_book.py` followed by Pandoc and headless Chromium) to assemble `build/book.md` and generate all handbook formats (`handbook.pdf`, `handbook.html`, `handbook.epub`, and `handbook.odt`).
 3. **Deploy Podman Pod Spec:** Add `docker/podman-pod.yaml` containing the complete container definition.
 4. **Build MCP Server Gateway:** Implement the Python-based MCP server in `src/mcp-server/` with initial PostgreSQL tool connections and FGAC middleware.
 5. **Initiate Phase 1 Migration:** Begin legacy report auditing, SQL logic extraction, and NiFi flow verification.

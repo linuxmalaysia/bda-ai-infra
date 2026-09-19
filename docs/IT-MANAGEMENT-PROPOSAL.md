@@ -207,9 +207,9 @@ The target architecture commits to the following quantifiable engineering benchm
 
 To ensure total clarity across executive and technical reviews, the target architecture is documented using our standardized dual-render architecture specification.
 
-### 2.1 Dual-Render Architecture Blueprint
+## 2.1 Dual-Render Architecture Blueprint
 
-#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" height="100%">
   <defs>
@@ -275,7 +275,7 @@ To ensure total clarity across executive and technical reviews, the target archi
 
 <p align="center"><em>Figure 2.1: Dual-Render Architecture Diagram — API-First &amp; MCP-Ready Data Platform Topology</em></p>
 
-#### 2. Git-Native Mermaid Topology (`.mmd`)
+### 2. Git-Native Mermaid Topology (`.mmd`)
 
 ```mermaid
 flowchart TD
@@ -308,7 +308,7 @@ flowchart TD
     MCP -->|"Native Tool Execution"| AI
 ```
 
-#### 3. Summary Interface & Routing Table
+### 3. Summary Interface & Routing Table
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
@@ -357,19 +357,19 @@ To ensure zero downtime and manage operational risk, legacy workbooks, applicati
 [ Phase 1: Audit ] ──► [ Phase 2: Logic Transfer ] ──► [ Phase 3: Open BI ] ──► [ Phase 4: MCP/API ]
 ```
 
-### Phase 1: Workbook & Monolith Audit
+## 4.1 Phase 1: Workbook & Monolith Audit
 * Catalogue all active legacy workbooks, calculated fields, custom SQL scripts, and user access lists.
 * Identify redundant reports and mark high-value dashboards for migration.
 
-### Phase 2: Data & Logic Consolidation
+## 4.2 Phase 2: Data & Logic Consolidation
 * Migrate complex calculations and data blending logic into **PostgreSQL Materialised Views** and stored functions.
 * Ensure Apache NiFi orchestrates data pipelines directly into clean PostgreSQL schemas.
 
-### Phase 3: Open-Source BI Deployment
+## 4.3 Phase 3: Open-Source BI Deployment
 * Deploy containerised **Apache Superset** (or Metabase) on Podman to replicate essential executive dashboards.
 * Connect directly to the PostgreSQL layer, restoring visual reporting capabilities with zero user-license overhead.
 
-### Phase 4: API & MCP Enablement
+## 4.4 Phase 4: API & MCP Enablement
 * Expose underlying business calculations as REST/gRPC API endpoints via Fusio.
 * Wrap PostgreSQL metrics and vector searches into standardised **MCP Tools** for internal AI agent consumption.
 

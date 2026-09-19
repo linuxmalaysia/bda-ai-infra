@@ -34,7 +34,7 @@ topics:
 
 This executive proposal outlines the technical blueprint to transition our national Big Data Analytics (BDA) and Enterprise AI Infrastructure from an aging, stateful monolithic footprint into an open-source, decoupled, and horizontally scalable data plane.
 
-Our primary mandate is to establish a verified **Single Source of Truth (SSoT)** designed specifically for human operations, paired with structured data layers optimized for **Artificial Intelligence (AI), Retrieval-Augmented Generation (RAG), and Transformer model consumption**.
+Our primary mandate is to establish a verified **Single Source of Truth (SSoT)** designed specifically for human operations, paired with structured data layers optimised for **Artificial Intelligence (AI), Retrieval-Augmented Generation (RAG), and Transformer model consumption**.
 
 ### Table of Contents
 * **1. Executive Summary & Architectural Strategy**
@@ -42,11 +42,16 @@ Our primary mandate is to establish a verified **Single Source of Truth (SSoT)**
   * **1.2 Stateful Database Dependencies:** Deprecating MariaDB Galera cluster & ClusterControl management.
   * **1.3 Storage Monolith Deprecation:** Operational inefficiencies of existing GlusterFS topologies.
   * **1.4 Target Metrics:** Absolute reduction of MTTR and achieving horizontal scalability across the data plane.
-* **2. Core Strategic Pillars: API-Ready, MCP-Ready & Human-AI Quarantine**
-* **3. Financial & Operational ROI Analysis**
-* **4. Decommissioning & Modernisation Strategy**
-* **5. Container & Cloud-Native Deployment Blueprint**
-* **6. Execution Plan & Next Steps**
+* **2. Modernised Infrastructure Fabric**
+  * **2.1 Container Orchestration:** Distributing High-Availability (HA) fabrics at scale using K3s with an embedded etcd datastore.
+  * **2.2 Immutable Workloads:** Utilising Podman Quadlets for seamless systemd integration and rollback capability.
+  * **2.3 Zero-Trust Networking:** Enforcing mutual TLS (mTLS) 1.3 across intra-cluster communication.
+  * **2.4 Dual-Render Architecture Blueprint:** Modernised Infrastructure Fabric Topology.
+* **3. Core Strategic Pillars: API-Ready, MCP-Ready & Human-AI Quarantine**
+* **4. Financial & Operational ROI Analysis**
+* **5. Decommissioning & Modernisation Strategy**
+* **6. Container & Cloud-Native Deployment Blueprint**
+* **7. Execution Plan & Next Steps**
 
 ---
 
@@ -54,7 +59,7 @@ Our primary mandate is to establish a verified **Single Source of Truth (SSoT)**
 
 Under the mandate of modernising the national Big Data Analytics (BDA) platform (`https://bda.example.gov.my`), this proposal establishes the technical blueprint to transition the infrastructure from an aging, stateful monolithic footprint into an open-source, decoupled, and horizontally scalable data plane. In its legacy implementation, the platform combined dynamic presentation layers, stateful enterprise application runtimes, and tightly coupled database clusters, introducing severe operational bottlenecks, vendor lock-in risks, and single-point-of-failure (SPOF) topologies.
 
-By decoupling ingestion, analytical compute, and frontend presentation, the modernised architecture targets digital sovereignty, zero proprietary licensing dependencies, and high-availability execution. The strategy systematically replaces the legacy Joomla 3 and WildFly application servers with an Astro 7.3.2 presentation framework and an isolated Laravel Human-in-the-Loop (HITL) quarantine ingestion portal. Concurrently, persistent storage transitions from legacy MariaDB Galera and GlusterFS deployments to Percona Patroni PostgreSQL 18 with `pgvector` and software-defined S3-compatible object storage (Ceph/MinIO). This transition eliminates state synchronization deadlocks and ensures deterministic data governance across all national environmental and natural resource datasets.
+By decoupling ingestion, analytical compute, and frontend presentation, the modernised architecture targets digital sovereignty, zero proprietary licensing dependencies, and high-availability execution. The strategy systematically replaces the legacy Joomla 3 and WildFly application servers with an Astro 7.3.2 presentation framework and an isolated Laravel Human-in-the-Loop (HITL) quarantine ingestion portal. Concurrently, persistent storage transitions from legacy MariaDB Galera and GlusterFS deployments to Percona Patroni PostgreSQL 18 with `pgvector` and software-defined S3-compatible object storage (Ceph/MinIO). This transition eliminates state synchronisation deadlocks and ensures deterministic data governance across all national environmental and natural resource datasets.
 
 At the end of the ingestion and transformation pipeline, data is exposed bidirectionally via high-performance **REST/gRPC API services** and native **Model Context Protocol (MCP) services**, enabling seamless data access for both traditional enterprise consumers and autonomous AI agents.
 
@@ -100,7 +105,7 @@ Through long-term operational evaluation, this dual-monolith architecture accumu
 
 1. **Direct Surface Exposure & Unpatched Vulnerability Risks:** Both Joomla instances directly exposed public administrative login interfaces at `/administrator/`. Coupled with legacy PHP 7.x runtimes and End-of-Life (EOL) Joomla 3 codebases, this presented a persistent threat surface vulnerable to automated brute-forcing, remote code execution (RCE), and unpatched extension exploits.
 2. **Resource Exhaustion & Concurrency Freezes:** Serving page views via dynamic PHP-FPM processes and heavy Java Virtual Machine (JVM) threads required continuous synchronous rendering and runtime database querying. During traffic bursts or Denial of Service (DoS) attempts, Nginx worker pools and PHP-FPM processes regularly stalled, triggering cascading gateway 502/504 timeouts that mandated manual administrative restarts (`systemctl restart nginx`, `service wildfly restart`).
-3. **Fragile Lifecycle Maintenance:** Maintenance routines suffered from tight coupled dependencies. Corrupted local session locks or disk exhaustion caused by unrotated application logs (`/var/log/nginx/` and `/opt/wildfly/standalone/log/`) frequently halted entire services, creating significant operational toil for sysadmins.
+3. **Fragile Lifecycle Maintenance:** Maintenance routines suffered from tightly coupled dependencies. Corrupted local session locks or disk exhaustion caused by unrotated application logs (`/var/log/nginx/` and `/opt/wildfly/standalone/log/`) frequently halted entire services, creating significant operational toil for sysadmins.
 
 ---
 
@@ -174,7 +179,7 @@ By analysing Day 2 operations under heavy analytical file ingestion, the distrib
 
 ## 1.4 Target Metrics: MTTR Reduction and Horizontal Data Plane Scalability
 
-With this modernisation blueprint, the overarching strategic objective is to achieve resilient, license-free digital sovereignty, eradicating operational toil and maximizing throughput across both ingestion and consumption tiers.
+With this modernisation blueprint, the overarching strategic objective is to achieve resilient, license-free digital sovereignty, eradicating operational toil and maximising throughput across both ingestion and consumption tiers.
 
 ```
 +-----------------------------------------------------------------------------------+
@@ -203,11 +208,226 @@ The target architecture commits to the following quantifiable engineering benchm
 
 ---
 
-# 2. Core Strategic Pillars: API-Ready, MCP-Ready & Human-AI Quarantine
+# 2. Modernised Infrastructure Fabric
 
-To ensure total clarity across executive and technical reviews, the target architecture is documented using our standardized dual-render architecture specification.
+To achieve digital sovereignty and an absolute reduction in Mean Time to Repair (MTTR), the infrastructure fabric transitions from statically provisioned virtual machines to a declarative, container-native ecosystem. This modernised compute layer eliminates configuration drift and ensures horizontal scalability across the data plane.
 
-## 2.1 Dual-Render Architecture Blueprint
+## 2.1 Container Orchestration: K3s with Embedded etcd
+
+The compute layer distributes High-Availability (HA) fabrics at scale using K3s, a lightweight, CNCF-certified Kubernetes distribution optimised for bare-metal enterprise deployments. To maintain strict control plane resiliency and eliminate external database dependencies, the architecture utilises K3s with an embedded etcd datastore.
+
+* **Quorum-Based Resiliency:** The HA control plane comprises an odd number of server nodes (a minimum of three nodes: `k3s-control-01.example.gov.my` [203.0.113.11], `k3s-control-02.example.gov.my` [203.0.113.12], and `k3s-control-03.example.gov.my` [203.0.113.13]) hosting the Kubernetes API and the embedded etcd datastore. Operating under Raft consensus, distributed quorum requires $Q = \lfloor N/2 \rfloor + 1 = 2$ active nodes, guaranteeing uninterrupted control plane availability even during node failure.
+* **Automated State Management:** K3s automatically handles etcd membership, Raft consensus management, and TLS certificate distribution without requiring manual cluster synchronisation. If a primary server node suffers a catastrophic failure, the remaining servers maintain quorum, allowing agent worker nodes (`k3s-worker-01.example.gov.my` [203.0.113.21] to `k3s-worker-04.example.gov.my` [203.0.113.24]) to automatically reconnect without downtime.
+* **Sovereign Deployment:** This orchestrated fabric operates directly on the underlying Proxmox VE hypervisors provisioned with Ubuntu 24.04 LTS, ensuring license-free, on-premise control over the routing and compute layers.
+
+## 2.2 Immutable Workloads: Podman Quadlets and systemd Integration
+
+For strict workload isolation and deterministic execution, the platform packages the Astro 7.3.2 frontend presentation layer and backend API microservices as immutable container images managed via Podman 5+ Quadlets.
+
+* **Declarative Infrastructure:** Podman Quadlets function as a native systemd generator, translating declarative `.container` unit files directly into native systemd service units at boot time.
+* **Seamless Lifecycle Management:** By integrating container lifecycles tightly with systemd, the operating system supervises pod execution, auto-starts dependencies in the correct sequence, and ensures predictable process recovery upon crash.
+* **Atomic Rollbacks:** Instantiating an image creates a completely new container filesystem rather than modifying existing state. Application upgrades are executed by simply swapping immutable image tags; if a health check fails, systemd instantly reverts the service unit to the previous known-good image, driving deployment MTTR near zero.
+
+### Technical Briefing: Declarative Podman Quadlet Service Unit Example
+
+```ini
+# /etc/containers/systemd/bda-astro.container
+[Unit]
+Description=BDA Astro 7.3.2 Presentation Frontend Service
+After=network-online.target
+Wants=network-online.target
+
+[Container]
+Image=localhost/bda-astro-frontend:7.3.2
+ContainerName=bda-astro-frontend
+Environment=NODE_ENV=production PORT=8080
+PublishPort=8080:8080
+HealthCmd=curl -f http://localhost:8080/health || exit 1
+HealthInterval=10s
+HealthRetries=3
+HealthTimeout=5s
+AutoUpdate=registry
+
+[Service]
+Restart=always
+RestartSec=5s
+TimeoutStartSec=60
+
+[Install]
+WantedBy=multi-user.target
+```
+
+## 2.3 Zero-Trust Networking: Mutual TLS (mTLS) 1.3
+
+To secure data-in-transit across the distributed cluster, the network fabric defaults to a zero-trust architecture enforcing mutual TLS (mTLS) 1.3 for all intra-cluster communication.
+
+* **Cryptographic Identity:** Every pod, microservice, and API endpoint is issued an ephemeral cryptographic identity (SPIFFE/SPIRE X.509 SVIDs). Connections are actively authenticated and encrypted using TLS 1.3 cipher suites (`TLS_AES_256_GCM_SHA384` and `TLS_CHACHA20_POLY1305_SHA256`) at the network edge before traffic is routed to the application layer.
+* **Lateral Movement Prevention:** By enforcing strict mTLS policies and default-deny network rules, the blast radius of any compromised node or application vulnerability is severely restricted. Unauthenticated lateral communication across the K3s cluster is cryptographically blocked, ensuring payload integrity as data moves from the headless API layer to the PostgreSQL persistence core.
+
+## 2.4 Dual-Render Architecture Blueprint — Modernised Infrastructure Fabric
+
+### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" width="100%" height="100%">
+  <defs>
+    <marker id="arrow-mif" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" />
+    </marker>
+    <filter id="shadow-mif" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="960" height="520" fill="#0F172A" rx="10"/>
+
+  <!-- Zone 1: K3s HA Control Plane -->
+  <rect x="25" y="20" width="285" height="440" fill="#1E293B" stroke="#0284C7" stroke-width="1.5" rx="8" filter="url(#shadow-mif)"/>
+  <rect x="25" y="20" width="285" height="26" fill="#0369A1" rx="8"/>
+  <text x="35" y="37" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#E0F2FE">1. K3s HA CONTROL PLANE (EMBEDDED ETCD)</text>
+
+  <rect x="40" y="60" width="255" height="80" fill="#F0F9FF" stroke="#0284C7" stroke-width="1" rx="6"/>
+  <text x="50" y="78" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0369A1">k3s-control-01 (203.0.113.11)</text>
+  <text x="50" y="96" font-family="Consolas, Monaco, monospace" font-size="10" fill="#0284C7">Embedded etcd Node 1 (Raft Leader)</text>
+  <text x="50" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#0369A1">Host: Proxmox VE / Ubuntu 24.04 LTS</text>
+
+  <rect x="40" y="155" width="255" height="80" fill="#F0F9FF" stroke="#0284C7" stroke-width="1" rx="6"/>
+  <text x="50" y="173" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0369A1">k3s-control-02 (203.0.113.12)</text>
+  <text x="50" y="191" font-family="Consolas, Monaco, monospace" font-size="10" fill="#0284C7">Embedded etcd Node 2 (Raft Follower)</text>
+  <text x="50" y="207" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#0369A1">Host: Proxmox VE / Ubuntu 24.04 LTS</text>
+
+  <rect x="40" y="250" width="255" height="80" fill="#F0F9FF" stroke="#0284C7" stroke-width="1" rx="6"/>
+  <text x="50" y="268" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#0369A1">k3s-control-03 (203.0.113.13)</text>
+  <text x="50" y="286" font-family="Consolas, Monaco, monospace" font-size="10" fill="#0284C7">Embedded etcd Node 3 (Raft Follower)</text>
+  <text x="50" y="302" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#0369A1">Host: Proxmox VE / Ubuntu 24.04 LTS</text>
+
+  <rect x="40" y="345" width="255" height="95" fill="#FEF3C7" stroke="#D97706" stroke-width="1" rx="6"/>
+  <text x="50" y="365" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#B45309">Raft Distributed Quorum State</text>
+  <text x="50" y="383" font-family="Consolas, Monaco, monospace" font-size="10" fill="#78350F">Q = floor(3/2) + 1 = 2 Active</text>
+  <text x="50" y="401" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#92400E">Ports: TCP 2379/2380 (etcd), 6443 (API)</text>
+  <text x="50" y="419" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#B45309">Auto Certificate &amp; Member Sync</text>
+
+  <!-- Zone 2: Podman Quadlets & systemd -->
+  <rect x="335" y="20" width="290" height="440" fill="#1E293B" stroke="#16A34A" stroke-width="1.5" rx="8" filter="url(#shadow-mif)"/>
+  <rect x="335" y="20" width="290" height="26" fill="#15803D" rx="8"/>
+  <text x="345" y="37" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#DCFCE7">2. PODMAN QUADLETS &amp; SYSTEMD SUPERVISION</text>
+
+  <rect x="350" y="60" width="260" height="110" fill="#F0FDF4" stroke="#16A34A" stroke-width="1" rx="6"/>
+  <text x="360" y="78" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#15803D">bda-astro.container Unit</text>
+  <text x="360" y="96" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Image: bda-astro-frontend:7.3.2</text>
+  <text x="360" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• systemd Service Unit Generation</text>
+  <text x="360" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Declarative Boot Lifecycle</text>
+  <text x="360" y="144" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#166534">• Automated Health Retries &amp; Checks</text>
+
+  <rect x="350" y="185" width="260" height="110" fill="#F0FDF4" stroke="#16A34A" stroke-width="1" rx="6"/>
+  <text x="360" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#15803D">bda-api.container Unit</text>
+  <text x="360" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#166534">Image: bda-api-microservice:v2</text>
+  <text x="360" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Rootless Execution Isolation</text>
+  <text x="360" y="253" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#15803D">• Immutable Filesystem Layers</text>
+  <text x="360" y="269" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#166534">• Fast In-Memory State Handling</text>
+
+  <rect x="350" y="310" width="260" height="130" fill="#FAF5FF" stroke="#9333EA" stroke-width="1" rx="6"/>
+  <text x="360" y="328" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">Atomic Rollback Supervisor</text>
+  <text x="360" y="346" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6B21A8">• Failed Health Check Detection</text>
+  <text x="360" y="362" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#6B21A8">• Automatic Known-Good Tag Swap</text>
+  <text x="360" y="378" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7E22CE">systemctl revert &lt;unit&gt;</text>
+  <text x="360" y="394" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#581C87">• Drives Deployment MTTR near Zero</text>
+  <text x="360" y="410" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Zero-Downtime Service Recovery</text>
+
+  <!-- Zone 3: Zero-Trust mTLS 1.3 Mesh -->
+  <rect x="650" y="20" width="285" height="440" fill="#1E293B" stroke="#9333EA" stroke-width="1.5" rx="8" filter="url(#shadow-mif)"/>
+  <rect x="650" y="20" width="285" height="26" fill="#7E22CE" rx="8"/>
+  <text x="660" y="37" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#F3E8FF">3. ZERO-TRUST MTLS 1.3 NETWORK MESH</text>
+
+  <rect x="665" y="60" width="255" height="110" fill="#FAF5FF" stroke="#9333EA" stroke-width="1" rx="6"/>
+  <text x="675" y="78" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">SPIFFE/SPIRE Identity Authority</text>
+  <text x="675" y="96" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">X.509 SVID Cryptographic Tokens</text>
+  <text x="675" y="112" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Ephemeral Cert Authority</text>
+  <text x="675" y="128" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Automated Workload Attestation</text>
+  <text x="675" y="144" font-family="Consolas, Monaco, monospace" font-size="10" fill="#581C87">spiffe://example.gov.my/ns/bda</text>
+
+  <rect x="665" y="185" width="255" height="110" fill="#FAF5FF" stroke="#9333EA" stroke-width="1" rx="6"/>
+  <text x="675" y="203" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#7E22CE">mTLS 1.3 Enforced Pipelines</text>
+  <text x="675" y="221" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6B21A8">Cipher: TLS_AES_256_GCM_SHA384</text>
+  <text x="675" y="237" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Bidirectional Mutual Auth</text>
+  <text x="675" y="253" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#7E22CE">• Active Network Edge Encryption</text>
+  <text x="675" y="269" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#581C87">• Strict Intra-Cluster Isolation</text>
+
+  <rect x="665" y="310" width="255" height="130" fill="#F5F3FF" stroke="#6D28D9" stroke-width="1" rx="6"/>
+  <text x="675" y="328" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#4C1D95">PostgreSQL Persistence Core</text>
+  <text x="675" y="346" font-family="Consolas, Monaco, monospace" font-size="10" fill="#581C87">Percona Patroni PostgreSQL 18</text>
+  <text x="675" y="362" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#4C1D95">• Fine-Grained Access Control (FGAC)</text>
+  <text x="675" y="378" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#581C87">• Default Deny Unauth Lateral Moves</text>
+  <text x="675" y="394" font-family="Consolas, Monaco, monospace" font-size="10" fill="#6D28D9">TCP 5432 / mTLS 1.3 Channel</text>
+  <text x="675" y="410" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#4C1D95">• Single Authoritative SSoT Writer</text>
+
+  <!-- Flow Connectors -->
+  <line x1="310" y1="210" x2="335" y2="210" stroke="#0284C7" stroke-width="2" marker-end="url(#arrow-mif)"/>
+  <line x1="625" y1="210" x2="650" y2="210" stroke="#16A34A" stroke-width="2" marker-end="url(#arrow-mif)"/>
+
+  <!-- Caption -->
+  <text x="480" y="495" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#94A3B8">Figure 2.1: Dual-Render Architecture Diagram — Modernised Infrastructure Fabric (K3s Embedded etcd, Podman Quadlets &amp; Zero-Trust mTLS 1.3 Mesh)</text>
+</svg>
+
+### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+flowchart TD
+    subgraph MIF_K3sPlane ["K3s High-Availability Control Plane (Proxmox VE / Ubuntu 24.04 LTS)"]
+        MIF_Node1["k3s-control-01 (203.0.113.11)\nEmbedded etcd Node 1"]
+        MIF_Node2["k3s-control-02 (203.0.113.12)\nEmbedded etcd Node 2"]
+        MIF_Node3["k3s-control-03 (203.0.113.13)\nEmbedded etcd Node 3"]
+        MIF_Quorum{"Raft Consensus Quorum\n(N=3, Q=2 Active)"}
+    end
+
+    subgraph MIF_QuadletTier ["Immutable Workload Layer (Podman 5+ Quadlets & systemd)"]
+        MIF_AstroPod["Astro 7.3.2 Frontend\n(bda-astro.container)"]
+        MIF_APIPod["Backend API Services\n(bda-api.container)"]
+        MIF_Systemd["systemd Lifecycle Supervision\n& Auto-Rollback Engine"]
+    end
+
+    subgraph MIF_mTLSMesh ["Zero-Trust Networking Layer (mTLS 1.3)"]
+        MIF_SPIFFE["SPIFFE/SPIRE SVID Authority\n(X.509 Cryptographic Identity)"]
+        MIF_mTLSGate["mTLS 1.3 Intra-Cluster Encryption\n(TLS_AES_256_GCM_SHA384)"]
+        MIF_PostgresCore[("Percona Patroni PostgreSQL 18\n(Tier 0 Golden SSoT Core)")]
+    end
+
+    MIF_Node1 <-->|"TCP 2379/2380 Raft Sync"| MIF_Node2
+    MIF_Node2 <-->|"TCP 2379/2380 Raft Sync"| MIF_Node3
+    MIF_Node3 <-->|"TCP 2379/2380 Raft Sync"| MIF_Node1
+
+    MIF_Node1 --> MIF_Quorum
+    MIF_Node2 --> MIF_Quorum
+    MIF_Node3 --> MIF_Quorum
+
+    MIF_Quorum -->|"K3s API Server (TCP 6443)"| MIF_Systemd
+    MIF_Systemd -->|"Supervises Service Units"| MIF_AstroPod
+    MIF_Systemd -->|"Supervises Service Units"| MIF_APIPod
+
+    MIF_SPIFFE -->|"Issues X.509 SVIDs"| MIF_AstroPod
+    MIF_SPIFFE -->|"Issues X.509 SVIDs"| MIF_APIPod
+    MIF_AstroPod -->|"mTLS 1.3 Encrypted REST"| MIF_APIPod
+    MIF_APIPod -->|"TCP 5432 / mTLS 1.3"| MIF_mTLSGate
+    MIF_mTLSGate -->|"Encrypted Database Persistence"| MIF_PostgresCore
+```
+
+### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Trust Zone | Operational Significance / Flow Description |
+| :--- | :--- | :--- | :--- | :--- |
+| **k3s-control-01..03** | **Embedded etcd Cluster** | `TCP 2379 / 2380` / Raft Protocol | Intra-Control-Plane Network | Maintains distributed state consensus and quorum across 3 control plane nodes. |
+| **K3s Control Plane** | **systemd Service Manager** | `TCP 6443` / Kube-API | Proxmox Host Hypervisor | Orchestrates Podman Quadlet `.container` unit lifecycles and health monitors. |
+| **systemd Supervisor** | **Astro 7.3.2 Frontend Pod** | Local Socket / systemctl | Rootless Container Sandbox | Supervises frontend application process with automated health checks and atomic rollbacks. |
+| **SPIFFE/SPIRE Authority** | **Astro & API Workloads** | `TCP 8443` / SPIFFE Workload API | Cryptographic Identity Domain | Issues short-lived X.509 SVID certificates for workload-to-workload mutual authentication. |
+| **Backend API Pods** | **PostgreSQL 18 Core** | `TCP 5432` / mTLS 1.3 | Zero-Trust Database Network Boundary | Enforces encrypted intra-cluster communication and prevents unauthenticated lateral movement. |
+
+---
+
+# 3. Core Strategic Pillars: API-Ready, MCP-Ready & Human-AI Quarantine
+
+To ensure total clarity across executive and technical reviews, the target architecture is documented using our standardised dual-render architecture specification.
+
+## 3.1 Dual-Render Architecture Blueprint
 
 ### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
@@ -273,7 +493,7 @@ To ensure total clarity across executive and technical reviews, the target archi
   <line x1="715" y1="340" x2="715" y2="375" stroke="#64748B" stroke-width="2" marker-end="url(#arrow-prop)"/>
 </svg>
 
-<p align="center"><em>Figure 2.1: Dual-Render Architecture Diagram — API-First &amp; MCP-Ready Data Platform Topology</em></p>
+<p align="center"><em>Figure 3.1: Dual-Render Architecture Diagram — API-First &amp; MCP-Ready Data Platform Topology</em></p>
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)
 
@@ -320,24 +540,24 @@ flowchart TD
 
 ---
 
-### 2.2 API-Ready: Universal Data Exchange
+## 3.2 API-Ready: Universal Data Exchange
 * 🔄 **Bidirectional Data Flow:** Data is no longer trapped inside static visual portals. Enterprise applications, IoT devices, and partner APIs can inject structured telemetry or transactional events directly into our core via REST or gRPC endpoints, as well as extract real-time datasets.
 * 🌐 **System Interoperability:** Enables zero-friction integration with any third-party, enterprise, or open-source application without requiring vendor-locked connectors.
 
-### 2.3 MCP-Ready: Native AI & LLM Capability
+## 3.3 MCP-Ready: Native AI & LLM Capability
 * 🤖 **Direct Agent Integration:** Implements the open standard **Model Context Protocol (MCP)**. Large Language Models (LLMs) and autonomous AI agents can directly query database metrics, trigger background transformations, and retrieve vector embeddings as native "Tools".
 * 🧠 **Contextual Grounding:** Replaces static PDF/Excel exports with conversational, context-aware AI interactions connected directly to live database state.
 
-### 2.4 Fine-Grained Access Control (FGAC) & Data Tagging Governance
+## 3.4 Fine-Grained Access Control (FGAC) & Data Tagging Governance
 * 🛡️ **Row and Column Level Security:** Permissions are strictly enforced at the API gateway and PostgreSQL database layer using session context injection (`SET LOCAL`). An external application or AI agent accesses only the precise data slices authorised for its identity.
 * 🏷️ **Human SSoT & AI Provenance Metadata Tagging:** To ensure total data authenticity and governance, all data within the Big Data Analytics Lakehouse is partitioned into two distinct categories:
-  1. **Real Data & Human Verification (Tier 0 SSoT):** Human-entered data is validated through the decoupled Laravel human-in-the-loop portal (replacing legacy WildFly application servers and monolithic script bottlenecks). As a target-state capability, the Laravel frontend supports client-side **WebAssembly (Wasm)** (Memory64 & Relaxed SIMD) and **WebGPU** (16-bit float `f16` and `DP4a` quantized INT8 math) for client-side Web AI pre-processing targeting sub-500ms latency. Untouched raw client uploads are persisted into an immutable raw-upload quarantine storage volume prior to client-side pre-processing. Normalized JSON/CSV outputs serve as derived advisory artifacts which are re-validated server-side by Apache NiFi 2.0. If client Wasm/WebGPU hardware acceleration features are unsupported or fail, execution seamlessly falls back to standard Wasm CPU or server-side NiFi validation. Apache NiFi 2.0 acts as the sole authoritative writer promoting validated derived data to Percona Patroni PostgreSQL 18, while retaining original raw files for audit and reprocessing.
+  1. **Real Data & Human Verification (Tier 0 SSoT):** Human-entered data is validated through the decoupled Laravel human-in-the-loop portal (replacing legacy WildFly application servers and monolithic script bottlenecks). As a target-state capability, the Laravel frontend supports client-side **WebAssembly (Wasm)** (Memory64 & Relaxed SIMD) and **WebGPU** (16-bit float `f16` and `DP4a` quantized INT8 math) for client-side Web AI pre-processing targeting sub-500ms latency. Untouched raw client uploads are persisted into an immutable raw-upload quarantine storage volume prior to client-side pre-processing. Normalised JSON/CSV outputs serve as derived advisory artifacts which are re-validated server-side by Apache NiFi 2.0. If client Wasm/WebGPU hardware acceleration features are unsupported or fail, execution seamlessly falls back to standard Wasm CPU or server-side NiFi validation. Apache NiFi 2.0 acts as the sole authoritative writer promoting validated derived data to Percona Patroni PostgreSQL 18, while retaining original raw files for audit and reprocessing.
   2. **AI Processes Enriched with RAG & Generative Metadata:** Any dataset touched, generated, or enriched by AI agents is explicitly tagged using `bda_provenance` metadata. This metadata records cryptographic signature contracts including `signature` (a 64-byte Ed25519 signature encoded as 128 uppercase hexadecimal characters), `key_id`, `verification_status`, `verification_timestamp`, `signature_algorithm` (Ed25519), and `signature_encoding` (`HEX_RAW_64_BYTE`, indicating 128 hex characters representing the 64 raw signature bytes), binding canonical RFC 8785 byte streams.
 * 📋 **Auditability & Zero Trust:** Every API call and MCP tool execution is logged, providing clear lineage and governance for regulatory compliance.
 
 ---
 
-# 3. Financial & Operational ROI Analysis
+# 4. Financial & Operational ROI Analysis
 
 | Area | Legacy Architecture (Tableau & Monolith) | Proposed Architecture (API/MCP on Podman/K3s) |
 | :--- | :--- | :--- |
@@ -349,7 +569,7 @@ flowchart TD
 
 ---
 
-# 4. Decommissioning & Modernisation Strategy
+# 5. Decommissioning & Modernisation Strategy
 
 To ensure zero downtime and manage operational risk, legacy workbooks, application runtimes, and databases will be systematically decommissioned using a four-phase migration roadmap:
 
@@ -357,25 +577,25 @@ To ensure zero downtime and manage operational risk, legacy workbooks, applicati
 [ Phase 1: Audit ] ──► [ Phase 2: Logic Transfer ] ──► [ Phase 3: Open BI ] ──► [ Phase 4: MCP/API ]
 ```
 
-## 4.1 Phase 1: Workbook & Monolith Audit
+## 5.1 Phase 1: Workbook & Monolith Audit
 * Catalogue all active legacy workbooks, calculated fields, custom SQL scripts, and user access lists.
 * Identify redundant reports and mark high-value dashboards for migration.
 
-## 4.2 Phase 2: Data & Logic Consolidation
+## 5.2 Phase 2: Data & Logic Consolidation
 * Migrate complex calculations and data blending logic into **PostgreSQL Materialised Views** and stored functions.
 * Ensure Apache NiFi orchestrates data pipelines directly into clean PostgreSQL schemas.
 
-## 4.3 Phase 3: Open-Source BI Deployment
+## 5.3 Phase 3: Open-Source BI Deployment
 * Deploy containerised **Apache Superset** (or Metabase) on Podman to replicate essential executive dashboards.
 * Connect directly to the PostgreSQL layer, restoring visual reporting capabilities with zero user-license overhead.
 
-## 4.4 Phase 4: API & MCP Enablement
+## 5.4 Phase 4: API & MCP Enablement
 * Expose underlying business calculations as REST/gRPC API endpoints via Fusio.
 * Wrap PostgreSQL metrics and vector searches into standardised **MCP Tools** for internal AI agent consumption.
 
 ---
 
-# 5. Container & Cloud-Native Deployment Blueprint
+# 6. Container & Cloud-Native Deployment Blueprint
 
 The target infrastructure relies on rootless **Podman** pods and **K3s Kubernetes** orchestration to enforce high availability, zero vendor lock-in, and full cloud-native compatibility.
 
@@ -406,7 +626,7 @@ spec:
 
 ---
 
-# 6. Execution Plan & Next Steps
+# 7. Execution Plan & Next Steps
 
 Upon approval of this proposal, execution will proceed as follows via automated code and configuration updates:
 

@@ -34,7 +34,7 @@ Skills are discovered hierarchically across the workspace:
 - Primary Sovereign Location: `.agents/skills/<skill-name>/SKILL.md`
 - Mirrored Standard Location: `skills/<skill-name>/SKILL.md`
 
-Every skill directory must contain a canonical `SKILL.md` conforming to OKF v0.2 YAML frontmatter rules and embedding executable automation scripts in subdirectories (e.g. `scripts/`).
+Every skill directory must contain a canonical `SKILL.md` conforming to OKF v0.2 YAML frontmatter rules. Skills that require automated execution MAY embed executable automation scripts in subdirectories (e.g. `scripts/`). Declarative documentation-only skills specifying governance policies, architecture contracts, or design standards are explicitly exempt from embedding executable scripts.
 
 ---
 

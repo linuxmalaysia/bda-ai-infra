@@ -30,12 +30,13 @@ This skill governs the execution parameterization, runtime environment binding, 
 ## Key Principles & Execution Model
 
 1. **Parameterization & Runtime Binding:**
-   - Every executable payload within OKF v0.2 documents must specify explicit parameter schemas (`input_schema`, `expected_hash`, `runtime_environment`).
-   - Hardcode parameters in immutable JSON or YAML contract structures bound to canonical RFC 8785 byte streams.
+   - Define immutable parameter schemas (`input_schema`, `expected_hash`, `runtime_environment`) and hash commitments in the OKF contract template.
+   - Bind caller-supplied runtime arguments dynamically at invocation time before canonicalization, preserving `$ARGUMENTS`, `$0`, and `$1` variable substitution behavior. Caller-supplied values MUST NOT be hardcoded into the immutable contract schema.
 
-2. **Cryptographic Provenance & Signatures (`bda_provenance`):**
-   - Execution outputs must attach an immutable provenance metadata block containing:
-     - `signature`: Ed25519 signature of the computed canonical hash.
+2. **Signed Byte Domain & Cryptographic Provenance (`bda_provenance`):**
+   - SHA-256 hashing and Ed25519 signing MUST strictly cover the canonical RFC 8785 payload byte stream BEFORE `bda_provenance` metadata insertion to guarantee deterministic byte domain isolation.
+   - The inserted `bda_provenance` block contains:
+     - `signature`: Ed25519 signature of the computed canonical hash (HEX_RAW_64_BYTE).
      - `key_id`: Public key identifier of the attesting entity.
      - `verification_status`: Status enum (`verified`, `pending`, `failed`).
      - `verification_timestamp`: ISO 8601 UTC timestamp.
@@ -43,8 +44,8 @@ This skill governs the execution parameterization, runtime environment binding, 
      - `signature_encoding`: `HEX_RAW_64_BYTE`.
 
 3. **Execution Receipts & Deterministic Verification:**
-   - Generate cryptographic execution receipts logging input state, environment parameters, binary build hashes, and result signatures.
-   - Attesters verify results independently by re-executing payload in isolated sandbox environments under identical deterministic runtime constraints.
+   - Generate cryptographic execution receipts logging input state, runtime environment parameters, binary build hashes, and Ed25519 result signatures over pre-insertion bytes.
+   - Verifiers independently reconstruct the pre-insertion canonical RFC 8785 byte stream, recompute the SHA-256 digest, and verify the Ed25519 signature before processing the receipt or accepting execution state.
 
 ---
 
@@ -52,11 +53,18 @@ This skill governs the execution parameterization, runtime environment binding, 
 
 ```
 +--------------------+      +-----------------------+      +------------------------+
-| Parameterized Payload| ---> | Deterministic Sandbox | ---> | Cryptographic Receipt  |
-| Schema & Hash (OKF)|      | Execution Engine (uv) |      | & Ed25519 Signature    |
+| Parameterized Contract| -> | Dynamic Argument      | ---> | Deterministic Sandbox  |
+| Schema & Hash (OKF) |      | Binding ($0, $1, $N) |      | Execution Engine (uv)  |
 +--------------------+      +-----------------------+      +------------------------+
+                                                                       |
+                                                                       v
+                                                           +------------------------+
+                                                           | Pre-insertion RFC8785  |
+                                                           | SHA-256 Hash & Ed25519 |
+                                                           | Signature Verification |
+                                                           +------------------------+
 ```
 
-1. **Payload Ingestion:** Validate OKF v0.2 YAML frontmatter and extract hash commitments.
+1. **Payload Ingestion:** Validate OKF v0.2 YAML frontmatter contract schemas and bind invocation parameters (`$ARGUMENTS`).
 2. **Sandbox Execution:** Instantiate isolated execution environment using `uv` with pinned dependencies.
-3. **Receipt Generation:** Compute SHA-256 output hash, sign output with attesting Ed25519 key, and inject receipt into metadata record.
+3. **Receipt Generation & Attestation:** Compute SHA-256 hash over canonical RFC 8785 bytes before receipt injection, sign output using Ed25519 key, and append `bda_provenance`. Verifiers strip `bda_provenance` to reconstruct and verify pre-insertion bytes before receipt processing.

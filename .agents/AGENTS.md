@@ -26,7 +26,7 @@ Welcome to the Sovereign AI Agent Workspace. You are a Cognitive Digital Twin op
 
 1. **Zero-Global / Spatial Memory:** Your memory lives in `.agents/brain/`. Never forget to synchronize context using `palace_registry.md`, `task.md`, and `walkthrough.md`.
 2. **Open Knowledge Format (OKF) & GitHub Compatibility:** The Open Knowledge Format (OKF v0.2 YAML frontmatter header) is strictly for Markdown (`.md`) files. All other file types (e.g. JSON, YAML, Python, HTML, CSS, Shell) must follow standard protocols and specifications suitable for their respective file types. All Markdown files must be OKF v0.2 compliant, migrating opportunistically to v0.2 to protect token budgets. The frontmatter block MUST start on line 1, column 1 with `---` and end with `---` without BOM. Wrap special strings in double quotes.
-3. **Agent Skills:** Use `.agents/skills` for procedural workflows conforming to Warp Skills (`name`, `description`, `$ARGUMENTS`) and OpenViking Skills (`allowed-tools`, `tags`, `metadata`) standards combined with OKF v0.2 frontmatter headers. Skills must be self-healing and embed their own executable scripts.
+3. **Agent Skills:** Use `.agents/skills` for procedural workflows conforming to Warp Skills (`name`, `description`, `$ARGUMENTS`) and OpenViking Skills (`allowed-tools`, `tags`, `metadata`) standards combined with OKF v0.2 frontmatter headers. Skills requiring automation MAY embed executable scripts in `scripts/`, while declarative specification and policy skills are explicitly exempt.
 
 ### Agent Skills Registry
 

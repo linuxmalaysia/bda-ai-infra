@@ -37,8 +37,10 @@ This skill enforces high-impact, publication-grade diagram design standards adap
 2. **Visual Hierarchy & Typography System:**
    - **Font Family:** System sans-serif or 'Inter' (`font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"`). Monospace for technical identifiers.
    - **Primary Entity Titles:** Bold, 14px-16px font weight, positioned prominently at top left or centered in card header.
-   - **Secondary Identifiers:** Monospace 12px font for FQDNs, IP addresses, ports, or service names (`#38BDF8` or `#2563EB`).
-   - **Tertiary Metadata:** Regular 10px-11px font for protocol descriptions, roles, or operational state notes.
+   - **Secondary Identifiers:** Monospace 12px font for FQDNs, IP addresses, ports, or service names. Enforce strict WCAG 2.1 AA contrast ratio (>= 4.5:1) across all canvases:
+     - *Light Canvas / Print Mode:* Use deep, high-contrast tones (`#0284C7` or `#1D4ED8` on `#FFFFFF`/`#F8FAFC`).
+     - *Dark Canvas / Screen Mode:* Use bright cyan/blue tones (`#38BDF8` or `#60A5FA` on `#0F172A`/`#1E293B`).
+   - **Tertiary Metadata:** Regular 10px-11px font for protocol descriptions, roles, or operational state notes (`#334155` on light canvas, `#94A3B8` on dark canvas).
 
 3. **Line Weight Consistency & Connector Clarity:**
    - Standardize stroke weights across connection paths: `1.5px` for secondary data flows, `2.0px` for primary architectural boundaries or ingress connections.

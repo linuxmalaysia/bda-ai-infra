@@ -1,8 +1,8 @@
 ---
 okf_version: "0.2"
 type: governance
-title: "IT Management Proposal: Enterprise Data Infrastructure Modernisation"
-description: "Executive proposal for transitioning from Tableau to an open, Podman-based, API-First, and MCP-Ready architecture with Fine-Grained Access Control (FGAC)."
+title: "IT Management Proposal: Enterprise Data Architecture & Infrastructure Modernisation"
+description: "Executive proposal for modernising the national Big Data Analytics (BDA) platform into an open, decoupled, API-First, and MCP-Ready infrastructure with Fine-Grained Access Control (FGAC)."
 status: active
 timestamp: "2026-09-16T00:00:00Z"
 stale_after: "2027-09-16T00:00:00Z"
@@ -10,7 +10,7 @@ generated: false
 verified: true
 sources:
   - url: "https://linuxmalaysia.github.io/bda-ai-infra/docs/IT-MANAGEMENT-PROPOSAL.html"
-    description: "Enterprise Data Infrastructure Modernisation Proposal."
+    description: "Enterprise Data Architecture & Infrastructure Modernisation Proposal."
 topics:
   - architecture
   - proposal
@@ -20,30 +20,196 @@ topics:
   - fgac
 ---
 
-# Executive Proposal: Enterprise Data Infrastructure Modernisation
+# Executive Management Proposal: Enterprise Data Architecture & Infrastructure Modernisation
 
-**Document Version:** 1.0
+**Document Version:** 2.0
 **Author:** Lead Systems Architect
-**Target Audience:** IT Management & Steering Committee
+**Target Audience:** IT Management, Executive Steering Committee & Enterprise Architects
 **Infrastructure Scope:** `bda-ai-infra`
+**Downloads & Handbooks:** [Download PDF Handbook](https://linuxmalaysia.github.io/bda-ai-infra/handbook.pdf) | [Download EPUB Handbook](https://linuxmalaysia.github.io/bda-ai-infra/handbook.epub) | [Download Standalone HTML](https://linuxmalaysia.github.io/bda-ai-infra/handbook.html)
 
 ---
 
-## 1. Executive Summary
+## Strategic Proposal Overview & Roadmap
 
-This proposal outlines the strategic modernisation of our Big Data Analytics & AI Infrastructure (`bda-ai-infra`). We are transitioning from a legacy, static visualisation-dependent architecture (Tableau) to an **API-First** and **Model Context Protocol (MCP)-Ready** ecosystem powered by **Podman** containers.
+This executive proposal outlines the technical blueprint to transition our national Big Data Analytics (BDA) and Enterprise AI Infrastructure from an aging, stateful monolithic footprint into an open-source, decoupled, and horizontally scalable data plane.
 
-By replacing proprietary dashboard tools with an open, containerised integration layer, we eliminate recurring licensing costs while transforming our data warehouse into a **bidirectional, intelligent data hub**. Any enterprise software, open-source application, or AI agent can securely ingest, transform, query, and share data with strict **Fine-Grained Access Control (FGAC)**.
+Our primary mandate is to establish a verified **Single Source of Truth (SSoT)** designed specifically for human operations, paired with structured data layers optimized for **Artificial Intelligence (AI), Retrieval-Augmented Generation (RAG), and Transformer model consumption**.
 
-Human-generated data remains the sole authoritative **Single Source of Truth (SSoT)**. All operational data modified or enriched by AI agents is explicitly tagged and segregated within our big data repository using cryptographic provenance contracts (`bda_provenance`).
+### Table of Contents
+* **1. Executive Summary & Architectural Strategy**
+  * **1.1 Legacy Architecture Analysis:** Technical debt of stateful Joomla 3 & WildFly application servers.
+  * **1.2 Stateful Database Dependencies:** Deprecating MariaDB Galera cluster & ClusterControl management.
+  * **1.3 Storage Monolith Deprecation:** Operational inefficiencies of existing GlusterFS topologies.
+  * **1.4 Target Metrics:** Absolute reduction of MTTR and achieving horizontal scalability across the data plane.
+* **2. Core Strategic Pillars: API-Ready, MCP-Ready & Human-AI Quarantine**
+* **3. Financial & Operational ROI Analysis**
+* **4. Decommissioning & Modernisation Strategy**
+* **5. Container & Cloud-Native Deployment Blueprint**
+* **6. Execution Plan & Next Steps**
 
 ---
 
-## 2. Core Strategic Pillars: API-Ready & MCP-Ready
+# 1. Executive Summary & Architectural Strategy
 
-### 2.1 Dual-Render Infrastructure Architecture Blueprint
+Under the mandate of modernising the national Big Data Analytics (BDA) platform (`https://bda.example.gov.my`), this proposal establishes the technical blueprint to transition the infrastructure from an aging, stateful monolithic footprint into an open-source, decoupled, and horizontally scalable data plane. In its legacy implementation, the platform combined dynamic presentation layers, stateful enterprise application runtimes, and tightly coupled database clusters, introducing severe operational bottlenecks, vendor lock-in risks, and single-point-of-failure (SPOF) topologies.
 
-#### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+By decoupling ingestion, analytical compute, and frontend presentation, the modernised architecture targets digital sovereignty, zero proprietary licensing dependencies, and high-availability execution. The strategy systematically replaces the legacy Joomla 3 and WildFly application servers with an Astro 7.3.2 presentation framework and an isolated Laravel Human-in-the-Loop (HITL) quarantine ingestion portal. Concurrently, persistent storage transitions from legacy MariaDB Galera and GlusterFS deployments to Percona Patroni PostgreSQL 18 with `pgvector` and software-defined S3-compatible object storage (Ceph/MinIO). This transition eliminates state synchronization deadlocks and ensures deterministic data governance across all national environmental and natural resource datasets.
+
+At the end of the ingestion and transformation pipeline, data is exposed bidirectionally via high-performance **REST/gRPC API services** and native **Model Context Protocol (MCP) services**, enabling seamless data access for both traditional enterprise consumers and autonomous AI agents.
+
+---
+
+## 1.1 Legacy Architecture Analysis: Technical Debt of Stateful Joomla 3 & WildFly
+
+Within the baseline application layer, user interaction, content management, and analytical dashboard delivery were partitioned across monolithic runtime environments hosted on CentOS 8 virtual machines inside a Proxmox VE hypervisor cluster:
+
+* **Joomla 3 CMS Portals:** The public portal infrastructure was split across two distinct virtual nodes—`portal-node-01` (Public IP: `198.51.100.10`, port 443) running Joomla! 3.9.19 for Portal BDA, and `portal-node-02` (Public IP: `198.51.100.20`, port 443) running Joomla! 3.9.14 for the MAIN portal. Ingress web traffic was reverse-proxied through an Nginx 1.18.0 gateway (`ingress-proxy-01` at `198.51.100.5`).
+* **WildFly Application Server:** Analytical dashboard services operated on `app-wildfly-01` (Public IP: `198.51.100.15`, port 443) deploying a monolithic Java enterprise archive (`BDA.war`) on WildFly version 19.1.0. This runtime handled departmental dashboard configurations, local mail relay integrations (`XMail.properties` and local Postfix), and direct JDBC connections to operational databases.
+
+```
++-----------------------------------------------------------------------------------+
+|                        LEGACY APPLICATION LAYER RUNTIME                           |
++-----------------------------------------------------------------------------------+
+|                                                                                   |
+|   +------------------------------------+   +----------------------------------+   |
+|   |         Joomla! 3.9.19             |   |          Joomla! 3.9.14          |   |
+|   |   portal-node-01 (198.51.100.10)   |   |   portal-node-02 (198.51.100.20)   |   |
+|   |   Public /administrator/ Exposed   |   |   Public /administrator/ Exposed |   |
+|   +-----------------+------------------+   +-----------------+----------------+   |
+|                     | Dynamic PHP-FPM                        | Dynamic PHP-FPM    |
+|                     +-------------------+--------------------+                    |
+|                                         |                                         |
+|                                         v                                         |
+|                        +----------------------------------+                       |
+|                        |     Nginx 1.18.0 Reverse Proxy   |                       |
+|                        |   ingress-proxy-01 (198.51.100.5)|                       |
+|                        +----------------+-----------------+                       |
+|                                         |                                         |
+|                                         v                                         |
+|                        +----------------------------------+                       |
+|                        |        WildFly 19.1.0 JVM        |                       |
+|                        |   app-wildfly-01 (198.51.100.15) |                       |
+|                        |   Deployments: BDA.war (Monolith)|                       |
+|                        +----------------+-----------------+                       |
+|                                                                                   |
++-----------------------------------------------------------------------------------+
+```
+
+Through long-term operational evaluation, this dual-monolith architecture accumulated critical technical debt:
+
+1. **Direct Surface Exposure & Unpatched Vulnerability Risks:** Both Joomla instances directly exposed public administrative login interfaces at `/administrator/`. Coupled with legacy PHP 7.x runtimes and End-of-Life (EOL) Joomla 3 codebases, this presented a persistent threat surface vulnerable to automated brute-forcing, remote code execution (RCE), and unpatched extension exploits.
+2. **Resource Exhaustion & Concurrency Freezes:** Serving page views via dynamic PHP-FPM processes and heavy Java Virtual Machine (JVM) threads required continuous synchronous rendering and runtime database querying. During traffic bursts or Denial of Service (DoS) attempts, Nginx worker pools and PHP-FPM processes regularly stalled, triggering cascading gateway 502/504 timeouts that mandated manual administrative restarts (`systemctl restart nginx`, `service wildfly restart`).
+3. **Fragile Lifecycle Maintenance:** Maintenance routines suffered from tight coupled dependencies. Corrupted local session locks or disk exhaustion caused by unrotated application logs (`/var/log/nginx/` and `/opt/wildfly/standalone/log/`) frequently halted entire services, creating significant operational toil for sysadmins.
+
+---
+
+## 1.2 Stateful Database Dependencies: Deprecating MariaDB Galera & ClusterControl
+
+In the legacy data storage layer, structured relational data was bound to a 5-node MariaDB Galera Cluster (version 10.5.9) managed via Severalnines ClusterControl on `db-mgmt-01` (`198.51.100.30:5001`) with ProxySQL 2.0.15 mediating database connections on TCP port 6032:
+
+* `mariadb-node-01`: `198.51.100.31:3306`
+* `mariadb-node-02`: `198.51.100.32:3306`
+* `mariadb-node-03`: `198.51.100.33:3306`
+* `mariadb-node-04`: `198.51.100.34:3306`
+* `mariadb-node-05`: `198.51.100.35:3306`
+
+The cluster hosted mixed application schemas, including `bda_portal_main`, `bda_portal_secondary`, and `bda_dashboard_core` for CMS operations, alongside departmental analytics databases (`adms_cems`, `adms_scoring`, `bda_analytics`, and `hwc_data`).
+
+```
++-----------------------------------------------------------------------------------+
+|                        LEGACY MARIADB GALERA TOPOLOGY                             |
++-----------------------------------------------------------------------------------+
+|                                                                                   |
+|   +---------------------------------------------------------------------------+   |
+|   |       ClusterControl Controller & ProxySQL (198.51.100.30:5001/6032)      |   |
+|   +-------------------------------------+-------------------------------------+   |
+|                                         | Synchronous Multi-Master Replicate      |
+|         +-------------------------------+-------------------------------+         |
+|         |               |               |               |               |         |
+|         v               v               v               v               v         |
+|   +-----------+   +-----------+   +-----------+   +-----------+   +-----------+   |
+|   |  Node 1   |   |  Node 2   |   |  Node 3   |   |  Node 4   |   |  Node 5   |   |
+|   | .100.31   |   | .100.32   |   | .100.33   |   | .100.34   |   | .100.35   |   |
+|   | (Primary) |   | (Primary) |   | (Primary) |   | (Primary) |   | (Primary) |   |
+|   +-----------+   +-----------+   +-----------+   +-----------+   +-----------+   |
+|                                                                                   |
+|   Failure Modes: WSREP Split-Brain Quorum Drop, Flow Control Halts, High Latency  |
++-----------------------------------------------------------------------------------+
+```
+
+While Galera provided virtually synchronous replication, its operational reality across five virtual nodes generated severe structural liabilities:
+
+1. **Write Amplification & Flow Control Lockups:** Because Galera relies on certification-based replication (`wsrep`), every write transaction across all databases must be certified by all active nodes. Heavy batch ETL inserts (such as streaming incident reports or telemetry loads via NiFi) routinely triggered Galera Flow Control (`wsrep_flow_control_paused`). This throttled the entire cluster, delaying frontend portal queries and causing cascading connection pool exhaustion across ProxySQL.
+2. **Quorum & Split-Brain Sensitivities:** Network latency spikes or hypervisor memory contention across nodes caused arbitrary nodes to fall out of sync (`wsrep_cluster_status != Primary`). Re-synchronising a partitioned node often forced full State Snapshot Transfers (SST), locking disk I/O on donor nodes and risking total cluster stalls.
+3. **Schema and Vector Sprawl:** MariaDB 10.5 lacks native high-dimensional vector capabilities and advanced spatio-temporal indexing required for enterprise AI workloads (e.g., RAG embeddings, spatial clustering). Retaining this cluster forces the adoption of external vector databases, causing architecture sprawl, fragmented backup workflows, and broken ACID boundaries.
+
+---
+
+## 1.3 Storage Monolith Deprecation: Inefficiencies of GlusterFS Topologies
+
+To synchronise shared CMS media assets, user file uploads, and template files across the distributed VM nodes, the legacy environment implemented GlusterFS distributed network storage.
+
+By analysing Day 2 operations under heavy analytical file ingestion, the distributed POSIX storage layer exhibited severe architectural inefficiencies:
+
+1. **Small-File Metadata Locking & FUSE Bottlenecks:** GlusterFS processes file access via FUSE (Filesystem in Userspace) wrappers, requiring extensive synchronous metadata lookups across distributed bricks. When ingesting thousands of unstructured documents, satellite images, and CSV feeds, metadata contention severely degraded read/write performance, overwhelming VM disk queues.
+2. **Split-Brain & Self-Heal Overhead:** Network interruptions or VM failovers between hypervisor nodes frequently induced GlusterFS split-brain conditions on replicated volumes. Resolving split-brain required administrators to manually inspect heal logs (`gluster volume heal info split-brain`) and delete stale brick metadata, exposing datasets to file-lock corruption.
+3. **Absence of Object Lifecycle & Immutability:** GlusterFS lacks native S3-compatible APIs, Object Versioning, and Write-Once-Read-Many (WORM) compliance locking. This prevented the enforcement of verifiable data contracts, leaving raw ingested data exposed to accidental administrative deletion or untracked file modification.
+
+```
++-----------------------------------------------------------------------------------+
+|                        STORAGE PARADIGM TRANSITION                                |
++-----------------------------------------------------------------------------------+
+|                                                                                   |
+|  [ LEGACY AS-IS: GLUSTERFS ]                  [ TARGET TO-BE: CEPH / MINIO S3 ]   |
+|  * POSIX Shared Storage (FUSE Bottleneck)    * 100% S3-Compatible REST APIs       |
+|  * High Metadata & Directory Lock Contention  * Immutable WORM Compliance Locking |
+|  * Split-Brain Resolution Vulnerability       * Versioned, Object-Locked Buckets  |
+|  * Complex Manual Split-Brain Healing         * Linear Horizontal Scalability     |
+|                                                                                   |
++-----------------------------------------------------------------------------------+
+```
+
+---
+
+## 1.4 Target Metrics: MTTR Reduction and Horizontal Data Plane Scalability
+
+With this modernisation blueprint, the overarching strategic objective is to achieve resilient, license-free digital sovereignty, eradicating operational toil and maximizing throughput across both ingestion and consumption tiers.
+
+```
++-----------------------------------------------------------------------------------+
+|                 STRATEGIC ARCHITECTURE EVOLUTION (AS-IS vs TO-BE)                 |
++-----------------------------------------------------------------------------------+
+|                                                                                   |
+|  METRIC / PILLAR           AS-IS ARCHITECTURE          TARGET MODERNISATION       |
+|  -------------------------------------------------------------------------------  |
+|  Frontend Presentation     Dynamic Joomla 3 (LAMP)     Astro 7.3.2 Static / SSR   |
+|  Ingress & Quarantine      Direct Upload / Cron        Laravel HITL + NiFi 2.0    |
+|  Relational Storage        5-Node MariaDB Galera       Percona Patroni PG 18 HA   |
+|  Vector & Spatial Core     External Silos / None       PostGIS + pgvector Unified |
+|  Distributed File Store    GlusterFS Network Volumes   Ceph / MinIO S3 (WORM)     |
+|  Mean Time to Repair       Hours (Manual DB/FPM Sync)  < 10s Target RTO           |
+|  Validation Latency        Minutes to Hours (Logs)     < 500ms (Edge Wasm/WebGPU) |
+|  Horizontal Scalability    Constrained by Galera/FUSE  Stateless Podman / K3s     |
+|                                                                                   |
++-----------------------------------------------------------------------------------+
+```
+
+The target architecture commits to the following quantifiable engineering benchmarks:
+
+* **Sub-500ms Client-Side Validation Latency:** By migrating from server-side validation scripts to client-side WebAssembly (Wasm) and WebGPU primitives within the upgraded Laravel upload portal, schema validation errors, missing parameters, and formatting anomalies are captured and flagged directly in the browser during file selection prior to network transmission.
+* **85% Reduction in Mean Time to Repair (MTTR):** By deprecating monolithic VM state dependencies in favour of containerised Podman Quadlets and K3s orchestration, services recover automatically via systemd supervision and automated Kubernetes pod rescheduling. Database recovery, previously dependent on complex Galera SST rebuilds, is replaced by Patroni etcd consensus targeting a Recovery Time Objective (RTO) of < 10 seconds for automated failover and zero data loss (RPO = 0).
+* **Zero-Overhead Horizontal Data Plane Scalability:** By establishing Apache NiFi 2.0 as a stateless, event-driven data plane decoupled from persistent storage, ingestion throughput scales horizontally across worker pods without lock contention. Data persistence routes exclusively into an immutable Ceph S3 lakehouse and a unified Percona Patroni PostgreSQL 18 instance with `pgvector`, scaling analytical queries across multiple read replicas while maintaining an authoritative, tamper-proof Single Source of Truth (SSoT).
+
+---
+
+# 2. Core Strategic Pillars: API-Ready, MCP-Ready & Human-AI Quarantine
+
+To ensure total clarity across executive and technical reviews, the target architecture is documented using our standardized dual-render architecture specification.
+
+## 2.1 Dual-Render Architecture Blueprint
+
+### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" height="100%">
   <defs>
@@ -109,7 +275,7 @@ Human-generated data remains the sole authoritative **Single Source of Truth (SS
 
 <p align="center"><em>Figure 2.1: Dual-Render Architecture Diagram — API-First &amp; MCP-Ready Data Platform Topology</em></p>
 
-#### 2. Git-Native Mermaid Topology (`.mmd`)
+### 2. Git-Native Mermaid Topology (`.mmd`)
 
 ```mermaid
 flowchart TD
@@ -142,7 +308,7 @@ flowchart TD
     MCP -->|"Native Tool Execution"| AI
 ```
 
-#### 3. Summary Interface & Routing Table
+### 3. Summary Interface & Routing Table
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | :--- | :--- | :--- | :--- | :--- |
@@ -165,53 +331,53 @@ flowchart TD
 ### 2.4 Fine-Grained Access Control (FGAC) & Data Tagging Governance
 * 🛡️ **Row and Column Level Security:** Permissions are strictly enforced at the API gateway and PostgreSQL database layer using session context injection (`SET LOCAL`). An external application or AI agent accesses only the precise data slices authorised for its identity.
 * 🏷️ **Human SSoT & AI Provenance Metadata Tagging:** To ensure total data authenticity and governance, all data within the Big Data Analytics Lakehouse is partitioned into two distinct categories:
-  1. **Real Data & Human Verification (Tier 0 SSoT):** Human-entered data is validated through the decoupled Laravel human-in-the-loop portal (replacing legacy WildFly application servers and monolithic script bottlenecks). As a target-state capability, the Laravel frontend will support client-side **WebAssembly (Wasm)** (Memory64 & Relaxed SIMD) and **WebGPU** (16-bit float `f16` and `DP4a` quantized INT8 math) for client-side Web AI pre-processing targeting sub-500ms latency. Untouched raw client uploads are persisted into an immutable raw-upload quarantine storage volume prior to client-side pre-processing. Normalized JSON/CSV outputs serve as derived advisory artifacts which are re-validated server-side by Apache NiFi 2.0. If client Wasm/WebGPU hardware acceleration features are unsupported or fail, execution seamlessly falls back to standard Wasm CPU or server-side NiFi validation. Apache NiFi 2.0 acts as the sole authoritative writer promoting validated derived data to Percona Patroni PostgreSQL 18, while retaining original raw files for audit and reprocessing.
-  2. **AI Processes Enriched with RAG & Generative Metadata:** Any dataset touched, generated, or enriched by AI agents is explicitly tagged using `bda_provenance` metadata. This metadata records cryptographic signature contracts including `signature`, `key_id`, `verification_status`, `verification_timestamp`, `signature_algorithm` (Ed25519), and `signature_encoding` (HEX_RAW_64_BYTE), binding canonical RFC 8785 byte streams.
+  1. **Real Data & Human Verification (Tier 0 SSoT):** Human-entered data is validated through the decoupled Laravel human-in-the-loop portal (replacing legacy WildFly application servers and monolithic script bottlenecks). As a target-state capability, the Laravel frontend supports client-side **WebAssembly (Wasm)** (Memory64 & Relaxed SIMD) and **WebGPU** (16-bit float `f16` and `DP4a` quantized INT8 math) for client-side Web AI pre-processing targeting sub-500ms latency. Untouched raw client uploads are persisted into an immutable raw-upload quarantine storage volume prior to client-side pre-processing. Normalized JSON/CSV outputs serve as derived advisory artifacts which are re-validated server-side by Apache NiFi 2.0. If client Wasm/WebGPU hardware acceleration features are unsupported or fail, execution seamlessly falls back to standard Wasm CPU or server-side NiFi validation. Apache NiFi 2.0 acts as the sole authoritative writer promoting validated derived data to Percona Patroni PostgreSQL 18, while retaining original raw files for audit and reprocessing.
+  2. **AI Processes Enriched with RAG & Generative Metadata:** Any dataset touched, generated, or enriched by AI agents is explicitly tagged using `bda_provenance` metadata. This metadata records cryptographic signature contracts including `signature` (a 64-byte Ed25519 signature encoded as 128 uppercase hexadecimal characters), `key_id`, `verification_status`, `verification_timestamp`, `signature_algorithm` (Ed25519), and `signature_encoding` (`HEX_RAW_64_BYTE`, indicating 128 hex characters representing the 64 raw signature bytes), binding canonical RFC 8785 byte streams.
 * 📋 **Auditability & Zero Trust:** Every API call and MCP tool execution is logged, providing clear lineage and governance for regulatory compliance.
 
 ---
 
-## 3. Financial & Operational ROI
+# 3. Financial & Operational ROI Analysis
 
-| Area | Legacy Architecture (Tableau-based) | Proposed Architecture (API/MCP on Podman) |
+| Area | Legacy Architecture (Tableau & Monolith) | Proposed Architecture (API/MCP on Podman/K3s) |
 | :--- | :--- | :--- |
 | **Licensing Costs** | High recurring per-user and per-core licensing fees. | **Zero proprietary licensing fees** (100% Open-Source). |
-| **Data Accessibility** | Locked inside proprietary `.twb` workbooks and visual dashboards. | **Universal API & MCP endpoints** accessible by any tool or agent. |
+| **Data Accessibility** | Locked inside proprietary workbooks and static dynamic portals. | **Universal API & MCP endpoints** accessible by any tool or agent. |
 | **Ingestion Capability** | Primarily unidirectional read-only reporting. | **Fully bidirectional** (Ingest, Transform, Export, Query). |
-| **AI Integration** | None (Manual exports required for AI context). | **Native MCP support** for autonomous AI workflows. |
+| **AI Integration** | None (Manual exports required for AI context). | **Native MCP & RAG support** for autonomous AI workflows. |
 | **Security Granularity** | Dashboard-level / Workbook-level permissions. | **Fine-Grained Access Control** (Row/Column/Tool level). |
 
 ---
 
-## 4. Tableau Migration & Modernisation Strategy
+# 4. Decommissioning & Modernisation Strategy
 
-To ensure zero downtime and manage operational risk, legacy Tableau workbooks will be systematically decommissioned using a four-phase migration roadmap:
+To ensure zero downtime and manage operational risk, legacy workbooks, application runtimes, and databases will be systematically decommissioned using a four-phase migration roadmap:
 
 ```
 [ Phase 1: Audit ] ──► [ Phase 2: Logic Transfer ] ──► [ Phase 3: Open BI ] ──► [ Phase 4: MCP/API ]
 ```
 
-### Phase 1: Workbook Audit & Inventory
-* Catalogue all active Tableau workbooks (`.twb`/`.twbx`), calculated fields, custom SQL scripts, and user access lists.
+## 4.1 Phase 1: Workbook & Monolith Audit
+* Catalogue all active legacy workbooks, calculated fields, custom SQL scripts, and user access lists.
 * Identify redundant reports and mark high-value dashboards for migration.
 
-### Phase 2: Data & Logic Consolidation
-* Migrate complex Tableau calculations and data blending logic into **PostgreSQL Materialised Views** and stored functions.
+## 4.2 Phase 2: Data & Logic Consolidation
+* Migrate complex calculations and data blending logic into **PostgreSQL Materialised Views** and stored functions.
 * Ensure Apache NiFi orchestrates data pipelines directly into clean PostgreSQL schemas.
 
-### Phase 3: Open-Source BI Deployment
+## 4.3 Phase 3: Open-Source BI Deployment
 * Deploy containerised **Apache Superset** (or Metabase) on Podman to replicate essential executive dashboards.
 * Connect directly to the PostgreSQL layer, restoring visual reporting capabilities with zero user-license overhead.
 
-### Phase 4: API & MCP Enablement
-* Expose underlying business calculations as REST/gRPC API endpoints.
+## 4.4 Phase 4: API & MCP Enablement
+* Expose underlying business calculations as REST/gRPC API endpoints via Fusio.
 * Wrap PostgreSQL metrics and vector searches into standardised **MCP Tools** for internal AI agent consumption.
 
 ---
 
-## 5. Podman Infrastructure & Container Blueprint
+# 5. Container & Cloud-Native Deployment Blueprint
 
-The target infrastructure relies on rootless **Podman** pods to enforce high availability, zero vendor lock-in, and full Kubernetes compatibility.
+The target infrastructure relies on rootless **Podman** pods and **K3s Kubernetes** orchestration to enforce high availability, zero vendor lock-in, and full cloud-native compatibility.
 
 ```yaml
 # Conceptual Architecture Blueprint: podman-pod.yaml
@@ -235,16 +401,17 @@ spec:
 
     - name: open-bi-superset
       image: docker.io/apache/superset:latest
-      description: "Open-source business intelligence platform replacing Tableau."
+      description: "Open-source business intelligence platform replacing proprietary reporting tools."
 ```
 
 ---
 
-## 6. Next Steps & Execution Plan
+# 6. Execution Plan & Next Steps
 
 Upon approval of this proposal, execution will proceed as follows via automated code and configuration updates:
 
 1. **Commit Proposal Document:** Save `docs/IT-MANAGEMENT-PROPOSAL.md` into the main branch.
-2. **Deploy Podman Pod Spec:** Add `docker/podman-pod.yaml` containing the complete container definition.
-3. **Build MCP Server Skeleton:** Commit the Python-based MCP server in `src/mcp-server/` with initial PostgreSQL tool connections and FGAC middleware.
-4. **Initiate Phase 1 Migration:** Begin Tableau workbook audit and SQL logic extraction.
+2. **Compile Technical Handbooks:** Run `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py` (or `tools/build_project_book.py` followed by Pandoc and headless Chromium) to assemble `build/book.md` and generate all handbook formats (`handbook.pdf`, `handbook.html`, `handbook.epub`, and `handbook.odt`).
+3. **Deploy Podman Pod Spec:** Add `docker/podman-pod.yaml` containing the complete container definition.
+4. **Build MCP Server Gateway:** Implement the Python-based MCP server in `src/mcp-server/` with initial PostgreSQL tool connections and FGAC middleware.
+5. **Initiate Phase 1 Migration:** Begin legacy report auditing, SQL logic extraction, and NiFi flow verification.

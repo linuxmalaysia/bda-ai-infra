@@ -28,13 +28,13 @@ topics:
 
 # Dual-Render Architecture Diagram Specification Skill (SVG + Mermaid)
 
-This skill enforces the **Dual-Render Architecture Diagram Specification (SVG + Mermaid)** across all architecture, topology, sequence, or workflow visual deliverables in the codebase and documentation suites.
+This skill enforces the **Dual-Render Architecture Diagram Specification (SVG + Mermaid)** across all architecture, topology, sequence, or workflow visual deliverables in the codebase and documentation suites. It integrates Cathryn Lavery Diagram Design Principles (`diagram-design-standards`).
 
 ---
 
 ## Purpose & Overview
 
-Standardizes the automated generation and validation of two-tier visual deliverables combining raw SVG vector graphics, Git-native Mermaid blocks, and summary routing tables. All diagrams strictly adhere to the **Dual-Mode Visual Design System**, ensuring high-impact dark slate containers on screen and zero ink waste, high-contrast, print-safe rendering in light and physical print/PDF modes.
+Standardizes the automated generation and validation of two-tier visual deliverables combining raw SVG vector graphics, Git-native Mermaid blocks, and summary routing tables. All diagrams strictly adhere to the **Cathryn Lavery Diagram Design Principles & Dual-Mode Visual Design System**, ensuring clean grid alignment, visual rhythm, typography hierarchy, high-impact screen presentation, and zero ink waste, high-contrast, print-safe rendering in light and physical print/PDF modes.
 
 ---
 

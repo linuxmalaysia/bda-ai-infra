@@ -27,6 +27,20 @@ Welcome to the Sovereign AI Agent Workspace. You are a Cognitive Digital Twin op
 1. **Zero-Global / Spatial Memory:** Your memory lives in `.agents/brain/`. Never forget to synchronize context using `palace_registry.md`, `task.md`, and `walkthrough.md`.
 2. **Open Knowledge Format (OKF) & GitHub Compatibility:** The Open Knowledge Format (OKF v0.2 YAML frontmatter header) is strictly for Markdown (`.md`) files. All other file types (e.g. JSON, YAML, Python, HTML, CSS, Shell) must follow standard protocols and specifications suitable for their respective file types. All Markdown files must be OKF v0.2 compliant, migrating opportunistically to v0.2 to protect token budgets. The frontmatter block MUST start on line 1, column 1 with `---` and end with `---` without BOM. Wrap special strings in double quotes.
 3. **Agent Skills:** Use `.agents/skills` for procedural workflows conforming to Warp Skills (`name`, `description`, `$ARGUMENTS`) and OpenViking Skills (`allowed-tools`, `tags`, `metadata`) standards combined with OKF v0.2 frontmatter headers. Skills must be self-healing and embed their own executable scripts.
+
+### Agent Skills Registry
+
+| Skill Name | Description | Path |
+| :--- | :--- | :--- |
+| `attested-computations` | Execution parameterization, receipts, and Ed25519 verification. | `.agents/skills/attested-computations/SKILL.md` |
+| `diagram-design-standards` | Cathryn Lavery visual design principles, grid alignment, and light mode printing. | `.agents/skills/diagram-design-standards/SKILL.md` |
+| `docstring` | Google-style Python docstring linting and quality gate enforcement. | `.agents/skills/docstring/SKILL.md` |
+| `dsom-downstream-compliance` | Downstream client compliance, OKF migration, and git safety. | `.agents/skills/dsom-downstream-compliance/SKILL.md` |
+| `dsom-migration-blueprint` | 4-Phase migration blueprint execution guide. | `.agents/skills/dsom-migration-blueprint/SKILL.md` |
+| `dsom-technical-book-compiler` | Multi-format handbook compilation (PDF, HTML, EPUB, ODT). | `.agents/skills/dsom-technical-book-compiler/SKILL.md` |
+| `dual-render-architecture-diagram` | Dual-render SVG + Mermaid diagrams and summary routing tables. | `.agents/skills/dual-render-architecture-diagram/SKILL.md` |
+| `okf-v02-adoption-engineer` | OKF v0.2 YAML frontmatter migration and link integrity. | `.agents/skills/okf-v02-adoption-engineer/SKILL.md` |
+| `warp-agent-skills` | Warp & OpenViking agent skill discovery, arguments, and MCP mappings. | `.agents/skills/warp-agent-skills/SKILL.md` |
 4. **Git Sovereignty & Atomic Commits:** Every major action must be committed to Git. Avoid silent execution or blanket `git commit -am` dumps. Stage and commit files granularly by logical unit.
 5. **Worktree Isolation:** Subagents must be instantiated within isolated Git branches to prevent merge conflicts.
 6. **The OKF Import & Opportunistic Migration Mandate:** Inject OKF YAML frontmatter for imported Markdown documents. Whenever editing or creating any `.md` file, upgrade its frontmatter to OKF v0.2 with complete trust signals (`sources`, `generated`, `verified`, `status`, `stale_after`). OKF format must NOT be applied to non-Markdown files.

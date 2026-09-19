@@ -181,6 +181,7 @@ Following the **Diátaxis Documentation Framework**, this suite is organized int
 - **[The Human-to-AI Quarantine Model](explanation/human-ai-quarantine-model.html):** Conceptual explanation of the 3-tier data classification topology (Tier 0 Golden Truth, Tier 1 Telemetry, Tier 2 AI Sandbox) preserving human ground truth.
 - **[Model Context Protocol (MCP) & AI Sandboxing](explanation/mcp-and-ai-sandboxing.html):** Explanation of how MCP confines AI models to operational tooling while barring direct writes to ground-truth data.
 - **[Governance, Security, and Compliance Framework](explanation/governance-and-compliance.html):** Enterprise catalog selection (OpenMetadata), Keycloak IAM, APISIX gateway, and compliance standards.
+- **[Attested Computations & Warp Agent Skills](explanation/attested-computations-and-warp-skills.html):** Architectural mechanics of OKF v0.2 attested computations and Warp/OpenViking skills.
 
 ---
 

@@ -31,6 +31,7 @@ topics:
 
 ## Explanation
 
+* [Attested Computations and Warp Agent Skills Architecture](docs/explanation/attested-computations-and-warp-skills.md)
 * [Governance, Security, and Compliance Framework](docs/explanation/governance-and-compliance.md)
 * [Model Context Protocol (MCP) and AI Sandboxing Architecture](docs/explanation/mcp-and-ai-sandboxing.md)
 * [The Human-to-AI Quarantine Model and Data Classification](docs/explanation/human-ai-quarantine-model.md)

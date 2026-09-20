@@ -1,16 +1,16 @@
 ---
 okf_version: "0.2"
 type: governance
-title: "NRE BDA Technical Migration Proposal: Legacy Joomla 3 to Decoupled Astro 7.3.2"
-description: "Technical proposal for transitioning https://bda.nres.gov.my/ from a legacy stateful Joomla 3 monolith to a decoupled, high-availability, static-first Astro 7.3.2 infrastructure."
+title: "BDA Technical Migration Proposal: Legacy Joomla 3 to Decoupled Astro 7.3.2"
+description: "Technical proposal for transitioning https://bda.example.gov.my/ from a legacy stateful Joomla 3 monolith to a decoupled, high-availability, static-first Astro 7.3.2 infrastructure."
 status: active
 timestamp: "2026-09-16T00:00:00Z"
 stale_after: "2027-09-16T00:00:00Z"
 generated: false
 verified: true
 sources:
-  - url: "https://bda.nres.gov.my/"
-    description: "NRE BDA portal legacy baseline endpoint."
+  - url: "https://bda.example.gov.my/"
+    description: "BDA portal legacy baseline endpoint."
 topics:
   - bda
   - astro
@@ -27,18 +27,18 @@ topics:
 **Document Version:** 1.0
 **Author:** Lead Systems Architect
 **Target Architecture:** Decoupled, High-Availability (HA), Static-First Infrastructure
-**Infrastructure Scope:** `bda-ai-infra` (`https://bda.nres.gov.my/` / `bda.ketsa.gov.my`)
+**Infrastructure Scope:** `bda-ai-infra` (`https://bda.example.gov.my/` / `legacy-bda.example.gov.my`)
 
 ---
 
 ## 1. Executive Summary & Migration Vision
 
-Through this operational blueprint, the primary objective is to completely decouple the legacy stateful monolithic architecture of `https://bda.nres.gov.my/` and migrate it to a modern, headless, and highly resilient framework.
+Through this operational blueprint, the primary objective is to completely decouple the legacy stateful monolithic architecture of `https://bda.example.gov.my/` and migrate it to a modern, headless, and highly resilient framework.
 
 An exhaustive audit of the existing *As-Is* environment reveals a heavy, stateful High Availability (HA) stack comprising Joomla 3 (versions 3.9.19 and 3.9.14), GlusterFS distributed storage, Nginx 1.18.0 reverse proxying, WildFly application servers, a 5-node MariaDB Galera cluster managed via ClusterControl, and Tableau visual analytics. By targeting **Astro 7.3.2** for the *To-Be* state, this proposal eliminates the compute overhead of dynamic CMS rendering, strictly adhering to national digital sovereignty and open-source software (FOSS) mandates.
 
 By adhering to the **Deep State of Mind (DSOM)** protocol, execution follows four precise operations:
-1. **Legacy Ingestion & Delta Mapping:** Dissecting existing database schemas (`bdaketsa_portal`, `bdaketsa_portal2`, `bda_dashboard_main`) and GlusterFS volumes to identify dependencies for deprecation or refactoring into headless API endpoints.
+1. **Legacy Ingestion & Delta Mapping:** Dissecting existing database schemas (`bda_legacy_portal`, `bda_legacy_portal2`, `bda_dashboard_main`) and GlusterFS volumes to identify dependencies for deprecation or refactoring into headless API endpoints.
 2. **State Transition Documentation (As-Is vs To-Be):** Authoring Git-native Markdown documenting legacy constraints and target decoupled architectures.
 3. **Knowledge Base Ingestion (`.agents/brain`):** Injecting operational context into `.agents/brain` and `.agents/skills` to align autonomous AI execution context.
 4. **Master Compilation:** Compiling all manifests, maps, and specifications via `dsom-technical-book-compiler` into an immutable source of truth.
@@ -49,11 +49,11 @@ By adhering to the **Deep State of Mind (DSOM)** protocol, execution follows fou
 
 ### 2.1 As-Is Footprint: Legacy Monolithic Stack
 
-The legacy `bda.ketsa.gov.my` environment relies on a stateful, tightly coupled LAMP-stack architecture hosted on CentOS 8 virtual machines within a Proxmox VE 6.2-4 hypervisor cluster:
+The legacy `legacy-bda.example.gov.my` environment relies on a stateful, tightly coupled LAMP-stack architecture hosted on CentOS 8 virtual machines within a Proxmox VE 6.2-4 hypervisor cluster:
 
 * **Application Core:** Serves the primary portal on Joomla! 3.9.19 (`Portal-node01`, HTTPS port `443`) and the main portal on Joomla! 3.9.14 (`Main-portal-node`, HTTPS port `443`).
 * **Ingress Routing:** Nginx 1.18.0 reverse proxy gateway filtering incoming web traffic over HTTP/HTTPS.
-* **Database Dependency:** Maintains persistent connections to a 5-node MariaDB Galera cluster (version 10.5.9) managed via ClusterControl, hosting `bdaketsa_portal`, `bdaketsa_portal2`, and `bda_dashboard_main`.
+* **Database Dependency:** Maintains persistent connections to a 5-node MariaDB Galera cluster (version 10.5.9) managed via ClusterControl, hosting `bda_legacy_portal`, `bda_legacy_portal2`, and `bda_dashboard_main`.
 * **Storage & Redundancy:** Heavy infrastructure redundancy relying on GlusterFS shared file storage to synchronise media assets across application nodes.
 * **Administrative Surface:** Publicly exposes administrative interfaces (`/administrator/`), presenting continuous zero-day vulnerability risks.
 * **Operational Toil & Bottlenecks:**
@@ -103,7 +103,7 @@ The target architecture shifts from reactive server-side dynamic rendering to pr
 
   <rect x="35" y="140" width="420" height="65" fill="#FEF2F2" stroke="#DC2626" stroke-width="1" rx="6"/>
   <text x="45" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="bold" fill="#991B1B">5-Node MariaDB Galera Cluster (10.5.9)</text>
-  <text x="45" y="178" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7F1D1D">Databases: bdaketsa_portal, bdaketsa_portal2, bda_dashboard_main</text>
+  <text x="45" y="178" font-family="Consolas, Monaco, monospace" font-size="10" fill="#7F1D1D">Databases: bda_legacy_portal, bda_legacy_portal2, bda_dashboard_main</text>
   <text x="45" y="194" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" fill="#991B1B">Managed via ClusterControl | Persistent DB Connection Limits</text>
 
   <rect x="35" y="220" width="420" height="55" fill="#FEF2F2" stroke="#DC2626" stroke-width="1" rx="6"/>
@@ -160,7 +160,7 @@ The target architecture shifts from reactive server-side dynamic rendering to pr
 flowchart TD
     subgraph AsIs ["Legacy Stateful Monolith (As-Is Footprint)"]
         AS_Joomla["Joomla! 3.9 (Portal-node01 & Main-portal-node)"]
-        AS_MariaDB[("5-Node MariaDB Galera 10.5 ClusterControl\n(bdaketsa_portal, bdaketsa_portal2, bda_dashboard_main)")]
+        AS_MariaDB[("5-Node MariaDB Galera 10.5 ClusterControl\n(bda_legacy_portal, bda_legacy_portal2, bda_dashboard_main)")]
         AS_Gluster["GlusterFS Shared File Storage"]
         AS_Tableau["WildFly & Tableau Visual Analytics"]
         AS_Admin["Public Administrative Gateway (/administrator/)"]
@@ -246,10 +246,10 @@ Day 2 operations default to **Elastic Observability** (Elasticsearch, Kibana, El
 Following the Deep State of Mind (DSOM) framework, execution proceeds through four sequential operations:
 
 1. **Phase 1: Legacy Ingestion & Delta Mapping**
-   * Dissect `bdaketsa_portal`, `bdaketsa_portal2`, and `bda_dashboard_main` MariaDB schemas.
+   * Dissect `bda_legacy_portal`, `bda_legacy_portal2`, and `bda_dashboard_main` MariaDB schemas.
    * Extract GlusterFS media assets and map endpoints to S3 bucket structures.
 2. **Phase 2: State Transition Documentation (As-Is vs To-Be)**
-   * Formalise state comparison within `docs/proposals/nre-bda-astro-migration.md`.
+   * Formalise state comparison within `docs/proposals/bda-astro-migration.md`.
 3. **Phase 3: Knowledge Base Ingestion (`.agents/brain`)**
    * Inject extracted operational intelligence into `.agents/brain/` spatial memory files (`task.md`, `walkthrough.md`, `palace_registry.md`) and `.agents/skills/`.
 4. **Phase 4: Master Compilation**

@@ -33,7 +33,7 @@ The following assets are currently in active development or audit scope under th
 - `.github/copilot-instructions.md`
 - `docs/AI-COGNITIVE-TWIN-PROTOCOL.md`
 - `docs/IT-MANAGEMENT-PROPOSAL.md`
-- `docs/proposals/nre-bda-astro-migration.md`
+- `docs/proposals/bda-astro-migration.md`
 - `docs/reference/postgresql-pgvector-enterprise-strategy.md`
 - `docs/reference/apache-nifi-2-master-data-plane-and-migration.md`
 - `.agents/skills/dual-render-architecture-diagram/SKILL.md`

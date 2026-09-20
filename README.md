@@ -414,7 +414,7 @@ Following the **Diátaxis Framework**, documentation is categorized into four di
 
 ### 🏛️ Strategic Proposals & Blueprints
 
-* [NRE BDA Astro 7.3.2 Technical Migration Proposal](docs/proposals/nre-bda-astro-migration.html)
+* [BDA Astro 7.3.2 Technical Migration Proposal](docs/proposals/bda-astro-migration.html)
 * [IT Management Proposal: Enterprise Data Infrastructure Modernisation](docs/IT-MANAGEMENT-PROPOSAL.html)
 
 ### 🎓 1. Tutorials (Practical Learning)

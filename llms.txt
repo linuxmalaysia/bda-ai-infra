@@ -10,7 +10,7 @@
 - [Root Documentation Index](README.md)
 
 ## Strategic Proposals & Migration Blueprints
-- [NRE BDA Astro 7.3.2 Migration Proposal](docs/proposals/nre-bda-astro-migration.md)
+- [BDA Astro 7.3.2 Migration Proposal](docs/proposals/bda-astro-migration.md)
 - [IT Management Proposal](docs/IT-MANAGEMENT-PROPOSAL.md)
 
 ## Spatial Memory

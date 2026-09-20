@@ -53,6 +53,7 @@ def split_content_into_sections(content: str) -> list[str]:
     """Split a large Markdown document into section/chapter chunks based on H1 headers.
 
     Ignores H1 headers occurring inside fenced code blocks (``` or ~~~).
+    Allows at most 3 leading spaces for code fence detection per CommonMark spec.
 
     Args:
         content (str): Un-frontmattered Markdown content.
@@ -73,7 +74,8 @@ def split_content_into_sections(content: str) -> list[str]:
     h1_starts: list[int] = []
     current_pos = 0
 
-    fence_pattern = re.compile(r"^([ \t]*)(`{3,}|~{3,})(.*)$")
+    # CommonMark code fences permit at most 3 leading spaces
+    fence_pattern = re.compile(r"^([ ]{0,3})(`{3,}|~{3,})(.*)$")
 
     for line in lines:
         line_start = current_pos

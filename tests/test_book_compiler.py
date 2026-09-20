@@ -156,6 +156,24 @@ Post-code text
     assert "# Real Chapter 2" in sections[2]
 
 
+def test_split_content_four_space_indented_fence() -> None:
+    """Verify four-space-indented fence-like line is ignored as a fence opener so subsequent H1 is recognized."""
+    from tools.build_project_book import split_content_into_sections
+
+    sample_md = """# Initial Chapter
+    ```python
+    indented code block line
+    ```
+
+# Unindented Chapter Two
+Text in chapter two
+"""
+    sections = split_content_into_sections(sample_md)
+    assert len(sections) == 2
+    assert "# Initial Chapter" in sections[0]
+    assert "# Unindented Chapter Two" in sections[1]
+
+
 def test_generate_chapters_execution(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Verify that tools/build_project_book.py generates chapter files in isolated tmp_path."""
     import tools.build_project_book as bpb

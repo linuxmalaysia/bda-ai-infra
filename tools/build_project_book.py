@@ -73,7 +73,7 @@ def split_content_into_sections(content: str) -> list[str]:
     h1_starts: list[int] = []
     current_pos = 0
 
-    fence_pattern = re.compile(r"^([ \t]*)(`{3,}|~{3,})")
+    fence_pattern = re.compile(r"^([ \t]*)(`{3,}|~{3,})(.*)$")
 
     for line in lines:
         line_start = current_pos
@@ -82,19 +82,26 @@ def split_content_into_sections(content: str) -> list[str]:
         m = fence_pattern.match(line)
         if m:
             chars = m.group(2)
+            suffix = m.group(3)
             char = chars[0]
             length = len(chars)
 
             if not in_fence:
-                in_fence = True
-                fence_char = char
-                fence_len = length
+                # Backtick fence info string cannot contain backticks
+                if char == "`" and "`" in suffix:
+                    pass
+                else:
+                    in_fence = True
+                    fence_char = char
+                    fence_len = length
+                    continue
             else:
-                if char == fence_char and length >= fence_len:
+                # Closing fence markers are valid only when suffix contains only whitespace
+                if char == fence_char and length >= fence_len and suffix.strip() == "":
                     in_fence = False
                     fence_char = None
                     fence_len = 0
-            continue
+                    continue
 
         if not in_fence and re.match(r"^#\s+", line):
             h1_starts.append(line_start)

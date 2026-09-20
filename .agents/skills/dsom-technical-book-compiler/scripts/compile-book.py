@@ -74,7 +74,8 @@ def generate_toc_html(merged_body_html: str) -> str:
     ]
     for level_str, hid, title_raw in headings:
         level = int(level_str)
-        clean_title = re.sub(r'<[^>]+>', '', title_raw).strip()
+        # Strip HTML tags then unescape entities before escaping for clean TOC title output
+        clean_title = html.unescape(re.sub(r'<[^>]+>', '', title_raw)).strip()
         if not clean_title:
             continue
         indent_class = f"toc-level-{level}"

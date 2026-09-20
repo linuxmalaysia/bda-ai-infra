@@ -119,7 +119,7 @@ Content for chapter 2
 
 
 def test_split_content_into_sections_with_code_fences() -> None:
-    """Verify that H1 headers inside backtick and tilde code blocks are ignored."""
+    """Verify that H1 headers inside backtick and tilde code blocks are ignored and fence rules are respected."""
     from tools.build_project_book import split_content_into_sections
 
     fenced_md = """# Real Chapter 1
@@ -131,20 +131,29 @@ def foo():
     pass
 ```
 
+```python`
+# Real Header because opener contained a backtick in info string
+```
+
 ~~~bash
 # Fake Header inside tilde fence
 echo "hello"
 ~~~
 
+```python
+# Fake Header inside fence
+```invalid_closer_with_text
+# Still inside fence because closing fence had non-whitespace trailing text
+```
+
 # Real Chapter 2
 Post-code text
 """
     sections = split_content_into_sections(fenced_md)
-    assert len(sections) == 2
+    assert len(sections) == 3
     assert "# Real Chapter 1" in sections[0]
-    assert "# Fake Header inside backtick fence" in sections[0]
-    assert "# Fake Header inside tilde fence" in sections[0]
-    assert "# Real Chapter 2" in sections[1]
+    assert "# Real Header because opener contained a backtick" in sections[1]
+    assert "# Real Chapter 2" in sections[2]
 
 
 def test_generate_chapters_execution(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -155,6 +164,14 @@ def test_generate_chapters_execution(tmp_path: Path, monkeypatch: pytest.MonkeyP
     tmp_chapters = tmp_build / "chapters"
     tmp_book = tmp_build / "book.md"
 
+    # Create dummy priority files inside tmp_path so chapter generation finds files
+    (tmp_path / "README.md").write_text("# Test README\nContent\n", encoding="utf-8")
+    (tmp_path / "START-HERE.md").write_text("# Start Here\nContent\n", encoding="utf-8")
+    tmp_docs = tmp_path / "docs"
+    tmp_docs.mkdir(parents=True, exist_ok=True)
+    (tmp_docs / "IT-MANAGEMENT-PROPOSAL.md").write_text("# Proposal\nContent\n", encoding="utf-8")
+
+    monkeypatch.setattr(bpb, "REPO_ROOT", tmp_path)
     monkeypatch.setattr(bpb, "BUILD_DIR", tmp_build)
     monkeypatch.setattr(bpb, "CHAPTERS_DIR", tmp_chapters)
     monkeypatch.setattr(bpb, "BOOK_PATH", tmp_book)
@@ -166,7 +183,7 @@ def test_generate_chapters_execution(tmp_path: Path, monkeypatch: pytest.MonkeyP
 
 
 def test_merge_chapter_html_files(tmp_path: Path) -> None:
-    """Verify merging chapter HTML chunks into a master HTML file with TOC generation."""
+    """Verify merging chapter HTML chunks into a master HTML file with TOC generation and entity unescaping."""
     compiler_script = (
         REPO_ROOT
         / ".agents"
@@ -181,7 +198,7 @@ def test_merge_chapter_html_files(tmp_path: Path) -> None:
     spec.loader.exec_module(compile_book)
 
     ch1 = tmp_path / "001_ch1.html"
-    ch1.write_text('<h1 id="ch1-heading">Chapter 1</h1><p>First paragraph.</p>', encoding="utf-8")
+    ch1.write_text('<h1 id="ch1-heading">API &amp; MCP Integration</h1><p>First paragraph.</p>', encoding="utf-8")
 
     ch2 = tmp_path / "002_ch2.html"
     ch2.write_text('<h1 id="ch2-heading">Chapter 2</h1><p>Second paragraph.</p>', encoding="utf-8")
@@ -194,8 +211,8 @@ def test_merge_chapter_html_files(tmp_path: Path) -> None:
     assert "<title>Test Handbook</title>" in merged_text
     assert '<nav id="TOC"' in merged_text
     assert 'href="#ch1-heading"' in merged_text
-    assert 'href="#ch2-heading"' in merged_text
-    assert "Chapter 1" in merged_text
+    assert "API &amp; MCP Integration" in merged_text
+    assert "&amp;amp;" not in merged_text
     assert "Chapter 2" in merged_text
     assert '<main class="markdown-body">' in merged_text
 

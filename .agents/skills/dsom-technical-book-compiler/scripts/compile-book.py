@@ -50,8 +50,47 @@ def run_command(cmd: list[str], timeout: float = 60.0) -> None:
     subprocess.run(cmd, check=True, timeout=timeout)
 
 
+def generate_toc_html(merged_body_html: str) -> str:
+    """Generate a single unified Table of Contents HTML from all merged body headings.
+
+    Args:
+        merged_body_html (str): Merged HTML content containing chapter body headings.
+
+    Returns:
+        str: Styled HTML Table of Contents block.
+
+    """
+    heading_pattern = re.compile(
+        r'<h([1-3])\s+[^>]*id="([^"]+)"[^>]*>([\s\S]*?)</h\1>', re.IGNORECASE
+    )
+    headings = heading_pattern.findall(merged_body_html)
+    if not headings:
+        return ""
+
+    toc_lines: list[str] = [
+        '<nav id="TOC" role="doc-toc" class="toc-container">',
+        '  <h2>Table of Contents</h2>',
+        '  <ul>',
+    ]
+    for level_str, hid, title_raw in headings:
+        level = int(level_str)
+        clean_title = re.sub(r'<[^>]+>', '', title_raw).strip()
+        if not clean_title:
+            continue
+        indent_class = f"toc-level-{level}"
+        toc_lines.append(
+            f'    <li class="{indent_class}"><a href="#{hid}">{html.escape(clean_title)}</a></li>'
+        )
+    toc_lines.append('  </ul>')
+    toc_lines.append('</nav>')
+    return "\n".join(toc_lines)
+
+
 def merge_chapter_html_files(html_files: list[Path], output_path: Path, title: str) -> None:
     """Merge compiled and baked chapter HTML fragments into a complete HTML document.
+
+    Generates a unified Table of Contents from all merged body headings and inserts it into
+    the document body to preserve navigation produced by Pandoc.
 
     Args:
         html_files (list[Path]): List of baked chapter HTML fragment paths.
@@ -71,6 +110,9 @@ def merge_chapter_html_files(html_files: list[Path], output_path: Path, title: s
         if clean_content:
             body_parts.append(clean_content)
 
+    merged_body = "\n\n<hr/>\n\n".join(body_parts)
+    toc_html = generate_toc_html(merged_body)
+
     full_html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,6 +130,17 @@ def merge_chapter_html_files(html_files: list[Path], output_path: Path, title: s
       background-color: #ffffff;
       color: #0f172a;
     }}
+    .toc-container {{
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }}
+    .toc-container ul {{ list-style-type: none; padding-left: 0; }}
+    .toc-container li {{ margin: 0.4rem 0; }}
+    .toc-container li.toc-level-2 {{ padding-left: 1.2rem; }}
+    .toc-container li.toc-level-3 {{ padding-left: 2.4rem; }}
     h1, h2, h3, h4 {{ color: #0f172a; margin-top: 2rem; margin-bottom: 1rem; }}
     code {{ background-color: #f1f5f9; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; }}
     pre code {{ display: block; padding: 1rem; overflow-x: auto; background-color: #0f172a; color: #f8fafc; border-radius: 6px; }}
@@ -99,7 +152,8 @@ def merge_chapter_html_files(html_files: list[Path], output_path: Path, title: s
 </head>
 <body>
   <main class="markdown-body">
-    {"\n\n<hr/>\n\n".join(body_parts)}
+    {toc_html}
+    {merged_body}
   </main>
 </body>
 </html>
@@ -160,6 +214,8 @@ def main() -> None:
                 str(c_md),
                 "-o",
                 str(c_html),
+                "--id-prefix",
+                f"{c_md.stem}-",
                 "-V",
                 "lang=en",
             ])
@@ -274,6 +330,8 @@ def main() -> None:
                         str(p_chunk),
                         "-o",
                         str(p_c_html),
+                        "--id-prefix",
+                        f"{p_chunk.stem}-",
                         "-V",
                         "lang=en",
                     ])

@@ -9,6 +9,7 @@ import shutil
 import subprocess
 from pathlib import Path
 
+import pytest
 from test_dual_render_diagrams import extract_routing_tables
 
 REPO_ROOT: Path = Path(__file__).parent.parent
@@ -117,18 +118,55 @@ Content for chapter 2
     assert "# 2. Second Major Chapter" in sections[2]
 
 
-def test_generate_chapters_execution() -> None:
-    """Verify that tools/build_project_book.py generates build/chapters/*.md files."""
-    from tools.build_project_book import generate_chapters
+def test_split_content_into_sections_with_code_fences() -> None:
+    """Verify that H1 headers inside backtick and tilde code blocks are ignored."""
+    from tools.build_project_book import split_content_into_sections
 
-    chapter_paths = generate_chapters()
+    fenced_md = """# Real Chapter 1
+Pre-code text
+
+```python
+# Fake Header inside backtick fence
+def foo():
+    pass
+```
+
+~~~bash
+# Fake Header inside tilde fence
+echo "hello"
+~~~
+
+# Real Chapter 2
+Post-code text
+"""
+    sections = split_content_into_sections(fenced_md)
+    assert len(sections) == 2
+    assert "# Real Chapter 1" in sections[0]
+    assert "# Fake Header inside backtick fence" in sections[0]
+    assert "# Fake Header inside tilde fence" in sections[0]
+    assert "# Real Chapter 2" in sections[1]
+
+
+def test_generate_chapters_execution(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Verify that tools/build_project_book.py generates chapter files in isolated tmp_path."""
+    import tools.build_project_book as bpb
+
+    tmp_build = tmp_path / "build"
+    tmp_chapters = tmp_build / "chapters"
+    tmp_book = tmp_build / "book.md"
+
+    monkeypatch.setattr(bpb, "BUILD_DIR", tmp_build)
+    monkeypatch.setattr(bpb, "CHAPTERS_DIR", tmp_chapters)
+    monkeypatch.setattr(bpb, "BOOK_PATH", tmp_book)
+
+    chapter_paths = bpb.generate_chapters()
     assert len(chapter_paths) > 0
     assert any("frontmatter" in p.name for p in chapter_paths)
-    assert (REPO_ROOT / "build" / "book.md").exists()
+    assert tmp_book.exists()
 
 
 def test_merge_chapter_html_files(tmp_path: Path) -> None:
-    """Verify merging chapter HTML chunks into a master HTML file."""
+    """Verify merging chapter HTML chunks into a master HTML file with TOC generation."""
     compiler_script = (
         REPO_ROOT
         / ".agents"
@@ -139,13 +177,14 @@ def test_merge_chapter_html_files(tmp_path: Path) -> None:
     )
     spec = importlib.util.spec_from_file_location("compile_book", compiler_script)
     compile_book = importlib.util.module_from_spec(spec)
+    assert spec is not None and spec.loader is not None
     spec.loader.exec_module(compile_book)
 
     ch1 = tmp_path / "001_ch1.html"
-    ch1.write_text("<h1>Chapter 1</h1><p>First paragraph.</p>", encoding="utf-8")
+    ch1.write_text('<h1 id="ch1-heading">Chapter 1</h1><p>First paragraph.</p>', encoding="utf-8")
 
     ch2 = tmp_path / "002_ch2.html"
-    ch2.write_text("<h1>Chapter 2</h1><p>Second paragraph.</p>", encoding="utf-8")
+    ch2.write_text('<h1 id="ch2-heading">Chapter 2</h1><p>Second paragraph.</p>', encoding="utf-8")
 
     out_html = tmp_path / "merged_handbook.html"
     compile_book.merge_chapter_html_files([ch1, ch2], out_html, "Test Handbook")
@@ -153,9 +192,12 @@ def test_merge_chapter_html_files(tmp_path: Path) -> None:
     assert out_html.exists()
     merged_text = out_html.read_text(encoding="utf-8")
     assert "<title>Test Handbook</title>" in merged_text
-    assert "<h1>Chapter 1</h1>" in merged_text
-    assert "<h1>Chapter 2</h1>" in merged_text
-    assert "<main class=\"markdown-body\">" in merged_text
+    assert '<nav id="TOC"' in merged_text
+    assert 'href="#ch1-heading"' in merged_text
+    assert 'href="#ch2-heading"' in merged_text
+    assert "Chapter 1" in merged_text
+    assert "Chapter 2" in merged_text
+    assert '<main class="markdown-body">' in merged_text
 
 
 def test_quarantine_workflow_routing_table() -> None:

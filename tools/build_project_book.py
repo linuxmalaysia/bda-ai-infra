@@ -52,6 +52,8 @@ def strip_frontmatter(content: str) -> str:
 def split_content_into_sections(content: str) -> list[str]:
     """Split a large Markdown document into section/chapter chunks based on H1 headers.
 
+    Ignores H1 headers occurring inside fenced code blocks (``` or ~~~).
+
     Args:
         content (str): Un-frontmattered Markdown content.
 
@@ -63,21 +65,52 @@ def split_content_into_sections(content: str) -> list[str]:
     if not content:
         return []
 
-    # Find H1 headers at the start of a line
-    h1_matches = list(re.finditer(r"^#\s+.*$", content, re.MULTILINE))
-    if len(h1_matches) <= 1:
+    lines = content.splitlines(keepends=True)
+    in_fence = False
+    fence_char: str | None = None
+    fence_len = 0
+
+    h1_starts: list[int] = []
+    current_pos = 0
+
+    fence_pattern = re.compile(r"^([ \t]*)(`{3,}|~{3,})")
+
+    for line in lines:
+        line_start = current_pos
+        current_pos += len(line)
+
+        m = fence_pattern.match(line)
+        if m:
+            chars = m.group(2)
+            char = chars[0]
+            length = len(chars)
+
+            if not in_fence:
+                in_fence = True
+                fence_char = char
+                fence_len = length
+            else:
+                if char == fence_char and length >= fence_len:
+                    in_fence = False
+                    fence_char = None
+                    fence_len = 0
+            continue
+
+        if not in_fence and re.match(r"^#\s+", line):
+            h1_starts.append(line_start)
+
+    if len(h1_starts) <= 1:
         return [content]
 
     sections: list[str] = []
-    # Content before first H1 header (e.g., frontmatter or preamble)
-    if h1_matches[0].start() > 0:
-        preamble = content[: h1_matches[0].start()].strip()
+    if h1_starts[0] > 0:
+        preamble = content[: h1_starts[0]].strip()
         if preamble:
             sections.append(preamble)
 
-    for i in range(len(h1_matches)):
-        start_idx = h1_matches[i].start()
-        end_idx = h1_matches[i + 1].start() if i + 1 < len(h1_matches) else len(content)
+    for i in range(len(h1_starts)):
+        start_idx = h1_starts[i]
+        end_idx = h1_starts[i + 1] if i + 1 < len(h1_starts) else len(content)
         sec_str = content[start_idx:end_idx].strip()
         if sec_str:
             sections.append(sec_str)

@@ -4,6 +4,7 @@ Protocol: Deep State of Mind (DSOM) Protocol
 License: GNU General Public License v3.0
 """
 
+import importlib.util
 import shutil
 import subprocess
 from pathlib import Path
@@ -95,6 +96,66 @@ def test_bake_native_svg_unrelated_preceding_svg(tmp_path: Path) -> None:
     # Should generate fallback vector SVG for NodeC / NodeD rather than omitting the block
     assert "Unrelated Source" in processed_content or "NodeC" in processed_content
     assert "baked-fallback-canvas" in processed_content
+
+
+def test_split_content_into_sections() -> None:
+    """Verify that tools/build_project_book.py splits Markdown content on H1 headers."""
+    from tools.build_project_book import split_content_into_sections
+
+    sample_md = """Preamble content
+
+# 1. First Major Chapter
+Content for chapter 1
+
+# 2. Second Major Chapter
+Content for chapter 2
+"""
+    sections = split_content_into_sections(sample_md)
+    assert len(sections) == 3
+    assert "Preamble content" in sections[0]
+    assert "# 1. First Major Chapter" in sections[1]
+    assert "# 2. Second Major Chapter" in sections[2]
+
+
+def test_generate_chapters_execution() -> None:
+    """Verify that tools/build_project_book.py generates build/chapters/*.md files."""
+    from tools.build_project_book import generate_chapters
+
+    chapter_paths = generate_chapters()
+    assert len(chapter_paths) > 0
+    assert any("frontmatter" in p.name for p in chapter_paths)
+    assert (REPO_ROOT / "build" / "book.md").exists()
+
+
+def test_merge_chapter_html_files(tmp_path: Path) -> None:
+    """Verify merging chapter HTML chunks into a master HTML file."""
+    compiler_script = (
+        REPO_ROOT
+        / ".agents"
+        / "skills"
+        / "dsom-technical-book-compiler"
+        / "scripts"
+        / "compile-book.py"
+    )
+    spec = importlib.util.spec_from_file_location("compile_book", compiler_script)
+    compile_book = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(compile_book)
+
+    ch1 = tmp_path / "001_ch1.html"
+    ch1.write_text("<h1>Chapter 1</h1><p>First paragraph.</p>", encoding="utf-8")
+
+    ch2 = tmp_path / "002_ch2.html"
+    ch2.write_text("<h1>Chapter 2</h1><p>Second paragraph.</p>", encoding="utf-8")
+
+    out_html = tmp_path / "merged_handbook.html"
+    compile_book.merge_chapter_html_files([ch1, ch2], out_html, "Test Handbook")
+
+    assert out_html.exists()
+    merged_text = out_html.read_text(encoding="utf-8")
+    assert "<title>Test Handbook</title>" in merged_text
+    assert "<h1>Chapter 1</h1>" in merged_text
+    assert "<h1>Chapter 2</h1>" in merged_text
+    assert "<main class=\"markdown-body\">" in merged_text
 
 
 def test_quarantine_workflow_routing_table() -> None:

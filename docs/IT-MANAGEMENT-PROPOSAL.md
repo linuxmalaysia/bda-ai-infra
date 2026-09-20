@@ -804,31 +804,41 @@ Key architectural benefits of migrating to Percona Patroni PostgreSQL 18 include
 
 ## 5.2 Vector Persistence: Utilizing pgvector for Semantic Search via n8n Pipeline
 
-With the secondary n8n pipeline orchestrating the AI lifecycle and computing Retrieval-Augmented Generation (RAG) embeddings, these semantic arrays must be persisted natively alongside relational records to prevent architectural sprawl. Utilizing the `pgvector` extension, high-dimensional vector data is stored directly within the PostgreSQL fabric, supporting sub-millisecond similarity searches via Hierarchical Navigable Small World (HNSW) indexing (`vector_cosine_ops`). This co-location guarantees that the unified database architecture serves as both the relational SSoT and the AI vector engine, enabling autonomous agents to execute hybrid SQL queries that combine precise geographical constraints with probabilistic semantic matches.
+With the secondary n8n pipeline orchestrating the AI lifecycle and computing Retrieval-Augmented Generation (RAG) embeddings, these semantic arrays must be persisted natively alongside relational records to prevent architectural sprawl. Utilizing the `pgvector` extension, high-dimensional vector data is stored directly within the PostgreSQL fabric, supporting sub-millisecond similarity searches via Hierarchical Navigable Small World (HNSW) indexing (`vector_cosine_ops`). To enforce strict SSoT governance, n8n does not write directly to Tier 0 Golden SSoT tables (`bda_master_golden`); instead, embedding persistence is either staged through the authorized Apache NiFi 2.0 ingestion gateway using `nifi_ingest_writer` or isolated into a dedicated Tier 2 vector schema (`bda_vector_store.environmental_embeddings`) under a constrained `n8n_vector_writer` service role. This co-location guarantees that the unified database architecture serves as both the relational SSoT and the AI vector engine, enabling autonomous agents to execute hybrid SQL queries that combine precise geographical constraints with probabilistic semantic matches.
 
 ### Technical Briefing: Unified Relational & Vector Schema Definition
 
 ```sql
--- Enable PostGIS and pgvector extensions in PostgreSQL 18 Core
+-- Enable PostGIS, pgvector, and pg_tde extensions in PostgreSQL 18 Core
 CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE EXTENSION IF NOT EXISTS vector;
 CREATE EXTENSION IF NOT EXISTS pg_tde;
 
--- Tier 0 Golden SSoT Master Knowledge Table
+-- Tier 0 Golden SSoT Master Knowledge Table (Encrypted via tde_heap Access Method)
 CREATE TABLE bda_master_golden.environmental_telemetry (
     record_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     station_code VARCHAR(64) NOT NULL,
     spatial_location GEOMETRY(Point, 4326) NOT NULL,
     sensor_readings JSONB NOT NULL,
     canonical_text TEXT NOT NULL,
-    embedding_vector VECTOR(1536) NOT NULL, -- 1536-dimensional RAG embeddings from n8n
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+) USING tde_heap;
+
+-- Tier 2 Vector Schema & Storage (Isolated n8n RAG Vector Embeddings)
+CREATE SCHEMA IF NOT EXISTS bda_vector_store;
+
+CREATE TABLE bda_vector_store.environmental_embeddings (
+    embedding_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    record_id UUID NOT NULL REFERENCES bda_master_golden.environmental_telemetry(record_id) ON DELETE CASCADE,
+    embedding_vector VECTOR(1536) NOT NULL, -- 1536-dimensional RAG embeddings from n8n
+    model_version VARCHAR(64) NOT NULL DEFAULT 'text-embedding-3-large',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+) USING tde_heap;
 
 -- Fast HNSW Vector Index for Cosine Distance Similarity
 CREATE INDEX idx_telemetry_vector_hnsw
-ON bda_master_golden.environmental_telemetry
+ON bda_vector_store.environmental_embeddings
 USING hnsw (embedding_vector vector_cosine_ops)
 WITH (m = 16, ef_construction = 64);
 
@@ -836,6 +846,10 @@ WITH (m = 16, ef_construction = 64);
 CREATE INDEX idx_telemetry_spatial_gist
 ON bda_master_golden.environmental_telemetry
 USING gist (spatial_location);
+
+-- Constrain n8n Write Scope to Isolated Vector Schema
+GRANT USAGE ON SCHEMA bda_vector_store TO n8n_vector_writer;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA bda_vector_store TO n8n_vector_writer;
 ```
 
 Co-locating relational, spatial, and vector datasets delivers:
@@ -848,7 +862,7 @@ Co-locating relational, spatial, and vector datasets delivers:
 
 ## 5.3 Automated Failover: Configuring Patroni with Embedded etcd for Resiliency
 
-By configuring Patroni with an embedded etcd datastore, we establish a robust, self-healing database clustering mechanism that eliminates complex external dependencies and keeps the high-availability logic simple for the underlying K3s environments. This embedded etcd topology acts as the distributed consensus layer, continuously monitoring the health of the PostgreSQL nodes. Upon detecting a primary node failure, Patroni instantly executes a leader election to automatically promote the most up-to-date healthy replica, ensuring an absolute reduction of MTTR without requiring manual split-brain resolution or administrative intervention.
+By configuring Patroni with an embedded etcd datastore, we establish a robust, self-healing database clustering mechanism that eliminates complex external dependencies and keeps the high-availability logic simple for the underlying K3s environments. This embedded etcd topology acts as the distributed consensus layer, continuously monitoring the health of the PostgreSQL nodes. Upon detecting a primary node failure, Patroni automatically conducts a leader election to promote the most up-to-date healthy replica, ensuring an absolute reduction of MTTR without requiring manual administrative intervention.
 
 ```
 +-----------------------------------------------------------------------------------+
@@ -874,7 +888,8 @@ By configuring Patroni with an embedded etcd datastore, we establish a robust, s
 |                      +---------------------------+                                |
 |                                                                                   |
 |  Distributed DCS Quorum: Raft Consensus (3 Nodes, 2 Active Required)              |
-|  Auto Failover Target RTO: < 10 Seconds | Zero Data Loss (RPO = 0)                |
+|  Auto Failover Target RTO: < 15 Seconds (Detection + Leader Election + Promotion) |
+|  Strict Synchronous Mode: Zero Data Loss (RPO = 0, synchronous_mode_strict: true) |
 +-----------------------------------------------------------------------------------+
 ```
 
@@ -887,23 +902,36 @@ namespace: /service
 name: pg-patroni-01.example.gov.my
 
 etcd3:
+  protocol: https
   hosts:
     - 203.0.113.31:2379
     - 203.0.113.32:2379
     - 203.0.113.33:2379
+  cacert: /etc/patroni/certs/etcd-ca.crt
+  cert: /etc/patroni/certs/patroni-etcd-client.crt
+  key: /etc/patroni/certs/patroni-etcd-client.key
 
 restapi:
-  listen: 203.0.113.31:8008
-  connect_address: 203.0.113.31:8008
+  listen: 192.168.100.31:8008 # Private management network interface
+  connect_address: 192.168.100.31:8008
+  cafile: /etc/patroni/certs/patroni-api-ca.crt
+  certfile: /etc/patroni/certs/patroni-api.crt
+  keyfile: /etc/patroni/certs/patroni-api.key
+  verify_client: required
+  authentication:
+    username: patroni_admin
+    password: "PUBLIC_SAFE_RESTAPI_PASSWORD_PLACEHOLDER"
+  allowlist:
+    - 192.168.100.0/24 # Restrict unsafe management endpoints (failover/switchover/reload)
 
 bootstrap:
   dcs:
-    ttl: 30
-    loop_wait: 10
-    retry_timeout: 10
+    ttl: 10
+    loop_wait: 3
+    retry_timeout: 3
     maximum_lag_on_failover: 1048576
     synchronous_mode: true
-    synchronous_mode_strict: false
+    synchronous_mode_strict: true # Enforce RPO = 0 by blocking writes if no standby is available
     postgresql:
       use_pg_rewind: true
       use_slots: true
@@ -911,6 +939,8 @@ bootstrap:
         max_connections: 500
         shared_buffers: 16GB
         wal_level: replica
+        wal_log_hints: "on" # Prerequisite requirement for pg_rewind execution
+        synchronous_commit: "on"
         max_wal_senders: 10
         max_replication_slots: 10
         hot_standby: "on"
@@ -938,24 +968,25 @@ tags:
 
 The Patroni automated failover workflow operates seamlessly:
 
-1. **Continuous Health Heartbeats:** Patroni daemons on all nodes send heartbeats every 10 seconds to the embedded etcd Distributed Configuration Store (DCS).
-2. **Leader Lease Maintenance:** The active primary node maintains an active leader lock key in etcd with a 30-second Time-To-Live (TTL).
-3. **Automated Promotion:** If the primary node crashes or network isolation occurs, its etcd lease expires after 30 seconds. The remaining Patroni nodes conduct an automated Raft election, identify the replica with the smallest WAL lag, and promote it to primary in under 10 seconds (RTO < 10s).
-4. **pg_rewind Split-Brain Prevention:** When the former primary node recovers, Patroni uses `pg_rewind` to automatically resynchronise its local timeline with the new primary without requiring a full manual node rebuild.
+1. **Continuous Health Heartbeats & Low Latency Lease:** Patroni daemons send heartbeats every 3 seconds (`loop_wait: 3`) to the embedded etcd DCS. The active leader maintains an active leader lock key with a 10-second TTL (`ttl: 10`).
+2. **Strict Zero Data Loss Guarantee (RPO = 0):** Enforcing `synchronous_mode_strict: true` alongside `synchronous_commit: "on"` guarantees that transactions are never committed on the primary until confirmed by at least one synchronous standby. If all standbys fail, writes are blocked rather than risking data loss.
+3. **Automated Promotion & Validated Detection (RTO < 15s):** Upon primary crash or network failure, the leader lease expires after 10 seconds. Surviving Patroni nodes elect the most up-to-date standby and promote it to primary within 2–3 seconds, yielding a total recovery time objective of under 15 seconds.
+4. **Timeline Resynchronization via pg_rewind:** Split-brain protection is guaranteed by Patroni's automatic leader lock revocation and demotion mechanisms. When a demoted or crashed former primary recovers, Patroni uses `pg_rewind` (enabled by `wal_log_hints: "on"`) to resynchronise its local timeline with the newly promoted primary without requiring a full manual node re-clone.
 
 ---
 
 ## 5.4 Cryptography & Security: Implementing pg_tde for Data-at-Rest Encryption
 
-To secure sensitive spatial vectors and proprietary environmental datasets against physical disk compromise, the database tier implements Transparent Data Encryption via the `pg_tde` extension. This cryptographic boundary encrypts the underlying tablespaces, Write-Ahead Logs (WAL), and vector logs at rest without altering downstream application logic or imposing overhead on SQL execution paths. By operating entirely at the storage layer and integrating with enterprise key management, `pg_tde` ensures hardware-grade compliance and protects the master data fabric against offline exfiltration while preserving the high-throughput performance required for advanced semantic querying.
+To secure sensitive spatial vectors and proprietary environmental datasets against physical disk compromise, the database tier implements Transparent Data Encryption via the `pg_tde` extension. In PostgreSQL 18, `pg_tde` operates as a custom access method (`USING tde_heap`), encrypting table files, Write-Ahead Logs (WAL), and vector logs at rest without altering downstream application logic or imposing overhead on SQL execution paths. By operating entirely at the storage layer and integrating with enterprise key management, `pg_tde` ensures hardware-grade compliance and protects the master data fabric against offline exfiltration while preserving the high-throughput performance required for advanced semantic querying.
 
 ### Technical Briefing: Declarative pg_tde Configuration & Key Management
 
 ```sql
 -- Load and configure pg_tde Transparent Data Encryption extension
+-- Note: Requires shared_preload_libraries = 'pg_tde' in postgresql.conf
 CREATE EXTENSION IF NOT EXISTS pg_tde;
 
--- Configure Key Management Provider (HashiCorp Vault or KMIP Key Manager)
+-- Register Centralized Key Provider (HashiCorp Vault KV v2)
 SELECT pg_tde_add_key_provider_vault(
     'vault_kmip_provider',
     'https://vault.example.gov.my:8200',
@@ -963,22 +994,25 @@ SELECT pg_tde_add_key_provider_vault(
     'PUBLIC_SAFE_VAULT_TOKEN_PLACEHOLDER'
 );
 
--- Set Primary Master Encryption Key for PostgreSQL 18 Cluster
-SELECT pg_tde_set_master_key('vault_kmip_provider');
+-- Register Principal Encryption Key for Cluster Data Encrypting Keys (DEK)
+SELECT pg_tde_set_principal_key('vault_kmip_provider', 'bda_pg18_principal_key');
 
--- Create Secure Tablespace with Transparent Data Encryption Enabled
-CREATE TABLESPACE tde_secure_tablespace
-LOCATION '/var/lib/postgresql/18/tde_data'
-WITH (encrypted = true);
+-- Create Encrypted Table using the tde_heap Access Method
+CREATE TABLE bda_master_golden.secure_environmental_records (
+    record_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    station_code VARCHAR(64) NOT NULL,
+    telemetry_payload JSONB NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+) USING tde_heap;
 
--- Assign Tier 0 Golden SSoT Tables to Encrypted Tablespace
+-- Convert Existing Standard Tables to Transparent Data Encryption
 ALTER TABLE bda_master_golden.environmental_telemetry
-SET TABLESPACE tde_secure_tablespace;
+SET ACCESS METHOD tde_heap;
 ```
 
 Key security attributes enforced by `pg_tde` include:
 
-* **Transparent Application Security:** Query paths, ORMs, and MCP tool execution operate standard SQL without modification; encryption and decryption happen transparently in PostgreSQL buffer pages.
+* **Transparent Application Security:** Query paths, ORMs, and MCP tool execution operate standard SQL without modification; encryption and decryption happen transparently in PostgreSQL buffer pages using the `tde_heap` access method.
 * **WAL and Vector Log Encryption:** Raw vector embeddings, geospatial geometries, and database Write-Ahead Logs written to disk are encrypted using AES-256-GCM hardware acceleration (AES-NI).
 * **Centralised Enterprise Key Management:** Master keys are secured in enterprise Vault/KMIP key management systems, enabling instant key rotation and remote cryptographic shredding in compliance with government data protection mandates.
 

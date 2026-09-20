@@ -11,3 +11,7 @@ build/
 .jekyll-cache/
 .jekyll-metadata
 *.md.lock
+.env
+.env.*
+.credentials
+credentials.json

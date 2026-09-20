@@ -4,8 +4,8 @@ type: spatial_memory
 title: "Task Registry - Day 2 Operations, Observability & AIOps Expansion"
 description: "DSOM Task Registry documenting Chapter 6 Day 2 Operations proposal expansion, dual-render diagrams, and PR feedback resolutions."
 status: active
-timestamp: "2026-09-20T17:30:00Z"
-stale_after: "2027-09-20T17:30:00Z"
+timestamp: "2026-09-20T18:00:00Z"
+stale_after: "2027-09-20T18:00:00Z"
 generated: false
 verified: true
 sources:
@@ -48,5 +48,11 @@ topics:
    - Executed `uv run ruff check .` -> 0 errors.
    - Executed full pytest suite (`uv run pytest`) -> 362/362 tests passed (100% pass rate).
 
-4. **EOD Palace Sync & Spatial Memory Update**:
-   - Synchronized spatial memory manifests in `.agents/brain/` (`task.md`, `checkpoint_summary.txt`).
+4. **Domain Anonymization & Link Refactoring**:
+   - Replaced domain names (`nre.gov.my`, `nres.gov.my`, `bda.nre.gov.my`, `bda.nres.gov.my`, `bda.ketsa.gov.my`, `ketsa.gov.my`) and legacy database identifiers (`bdaketsa_portal`) with public-safe generic placeholders (`https://bda.example.gov.my/`, `legacy-bda.example.gov.my`, `bda_legacy_portal`).
+   - Renamed proposal files `nre-bda-astro-migration.md` -> `bda-astro-migration.md` and `nre-bda-pipeline-upgrade.md` -> `bda-pipeline-upgrade.md`.
+   - Updated all navigation links across `SUMMARY.md`, `_data/navigation.yml`, `README.md`, `docs/README.md`, `START-HERE.md`, `llms.txt`, `CHANGELOG.md`, `HISTORY.md`, and `.agents/brain/active_context_manifest.md`.
+
+5. **EOD Palace Sync & DSOM Alignment**:
+   - Executed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory (`task.md`, `walkthrough.md`, `palace_registry.md`, `active_context_manifest.md`, `checkpoint_summary.txt`).
+   - Verified static linters (`ruff check .`, `markdownlint-cli`) and 366/366 pytest test suite execution (100% pass rate).

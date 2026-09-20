@@ -4,4 +4,5 @@ DSOM EOD Palace Checkpoint Summary (2026-09-20)
 2. Renumbered subsequent proposal chapters (7 Financial ROI, 8 Decommissioning Strategy with subsections 8.1–8.4, 9 Container Blueprint, 10 Execution Plan).
 3. Resolved PR code review comments regarding pgBackRest checksum delta restores, parallel compression with --process-max, Ceph S3 restore path, Elastic Fleet and OTLP authentication credentials, and AIOps metric qualification.
 4. Regenerated build/book.md and _data/navigation.yml / SUMMARY.md.
-5. Verified code health with ruff (0 errors) and executed full test suite via uv run pytest (362/362 passed, 100% pass rate).
+5. Replaced domain references (nre.gov.my, bda.nre.gov.my, nres.gov.my, bda.ketsa.gov.my) with generic public-safe placeholders (bda.example.gov.my). Renamed proposals to bda-astro-migration.md and bda-pipeline-upgrade.md.
+6. Verified code health with ruff (0 errors), markdownlint-cli, and executed full test suite via uv run pytest (366/366 passed, 100% pass rate). Executed EOD Palace Sync.

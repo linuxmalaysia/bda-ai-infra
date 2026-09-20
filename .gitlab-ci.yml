@@ -1,7 +1,25 @@
-# GitLab Pages CI/CD Pipeline
-image: ruby:3.2
+# GitLab CI/CD Pipeline
+# Combines Security Scanning (SAST, Secret Detection) and GitLab Pages deployment
+stages:
+  - test
+  - secret-detection
+  - deploy
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+
+variables:
+  SECRET_DETECTION_ENABLED: 'true'
+
+sast:
+  stage: test
+
+secret_detection:
+  stage: secret-detection
 
 pages:
+  image: ruby:3.2
   stage: deploy
   pages: true
   script:

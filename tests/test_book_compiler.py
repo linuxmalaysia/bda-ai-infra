@@ -4,10 +4,12 @@ Protocol: Deep State of Mind (DSOM) Protocol
 License: GNU General Public License v3.0
 """
 
+import importlib.util
 import shutil
 import subprocess
 from pathlib import Path
 
+import pytest
 from test_dual_render_diagrams import extract_routing_tables
 
 REPO_ROOT: Path = Path(__file__).parent.parent
@@ -95,6 +97,142 @@ def test_bake_native_svg_unrelated_preceding_svg(tmp_path: Path) -> None:
     # Should generate fallback vector SVG for NodeC / NodeD rather than omitting the block
     assert "Unrelated Source" in processed_content or "NodeC" in processed_content
     assert "baked-fallback-canvas" in processed_content
+
+
+def test_split_content_into_sections() -> None:
+    """Verify that tools/build_project_book.py splits Markdown content on H1 headers."""
+    from tools.build_project_book import split_content_into_sections
+
+    sample_md = """Preamble content
+
+# 1. First Major Chapter
+Content for chapter 1
+
+# 2. Second Major Chapter
+Content for chapter 2
+"""
+    sections = split_content_into_sections(sample_md)
+    assert len(sections) == 3
+    assert "Preamble content" in sections[0]
+    assert "# 1. First Major Chapter" in sections[1]
+    assert "# 2. Second Major Chapter" in sections[2]
+
+
+def test_split_content_into_sections_with_code_fences() -> None:
+    """Verify that H1 headers inside backtick and tilde code blocks are ignored and fence rules are respected."""
+    from tools.build_project_book import split_content_into_sections
+
+    fenced_md = """# Real Chapter 1
+Pre-code text
+
+```python
+# Fake Header inside backtick fence
+def foo():
+    pass
+```
+
+```python`
+# Real Header because opener contained a backtick in info string
+```
+
+~~~bash
+# Fake Header inside tilde fence
+echo "hello"
+~~~
+
+```python
+# Fake Header inside fence
+```invalid_closer_with_text
+# Still inside fence because closing fence had non-whitespace trailing text
+```
+
+# Real Chapter 2
+Post-code text
+"""
+    sections = split_content_into_sections(fenced_md)
+    assert len(sections) == 3
+    assert "# Real Chapter 1" in sections[0]
+    assert "# Real Header because opener contained a backtick" in sections[1]
+    assert "# Real Chapter 2" in sections[2]
+
+
+def test_split_content_four_space_indented_fence() -> None:
+    """Verify four-space-indented fence-like line is ignored as a fence opener so subsequent H1 is recognized."""
+    from tools.build_project_book import split_content_into_sections
+
+    sample_md = """# Initial Chapter
+    ```python
+    indented code block line
+    ```
+
+# Unindented Chapter Two
+Text in chapter two
+"""
+    sections = split_content_into_sections(sample_md)
+    assert len(sections) == 2
+    assert "# Initial Chapter" in sections[0]
+    assert "# Unindented Chapter Two" in sections[1]
+
+
+def test_generate_chapters_execution(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    """Verify that tools/build_project_book.py generates chapter files in isolated tmp_path."""
+    import tools.build_project_book as bpb
+
+    tmp_build = tmp_path / "build"
+    tmp_chapters = tmp_build / "chapters"
+    tmp_book = tmp_build / "book.md"
+
+    # Create dummy priority files inside tmp_path so chapter generation finds files
+    (tmp_path / "README.md").write_text("# Test README\nContent\n", encoding="utf-8")
+    (tmp_path / "START-HERE.md").write_text("# Start Here\nContent\n", encoding="utf-8")
+    tmp_docs = tmp_path / "docs"
+    tmp_docs.mkdir(parents=True, exist_ok=True)
+    (tmp_docs / "IT-MANAGEMENT-PROPOSAL.md").write_text("# Proposal\nContent\n", encoding="utf-8")
+
+    monkeypatch.setattr(bpb, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(bpb, "BUILD_DIR", tmp_build)
+    monkeypatch.setattr(bpb, "CHAPTERS_DIR", tmp_chapters)
+    monkeypatch.setattr(bpb, "BOOK_PATH", tmp_book)
+
+    chapter_paths = bpb.generate_chapters()
+    assert len(chapter_paths) > 0
+    assert any("frontmatter" in p.name for p in chapter_paths)
+    assert tmp_book.exists()
+
+
+def test_merge_chapter_html_files(tmp_path: Path) -> None:
+    """Verify merging chapter HTML chunks into a master HTML file with TOC generation and entity unescaping."""
+    compiler_script = (
+        REPO_ROOT
+        / ".agents"
+        / "skills"
+        / "dsom-technical-book-compiler"
+        / "scripts"
+        / "compile-book.py"
+    )
+    spec = importlib.util.spec_from_file_location("compile_book", compiler_script)
+    compile_book = importlib.util.module_from_spec(spec)
+    assert spec is not None and spec.loader is not None
+    spec.loader.exec_module(compile_book)
+
+    ch1 = tmp_path / "001_ch1.html"
+    ch1.write_text('<h1 id="ch1-heading">API &amp; MCP Integration</h1><p>First paragraph.</p>', encoding="utf-8")
+
+    ch2 = tmp_path / "002_ch2.html"
+    ch2.write_text('<h1 id="ch2-heading">Chapter 2</h1><p>Second paragraph.</p>', encoding="utf-8")
+
+    out_html = tmp_path / "merged_handbook.html"
+    compile_book.merge_chapter_html_files([ch1, ch2], out_html, "Test Handbook")
+
+    assert out_html.exists()
+    merged_text = out_html.read_text(encoding="utf-8")
+    assert "<title>Test Handbook</title>" in merged_text
+    assert '<nav id="TOC"' in merged_text
+    assert 'href="#ch1-heading"' in merged_text
+    assert "API &amp; MCP Integration" in merged_text
+    assert "&amp;amp;" not in merged_text
+    assert "Chapter 2" in merged_text
+    assert '<main class="markdown-body">' in merged_text
 
 
 def test_quarantine_workflow_routing_table() -> None:

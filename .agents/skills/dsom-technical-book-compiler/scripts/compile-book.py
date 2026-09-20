@@ -5,12 +5,19 @@ This module orchestrates the multi-format compilation of repository source code,
 Diátaxis documentation, and telemetry assets into publication-grade handbooks
 (PDF, standalone HTML, EPUB, ODT) using Pandoc and headless Chromium/Edge browser engines.
 
+Memory & CPU Optimization:
+Compiles Markdown manuscripts chapter-by-chapter into intermediate HTML fragments,
+pre-renders native vector SVGs per fragment to prevent heap allocation spikes,
+and merges the resulting chunks with Python.
+
 Protocol: Deep State of Mind (DSOM) Protocol
 License: GNU General Public License v3.0
 """
 
 import argparse
+import html
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -18,7 +25,13 @@ from pathlib import Path
 
 REPO_ROOT: Path = Path(__file__).parent.parent.parent.parent.parent
 BUILD_DIR: Path = REPO_ROOT / "build"
+CHAPTERS_DIR: Path = BUILD_DIR / "chapters"
+CHAPTERS_HTML_DIR: Path = BUILD_DIR / "chapters_html"
 BOOK_MD: Path = BUILD_DIR / "book.md"
+
+# Import bake_native_svg tools
+sys.path.insert(0, str(REPO_ROOT))
+from tools.bake_native_svg import INLINE_CSS, process_html_file  # noqa: E402
 
 
 def run_command(cmd: list[str], timeout: float = 60.0) -> None:
@@ -37,17 +50,129 @@ def run_command(cmd: list[str], timeout: float = 60.0) -> None:
     subprocess.run(cmd, check=True, timeout=timeout)
 
 
+def generate_toc_html(merged_body_html: str) -> str:
+    """Generate a single unified Table of Contents HTML from all merged body headings.
+
+    Args:
+        merged_body_html (str): Merged HTML content containing chapter body headings.
+
+    Returns:
+        str: Styled HTML Table of Contents block.
+
+    """
+    heading_pattern = re.compile(
+        r'<h([1-3])\s+[^>]*id="([^"]+)"[^>]*>([\s\S]*?)</h\1>', re.IGNORECASE
+    )
+    headings = heading_pattern.findall(merged_body_html)
+    if not headings:
+        return ""
+
+    toc_lines: list[str] = [
+        '<nav id="TOC" role="doc-toc" class="toc-container">',
+        '  <h2>Table of Contents</h2>',
+        '  <ul>',
+    ]
+    for level_str, hid, title_raw in headings:
+        level = int(level_str)
+        # Strip HTML tags then unescape entities before escaping for clean TOC title output
+        clean_title = html.unescape(re.sub(r'<[^>]+>', '', title_raw)).strip()
+        if not clean_title:
+            continue
+        indent_class = f"toc-level-{level}"
+        toc_lines.append(
+            f'    <li class="{indent_class}"><a href="#{hid}">{html.escape(clean_title)}</a></li>'
+        )
+    toc_lines.append('  </ul>')
+    toc_lines.append('</nav>')
+    return "\n".join(toc_lines)
+
+
+def merge_chapter_html_files(html_files: list[Path], output_path: Path, title: str) -> None:
+    """Merge compiled and baked chapter HTML fragments into a complete HTML document.
+
+    Generates a unified Table of Contents from all merged body headings and inserts it into
+    the document body to preserve navigation produced by Pandoc.
+
+    Args:
+        html_files (list[Path]): List of baked chapter HTML fragment paths.
+        output_path (Path): Path for merged master HTML file.
+        title (str): Title for HTML head metadata.
+
+    """
+    body_parts: list[str] = []
+
+    for path in html_files:
+        if not path.exists():
+            continue
+        content = path.read_text(encoding="utf-8")
+        clean_content = re.sub(
+            r'<style id="baked-svg-print-styles">[\s\S]*?</style>', '', content
+        ).strip()
+        if clean_content:
+            body_parts.append(clean_content)
+
+    merged_body = "\n\n<hr/>\n\n".join(body_parts)
+    toc_html = generate_toc_html(merged_body)
+
+    full_html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{html.escape(title)}</title>
+  {INLINE_CSS}
+  <style>
+    body {{
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: #ffffff;
+      color: #0f172a;
+    }}
+    .toc-container {{
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }}
+    .toc-container ul {{ list-style-type: none; padding-left: 0; }}
+    .toc-container li {{ margin: 0.4rem 0; }}
+    .toc-container li.toc-level-2 {{ padding-left: 1.2rem; }}
+    .toc-container li.toc-level-3 {{ padding-left: 2.4rem; }}
+    h1, h2, h3, h4 {{ color: #0f172a; margin-top: 2rem; margin-bottom: 1rem; }}
+    code {{ background-color: #f1f5f9; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; }}
+    pre code {{ display: block; padding: 1rem; overflow-x: auto; background-color: #0f172a; color: #f8fafc; border-radius: 6px; }}
+    blockquote {{ border-left: 4px solid #2563eb; margin: 1rem 0; padding-left: 1rem; color: #475569; }}
+    table {{ width: 100%; border-collapse: collapse; margin: 1.5rem 0; }}
+    th, td {{ border: 1px solid #cbd5e1; padding: 0.75rem; text-align: left; }}
+    th {{ background-color: #f8fafc; font-weight: 600; }}
+  </style>
+</head>
+<body>
+  <main class="markdown-body">
+    {toc_html}
+    {merged_body}
+  </main>
+</body>
+</html>
+"""
+    output_path.write_text(full_html, encoding="utf-8")
+
+
 def main() -> None:
     """Orchestrate the complete technical book compilation pipeline.
 
     Executes sequential build stages:
-    1. Assembles master markdown document via tools/build_project_book.py into build/book.md.
-    2. Compiles standalone interactive HTML using Pandoc with lang=en.
-    3. Bakes native vector SVGs and inline CSS styling via tools/bake_native_svg.py.
+    1. Assembles modular chapter chunks into build/chapters/*.md via tools/build_project_book.py.
+    2. Compiles interactive HTML chapter-by-chapter and bakes native vector SVGs per chunk.
+    3. Merges compiled chapter HTML fragments into root handbook.html using Python.
     4. Compiles publication-grade PDF using headless Chromium/Chrome/Edge.
-    5. Compiles EPUB 3 ebook using Pandoc.
-    6. Compiles ODT document using Pandoc.
-    7. Compiles standalone IT Management Proposal PDF and HTML deliverables.
+    5. Compiles EPUB 3 ebook using Pandoc from chapter Markdown files.
+    6. Compiles ODT document using Pandoc from chapter Markdown files.
+    7. Compiles standalone IT Management Proposal PDF and HTML deliverables in section chunks.
     """
     parser = argparse.ArgumentParser(description="Orchestrate technical book compilation pipeline.")
     parser.add_argument(
@@ -65,38 +190,57 @@ def main() -> None:
         raise RuntimeError("Required dependency 'uv' executable not found in PATH.")
     python_cmd = [uv_bin, "run", "python"] if uv_bin else [sys.executable]
 
-    # 1. Build Master Markdown handbook into build/book.md
+    # 1. Build Master Markdown & Chapter chunks into build/chapters/*.md
     if not dry_run:
         run_command(python_cmd + ["tools/build_project_book.py"])
-        if not BOOK_MD.exists():
-            raise RuntimeError("Handbook source manuscript build/book.md is missing or failed to generate.")
+        if not BOOK_MD.exists() or not CHAPTERS_DIR.exists():
+            raise RuntimeError("Handbook chapter manuscripts in build/chapters/ are missing.")
     else:
         print("Dry-run mode active; skipping handbook manuscript build preparation.")
 
-    # 2. Compile Standalone Interactive HTML
+    chapter_md_files = sorted(CHAPTERS_DIR.glob("*.md")) if CHAPTERS_DIR.exists() else []
+
+    # 2. Chapter-by-Chapter HTML Compilation & SVG Baking
     pandoc_bin = shutil.which("pandoc")
     handbook_html = REPO_ROOT / "handbook.html"
-    if pandoc_bin and BOOK_MD.exists():
-        run_command([
-            "pandoc",
-            str(BOOK_MD),
-            "-o",
-            "handbook.html",
-            "--standalone",
-            "--toc",
-            "-V",
-            "lang=en",
-        ])
+
+    if pandoc_bin and chapter_md_files:
+        CHAPTERS_HTML_DIR.mkdir(parents=True, exist_ok=True)
+        baked_html_chunks: list[Path] = []
+
+        for c_md in chapter_md_files:
+            c_html = CHAPTERS_HTML_DIR / f"{c_md.stem}.html"
+            run_command([
+                "pandoc",
+                str(c_md),
+                "-o",
+                str(c_html),
+                "--id-prefix",
+                f"{c_md.stem}-",
+                "-V",
+                "lang=en",
+            ])
+            # Process & bake SVG on individual chapter HTML chunk
+            process_html_file(c_html)
+            baked_html_chunks.append(c_html)
+
+        # Merge chapter HTML fragments into master handbook.html
+        merge_chapter_html_files(
+            baked_html_chunks,
+            handbook_html,
+            "DSOM Big Data Analytics & Enterprise AI Infrastructure Handbook",
+        )
+
         if not dry_run and not handbook_html.exists():
             raise RuntimeError(f"Handbook HTML output failed to generate at {handbook_html}")
     elif dry_run:
-        print("Pandoc not found or build/book.md missing; skipping HTML build in dry-run mode.")
-    elif not BOOK_MD.exists():
-        raise RuntimeError("Handbook source manuscript build/book.md is missing.")
+        print("Pandoc not found or chapter files missing; skipping HTML build in dry-run mode.")
+    elif not chapter_md_files:
+        raise RuntimeError("Handbook source chapters in build/chapters/ are missing.")
     else:
         raise RuntimeError("Required dependency 'pandoc' not found in PATH for handbook HTML compilation.")
 
-    # 3. Bake Native Vector SVGs & Inline CSS
+    # 3. Bake Native Vector SVGs for root proposal files if present
     if not dry_run:
         run_command(python_cmd + ["tools/bake_native_svg.py"])
     else:
@@ -131,10 +275,10 @@ def main() -> None:
     # 5. Compile EPUB 3 Ebook & ODT Document
     handbook_epub = REPO_ROOT / "handbook.epub"
     handbook_odt = REPO_ROOT / "handbook.odt"
-    if pandoc_bin and BOOK_MD.exists():
-        run_command([
+    if pandoc_bin and chapter_md_files:
+        cmd_epub = [
             "pandoc",
-            str(BOOK_MD),
+            *[str(p) for p in chapter_md_files],
             "-o",
             "handbook.epub",
             "-t",
@@ -142,8 +286,16 @@ def main() -> None:
             "--toc",
             "-V",
             "lang=en",
-        ])
-        run_command(["pandoc", str(BOOK_MD), "-o", "handbook.odt", "--toc"])
+        ]
+        cmd_odt = [
+            "pandoc",
+            *[str(p) for p in chapter_md_files],
+            "-o",
+            "handbook.odt",
+            "--toc",
+        ]
+        run_command(cmd_epub)
+        run_command(cmd_odt)
         if not dry_run:
             if not handbook_epub.exists():
                 raise RuntimeError(f"Handbook EPUB output failed to generate at {handbook_epub}")
@@ -151,8 +303,8 @@ def main() -> None:
                 raise RuntimeError(f"Handbook ODT output failed to generate at {handbook_odt}")
     elif dry_run:
         print("Pandoc missing; skipping EPUB and ODT builds in dry-run mode.")
-    elif not BOOK_MD.exists():
-        raise RuntimeError("Handbook source manuscript build/book.md is missing.")
+    elif not chapter_md_files:
+        raise RuntimeError("Handbook source chapters in build/chapters/ are missing.")
     else:
         raise RuntimeError("Required dependency 'pandoc' not found in PATH for EPUB/ODT compilation.")
 
@@ -168,17 +320,43 @@ def main() -> None:
             raise RuntimeError(f"Proposal source file missing: {proposal_md}")
     else:
         if pandoc_bin:
-            run_command([
-                "pandoc",
-                str(proposal_md),
-                "-o",
-                str(proposal_html),
-                "--standalone",
-                "--toc",
-                "--highlight-style=tango",
-                "-V",
-                "lang=en",
-            ])
+            # Gather proposal section chapters if present, otherwise process directly
+            proposal_chunks = [p for p in chapter_md_files if "it-management-p" in p.name]
+            if proposal_chunks:
+                proposal_html_chunks: list[Path] = []
+                for p_chunk in proposal_chunks:
+                    p_c_html = CHAPTERS_HTML_DIR / f"proposal_{p_chunk.stem}.html"
+                    run_command([
+                        "pandoc",
+                        str(p_chunk),
+                        "-o",
+                        str(p_c_html),
+                        "--id-prefix",
+                        f"{p_chunk.stem}-",
+                        "-V",
+                        "lang=en",
+                    ])
+                    process_html_file(p_c_html)
+                    proposal_html_chunks.append(p_c_html)
+                merge_chapter_html_files(
+                    proposal_html_chunks,
+                    proposal_html,
+                    "IT Management Proposal",
+                )
+            else:
+                run_command([
+                    "pandoc",
+                    str(proposal_md),
+                    "-o",
+                    str(proposal_html),
+                    "--standalone",
+                    "--toc",
+                    "--highlight-style=tango",
+                    "-V",
+                    "lang=en",
+                ])
+                process_html_file(proposal_html)
+
             if not proposal_html.exists():
                 raise RuntimeError(f"Proposal HTML output failed to generate at {proposal_html}")
 

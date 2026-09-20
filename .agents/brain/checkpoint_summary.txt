@@ -1,8 +1,8 @@
 DSOM EOD Palace Checkpoint Summary (2026-09-20)
 ===================================================
-1. Integrated Chapter 6: Day 2 Operations, Observability & AIOps into docs/IT-MANAGEMENT-PROPOSAL.md covering 6.1 Telemetry & Centralised Logging (OTLP, Elastic Observability), 6.2 AIOps Integration (machine learning RCA, SLO-based alerting), 6.3 Disaster Recovery (pgBackRest PITR, checksum delta restores, Ceph S3 Object Lock Compliance WORM), and 6.4 Dual-Render Architecture Blueprint.
-2. Renumbered subsequent proposal chapters (7 Financial ROI, 8 Decommissioning Strategy with subsections 8.1–8.4, 9 Container Blueprint, 10 Execution Plan).
-3. Resolved PR code review comments regarding pgBackRest checksum delta restores, parallel compression with --process-max, Ceph S3 restore path, Elastic Fleet and OTLP authentication credentials, and AIOps metric qualification.
-4. Regenerated build/book.md and _data/navigation.yml / SUMMARY.md.
+1. Refactored tools/build_project_book.py and compile-book.py to implement modular, chapter-by-chapter Markdown chunking and intermediate HTML compilation, pre-rendering vector SVGs per chunk to eliminate memory and CPU spikes on resource-constrained VMs.
+2. Implemented CommonMark code fence parsing rules (allowing up to 3 leading spaces, rejecting backticks in backtick info strings, and enforcing trailing whitespace on closing fences) in split_content_into_sections().
+3. Added --id-prefix heading namespace isolation and unescaped Table of Contents navigation HTML generation in merge_chapter_html_files().
+4. Updated tests/test_book_compiler.py with isolated tmp_path monkeypatching and unit test coverage for fence parsing and TOC unescaping.
 5. Replaced domain references (nre.gov.my, bda.nre.gov.my, nres.gov.my, bda.ketsa.gov.my) with generic public-safe placeholders (bda.example.gov.my). Renamed proposals to bda-astro-migration.md and bda-pipeline-upgrade.md.
-6. Verified code health with ruff (0 errors), markdownlint-cli, and executed full test suite via uv run pytest (366/366 passed, 100% pass rate). Executed EOD Palace Sync.
+6. Verified code health with ruff (0 errors) and executed full test suite via uv run pytest (371/371 passed, 100% pass rate). Completed EOD Palace Sync.

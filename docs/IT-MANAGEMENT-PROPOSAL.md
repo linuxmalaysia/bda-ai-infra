@@ -1219,9 +1219,9 @@ By centralising incident context, engineering teams avoid reconstructing events 
 
 ## 6.2 AIOps Integration
 
-Traditional monitoring dashboards that merely display observable symptoms (e.g., CPU spikes or elevated error rates) fail to explain causation. To achieve the target 85% reduction in Mean Time To Repair (MTTR), the Elastic platform delivers out-of-the-box machine learning to execute automated root cause analysis (RCA) and dynamic anomaly detection.
+Traditional monitoring dashboards that merely display observable symptoms (e.g., CPU spikes or elevated error rates) fail to explain causation. To achieve a targeted 85% reduction in Mean Time To Repair (MTTR)—evaluated against historical un-automated incident baseline response durations—the Elastic platform delivers out-of-the-box machine learning to execute automated root cause analysis (RCA) and dynamic anomaly detection.
 
-These models continuously analyse deviations in application performance to identify misbehaving services or backpressure within the primary Apache NiFi 2.0 ingestion gates and the secondary n8n RAG pipelines. By switching from rigid threshold alerts to SLO-based, AI-powered alerting, the infrastructure cuts alert volume by 40–60%. The AIOps engine correlates related events and surfaces similar past incidents via pattern matching, allowing responders to skip hours of exploration and move directly to validated fixes.
+These models continuously analyse deviations in application performance to identify misbehaving services or backpressure within the primary Apache NiFi 2.0 ingestion gates and the secondary n8n RAG pipelines. By switching from rigid threshold alerts to SLO-based, AI-powered alerting, the infrastructure targets an estimated 40–60% cut in alert volume compared to un-deduplicated legacy alert streams, evaluated post-implementation via Kibana alert grouping metrics. The AIOps engine correlates related events and surfaces similar past incidents via pattern matching, allowing responders to skip hours of exploration and move directly to validated fixes.
 
 ## 6.3 Disaster Recovery
 
@@ -1229,10 +1229,10 @@ Disaster recovery for the Percona Patroni PostgreSQL 18 Single Source of Truth (
 
 To ensure strict Recovery Time Objectives (RTO) and Recovery Point Objectives (RPO), pgBackRest relies on two critical mechanisms:
 
-* **Delta Restores & Parallel Processing:** During recovery operations, the `--delta` flag prompts pgBackRest to compare checksums of existing files in the data directory against the backup manifest, transferring only the altered blocks. Combined with parallel worker processes (`--process-max`), this delta restore mode reduces recovery time windows by 80% or more on large clustered databases.
+* **Delta Restores & Parallel Processing:** During recovery operations, the `--delta` flag prompts pgBackRest to compare per-file checksums between the local data directory and the backup manifest, preserving matching files on disk and restoring only mismatched or missing files. Parallel worker processes (`--process-max`) manage concurrent file compression and transfer. The restore data flow streams directly from Ceph S3 object storage through pgBackRest into PostgreSQL, achieving an estimated 80% target reduction in recovery time windows compared to full directory re-synchronisation under large database benchmark workloads.
 * **Point-in-Time Recovery (PITR):** In the event of catastrophic data corruption, administrators execute granular PITR by replaying WAL segments until a precise target timestamp or Log Sequence Number (LSN) is reached.
 
-All backup files and WAL archives are routed directly to the Ceph S3 object storage fabric. These buckets enforce hardware-grade S3 Object Lock in compliance mode, guaranteeing total cryptographic immutability against ransomware attacks or accidental administrative deletion.
+All backup files and WAL archives are routed directly to the Ceph S3 object storage fabric. Ceph S3 buckets enforce S3 Object Lock in Compliance Mode for WORM (Write Once Read Many) retention over configured retention periods, preventing modification or deletion of locked backup objects even by administrative accounts until the retention period expires. Encryption at rest (AES-256 server-side encryption with Vault key management), bucket versioning, object retention policies, and disaster recovery threat assumptions (protecting against administrative accidental deletion and unauthorized data overwrite during the retention window) operate as separate security and governance guarantees.
 
 ---
 
@@ -1301,7 +1301,6 @@ All backup files and WAL archives are routed directly to the Ceph S3 object stor
 
   <!-- Connectors -->
   <line x1="300" y1="150" x2="350" y2="150" stroke="#0F172A" stroke-width="1.5" marker-end="url(#arrow-ops)"/>
-  <line x1="610" y1="210" x2="660" y2="210" stroke="#0F172A" stroke-width="1.5" marker-end="url(#arrow-ops)"/>
 </svg>
 
 ### 2. Git-Native Mermaid Topology (`.mmd`)
@@ -1333,12 +1332,12 @@ graph TD
 
 | Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
 | --- | --- | --- | --- | --- |
-| **K3s / Podman Nodes** | **Elastic Agent** | `TCP 4317` / OTLP | mTLS / Fleet Policy Token | Standardises trace and metric collection natively from containers without vendor lock-in. |
-| **Elastic Agent** | **Elasticsearch Cluster** | `TCP 9200` / HTTPS | Role-Based Access Control | Centralises all operational data, providing the foundational dataset for anomaly detection. |
-| **AIOps Engine** | **Kibana Dashboards** | Internal API | Active Directory / Keycloak SSO | Correlates logs, traces, and metrics to execute automated root cause analysis (RCA), cutting alert volume by 40–60%. |
+| **K3s / Podman Nodes** | **Elastic Agent** | `TCP 4317` / OTLP | OTLP Auth (API Key / Bearer Token) & Fleet Enrollment Secret | Standardises trace and metric collection natively from containers without vendor lock-in; uses separate Fleet enrollment credentials for policy management. |
+| **Elastic Agent** | **Elasticsearch Cluster** | `TCP 9200` / HTTPS | TLS CA Verification & ES Output API Key / Role | Centralises all operational data, authenticated via Elasticsearch output API keys with TLS CA verification separate from Fleet and OTLP authentication. |
+| **AIOps Engine** | **Kibana Dashboards** | Internal API | Active Directory / Keycloak SSO | Correlates logs, traces, and metrics to execute automated root cause analysis (RCA), targeting a 40–60% reduction in alert volume evaluated post-deployment. |
 | **PostgreSQL 18 SSoT** | **pgBackRest** | Local Subprocess / SSH | `postgres` System Role | Captures continuous WAL segments and executes parallel, compressed backup operations. |
-| **pgBackRest** | **Ceph S3 Bucket** | `TCP 443` / S3 API | S3 IAM / Compliance Lock | Writes backup artefacts to immutable object storage, ensuring hardware-grade ransomware protection. |
-| **Ceph S3 Bucket** | **PostgreSQL 18 SSoT** | `TCP 443` / S3 API | `--delta` / `--process-max` | Facilitates rapid Point-in-Time Recovery (PITR) by restoring only altered checksum blocks, accelerating MTTR by 80%+. |
+| **pgBackRest** | **Ceph S3 Bucket** | `TCP 443` / S3 API | S3 IAM / WORM Compliance Lock | Writes backup artefacts to S3 object storage with Object Lock Compliance Mode enforcing WORM retention. |
+| **Ceph S3 Bucket** | **PostgreSQL 18 SSoT** | `TCP 443` / S3 API | S3 IAM / Read-Only Restore Scope | Streams backup data along the restore path Ceph S3 -> pgBackRest -> PostgreSQL 18 SSoT; `--delta` compares per-file checksums and `--process-max` parallelises transfers to accelerate recovery windows. |
 
 ---
 
@@ -1362,19 +1361,19 @@ To ensure zero downtime and manage operational risk, legacy workbooks, applicati
 [ Phase 1: Audit ] ──► [ Phase 2: Logic Transfer ] ──► [ Phase 3: Open BI ] ──► [ Phase 4: MCP/API ]
 ```
 
-## 7.1 Phase 1: Workbook & Monolith Audit
+## 8.1 Phase 1: Workbook & Monolith Audit
 * Catalogue all active legacy workbooks, calculated fields, custom SQL scripts, and user access lists.
 * Identify redundant reports and mark high-value dashboards for migration.
 
-## 7.2 Phase 2: Data & Logic Consolidation
+## 8.2 Phase 2: Data & Logic Consolidation
 * Migrate complex calculations and data blending logic into **PostgreSQL Materialised Views** and stored functions.
 * Ensure Apache NiFi orchestrates data pipelines directly into clean PostgreSQL schemas.
 
-## 7.3 Phase 3: Open-Source BI Deployment
+## 8.3 Phase 3: Open-Source BI Deployment
 * Deploy containerised **Apache Superset** (or Metabase) on Podman to replicate essential executive dashboards.
 * Connect directly to the PostgreSQL layer, restoring visual reporting capabilities with zero user-license overhead.
 
-## 7.4 Phase 4: API & MCP Enablement
+## 8.4 Phase 4: API & MCP Enablement
 * Expose underlying business calculations as REST/gRPC API endpoints via Fusio.
 * Wrap PostgreSQL metrics and vector searches into standardised **MCP Tools** for internal AI agent consumption.
 

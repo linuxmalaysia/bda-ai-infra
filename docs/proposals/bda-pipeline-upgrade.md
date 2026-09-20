@@ -29,7 +29,7 @@ topics:
 **Document Version:** 1.0
 **Author:** Lead Systems Architect
 **Target Architecture:** Decoupled Human-in-the-Loop (HITL) File Quarantine & Browser-Accelerated Web AI
-**Infrastructure Scope:** `bda-ai-infra` (`https://bda.nres.gov.my/` / `bda.ketsa.gov.my`)
+**Infrastructure Scope:** `bda-ai-infra` (`https://bda.example.gov.my/` / `legacy-bda.example.gov.my`)
 
 ---
 

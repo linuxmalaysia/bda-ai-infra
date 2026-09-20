@@ -150,7 +150,7 @@ Following the **Diátaxis Documentation Framework**, this suite is organized int
 
 ### 🏛️ Strategic Proposals & Migration Blueprints
 
-- **[NRE BDA Technical Migration Proposal](proposals/nre-bda-astro-migration.html):** Transition proposal from legacy stateful Joomla 3 monolith to decoupled Astro 7.3.2 static-first architecture.
+- **[BDA Technical Migration Proposal](proposals/bda-astro-migration.html):** Transition proposal from legacy stateful Joomla 3 monolith to decoupled Astro 7.3.2 static-first architecture.
 - **[IT Management Proposal](IT-MANAGEMENT-PROPOSAL.html):** Executive proposal for Enterprise Data Infrastructure Modernisation (Tableau to Podman, API-First, MCP-Ready).
 
 ### 🎓 1. Tutorials (Practical Learning for Onboarding)

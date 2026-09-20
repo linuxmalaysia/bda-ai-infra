@@ -28,7 +28,7 @@ and this project adheres to Semantic Versioning.
 
 ### Added
 
-- Published `docs/proposals/nre-bda-astro-migration.md` in UK English detailing the technical migration proposal transitioning `https://bda.nres.gov.my/` from legacy stateful Joomla 3 monolith to a decoupled, high-availability, static-first Astro 7.3.2 architecture on K3s/RKE2 and Podman Quadlets.
+- Published `docs/proposals/bda-astro-migration.md` in UK English detailing the technical migration proposal transitioning `https://bda.example.gov.my/` from legacy stateful Joomla 3 monolith to a decoupled, high-availability, static-first Astro 7.3.2 architecture on K3s/RKE2 and Podman Quadlets.
 - Embedded complete Dual-Render Architecture Diagram suite (raw inline SVG vector graphic, Git-native Mermaid topology, and 5-column summary routing table).
 - Added DSOM 4-Phase Migration Blueprint & AI Skills Readiness (`.agents/skills/dsom-migration-blueprint/SKILL.md`) conforming to Warp Skills and OpenViking Skills specifications.
 - Published `docs/how-to-guides/dsom-migration-blueprint-execution-guide.md` in UK English detailing the 4-phase execution pipeline (Legacy Ingestion & Delta Mapping, State Transition Documentation As-Is vs To-Be, Contextual Population into `.agents/brain` & `.agents/skills`, and Master Compilation) complete with Dual-Render Architecture Diagram.

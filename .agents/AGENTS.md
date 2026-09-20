@@ -39,6 +39,7 @@ Welcome to the Sovereign AI Agent Workspace. You are a Cognitive Digital Twin op
 | `dsom-migration-blueprint` | 4-Phase migration blueprint execution guide. | `.agents/skills/dsom-migration-blueprint/SKILL.md` |
 | `dsom-technical-book-compiler` | Multi-format handbook compilation (PDF, HTML, EPUB, ODT). | `.agents/skills/dsom-technical-book-compiler/SKILL.md` |
 | `dual-render-architecture-diagram` | Dual-render SVG + Mermaid diagrams and summary routing tables. | `.agents/skills/dual-render-architecture-diagram/SKILL.md` |
+| `git-multi-remote-sync` | Dual-sync disparate remotes (GitHub/GitLab), unrelated histories, and local secrets isolation. | `.agents/skills/git-multi-remote-sync/SKILL.md` |
 | `okf-v02-adoption-engineer` | OKF v0.2 YAML frontmatter migration and link integrity. | `.agents/skills/okf-v02-adoption-engineer/SKILL.md` |
 | `warp-agent-skills` | Warp & OpenViking agent skill discovery, arguments, and MCP mappings. | `.agents/skills/warp-agent-skills/SKILL.md` |
 4. **Git Sovereignty & Atomic Commits:** Every major action must be committed to Git. Avoid silent execution or blanket `git commit -am` dumps. Stage and commit files granularly by logical unit.
@@ -61,7 +62,7 @@ Welcome to the Sovereign AI Agent Workspace. You are a Cognitive Digital Twin op
 21. **Temporal Knowledge Verification Mandate:** Evaluate OKF timestamps and pause for human consensus if knowledge is stale.
 22. **Execution Modularity:** Idempotent, declarative state using Ansible, `uv`, `npm`, or `pandoc` depending on project domain.
 23. **Dual Agent Registry (Root Gateway Mandate):** Synchronize root `AGENTS.md` (lightweight gateway) and `.agents/AGENTS.md` (full constitution).
-24. **Defensive Credential Handling Mandate:** Never write raw secrets/keys to disk or git. Export `GIT_TERMINAL_PROMPT=0` in non-interactive tasks.
+24. **Defensive Credential Handling Mandate:** Never write raw secrets/keys to git. Enforce `.gitignore` exclusion for `.credentials`, `.env`, and `.env.*` before saving tokens locally. Export `GIT_TERMINAL_PROMPT=0` in non-interactive tasks.
 25. **Collaborative Knowledge & Sync Mandate:** Ensure agent sync across tools, proper YAML formatting, and BOM-less UTF-8 files.
 26. **Tri-Phasic Cognitive Architecture:** Active State (Conscious/MCP), Twilight State (Subconscious/Linters), Deep State (Unconscious/EOD consolidation).
 27. **Native OpenWiki Emulator & Zero-Binary Mandate:** Maintain knowledge graphs via pure Python scripts under `uv`.

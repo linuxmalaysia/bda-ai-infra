@@ -912,7 +912,7 @@ etcd3:
   key: /etc/patroni/certs/patroni-etcd-client.key
 
 restapi:
-  listen: 192.168.100.31:8008 # Private management network interface
+  listen: 192.168.100.31:8008 # Node-specific private management network interface (substitute .32 / .33 per node)
   connect_address: 192.168.100.31:8008
   cafile: /etc/patroni/certs/patroni-api-ca.crt
   certfile: /etc/patroni/certs/patroni-api.crt
@@ -923,6 +923,12 @@ restapi:
     password: "PUBLIC_SAFE_RESTAPI_PASSWORD_PLACEHOLDER"
   allowlist:
     - 192.168.100.0/24 # Restrict unsafe management endpoints (failover/switchover/reload)
+
+ctl:
+  cacert: /etc/patroni/certs/patroni-api-ca.crt
+  cert: /etc/patroni/certs/patronictl-client.crt
+  key: /etc/patroni/certs/patronictl-client.key
+  insecure: false
 
 bootstrap:
   dcs:
@@ -1013,7 +1019,7 @@ SET ACCESS METHOD tde_heap;
 Key security attributes enforced by `pg_tde` include:
 
 * **Transparent Application Security:** Query paths, ORMs, and MCP tool execution operate standard SQL without modification; encryption and decryption happen transparently in PostgreSQL buffer pages using the `tde_heap` access method.
-* **WAL and Vector Log Encryption:** Raw vector embeddings, geospatial geometries, and database Write-Ahead Logs written to disk are encrypted using AES-256-GCM hardware acceleration (AES-NI).
+* **WAL and Relation Data Encryption Scope:** Raw vector embeddings, geospatial geometries, table relation files, indexes, TOAST data, and database Write-Ahead Logs (WAL) written to disk are encrypted at rest using AES-256-GCM hardware acceleration (AES-NI). Temporary files created when queries exceed `work_mem` and system catalog metadata tables remain in unencrypted plaintext per standard `pg_tde` design boundaries.
 * **Centralised Enterprise Key Management:** Master keys are secured in enterprise Vault/KMIP key management systems, enabling instant key rotation and remote cryptographic shredding in compliance with government data protection mandates.
 
 ---

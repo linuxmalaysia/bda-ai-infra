@@ -66,10 +66,15 @@ Our primary mandate is to establish a verified **Single Source of Truth (SSoT)**
   * **5.3 Automated Failover:** Configuring Patroni with embedded etcd for strict database resiliency.
   * **5.4 Cryptography & Security:** Implementing pg_tde for transparent data-at-rest encryption.
   * **5.5 Dual-Render Architecture Blueprint:** High-Availability Database & Storage Fabric Topology.
-* **6. Financial & Operational ROI Analysis**
-* **7. Decommissioning & Modernisation Strategy**
-* **8. Container & Cloud-Native Deployment Blueprint**
-* **9. Execution Plan & Next Steps**
+* **6. Day 2 Operations, Observability & AIOps**
+  * **6.1 Telemetry & Centralised Logging:** OpenTelemetry (OTLP) protocol & Fleet-managed Elastic Observability.
+  * **6.2 AIOps Integration:** Machine learning automated root cause analysis (RCA) & SLO-based alerting.
+  * **6.3 Disaster Recovery:** pgBackRest PITR, checksum delta restores, & Ceph S3 compliance Object Lock.
+  * **6.4 Dual-Render Architecture Blueprint:** Day 2 Operations, Observability & AIOps Topology.
+* **7. Financial & Operational ROI Analysis**
+* **8. Decommissioning & Modernisation Strategy**
+* **9. Container & Cloud-Native Deployment Blueprint**
+* **10. Execution Plan & Next Steps**
 
 ---
 
@@ -1202,7 +1207,141 @@ flowchart TD
 
 ---
 
-# 6. Financial & Operational ROI Analysis
+# 6. Day 2 Operations, Observability & AIOps
+
+Securing digital sovereignty requires absolute visibility into the decoupled data plane. By transitioning from fragmented, reactive monitoring to a unified, AI-driven observability fabric, the infrastructure shifts the operational burden from human operators to automated systems.
+
+## 6.1 Telemetry & Centralised Logging
+
+To eliminate blind spots across the distributed K3s and Podman container fabrics, telemetry collection is strictly standardised using the OpenTelemetry (OTLP) protocol. Elastic Observability—comprising horizontally scaled Elasticsearch clusters, Kibana, and Fleet-managed Elastic Agents—is deployed across all nodes to ingest multi-dimensional metrics, logs, and distributed traces natively.
+
+By centralising incident context, engineering teams avoid reconstructing events across disparate tools, directly addressing the investigation phase which typically consumes 60–80% of incident response time in distributed systems. Elastic Agents operate seamlessly on the host nodes to pull container logs, API latency metrics from the Fusio gateway, and pipeline health statuses from Apache NiFi 2.0, establishing a single pane of glass for all infrastructure layers.
+
+## 6.2 AIOps Integration
+
+Traditional monitoring dashboards that merely display observable symptoms (e.g., CPU spikes or elevated error rates) fail to explain causation. To achieve a targeted 85% reduction in Mean Time To Repair (MTTR)—evaluated against historical un-automated incident baseline response durations—the Elastic platform delivers out-of-the-box machine learning to execute automated root cause analysis (RCA) and dynamic anomaly detection.
+
+These models continuously analyse deviations in application performance to identify misbehaving services or backpressure within the primary Apache NiFi 2.0 ingestion gates and the secondary n8n RAG pipelines. By switching from rigid threshold alerts to SLO-based, AI-powered alerting, the infrastructure targets an estimated 40–60% cut in alert volume compared to un-deduplicated legacy alert streams, evaluated post-implementation via Kibana alert grouping metrics. The AIOps engine correlates related events and surfaces similar past incidents via pattern matching, allowing responders to skip hours of exploration and move directly to validated fixes.
+
+## 6.3 Disaster Recovery
+
+Disaster recovery for the Percona Patroni PostgreSQL 18 Single Source of Truth (SSoT) is governed exclusively by pgBackRest. Operating as the enterprise backup engine, pgBackRest manages full, differential, and incremental backups combined with continuous Write-Ahead Log (WAL) archiving.
+
+To ensure strict Recovery Time Objectives (RTO) and Recovery Point Objectives (RPO), pgBackRest relies on two critical mechanisms:
+
+* **Delta Restores & Parallel Processing:** During recovery operations, the `--delta` flag prompts pgBackRest to compare per-file checksums between the local data directory and the backup manifest, preserving matching files on disk and restoring only mismatched or missing files. Parallel worker processes (`--process-max`) manage concurrent file compression and transfer. The restore data flow streams directly from Ceph S3 object storage through pgBackRest into PostgreSQL, achieving an estimated 80% target reduction in recovery time windows compared to full directory re-synchronisation under large database benchmark workloads.
+* **Point-in-Time Recovery (PITR):** In the event of catastrophic data corruption, administrators execute granular PITR by replaying WAL segments until a precise target timestamp or Log Sequence Number (LSN) is reached.
+
+All backup files and WAL archives are routed directly to the Ceph S3 object storage fabric. Ceph S3 buckets enforce S3 Object Lock in Compliance Mode for WORM (Write Once Read Many) retention over configured retention periods, preventing modification or deletion of locked backup objects even by administrative accounts until the retention period expires. Encryption at rest (AES-256 server-side encryption with Vault key management), bucket versioning, object retention policies, and disaster recovery threat assumptions (protecting against administrative accidental deletion and unauthorized data overwrite during the retention window) operate as separate security and governance guarantees.
+
+---
+
+## 6.4 Dual-Render Architecture Blueprint — Day 2 Operations
+
+### 1. Standalone Production-Ready SVG Vector Graphic (`.svg`)
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="100%" height="auto" style="background-color: #FFFFFF;">
+  <defs>
+    <marker id="arrow-ops" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#0F172A" />
+    </marker>
+    <filter id="shadow-ops" x="-4%" y="-4%" width="108%" height="108%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+
+  <rect width="960" height="480" fill="#FFFFFF" rx="10"/>
+  <rect x="20" y="20" width="920" height="440" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="1.5" rx="8"/>
+
+  <!-- Telemetry Ingestion Layer -->
+  <rect x="40" y="40" width="260" height="380" fill="#FFFFFF" stroke="#0284C7" stroke-width="1.5" rx="6" filter="url(#shadow-ops)"/>
+  <rect x="40" y="40" width="260" height="30" fill="#E0F2FE" rx="6"/>
+  <text x="55" y="60" font-family="Inter, sans-serif" font-size="12" font-weight="bold" fill="#0369A1">1. TELEMETRY &amp; LOGGING</text>
+
+  <text x="55" y="100" font-family="Inter, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">OpenTelemetry (OTLP)</text>
+  <text x="55" y="120" font-family="Consolas, monospace" font-size="10" fill="#475569">Apache NiFi 2.0 Traces</text>
+  <text x="55" y="140" font-family="Consolas, monospace" font-size="10" fill="#475569">Fusio Gateway Metrics</text>
+  <text x="55" y="160" font-family="Consolas, monospace" font-size="10" fill="#475569">K3s Podman Logs</text>
+
+  <text x="55" y="200" font-family="Inter, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Elastic Agents</text>
+  <text x="55" y="220" font-family="Consolas, monospace" font-size="10" fill="#475569">Fleet-Managed Ingestion</text>
+  <text x="55" y="240" font-family="Consolas, monospace" font-size="10" fill="#475569">Host-Level Profiling</text>
+
+  <!-- AIOps Correlation Layer -->
+  <rect x="350" y="40" width="260" height="380" fill="#FFFFFF" stroke="#7E22CE" stroke-width="1.5" rx="6" filter="url(#shadow-ops)"/>
+  <rect x="350" y="40" width="260" height="30" fill="#F3E8FF" rx="6"/>
+  <text x="365" y="60" font-family="Inter, sans-serif" font-size="12" font-weight="bold" fill="#6B21A8">2. AIOPS &amp; OBSERVABILITY</text>
+
+  <text x="365" y="100" font-family="Inter, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Elasticsearch Cluster</text>
+  <text x="365" y="120" font-family="Consolas, monospace" font-size="10" fill="#475569">Centralised Indexing</text>
+  <text x="365" y="140" font-family="Consolas, monospace" font-size="10" fill="#475569">Kibana Dashboards</text>
+
+  <text x="365" y="180" font-family="Inter, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Machine Learning Models</text>
+  <text x="365" y="200" font-family="Consolas, monospace" font-size="10" fill="#475569">Automated RCA Correlation</text>
+  <text x="365" y="220" font-family="Consolas, monospace" font-size="10" fill="#475569">Anomaly Detection Engine</text>
+  <text x="365" y="240" font-family="Consolas, monospace" font-size="10" fill="#475569">SLO-Based Alerting</text>
+
+  <!-- Disaster Recovery Layer -->
+  <rect x="660" y="40" width="260" height="380" fill="#FFFFFF" stroke="#059669" stroke-width="1.5" rx="6" filter="url(#shadow-ops)"/>
+  <rect x="660" y="40" width="260" height="30" fill="#D1FAE5" rx="6"/>
+  <text x="675" y="60" font-family="Inter, sans-serif" font-size="12" font-weight="bold" fill="#047857">3. DISASTER RECOVERY</text>
+
+  <text x="675" y="100" font-family="Inter, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">pgBackRest Engine</text>
+  <text x="675" y="120" font-family="Consolas, monospace" font-size="10" fill="#475569">PostgreSQL 18 SSoT Backups</text>
+  <text x="675" y="140" font-family="Consolas, monospace" font-size="10" fill="#475569">Continuous WAL Archiving</text>
+
+  <text x="675" y="180" font-family="Inter, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Restoration Protocols</text>
+  <text x="675" y="200" font-family="Consolas, monospace" font-size="10" fill="#475569">Parallel Processing Max</text>
+  <text x="675" y="220" font-family="Consolas, monospace" font-size="10" fill="#475569">Checksum Delta Restores</text>
+  <text x="675" y="240" font-family="Consolas, monospace" font-size="10" fill="#475569">Point-In-Time Recovery (PITR)</text>
+
+  <text x="675" y="280" font-family="Inter, sans-serif" font-size="11" font-weight="bold" fill="#0F172A">Ceph S3 Storage</text>
+  <text x="675" y="300" font-family="Consolas, monospace" font-size="10" fill="#475569">S3 Object Lock (Compliance)</text>
+  <text x="675" y="320" font-family="Consolas, monospace" font-size="10" fill="#475569">Ransomware Immutability</text>
+
+  <!-- Connectors -->
+  <line x1="300" y1="150" x2="350" y2="150" stroke="#0F172A" stroke-width="1.5" marker-end="url(#arrow-ops)"/>
+</svg>
+
+### 2. Git-Native Mermaid Topology (`.mmd`)
+
+```mermaid
+graph TD
+    subgraph Telemetry ["Telemetry & Logging Fabric"]
+        A[K3s / Podman Nodes] -->|OTLP Metrics| B(Elastic Agent)
+        C[Apache NiFi / Fusio API] -->|Distributed Traces| B
+    end
+
+    subgraph AIOps ["Elastic Observability & AIOps"]
+        B -->|Encrypted Ingest| D[(Elasticsearch Cluster)]
+        D -->|Log Categorisation| E{Machine Learning Models}
+        E -->|Anomaly Detection| F[SLO-Based Alerts]
+        E -->|Pattern Matching| G[Automated RCA Context]
+    end
+
+    subgraph DR ["Disaster Recovery (pgBackRest)"]
+        H[(PostgreSQL 18 SSoT)] -->|Continuous WAL| I[pgBackRest]
+        H -->|Incremental/Full| I
+        I -->|Parallel Encryption| J[(Ceph S3 Bucket)]
+        J -.->|Object Lock WORM| J
+        J -->|Delta Checksum Restore| H
+    end
+```
+
+### 3. Summary Interface & Routing Table
+
+| Source Component | Target Component | Port / Protocol / API Ingress | Security Boundary / Access Key | Operational Significance / Flow Description |
+| --- | --- | --- | --- | --- |
+| **K3s / Podman Nodes** | **Elastic Agent** | `TCP 4317` / OTLP | OTLP Auth (API Key / Bearer Token) & Fleet Enrollment Secret | Standardises trace and metric collection natively from containers without vendor lock-in; uses separate Fleet enrollment credentials for policy management. |
+| **Elastic Agent** | **Elasticsearch Cluster** | `TCP 9200` / HTTPS | TLS CA Verification & ES Output API Key / Role | Centralises all operational data, authenticated via Elasticsearch output API keys with TLS CA verification separate from Fleet and OTLP authentication. |
+| **AIOps Engine** | **Kibana Dashboards** | Internal API | Active Directory / Keycloak SSO | Correlates logs, traces, and metrics to execute automated root cause analysis (RCA), targeting a 40–60% reduction in alert volume evaluated post-deployment. |
+| **PostgreSQL 18 SSoT** | **pgBackRest** | Local Subprocess / SSH | `postgres` System Role | Captures continuous WAL segments and executes parallel, compressed backup operations. |
+| **pgBackRest** | **Ceph S3 Bucket** | `TCP 443` / S3 API | S3 IAM / WORM Compliance Lock | Writes backup artefacts to S3 object storage with Object Lock Compliance Mode enforcing WORM retention. |
+| **Ceph S3 Bucket** | **PostgreSQL 18 SSoT** | `TCP 443` / S3 API | S3 IAM / Read-Only Restore Scope | Streams backup data along the restore path Ceph S3 -> pgBackRest -> PostgreSQL 18 SSoT; `--delta` compares per-file checksums and `--process-max` parallelises transfers to accelerate recovery windows. |
+
+---
+
+# 7. Financial & Operational ROI Analysis
 
 | Area | Legacy Architecture (Tableau & Monolith) | Proposed Architecture (API/MCP on Podman/K3s) |
 | :--- | :--- | :--- |
@@ -1214,7 +1353,7 @@ flowchart TD
 
 ---
 
-# 7. Decommissioning & Modernisation Strategy
+# 8. Decommissioning & Modernisation Strategy
 
 To ensure zero downtime and manage operational risk, legacy workbooks, application runtimes, and databases will be systematically decommissioned using a four-phase migration roadmap:
 
@@ -1222,25 +1361,25 @@ To ensure zero downtime and manage operational risk, legacy workbooks, applicati
 [ Phase 1: Audit ] ──► [ Phase 2: Logic Transfer ] ──► [ Phase 3: Open BI ] ──► [ Phase 4: MCP/API ]
 ```
 
-## 7.1 Phase 1: Workbook & Monolith Audit
+## 8.1 Phase 1: Workbook & Monolith Audit
 * Catalogue all active legacy workbooks, calculated fields, custom SQL scripts, and user access lists.
 * Identify redundant reports and mark high-value dashboards for migration.
 
-## 7.2 Phase 2: Data & Logic Consolidation
+## 8.2 Phase 2: Data & Logic Consolidation
 * Migrate complex calculations and data blending logic into **PostgreSQL Materialised Views** and stored functions.
 * Ensure Apache NiFi orchestrates data pipelines directly into clean PostgreSQL schemas.
 
-## 7.3 Phase 3: Open-Source BI Deployment
+## 8.3 Phase 3: Open-Source BI Deployment
 * Deploy containerised **Apache Superset** (or Metabase) on Podman to replicate essential executive dashboards.
 * Connect directly to the PostgreSQL layer, restoring visual reporting capabilities with zero user-license overhead.
 
-## 7.4 Phase 4: API & MCP Enablement
+## 8.4 Phase 4: API & MCP Enablement
 * Expose underlying business calculations as REST/gRPC API endpoints via Fusio.
 * Wrap PostgreSQL metrics and vector searches into standardised **MCP Tools** for internal AI agent consumption.
 
 ---
 
-# 8. Container & Cloud-Native Deployment Blueprint
+# 9. Container & Cloud-Native Deployment Blueprint
 
 The target infrastructure relies on rootless **Podman** pods and **K3s Kubernetes** orchestration to enforce high availability, zero vendor lock-in, and full cloud-native compatibility.
 
@@ -1271,7 +1410,7 @@ spec:
 
 ---
 
-# 9. Execution Plan & Next Steps
+# 10. Execution Plan & Next Steps
 
 Upon approval of this proposal, execution will proceed as follows via automated code and configuration updates:
 

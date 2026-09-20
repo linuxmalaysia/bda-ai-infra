@@ -1,8 +1,7 @@
-DSOM EOD Palace Checkpoint Summary (2026-09-18)
+DSOM EOD Palace Checkpoint Summary (2026-09-20)
 ===================================================
-1. Integrated Chapter 2: Modernised Infrastructure Fabric into docs/IT-MANAGEMENT-PROPOSAL.md with sections 2.1 (K3s embedded etcd HA), 2.2 (rootless Podman Quadlets & systemd user units), 2.3 (Zero-Trust mTLS 1.3 with per-node SPIRE agent sockets and Cilium/Nginx sidecars), and 2.4 (Dual-Render Diagram).
-2. Resolved all CodeRabbit PR review comments on Quadlet configuration paths (~/.config/containers/systemd/), systemctl --user commands, Podman Auto-Update Engine digest rollbacks, SPIFFE/SPIRE workload Unix sockets, mTLS sidecars, and K3s routing table source/target alignment.
-3. Updated document TOC and renumbered all subsequent sections (3 through 7) and figures (Figure 3.1).
-4. Sanitized all credentials, IP addresses (using RFC 5737 203.0.113.x test IPs), and hostnames (example.gov.my) with 100% UK English spelling compliance.
-5. Synthesized master project book manuscript in build/book.md using tools/build_project_book.py.
-6. Verified Python code health with ruff (0 errors) and executed full test suite via uv run pytest (362/362 passed, 100% pass rate).
+1. Integrated Chapter 6: Day 2 Operations, Observability & AIOps into docs/IT-MANAGEMENT-PROPOSAL.md covering 6.1 Telemetry & Centralised Logging (OTLP, Elastic Observability), 6.2 AIOps Integration (machine learning RCA, SLO-based alerting), 6.3 Disaster Recovery (pgBackRest PITR, checksum delta restores, Ceph S3 Object Lock Compliance WORM), and 6.4 Dual-Render Architecture Blueprint.
+2. Renumbered subsequent proposal chapters (7 Financial ROI, 8 Decommissioning Strategy with subsections 8.1–8.4, 9 Container Blueprint, 10 Execution Plan).
+3. Resolved PR code review comments regarding pgBackRest checksum delta restores, parallel compression with --process-max, Ceph S3 restore path, Elastic Fleet and OTLP authentication credentials, and AIOps metric qualification.
+4. Regenerated build/book.md and _data/navigation.yml / SUMMARY.md.
+5. Verified code health with ruff (0 errors) and executed full test suite via uv run pytest (362/362 passed, 100% pass rate).

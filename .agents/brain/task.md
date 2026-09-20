@@ -1,11 +1,11 @@
 ---
 okf_version: "0.2"
 type: spatial_memory
-title: "Task Registry - Modernised Infrastructure Fabric & Proposal Expansion"
-description: "DSOM Task Registry documenting Chapter 2 Modernised Infrastructure Fabric proposal expansion, dual-render diagrams, and PR feedback resolutions."
+title: "Task Registry - Day 2 Operations, Observability & AIOps Expansion"
+description: "DSOM Task Registry documenting Chapter 6 Day 2 Operations proposal expansion, dual-render diagrams, and PR feedback resolutions."
 status: active
-timestamp: "2026-09-18T22:00:00Z"
-stale_after: "2027-09-18T22:00:00Z"
+timestamp: "2026-09-20T17:30:00Z"
+stale_after: "2027-09-20T17:30:00Z"
 generated: false
 verified: true
 sources:
@@ -17,11 +17,11 @@ sources:
     path: "tools/build_project_book.py"
 topics:
   - proposal
-  - modernised-infrastructure-fabric
-  - k3s
-  - podman-quadlets
-  - mtls
-  - spiffe-spire
+  - observability
+  - aiops
+  - disaster-recovery
+  - elastic-stack
+  - pgbackrest
   - dual-render-diagrams
   - spatial-memory
   - dsom
@@ -31,20 +31,20 @@ topics:
 
 ## 🟢 Completed Objectives
 
-1. **IT Management Proposal Chapter 2 Expansion (`docs/IT-MANAGEMENT-PROPOSAL.md`)**:
-   - Integrated Chapter 2: "Modernised Infrastructure Fabric" covering:
-     - **2.1 Container Orchestration:** K3s with embedded etcd HA control plane, Raft consensus ($Q = \lfloor N/2 \rfloor + 1 = 2$), and Proxmox VE / Ubuntu 24.04 LTS deployment.
-     - **2.2 Immutable Workloads:** Rootless Podman Quadlets (`~/.config/containers/systemd/bda-astro.container`), systemctl `--user` management, and Podman Auto-Update Engine digest rollbacks with `Notify=healthy` readiness gates.
-     - **2.3 Zero-Trust Networking:** mTLS 1.3 encryption with per-node SPIRE Agent local Unix domain socket SVID handoffs (`$XDG_RUNTIME_DIR/spire/agent.sock`), TCP 8443 node attestation, and Cilium/Nginx mTLS sidecar policy enforcement.
-     - **2.4 Dual-Render Architecture Diagram:** Standalone SVG vector graphic with light/print mode CSS support, Git-native Mermaid topology (`MIF_` namespace), and summary routing table.
-   - Updated document TOC and renumbered all subsequent sections (3 through 7) and figures (`Figure 3.1`).
+1. **IT Management Proposal Chapter 6 Expansion (`docs/IT-MANAGEMENT-PROPOSAL.md`)**:
+   - Integrated Chapter 6: "Day 2 Operations, Observability & AIOps" covering:
+     - **6.1 Telemetry & Centralised Logging:** OpenTelemetry (OTLP) protocol, Elastic Observability, Fleet-managed Elastic Agents, and OTLP API Key / Bearer token authentication separate from Fleet enrollment credentials.
+     - **6.2 AIOps Integration:** Elastic machine learning automated Root Cause Analysis (RCA), anomaly detection, and qualified target evaluation metrics (85% MTTR reduction and 40–60% alert volume reduction evaluated post-deployment).
+     - **6.3 Disaster Recovery:** pgBackRest Point-in-Time Recovery (PITR), per-file checksum delta restores (`--delta`), parallel compression (`--process-max`), restore path (`Ceph S3 -> pgBackRest -> PostgreSQL 18 SSoT`), and Ceph S3 Object Lock Compliance Mode WORM retention with separate encryption at rest, key management, and threat boundary guarantees.
+     - **6.4 Dual-Render Architecture Blueprint:** Standalone SVG vector graphic with light/print mode CSS support, Git-native Mermaid topology, and summary routing table.
+   - Updated document TOC and renumbered all subsequent sections (7 Financial ROI, 8 Decommissioning Strategy with 8.1–8.4, 9 Container Blueprint, 10 Execution Plan).
    - Enforced RFC 5737 public-safe test IP addresses (`203.0.113.x`), generic domain names (`example.gov.my`), and UK English spelling throughout.
 
 2. **Master Project Handbook Manuscript Build (`build/book.md`)**:
-   - Executed `tools/build_project_book.py` to synthesize all platform documentation into `build/book.md`.
+   - Executed `tools/build_project_book.py` and `tools/generate_summary.py` to synthesize all platform documentation into `build/book.md`, `SUMMARY.md`, and `_data/navigation.yml`.
 
 3. **PR Feedback Resolutions & Code Health Verification**:
-   - Resolved all CodeRabbit PR inline and diff review comments.
+   - Resolved all PR review comments in `docs/IT-MANAGEMENT-PROPOSAL.md`.
    - Executed `uv run ruff check .` -> 0 errors.
    - Executed full pytest suite (`uv run pytest`) -> 362/362 tests passed (100% pass rate).
 

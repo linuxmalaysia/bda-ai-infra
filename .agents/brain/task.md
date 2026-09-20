@@ -1,11 +1,11 @@
 ---
 okf_version: "0.2"
 type: spatial_memory
-title: "Task Registry - Day 2 Operations, Observability & AIOps Expansion"
-description: "DSOM Task Registry documenting Chapter 6 Day 2 Operations proposal expansion, dual-render diagrams, and PR feedback resolutions."
+title: "Task Registry - Day 2 Operations, Observability & Modular Book Compiler"
+description: "DSOM Task Registry documenting Chapter 6 Day 2 Operations proposal expansion, modular chapter-by-chapter book compiler refactoring, and PR feedback resolutions."
 status: active
-timestamp: "2026-09-20T18:00:00Z"
-stale_after: "2027-09-20T18:00:00Z"
+timestamp: "2026-09-20T21:00:00Z"
+stale_after: "2027-09-20T21:00:00Z"
 generated: false
 verified: true
 sources:
@@ -15,13 +15,15 @@ sources:
     path: ".agents/skills/dual-render-architecture-diagram/SKILL.md"
   - id: "book_compiler"
     path: "tools/build_project_book.py"
+  - id: "compiler_script"
+    path: ".agents/skills/dsom-technical-book-compiler/scripts/compile-book.py"
 topics:
   - proposal
   - observability
   - aiops
   - disaster-recovery
-  - elastic-stack
-  - pgbackrest
+  - book-compiler
+  - memory-optimization
   - dual-render-diagrams
   - spatial-memory
   - dsom
@@ -46,13 +48,19 @@ topics:
 3. **PR Feedback Resolutions & Code Health Verification**:
    - Resolved all PR review comments in `docs/IT-MANAGEMENT-PROPOSAL.md`.
    - Executed `uv run ruff check .` -> 0 errors.
-   - Executed full pytest suite (`uv run pytest`) -> 362/362 tests passed (100% pass rate).
+   - Executed full pytest suite (`uv run pytest`) -> 371/371 tests passed (100% pass rate).
 
 4. **Domain Anonymization & Link Refactoring**:
    - Replaced domain names (`nre.gov.my`, `nres.gov.my`, `bda.nre.gov.my`, `bda.nres.gov.my`, `bda.ketsa.gov.my`, `ketsa.gov.my`) and legacy database identifiers (`bdaketsa_portal`) with public-safe generic placeholders (`https://bda.example.gov.my/`, `legacy-bda.example.gov.my`, `bda_legacy_portal`).
    - Renamed proposal files `nre-bda-astro-migration.md` -> `bda-astro-migration.md` and `nre-bda-pipeline-upgrade.md` -> `bda-pipeline-upgrade.md`.
    - Updated all navigation links across `SUMMARY.md`, `_data/navigation.yml`, `README.md`, `docs/README.md`, `START-HERE.md`, `llms.txt`, `CHANGELOG.md`, `HISTORY.md`, and `.agents/brain/active_context_manifest.md`.
 
-5. **EOD Palace Sync & DSOM Alignment**:
+5. **Technical Book Compiler Refactoring for Memory & CPU Efficiency**:
+   - Refactored `tools/build_project_book.py` to support fence-aware section/chapter chunking into `build/chapters/*.md` conforming to CommonMark code fence rules (`^[ ]{0,3}`).
+   - Refactored `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py` to compile Markdown chapter chunks into intermediate HTML fragments, pre-render vector SVGs on individual chunks to prevent memory spikes, assign `--id-prefix` namespaces, and merge HTML fragments into `handbook.html` with unescaped TOC navigation HTML.
+   - Updated `tests/test_book_compiler.py` with isolated `tmp_path` monkeypatching, fence parsing test cases, and TOC unescaping verification.
+   - Ran `uv run pytest` -> 371/371 tests passed (100% pass rate) and `uv run ruff check` -> 0 errors.
+
+6. **EOD Palace Sync & DSOM Alignment**:
    - Executed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory (`task.md`, `walkthrough.md`, `palace_registry.md`, `active_context_manifest.md`, `checkpoint_summary.txt`).
-   - Verified static linters (`ruff check .`, `markdownlint-cli`) and 366/366 pytest test suite execution (100% pass rate).
+   - Verified static linters (`ruff check .`, `markdownlint-cli`) and 371/371 pytest test suite execution (100% pass rate).

@@ -47,6 +47,7 @@ Our primary mandate is to establish a verified **Single Source of Truth (SSoT)**
   * **2.2 Immutable Workloads:** Utilising Podman Quadlets for seamless systemd integration and rollback capability.
   * **2.3 Zero-Trust Networking:** Enforcing mutual TLS (mTLS) 1.3 across intra-cluster communication.
   * **2.4 Dual-Render Architecture Blueprint:** Modernised Infrastructure Fabric Topology.
+  * **2.5 Sovereign GitOps & AIOps Orchestration Engine:** Infrastructure-as-Code governance via Ansible, uv, ARA, and OpenTofu.
 * **3. Presentation Layer Decoupling & Edge Inference**
   * **3.1 Next-Generation Frontend:** Astro 7.3.2 SSG/SSR & Laravel HITL Portal.
   * **3.2 Client-Side AI Acceleration:** Offloading compute to the browser for sub-500ms validation and data privacy.
@@ -450,6 +451,63 @@ flowchart TD
 | **systemd User Manager** | **Astro 7.3.2 Frontend Pod** | Local Socket / `systemctl --user` | Rootless User Container Sandbox | Supervises host container service unit (`~/.config/containers/systemd/bda-astro.container`) with health-gated readiness. |
 | **SPIRE Agent (Per-Node)** | **Astro & API Workloads** | Local Unix Socket / SPIFFE Workload API | Workload Socket Sandbox | Issues short-lived X.509 SVID certificates via `$XDG_RUNTIME_DIR/spire/agent.sock` with TCP 8443 reserved for SPIRE server-agent attestation. |
 | **Backend API Pods** | **PostgreSQL 18 Core** | `TCP 5432` / mTLS 1.3 | Cilium / Nginx mTLS Sidecar Boundary | Enforces encrypted intra-cluster communication and prevents unauthenticated lateral movement. |
+| **AI Agents (Proposal Stage)** | **Git / PR Interface -> CI & CHI Review Gate -> Ansible Controller** | `HTTPS (443)` / Git API / Local Subprocess | Git Role Scope & PR MFA Sign-off (No Direct Agent SSH/Ansible Credentials) | AI agents submit proposed diffs via Git Pull Requests for CI and human review. Agents possess no execution credentials; post-merge Ansible Controller ingests merged playbooks and executes changes. |
+| **Ansible Controller** | **ARA Records Ansible** | `TCP 8000` / HTTP (REST Endpoint) | Internal Loopback / Audit Boundary | Records comprehensive playbook execution history, variable states, and host diffs into SQLite or PostgreSQL audit database backends. |
+| **Ansible Controller** | **OpenTofu CLI** | Local Subprocess / S3 State API | S3 State Locking / IAM Scope | Called natively by Ansible to provision hypervisor VMs and K3s node topologies declaratively. |
+| **Ansible Controller** | **Proxmox / K3s Nodes** | `TCP 22` / SSH (Ed25519 Host & User Keys) | Host SSH Sandbox, Vault Key Escrow & Lynis Hardening | Applies idempotent systemd Quadlet updates, patches, and network policies deterministically. |
+
+---
+
+## 2.5 Sovereign GitOps & AIOps Orchestration Engine
+
+To eliminate operational toil while enforcing strict human-in-the-loop (HITL) architectural guardrails, infrastructure management transitions from manual terminal access to an integrated **GitOps + AIOps Orchestration Engine**.
+
+While autonomous AI agents and Elastic AIOps anomaly engines monitor workloads, formulate remediations, and draft infrastructure modifications, **AI agents are structurally barred from executing unverified, arbitrary mutations or direct raw shell commands against production nodes.** All infrastructure operations, scaling events, and configuration states are codified declaratively in Git and executed strictly through deterministic automation pipelines.
+
+```
++--------------------------------------------------------------------------------------------------------+
+|                                SOVEREIGN GITOPS + AIOPS ORCHESTRATION FABRIC                           |
++--------------------------------------------------------------------------------------------------------+
+|                                                                                                        |
+|  [ AIOps & AGENTIC REASONING ]            [ GITOPS REPOSITORY (SSoT) ]        [ DETERMINISTIC EXECUTION]|
+|                                                                                                        |
+|  Elastic Observability (OTLP)             Git Repository (GitOps Core)        Ansible Automation Engine|
+|  • Real-time Anomaly Detection            • Declarative System State          • Python Runtime: uv     |
+|  • Dynamic Alert Signals                  • Audited Pull Requests (PRs)       • Execution Verification |
+|                 │                                       ▲                     • Idempotent Playbooks   |
+|                 ▼                                       │                                │             |
+|  Autonomous AI Agents                     Human / CHI Review Gate                       │             |
+|  • Root Cause Correlation                 • Playbook Syntax Validation                  ▼             |
+|  • Proposes Declarative Diffs             • Cryptographic Approval Sign-off   OpenTofu (IaC Provider)  |
+|  • Generates Ansible Playbooks                          │                     • Node & K3s Topology    |
+|                 │                                       ▼                     • Fabric Ingress Binding |
+|                 └───────────────────────────► Git-Native Commit                          │             |
+|                                                                                          ▼             |
+|                                           [ ARA AUDIT & PROVENANCE ]          Production Infrastructure|
+|                                           Records every host change, task     • K3s Clustered Nodes    |
+|                                           status, and diff into SQLite/PG     • Podman Quadlet Units   |
+|                                                                                                        |
++--------------------------------------------------------------------------------------------------------+
+```
+
+### 1. Deterministic Toolchain: Ansible, uv, ARA, and OpenTofu
+* **Ansible as the Authoritative Man-in-the-Loop:** Ansible serves as the deterministic execution gatekeeper. Every infrastructure task—whether configuring Podman Quadlets, provisioning users, rotating TLS certificates, or deploying Patroni nodes—is packaged into idempotent Ansible roles and playbooks.
+* **Hermetic Python Tooling via `uv`:** To prevent dependency drift and environment pollution, all Python runtimes, CLI utilities, and helper scripts managed within this repository are executed via `uv` (`uv run --locked`). For Ansible and linting executions where Python dependencies are pinned in `pyproject.toml` and `uv.lock`, `uv` ensures sub-second virtual environment initialisation, strict lockfile reproducibility, and zero external dependency contamination on host controllers. OpenTofu operates independently as a native Go binary called by Ansible rather than a Python `uv` package.
+* **Complete Operational Auditability via ARA (Ansible Records Ansible):** Every playbook execution triggered by human operators or agentic pipelines requires the ARA callback plugin (`callback_plugins = ...`) enabled across all Ansible controller jobs and environments. If ARA persistence or database connectivity fails during playbook execution, the pipeline raises a mandatory security alert and halts execution to prevent un-audited infrastructure mutations. ARA-specific redaction controls are strictly enforced:
+  * **File Ignored Settings:** `ARA_IGNORED_FILES` (or `[ara] ignored_files`) excludes all Vault secret files, private key paths, and sensitive templates from being recorded.
+  * **Task Content Settings:** `ARA_RECORD_TASK_CONTENT=false` disables raw task content capture for sensitive roles, while tasks handling credentials retain mandatory `no_log: true` directives to block secret-derived host diff exposure.
+  * **Storage & RBAC:** ARA records execution metadata, task statuses, and sanitized diffs into a dedicated SQLite/PostgreSQL audit database governed by least-privilege role-based access control (RBAC), delivering a tamper-proof ledger of every state change across the data plane.
+* **Declarative Bare-Metal & Cloud IaC via OpenTofu:** Where physical hypervisor slices, virtual networks, or geodistributed cloud instances require provisioning, Ansible calls **OpenTofu** (the open-source, sovereign fork of Terraform). OpenTofu state files are persisted in Ceph/MinIO S3 compliance storage equipped with dedicated state-governance controls:
+  * **S3 Native State Locking & Retention Management:** Ceph/MinIO S3 backends enforce state locking via native S3 lockfiles (`use_lockfile = true`), requiring an S3-compatible object store supporting OpenTofu S3 conditional writes using the `If-None-Match` header. When using `use_lockfile = true` on S3 buckets with Object Lock in Compliance Mode, lock-object retention must be distinguished from state-file retention: each execution creates and releases a `.tflock` file. Under versioned Compliance Mode, releasing the lock via unversioned deletion leaves a delete marker so subsequent runs remain usable, but each run accumulates a new immutable `.tflock` object version under the bucket's retention policy. For Compliance-retained state buckets, DynamoDB locking (`dynamodb_table` with `LockID` String partition key and custom `endpoints = { dynamodb = ... }`) is recommended to isolate transient lock operations, or a dedicated, shorter lifecycle retention policy must be configured for `.tflock` prefixes. Both locking mechanisms operate independently and apply strictly to their configured backend state storage.
+  * **Object Versioning & Retention:** Captures full version history for every state mutation, with Object Lock in Compliance Mode enforcing WORM immutability settings to prevent state tampering or accidental deletion.
+  * **Encryption & IAM Controls:** State payloads are encrypted at rest via AES-256 server-side encryption (SSE-S3/Vault DEK) and restricted through least-privilege IAM policies, ensuring unauthorised principals cannot inspect infrastructure secrets or state diffs while preserving OpenTofu's declarative provisioning context.
+
+### 2. Autonomous AI Operations with Structured Execution Guardrails
+The integration between GitOps and AIOps follows a strict closed-loop governance protocol:
+1. **Anomaly Detection & Correlation:** Elastic Observability detects anomalous behaviour (such as backpressure in Apache NiFi or memory saturation on a Patroni node) and issues an OTLP-correlated event to the AI agentic layer.
+2. **Declarative Diff Formulation:** The AI agent analyses the telemetry, identifies the root cause, and formulates the required architectural fix. Rather than executing changes imperatively, the agent opens a Pull Request against the GitOps repository containing the exact Ansible playbook or OpenTofu manifest modification.
+3. **Deterministic Verification Gate:** Automated CI tests in the repository audit pipeline (`.github/workflows/dsom-audit.yml` executing `uv run pytest` for OKF frontmatter, link integrity, and diagram validation) run alongside target-state verification gates (`ansible-lint` and `tofu plan`) to validate syntax, idempotency, and security constraints. A human systems architect (or Council of High Intelligence quorum) reviews the proposal and signs off via cryptographic multi-factor authentication (MFA).
+4. **Controlled Convergence:** Once merged, Ansible executes the verified playbook, bringing the live infrastructure into convergence with Git while ARA records the entire run for regulatory compliance.
 
 ---
 

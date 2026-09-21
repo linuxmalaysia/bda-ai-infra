@@ -4,8 +4,8 @@ type: changelog
 title: "Changelog Ledger"
 description: "Notable changes to the DSOM Big Data Analytics Lakehouse Documentation Platform."
 status: active
-timestamp: "2026-09-16T04:00:00Z"
-stale_after: "2027-09-16T04:00:00Z"
+timestamp: "2026-09-21T23:35:00Z"
+stale_after: "2027-09-21T23:35:00Z"
 generated: false
 verified: true
 sources:
@@ -28,6 +28,11 @@ and this project adheres to Semantic Versioning.
 
 ### Added
 
+- Published `docs/how-to-guides/ansible-ai-forge-opentofu-integration.md` detailing the Ansible AI Forge, OpenTofu, and `uv` Python 4W1H orchestration integration framework.
+- Integrated `.agents/skills/ansible-ai-forge-orchestrator/SKILL.md` adopting AI Forge module and skill standards.
+- Created master orchestration playbooks (`playbooks/site.yml`, `playbooks/opentofu_provision.yml`, `playbooks/deploy.yml`, `playbooks/monitor.yml`).
+- Added OpenTofu configuration (`opentofu/main.tf`, `opentofu/variables.tf`, `opentofu/outputs.tf`) and `tools/opentofu` CLI emulator.
+- Added `ansible-core` dependency in `pyproject.toml`.
 - Published `docs/proposals/bda-astro-migration.md` in UK English detailing the technical migration proposal transitioning `https://bda.example.gov.my/` from legacy stateful Joomla 3 monolith to a decoupled, high-availability, static-first Astro 7.3.2 architecture on K3s/RKE2 and Podman Quadlets.
 - Embedded complete Dual-Render Architecture Diagram suite (raw inline SVG vector graphic, Git-native Mermaid topology, and 5-column summary routing table).
 - Added DSOM 4-Phase Migration Blueprint & AI Skills Readiness (`.agents/skills/dsom-migration-blueprint/SKILL.md`) conforming to Warp Skills and OpenViking Skills specifications.

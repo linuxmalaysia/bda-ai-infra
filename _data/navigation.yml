@@ -43,6 +43,8 @@
     url: /docs/governance/TECHNICAL-BOOK-DESIGN-AND-PDF-COMPILER-PROMPT-GUIDE.html
 - title: How To Guides
   items:
+  - title: Ansible, AI Forge, OpenTofu, and UV Python Integration Blueprint
+    url: /docs/how-to-guides/ansible-ai-forge-opentofu-integration.html
   - title: DSOM 4-Phase Migration Blueprint & AI Skills Execution Guide
     url: /docs/how-to-guides/dsom-migration-blueprint-execution-guide.html
   - title: 'How-To Guide: Onboarding and Scaling New AI/ML Business Cases'

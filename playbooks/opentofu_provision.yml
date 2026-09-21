@@ -1,0 +1,27 @@
+---
+# OpenTofu Provisioning Playbook
+- name: Provision Sovereign Infrastructure Layer
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    opentofu_dir: "{{ playbook_dir }}/../opentofu"
+
+  tasks:
+    - name: Initialize OpenTofu Working Directory
+      ansible.builtin.command:
+        cmd: opentofu init
+        chdir: "{{ opentofu_dir }}"
+      register: tofu_init
+      changed_when: false
+
+    - name: Apply OpenTofu Infrastructure Configuration
+      ansible.builtin.command:
+        cmd: opentofu apply -auto-approve
+        chdir: "{{ opentofu_dir }}"
+      register: tofu_apply
+      changed_when: "'Apply complete!' in tofu_apply.stdout"
+
+    - name: Display Provisioning Output
+      ansible.builtin.debug:
+        msg: "OpenTofu provisioning completed successfully."

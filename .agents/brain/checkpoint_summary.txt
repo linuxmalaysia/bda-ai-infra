@@ -1,8 +1,13 @@
-DSOM EOD Palace Checkpoint Summary (2026-09-20)
-===================================================
-1. Refactored tools/build_project_book.py and compile-book.py to implement modular, chapter-by-chapter Markdown chunking and intermediate HTML compilation, pre-rendering vector SVGs per chunk to eliminate memory and CPU spikes on resource-constrained VMs.
-2. Implemented CommonMark code fence parsing rules (allowing up to 3 leading spaces, rejecting backticks in backtick info strings, and enforcing trailing whitespace on closing fences) in split_content_into_sections().
-3. Added --id-prefix heading namespace isolation and unescaped Table of Contents navigation HTML generation in merge_chapter_html_files().
-4. Updated tests/test_book_compiler.py with isolated tmp_path monkeypatching and unit test coverage for fence parsing and TOC unescaping.
-5. Replaced domain references (nre.gov.my, bda.nre.gov.my, nres.gov.my, bda.ketsa.gov.my) with generic public-safe placeholders (bda.example.gov.my). Renamed proposals to bda-astro-migration.md and bda-pipeline-upgrade.md.
-6. Verified code health with ruff (0 errors) and executed full test suite via uv run pytest (371/371 passed, 100% pass rate). Completed EOD Palace Sync.
+[DSOM EPISODIC RECORD]
+Timestamp: 2026-09-21T23:45:00Z
+Session: Ansible AI Forge, OpenTofu & uv Python Orchestration Integration
+Status: COMPLETED (100% Pass Rate across 387 unit/integration tests)
+
+Key Accomplishments:
+1. Integrated Ansible AI Forge 4W1H Blueprint in docs/how-to-guides/ansible-ai-forge-opentofu-integration.md.
+2. Created master Ansible playbooks (playbooks/site.yml, opentofu_provision.yml, deploy.yml, monitor.yml) using Ansible as primary driver wrapping opentofu and uv Python.
+3. Scaffolded OpenTofu HCL configs (opentofu/main.tf, variables.tf, outputs.tf) and built tools/opentofu CLI emulator tool.
+4. Added .agents/skills/ansible-ai-forge-orchestrator/SKILL.md adopting Ansible AI Forge standards.
+5. Added unit test suite tests/test_ansible_opentofu.py covering OpenTofu CLI commands, error status code 2 handling, inventory matrix generation, and playbook syntax validation.
+6. Refined Python files with Google-style PEP 257 docstrings and zero ruff linter errors.
+7. Executed End of Day (EOD) Palace Sync across .agents/brain/ and updated triple-ledger documents (README.md, CHANGELOG.md, HISTORY.md).

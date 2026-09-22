@@ -1,31 +1,23 @@
 ---
 okf_version: "0.2"
 type: spatial_memory
-title: "Task Registry - Day 2 Operations, Observability & Modular Book Compiler"
-description: "DSOM Task Registry documenting Chapter 6 Day 2 Operations proposal expansion, modular chapter-by-chapter book compiler refactoring, and PR feedback resolutions."
+title: "Task Registry - Ansible AI Forge, OpenTofu, uv Python Integration & DSOM Protocol"
+description: "DSOM Task Registry documenting Ansible AI Forge adoption, OpenTofu IaC integration, uv Python execution, 4W1H blueprint, and triple-ledger sync."
 status: active
-timestamp: "2026-09-20T21:00:00Z"
-stale_after: "2027-09-20T21:00:00Z"
+timestamp: "2026-09-21T23:35:00Z"
+stale_after: "2027-09-21T23:35:00Z"
 generated: false
 verified: true
 sources:
-  - id: "proposal_doc"
-    path: "docs/IT-MANAGEMENT-PROPOSAL.md"
-  - id: "dual_render_skill"
-    path: ".agents/skills/dual-render-architecture-diagram/SKILL.md"
-  - id: "book_compiler"
-    path: "tools/build_project_book.py"
-  - id: "compiler_script"
-    path: ".agents/skills/dsom-technical-book-compiler/scripts/compile-book.py"
+  - id: "ai_forge"
+    url: "https://github.com/ansible-community/ai-forge"
+  - id: "dsom_prompt"
+    url: "https://linuxmalaysia.github.io/deep-state-of-mind-for-my-ai/START-AI-AGENTS-PROMPT/"
 topics:
-  - proposal
-  - observability
-  - aiops
-  - disaster-recovery
-  - book-compiler
-  - memory-optimization
-  - dual-render-diagrams
-  - spatial-memory
+  - ansible
+  - ai-forge
+  - opentofu
+  - python-uv
   - dsom
 ---
 
@@ -33,34 +25,19 @@ topics:
 
 ## 🟢 Completed Objectives
 
-1. **IT Management Proposal Chapter 6 Expansion (`docs/IT-MANAGEMENT-PROPOSAL.md`)**:
-   - Integrated Chapter 6: "Day 2 Operations, Observability & AIOps" covering:
-     - **6.1 Telemetry & Centralised Logging:** OpenTelemetry (OTLP) protocol, Elastic Observability, Fleet-managed Elastic Agents, and OTLP API Key / Bearer token authentication separate from Fleet enrollment credentials.
-     - **6.2 AIOps Integration:** Elastic machine learning automated Root Cause Analysis (RCA), anomaly detection, and qualified target evaluation metrics (85% MTTR reduction and 40–60% alert volume reduction evaluated post-deployment).
-     - **6.3 Disaster Recovery:** pgBackRest Point-in-Time Recovery (PITR), per-file checksum delta restores (`--delta`), parallel compression (`--process-max`), restore path (`Ceph S3 -> pgBackRest -> PostgreSQL 18 SSoT`), and Ceph S3 Object Lock Compliance Mode WORM retention with separate encryption at rest, key management, and threat boundary guarantees.
-     - **6.4 Dual-Render Architecture Blueprint:** Standalone SVG vector graphic with light/print mode CSS support, Git-native Mermaid topology, and summary routing table.
-   - Updated document TOC and renumbered all subsequent sections (7 Financial ROI, 8 Decommissioning Strategy with 8.1–8.4, 9 Container Blueprint, 10 Execution Plan).
-   - Enforced RFC 5737 public-safe test IP addresses (`203.0.113.x`), generic domain names (`example.gov.my`), and UK English spelling throughout.
+1. **Ansible AI Forge & 4W1H Integration Blueprint (`docs/how-to-guides/ansible-ai-forge-opentofu-integration.md`)**:
+   - Authored complete 4W1H blueprint (Who, What, When, Where, How) adhering to OKF v0.2 frontmatter and DSOM standards.
+   - Structured Ansible playbooks as primary drivers executing `opentofu` IaC and `uv` Python toolchains.
 
-2. **Master Project Handbook Manuscript Build (`build/book.md`)**:
-   - Executed `tools/build_project_book.py` and `tools/generate_summary.py` to synthesize all platform documentation into `build/book.md`, `SUMMARY.md`, and `_data/navigation.yml`.
+2. **Ansible, OpenTofu, and uv Python Orchestration Infrastructure**:
+   - Created `playbooks/site.yml`, `playbooks/opentofu_provision.yml`, `playbooks/deploy.yml`, and `playbooks/monitor.yml`.
+   - Created `opentofu/main.tf`, `opentofu/variables.tf`, and `opentofu/outputs.tf`.
+   - Built `tools/opentofu` CLI emulator for deterministic local testing.
+   - Added `ansible-core` dependency in `pyproject.toml`.
 
-3. **PR Feedback Resolutions & Code Health Verification**:
-   - Resolved all PR review comments in `docs/IT-MANAGEMENT-PROPOSAL.md`.
-   - Executed `uv run ruff check .` -> 0 errors.
-   - Executed full pytest suite (`uv run pytest`) -> 371/371 tests passed (100% pass rate).
+3. **Ansible AI Forge Orchestrator Skill Integration**:
+   - Created `.agents/skills/ansible-ai-forge-orchestrator/SKILL.md` following AI Forge module/skill standards and OKF v0.2 frontmatter.
 
-4. **Domain Anonymization & Link Refactoring**:
-   - Replaced domain names (`nre.gov.my`, `nres.gov.my`, `bda.nre.gov.my`, `bda.nres.gov.my`, `bda.ketsa.gov.my`, `ketsa.gov.my`) and legacy database identifiers (`bdaketsa_portal`) with public-safe generic placeholders (`https://bda.example.gov.my/`, `legacy-bda.example.gov.my`, `bda_legacy_portal`).
-   - Renamed proposal files `nre-bda-astro-migration.md` -> `bda-astro-migration.md` and `nre-bda-pipeline-upgrade.md` -> `bda-pipeline-upgrade.md`.
-   - Updated all navigation links across `SUMMARY.md`, `_data/navigation.yml`, `README.md`, `docs/README.md`, `START-HERE.md`, `llms.txt`, `CHANGELOG.md`, `HISTORY.md`, and `.agents/brain/active_context_manifest.md`.
-
-5. **Technical Book Compiler Refactoring for Memory & CPU Efficiency**:
-   - Refactored `tools/build_project_book.py` to support fence-aware section/chapter chunking into `build/chapters/*.md` conforming to CommonMark code fence rules (`^[ ]{0,3}`).
-   - Refactored `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py` to compile Markdown chapter chunks into intermediate HTML fragments, pre-render vector SVGs on individual chunks to prevent memory spikes, assign `--id-prefix` namespaces, and merge HTML fragments into `handbook.html` with unescaped TOC navigation HTML.
-   - Updated `tests/test_book_compiler.py` with isolated `tmp_path` monkeypatching, fence parsing test cases, and TOC unescaping verification.
-   - Ran `uv run pytest` -> 371/371 tests passed (100% pass rate) and `uv run ruff check` -> 0 errors.
-
-6. **EOD Palace Sync & DSOM Alignment**:
-   - Executed End of Day (EOD) Palace Sync across `.agents/brain/` spatial memory (`task.md`, `walkthrough.md`, `palace_registry.md`, `active_context_manifest.md`, `checkpoint_summary.txt`).
-   - Verified static linters (`ruff check .`, `markdownlint-cli`) and 371/371 pytest test suite execution (100% pass rate).
+4. **Verification & Test Execution**:
+   - Executed Ansible playbooks (`opentofu_provision.yml`, `site.yml`, `deploy.yml`, `monitor.yml`) cleanly with zero errors.
+   - Verified tests pass across full pytest suite.

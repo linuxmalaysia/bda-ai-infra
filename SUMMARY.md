@@ -50,6 +50,7 @@ topics:
 
 ## How To Guides
 
+* [Ansible, AI Forge, OpenTofu, and UV Python Integration Blueprint](docs/how-to-guides/ansible-ai-forge-opentofu-integration.md)
 * [DSOM 4-Phase Migration Blueprint & AI Skills Execution Guide](docs/how-to-guides/dsom-migration-blueprint-execution-guide.md)
 * [How-To Guide: Onboarding and Scaling New AI/ML Business Cases](docs/how-to-guides/onboarding-new-ai-business-cases.md)
 * [Ingestion Pipeline, Application Portal, and Superset Modernization](docs/how-to-guides/ingestion-pipeline-modernization.md)

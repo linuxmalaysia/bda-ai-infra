@@ -127,7 +127,7 @@ graph TD
 
 | Source Component | Target Component | Ingress Protocol | Security Boundary | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **OpenTofu IaC** | `uv run python tools/opentofu` | Local Process | Control Plane | Reads `opentofu/main.tf` and generates inventory file |
+| **OpenTofu IaC** | `uv run python tools/opentofu` | Local Process | Control Plane | Simulates `opentofu/main.tf` and generates inventory for 3 cluster worker nodes in staging |
 | **`uv` Python** | `uv run python` | CLI Pipe | Hermetic Venv | Executes isolated Python scripts and diagnostic tools |
 | **Ansible Core** | `ansible-playbook` | SSH Subsystem | Control Plane | Executes master playbooks for configuration and deployment |
 | **AI Forge Skill** | `ansible-ai-forge-orchestrator` | Skill Manifest | Agent Boundary | Provides standardized automation and triage commands |

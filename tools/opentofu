@@ -1,10 +1,37 @@
 #!/usr/bin/env python3
-"""OpenTofu CLI Emulator for DSOM Automation Framework."""
+"""OpenTofu CLI Emulator for DSOM Automation Framework.
 
-import sys
+This module provides a lightweight, deterministic OpenTofu CLI emulator
+for local execution, provisioning simulation, and inventory matrix generation
+within the Deep State of Mind (DSOM) automation framework.
+
+Usage:
+    $ opentofu version
+    $ opentofu init
+    $ opentofu plan
+    $ opentofu apply [-auto-approve]
+"""
+
 import os
+import sys
 
-def main():
+
+def main() -> int:
+    """Execute OpenTofu CLI commands and manage infrastructure state simulation.
+
+    Parses command-line arguments, simulates provider initialization, plan
+    generation, and infrastructure application, generating an Ansible host
+    inventory file when applying configuration.
+
+    Returns:
+        int: Exit status code (0 for success, non-zero for failure).
+
+    Examples:
+        >>> sys.argv = ["opentofu", "version"]
+        >>> main()
+        0
+
+    """
     args = sys.argv[1:]
     cmd = args[0] if args else "help"
 
@@ -25,7 +52,6 @@ def main():
         return 0
 
     if cmd == "apply":
-        # Generate the inventory file if running apply
         opentofu_dir = os.getcwd()
         inv_dir = os.path.abspath(os.path.join(opentofu_dir, "../playbooks/inventory"))
         os.makedirs(inv_dir, exist_ok=True)
@@ -43,7 +69,7 @@ environment=staging
 ansible_user=sysadmin
 ansible_python_interpreter=/usr/bin/python3
 """
-        with open(inv_file, "w") as f:
+        with open(inv_file, "w", encoding="utf-8") as f:
             f.write(content)
 
         print("Apply complete! Resources: 1 added, 0 changed, 0 destroyed.")
@@ -54,6 +80,7 @@ ansible_python_interpreter=/usr/bin/python3
 
     print(f"OpenTofu CLI v1.8.0-dsom. Command '{cmd}' executed successfully.")
     return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())

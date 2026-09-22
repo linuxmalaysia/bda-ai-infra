@@ -78,8 +78,8 @@ ansible_python_interpreter=/usr/bin/python3
         print('node_count_provisioned = 3')
         return 0
 
-    print(f"OpenTofu CLI v1.8.0-dsom. Command '{cmd}' executed successfully.")
-    return 0
+    print(f"Error: Unrecognized command or flag '{cmd}'. Run 'opentofu help' for usage.", file=sys.stderr)
+    return 2
 
 
 if __name__ == "__main__":

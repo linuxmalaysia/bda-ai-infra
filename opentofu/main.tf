@@ -1,4 +1,4 @@
-# Sovereign Infrastructure Fabric - OpenTofu Configuration
+# Sovereign Infrastructure Fabric - OpenTofu Main Configuration
 
 terraform {
   required_version = ">= 1.6.0"
@@ -11,18 +11,6 @@ terraform {
 }
 
 provider "local" {}
-
-variable "environment" {
-  type        = string
-  default     = "staging"
-  description = "Target deployment environment (staging / production)"
-}
-
-variable "node_count" {
-  type        = number
-  default     = 3
-  description = "Number of cluster nodes to provision"
-}
 
 resource "local_file" "ansible_inventory_matrix" {
   filename = "${path.module}/../playbooks/inventory/generated_hosts.ini"
@@ -40,14 +28,4 @@ environment=${var.environment}
 ansible_user=sysadmin
 ansible_python_interpreter=/usr/bin/python3
 EOT
-}
-
-output "control_plane_ip" {
-  value       = "203.0.113.10"
-  description = "Public-safe IP address for control plane master"
-}
-
-output "node_count_provisioned" {
-  value       = var.node_count
-  description = "Total worker nodes provisioned by OpenTofu"
 }

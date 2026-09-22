@@ -7,6 +7,7 @@
   vars:
     project_root: "{{ playbook_dir }}/.."
     opentofu_dir: "{{ project_root }}/opentofu"
+    opentofu_bin: "{{ project_root }}/tools/opentofu"
     target_env: "staging"
 
   tasks:
@@ -26,7 +27,7 @@
 
     - name: Provision Infrastructure via OpenTofu
       ansible.builtin.command:
-        cmd: "opentofu apply -auto-approve"
+        cmd: "uv run python {{ opentofu_bin }} apply -auto-approve"
         chdir: "{{ opentofu_dir }}"
       register: opentofu_apply
       changed_when: "'Apply complete!' in opentofu_apply.stdout"

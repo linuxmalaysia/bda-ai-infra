@@ -115,7 +115,7 @@ Ansible serves as the top-level driver, wrapping OpenTofu and `uv` Python calls 
 ```mermaid
 graph TD
     A[Human / AI Agent] -->|Trigger Playbook| B[Ansible Master Engine]
-    B -->|uv run opentofu| C[OpenTofu IaC Provisioner]
+    B -->|uv run python tools/opentofu| C[OpenTofu IaC Provisioner]
     C -->|Provision Virtual Machines / Containers| D[Infrastructure Fabric]
     B -->|uv run python| E[Hermetic Python Execution - AI Forge]
     E -->|Analyze / Triage / Audit| F[Audit & Telemetry Logs]
@@ -127,7 +127,7 @@ graph TD
 
 | Source Component | Target Component | Ingress Protocol | Security Boundary | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **OpenTofu IaC** | `opentofu apply` | Local Process | Control Plane | Reads `opentofu/main.tf` and generates inventory file |
+| **OpenTofu IaC** | `uv run python tools/opentofu` | Local Process | Control Plane | Reads `opentofu/main.tf` and generates inventory file |
 | **`uv` Python** | `uv run python` | CLI Pipe | Hermetic Venv | Executes isolated Python scripts and diagnostic tools |
 | **Ansible Core** | `ansible-playbook` | SSH Subsystem | Control Plane | Executes master playbooks for configuration and deployment |
 | **AI Forge Skill** | `ansible-ai-forge-orchestrator` | Skill Manifest | Agent Boundary | Provides standardized automation and triage commands |
@@ -143,7 +143,7 @@ Ansible manages the installation and verification of `uv`, `opentofu`, and requi
 ```bash
 # Verify hermetic uv environment
 uv run python --version
-uv run opentofu version
+uv run python tools/opentofu version
 uv run ansible-playbook --version
 ```
 
@@ -153,7 +153,7 @@ Ansible executes OpenTofu tasks using the `community.general.terraform` or `ansi
 ```yaml
 - name: Provision Infrastructure with OpenTofu
   ansible.builtin.command:
-    cmd: "opentofu apply -auto-approve"
+    cmd: "uv run python {{ playbook_dir }}/../tools/opentofu apply -auto-approve"
     chdir: "{{ playbook_dir }}/../opentofu"
   register: opentofu_result
 ```

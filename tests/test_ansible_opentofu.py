@@ -7,7 +7,6 @@ License: GNU General Public License v3.0
 
 import os
 import subprocess
-import sys
 from pathlib import Path
 
 REPO_ROOT: Path = Path(__file__).parent.parent
@@ -22,7 +21,7 @@ def test_opentofu_emulator_version() -> None:
     the returned exit code and string contents.
     """
     res = subprocess.run(
-        [sys.executable, str(OPENTOFU_TOOL), "version"],
+        ["uv", "run", "python", str(OPENTOFU_TOOL), "version"],
         capture_output=True,
         text=True,
         check=True,
@@ -38,7 +37,7 @@ def test_opentofu_emulator_init() -> None:
     the returned exit code and output logs.
     """
     res = subprocess.run(
-        [sys.executable, str(OPENTOFU_TOOL), "init"],
+        ["uv", "run", "python", str(OPENTOFU_TOOL), "init"],
         capture_output=True,
         text=True,
         check=True,
@@ -54,7 +53,7 @@ def test_opentofu_emulator_plan() -> None:
     the returned exit code and planned action summary.
     """
     res = subprocess.run(
-        [sys.executable, str(OPENTOFU_TOOL), "plan"],
+        ["uv", "run", "python", str(OPENTOFU_TOOL), "plan"],
         capture_output=True,
         text=True,
         check=True,
@@ -79,7 +78,7 @@ def test_opentofu_emulator_apply(tmp_path: Path) -> None:
     try:
         os.chdir(str(opentofu_dir))
         res = subprocess.run(
-            [sys.executable, str(OPENTOFU_TOOL), "apply", "-auto-approve"],
+            ["uv", "run", "python", str(OPENTOFU_TOOL), "apply", "-auto-approve"],
             capture_output=True,
             text=True,
             check=True,
@@ -93,6 +92,17 @@ def test_opentofu_emulator_apply(tmp_path: Path) -> None:
         assert "ansible_host=203.0.113.10" in content
     finally:
         os.chdir(cwd)
+
+
+def test_opentofu_emulator_invalid_command() -> None:
+    """Verify that the OpenTofu emulator CLI handles unrecognized commands with exit code 2."""
+    res = subprocess.run(
+        ["uv", "run", "python", str(OPENTOFU_TOOL), "invalid_command_xyz"],
+        capture_output=True,
+        text=True,
+    )
+    assert res.returncode == 2
+    assert "Error: Unrecognized command" in res.stderr
 
 
 def test_ansible_playbooks_exist() -> None:

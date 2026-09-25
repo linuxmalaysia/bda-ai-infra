@@ -2,10 +2,10 @@
 okf_version: "0.2"
 type: spatial_memory
 title: "Palace Registry - Memory Index"
-description: "Master Palace index tracking spatial memory entries, skills, and documentation assets."
+description: "Master Palace index tracking spatial memory entries, skills, and documentation assets under the DSOM Protocol."
 status: active
-timestamp: "2026-09-18T19:30:00Z"
-stale_after: "2027-09-18T19:30:00Z"
+timestamp: "2026-09-21T23:45:00Z"
+stale_after: "2027-09-21T23:45:00Z"
 generated: false
 verified: true
 sources:
@@ -28,6 +28,7 @@ topics:
 
 ## 🛠️ Registered Agent Skills
 
+- `ansible-ai-forge-orchestrator`: Ansible AI Forge Orchestrator & OpenTofu IaC Skill
 - `attested-computations`: Attested Computations in OKF v0.2 Skill
 - `diagram-design-standards`: Cathryn Lavery Diagram Design Principles & Standards Skill
 - `docstring`: Python Docstring Quality & Compliance Standard Skill

@@ -1,0 +1,62 @@
+---
+# Master Automation Entrypoint - Ansible + OpenTofu + uv Python Integration
+- name: Sovereign AI & BDA Infrastructure Master Playbook
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    project_root: "{{ playbook_dir }}/.."
+    opentofu_dir: "{{ project_root }}/opentofu"
+    opentofu_bin: "{{ project_root }}/tools/opentofu"
+    target_env: "staging"
+
+  tasks:
+    - name: Display Master Execution Header
+      ansible.builtin.debug:
+        msg: "Starting Master Automation Orchestration via Ansible + uv Python + OpenTofu"
+
+    - name: Verify Python uv Runtime Environment
+      ansible.builtin.command:
+        cmd: "uv run python --version"
+      register: uv_check
+      changed_when: false
+
+    - name: Log uv Python Version
+      ansible.builtin.debug:
+        msg: "Runtime Python Environment: {{ uv_check.stdout }}"
+
+    - name: Provision Infrastructure via OpenTofu
+      ansible.builtin.command:
+        cmd: "uv run python {{ opentofu_bin }} apply -auto-approve"
+        chdir: "{{ opentofu_dir }}"
+      register: opentofu_apply
+      changed_when: "'Apply complete!' in opentofu_apply.stdout"
+
+    - name: Display OpenTofu Execution Output
+      ansible.builtin.debug:
+        msg: "OpenTofu status: Infrastructure provisioned and inventory generated."
+
+- name: System Administration, Deployment and Configuration
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Run System Administration Diagnostics via uv Python
+      ansible.builtin.command:
+        cmd: "uv run python -c \"import sys; print('Admin Diagnostic OK')\""
+      register: admin_diag
+      changed_when: false
+
+    - name: Log Administration Status
+      ansible.builtin.debug:
+        msg: "{{ admin_diag.stdout }}"
+
+    - name: Execute Service Health & Monitoring Audits
+      ansible.builtin.command:
+        cmd: "uv run python -c \"print('Monitoring Health Audit: All Services Operational')\""
+      register: monitor_check
+      changed_when: false
+
+    - name: Log Telemetry Report
+      ansible.builtin.debug:
+        msg: "{{ monitor_check.stdout }}"

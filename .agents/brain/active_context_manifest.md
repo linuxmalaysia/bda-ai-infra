@@ -4,8 +4,8 @@ type: spatial_memory
 title: "Active Context Manifest"
 description: "Live tracking manifest of files currently in active engineering scope under the DSOM protocol and LLM-WIKI framework."
 status: active
-timestamp: "2026-09-16T04:00:00Z"
-stale_after: "2027-09-16T04:00:00Z"
+timestamp: "2026-09-21T23:35:00Z"
+stale_after: "2027-09-21T23:35:00Z"
 generated: false
 verified: true
 sources:
@@ -33,15 +33,8 @@ The following assets are currently in active development or audit scope under th
 - `.github/copilot-instructions.md`
 - `docs/AI-COGNITIVE-TWIN-PROTOCOL.md`
 - `docs/IT-MANAGEMENT-PROPOSAL.md`
-- `docs/proposals/bda-astro-migration.md`
-- `docs/reference/postgresql-pgvector-enterprise-strategy.md`
-- `docs/reference/apache-nifi-2-master-data-plane-and-migration.md`
-- `.agents/skills/dual-render-architecture-diagram/SKILL.md`
-- `.agents/skills/dsom-technical-book-compiler/SKILL.md`
-- `.agents/skills/dsom-migration-blueprint/SKILL.md`
-- `docs/how-to-guides/dsom-migration-blueprint-execution-guide.md`
-- `.agents/skills/dsom-technical-book-compiler/scripts/compile-book.py`
-- `docs/governance/TECHNICAL-BOOK-DESIGN-AND-PDF-COMPILER-PROMPT-GUIDE.md`
+- `docs/how-to-guides/ansible-ai-forge-opentofu-integration.md`
+- `.agents/skills/ansible-ai-forge-orchestrator/SKILL.md`
 
 ## 🧠 Spatial Memory State (`.agents/brain/`)
 
@@ -50,6 +43,18 @@ The following assets are currently in active development or audit scope under th
 - `.agents/brain/palace_registry.md`
 - `.agents/brain/active_context_manifest.md`
 - `.agents/brain/checkpoint_summary.txt`
+
+## ⚙️ Ansible, OpenTofu & uv Automation Staging
+
+- `playbooks/site.yml`
+- `playbooks/opentofu_provision.yml`
+- `playbooks/deploy.yml`
+- `playbooks/monitor.yml`
+- `playbooks/inventory/hosts.ini`
+- `opentofu/main.tf`
+- `opentofu/variables.tf`
+- `opentofu/outputs.tf`
+- `tools/opentofu`
 
 ## 🛡️ Human-AI Quarantine Architecture Assets
 
@@ -62,25 +67,6 @@ The following assets are currently in active development or audit scope under th
 - `SUMMARY.md`
 - `_data/navigation.yml`
 - `llms.txt`
-- `tests/test_okf_and_links.py`
-
-## 🌐 OpenWiki & BDA SSoT Knowledge Base
-
-- `tools/openwiki_emulator.py`
-- `openwiki/quickstart.md`
-- `openwiki/architecture/overview.md`
-- `openwiki/infrastructure/proxmox-rke2-ceph.md`
-- `openwiki/software/engines-and-storage.md`
-- `openwiki/software/ingestion-and-orchestration.md`
-- `openwiki/governance/governance-and-lineage.md`
-- `openwiki/governance/security-iam-gateway.md`
-- `openwiki/solutions/bi-and-mlops.md`
-- `openwiki/integrations/mcp-and-ci.md`
-- `openwiki/quality/verification.md`
-- `openwiki/INSTRUCTIONS.md`
-- `openwiki/_skeleton.md`
-- `openwiki/graph.html`
-- `tests/test_openwiki.py`
 
 ## 🧪 CI/CD, Linters, Infrastructure & Test Suites
 
@@ -88,16 +74,7 @@ The following assets are currently in active development or audit scope under th
 - `pyproject.toml`
 - `tests/test_okf_and_links.py`
 - `tests/test_dual_render_diagrams.py`
-- `.markdownlint.json`
-- `.pre-commit-config.yaml`
-- `.ansible-lint`
-- `molecule/default/molecule.yml`
-- `molecule/default/converge.yml`
-- `package.json`
-- `playwright.config.ts`
-- `tests/e2e/docs_search.spec.ts`
 - `tools/generate_summary.py`
-- `tools/install_git_guardrails.py`
 - `tools/build_project_book.py`
 - `tools/bake_native_svg.py`
 - `tests/test_book_compiler.py`

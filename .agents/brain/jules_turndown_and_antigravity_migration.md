@@ -120,12 +120,23 @@ errors = []
 
 def rpc(m, b=None):
     req = urllib.request.Request(f"{RPC}/{m}", data=json.dumps(b or {}).encode(), headers=HEADERS, method="POST")
-    with urllib.request.urlopen(req, timeout=60) as r: return json.loads(r.read().decode() or "{}")
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r: return json.loads(r.read().decode() or "{}")
+    except urllib.error.HTTPError as e:
+        if e.code == 401:
+            sys.exit("HTTP 401: Jules token expired or invalid. Please re-run `jules login`.")
+        raise
 
 def get(path, **params):
     q = ("?" + urllib.parse.urlencode(params)) if params else ""
-    with urllib.request.urlopen(urllib.request.Request(f"{REST}{path}{q}", headers=HEADERS), timeout=60) as r:
-        return json.loads(r.read().decode() or "{}")
+    req = urllib.request.Request(f"{REST}{path}{q}", headers=HEADERS)
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return json.loads(r.read().decode() or "{}")
+    except urllib.error.HTTPError as e:
+        if e.code == 401:
+            sys.exit("HTTP 401: Jules token expired or invalid. Please re-run `jules login`.")
+        raise
 
 def paged(fetch, key):
     items, token = [], None
@@ -179,6 +190,10 @@ for s in sorted(sessions, key=lambda s: s.get("createdAt", "")):
         if c.get("patch", {}).get("unidiff"):
             (d / f"patch-{i}.diff").write_text(c["patch"]["unidiff"]); patches += 1
         meta = c.get("repoMetadata", {})
+        if meta.get("environmentSetupScript"):
+            (d / "setup.sh").write_text(meta["environmentSetupScript"] + "\n")
+        if meta.get("testCommand"):
+            (d / "test-command.txt").write_text(meta["testCommand"] + "\n")
         if meta.get("environmentSetupScript") or meta.get("testCommand"):
             setup[task.get("sourceId") or meta.get("name") or tid] = meta
     plan = task.get("latestPlan", {}).get("steps", [])

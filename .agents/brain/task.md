@@ -41,3 +41,7 @@ topics:
 4. **Verification & Test Execution**:
    - Executed Ansible playbooks (`opentofu_provision.yml`, `site.yml`, `deploy.yml`, `monitor.yml`) cleanly with zero errors.
    - Verified tests pass across full pytest suite.
+
+5. **Google Jules Turndown & Google Antigravity Migration Archival**:
+   - Documented Jules sunset schedule, credential extraction mechanics, and SweBot APIs in `.agents/brain/jules_turndown_and_antigravity_migration.md`.
+   - Captured full Python exporter toolchain and transition strategy into Google Antigravity.

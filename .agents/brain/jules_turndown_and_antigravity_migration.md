@@ -118,14 +118,24 @@ REST = "https://aida.googleapis.com/v1/swebot"
 OUT = pathlib.Path("./jules-export"); OUT.mkdir(exist_ok=True)
 errors = []
 
+def _handle_http_error(e):
+    if e.code == 401:
+        body = ""
+        try:
+            body = e.read().decode()
+        except Exception:
+            pass
+        if "missing required authentication credential" in body.lower():
+            sys.exit("HTTP 401: GitHub account not connected to Jules. Connect your GitHub account at https://github.com/apps/google-labs-jules/installations/select_target")
+        sys.exit("HTTP 401: Jules token expired or invalid. Please re-run `jules login`.")
+    raise e
+
 def rpc(m, b=None):
     req = urllib.request.Request(f"{RPC}/{m}", data=json.dumps(b or {}).encode(), headers=HEADERS, method="POST")
     try:
         with urllib.request.urlopen(req, timeout=60) as r: return json.loads(r.read().decode() or "{}")
     except urllib.error.HTTPError as e:
-        if e.code == 401:
-            sys.exit("HTTP 401: Jules token expired or invalid. Please re-run `jules login`.")
-        raise
+        _handle_http_error(e)
 
 def get(path, **params):
     q = ("?" + urllib.parse.urlencode(params)) if params else ""
@@ -134,9 +144,7 @@ def get(path, **params):
         with urllib.request.urlopen(req, timeout=60) as r:
             return json.loads(r.read().decode() or "{}")
     except urllib.error.HTTPError as e:
-        if e.code == 401:
-            sys.exit("HTTP 401: Jules token expired or invalid. Please re-run `jules login`.")
-        raise
+        _handle_http_error(e)
 
 def paged(fetch, key):
     items, token = [], None

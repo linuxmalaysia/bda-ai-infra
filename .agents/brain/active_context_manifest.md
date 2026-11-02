@@ -43,6 +43,7 @@ The following assets are currently in active development or audit scope under th
 - `.agents/brain/palace_registry.md`
 - `.agents/brain/active_context_manifest.md`
 - `.agents/brain/checkpoint_summary.txt`
+- `.agents/brain/jules_turndown_and_antigravity_migration.md`
 
 ## ⚙️ Ansible, OpenTofu & uv Automation Staging
 

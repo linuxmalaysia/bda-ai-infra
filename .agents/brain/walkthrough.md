@@ -37,3 +37,7 @@ topics:
 
 4. **Execution Verification:**
    - Ran all playbooks using `uv run ansible-playbook` with zero errors.
+
+5. **Google Jules Turndown & Google Antigravity Migration Guide:**
+   - Materialized `.agents/brain/jules_turndown_and_antigravity_migration.md` preserving full migration runbook, OAuth2 keyring mechanisms, SweBot API endpoints, and exporter utility.
+   - Synchronized `.agents/brain/palace_registry.md`, `.agents/brain/active_context_manifest.md`, and `.agents/brain/task.md`.

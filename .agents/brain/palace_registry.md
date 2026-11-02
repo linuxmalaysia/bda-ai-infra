@@ -25,6 +25,7 @@ topics:
 - **Active Context Manifest:** `.agents/brain/active_context_manifest.md`
 - **Walkthrough Log:** `.agents/brain/walkthrough.md`
 - **Checkpoint Summary:** `.agents/brain/checkpoint_summary.txt`
+- **Jules Turndown & Antigravity Migration:** `.agents/brain/jules_turndown_and_antigravity_migration.md`
 
 ## 🛠️ Registered Agent Skills
 
